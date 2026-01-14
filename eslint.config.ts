@@ -30,7 +30,7 @@ export default defineConfigWithVueTs(
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
   },
-   {
+  {
     files: ['**/*.js', '**/*.mjs', '**/*.vue', '**/*.ts'],
     plugins: { '@stylistic': stylistic },
     rules: { ...stylistic.configs.recommended.rules },
