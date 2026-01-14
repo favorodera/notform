@@ -1,0 +1,69 @@
+{
+  "name": "valid",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/valid.umd.js",
+  "module": "./dist/valid.es.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/valid.es.js",
+      "require": "./dist/valid.umd.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "test:unit": "vitest",
+    "test:e2e": "playwright test",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build",
+    "lint": "eslint . --fix --cache",
+    "prepublishOnly": "pnpm build && pnpm typecheck && pnpm vitest --watch=false",
+    "ci:release": "pnpm build && pnpm dlx @changesets/cli publish",
+    "ci:version": "pnpm dlx @changesets/cli version && pnpm install --no-frozen-lockfile"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.26",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@tsconfig/node24": "^24.0.3",
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^24.10.4",
+    "@vitejs/plugin-vue": "^6.0.3",
+    "@vitest/eslint-plugin": "^1.6.5",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.8.1",
+    "eslint": "^9.39.2",
+    "eslint-plugin-playwright": "^2.4.0",
+    "eslint-plugin-vue": "~10.6.2",
+    "jiti": "^2.6.1",
+    "jsdom": "^27.4.0",
+    "npm-run-all2": "^8.0.4",
+    "typescript": "~5.9.3",
+    "vite": "beta",
+    "vite-plugin-vue-devtools": "^8.0.5",
+    "vitest": "^4.0.16",
+    "vue-tsc": "^3.2.2",
+    "@changesets/cli": "^2.29.8",
+    "@stylistic/eslint-plugin": "^5.7.0"
+  },
+  "packageManager": "pnpm@10.26.1",
+  "engines": {
+    "node": ">=24.4.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:rolldown-vite@7.2.5"
+    }
+  }
+}
