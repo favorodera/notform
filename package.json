@@ -34,7 +34,9 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.8",
     "@playwright/test": "^1.57.0",
+    "@stylistic/eslint-plugin": "^5.7.0",
     "@tsconfig/node24": "^24.0.3",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.4",
@@ -53,9 +55,7 @@
     "vite": "beta",
     "vite-plugin-vue-devtools": "^8.0.5",
     "vitest": "^4.0.16",
-    "vue-tsc": "^3.2.2",
-    "@changesets/cli": "^2.29.8",
-    "@stylistic/eslint-plugin": "^5.7.0"
+    "vue-tsc": "^3.2.2"
   },
   "packageManager": "pnpm@10.26.1",
   "engines": {
@@ -65,5 +65,8 @@
     "overrides": {
       "vite": "npm:rolldown-vite@7.2.5"
     }
+  },
+  "dependencies": {
+    "dot-prop": "^10.1.0"
   }
 }
