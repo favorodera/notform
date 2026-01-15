@@ -1,14 +1,19 @@
 <script lang="ts" setup generic="TSchema extends Schema">
-import type { Form, FormProps } from '@/types/form'
+import type { Form, FormEmits, FormProps } from '@/types/form'
 import type { Schema } from '@/types/shared'
 import { klona } from 'klona'
 import { computed, nextTick, onMounted, ref, toRaw, watch } from 'vue'
 import * as zod from 'zod/v4/core'
 
+// Props
 const props = withDefaults(defineProps<FormProps<TSchema>>(), {
   mode: 'lazy',
   validateOn: () => ['blur', 'input'],
 })
+
+
+// Emits
+const emit = defineEmits<FormEmits<TSchema>>()
 
 // Internal state
 /** Stores current validation errors, keyed by field path */
@@ -47,13 +52,15 @@ const form: Form<TSchema> = {
     try {
       await zod.parseAsync(props.schema, props.state)
       _errors.value = {}
+      emit('validate', true)
       return true
     }
     catch (error) {
       if (error instanceof zod.$ZodError) {
         _errors.value = zod.treeifyError(error as zod.$ZodError<TSchema>).properties
+        emit('error', _errors.value)
+        emit('validate', false)
       }
-
       return false
     }
   },
@@ -70,12 +77,17 @@ onMounted(async () => {
   }
 })
 
-// -- Watchers --
 
-// TODO:TEST ONLY
+// Watchers
+
+
+// TODO:TEST ONLY - Will remove
 watch(() => props.state, () => {
   form.validateForm()
 }, { deep: true })
+
+
+// TODO: Provide and inject factory
 
 
 // Expose form factory to parent
@@ -88,4 +100,3 @@ defineExpose(form)
   {{ _initialState }}
 </form>
 </template>
-
