@@ -9,7 +9,6 @@ import type { DeepPartial } from './utils'
  *
  * @template TSchema - The zod schema of the form
  */
- 
 export type Form<TSchema extends Schema = Schema> = {
   /** Reactive reference to the current form state (values) */
   state: ComputedRef<DeepPartial<zod.output<TSchema>> | zod.output<TSchema>>
@@ -33,7 +32,14 @@ export type Form<TSchema extends Schema = Schema> = {
   validateForm(): Promise<boolean>
 }
 
+
+/**
+ * Props for the Form component
+ * @template TSchema - The zod schema of the form
+*/
 export type FormProps<TSchema extends Schema = Schema> = Partial<Pick<Form<TSchema>, 'mode' | 'validateOn'>> & {
+  /** The schema used for validation */
   schema: TSchema
+  /** The data/value state of the form */
   state: DeepPartial<zod.output<TSchema>> | zod.output<TSchema>
 }
