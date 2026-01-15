@@ -1,2 +1,2 @@
-export type { Form } from './types/form'
-export type { ValidationMode, ValidationTriggers } from './types/shared'
+export type { Form, FormProps, FormEmits } from './types/form'
+export type { ValidationMode, ValidationTriggers, Schema } from './types/shared'
