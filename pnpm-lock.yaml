@@ -75,6 +75,9 @@ importers:
       npm-run-all2:
         specifier: ^8.0.4
         version: 8.0.4
+      type-fest:
+        specifier: ^5.4.1
+        version: 5.4.1
       typescript:
         specifier: ~5.9.3
         version: 5.9.3
