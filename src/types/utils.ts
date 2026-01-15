@@ -1,6 +1,6 @@
+import type { Get, PartialDeep, Paths } from 'type-fest'
 import * as zod from 'zod/v4/core'
 import type { Schema } from './shared'
-import type { PartialDeep, Paths, Get } from 'type-fest'
 
 /**
  * Extracts the input type from a Zod schema.

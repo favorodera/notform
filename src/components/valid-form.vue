@@ -1,12 +1,12 @@
 <script lang="ts" setup generic="TSchema extends Schema">
-import { formFactoryKey } from '../utils/symbol-keys'
+import { getProperty, parsePath, setProperty } from 'dot-prop'
+import { klona } from 'klona'
+import { computed, provide, ref, toRaw, type ComputedRef } from 'vue'
+import * as zod from 'zod/v4/core'
 import type { Form, FormEmits, FormProps } from '../types/form'
 import type { Schema } from '../types/shared'
 import type { InferOutput, InputPaths, InputPathValue, OutputPaths, OutputPathValue } from '../types/utils'
-import { getProperty, setProperty, parsePath } from 'dot-prop'
-import { klona } from 'klona'
-import { computed, nextTick, onMounted, provide, ref, toRaw, watch, type ComputedRef } from 'vue'
-import * as zod from 'zod/v4/core'
+import { formFactoryKey } from '../utils/symbol-keys'
 
 // Props
 const props = withDefaults(defineProps<FormProps<TSchema>>(), {

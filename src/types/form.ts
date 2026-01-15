@@ -1,7 +1,7 @@
 import { type ComputedRef } from 'vue'
 import * as zod from 'zod/v4/core'
 import type { Schema, ValidationMode, ValidationTriggers } from './shared'
-import type { DeepPartial, InputPathValue, OutputPathValue, InputPaths, OutputPaths, InferOutput } from './utils'
+import type { DeepPartial, InferOutput, InputPaths, InputPathValue, OutputPaths, OutputPathValue } from './utils'
 
 /**
  * The context the form is running on.
