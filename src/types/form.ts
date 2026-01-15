@@ -40,6 +40,23 @@ export type Form<TSchema extends Schema = Schema> = {
 export type FormProps<TSchema extends Schema = Schema> = Partial<Pick<Form<TSchema>, 'mode' | 'validateOn'>> & {
   /** The schema used for validation */
   schema: TSchema
+  
   /** The data/value state of the form */
   state: DeepPartial<zod.output<TSchema>> | zod.output<TSchema>
+}
+
+/**
+ * Events emitted by the Form component.
+ *
+ * @template TSchema - The zod schema of the form
+ */
+export type FormEmits<TSchema extends Schema = Schema> = {
+  /** Emitted when the form acts on a submit event (regardless of validity) or successfully validates. */
+  submit: [data: zod.output<TSchema>]
+
+  /** Emitted when validation errors occur. */
+  error: [errors: Form<TSchema>['errors']]
+
+  /** Emitted whenever validation runs, with the result boolean. */
+  validate: [isValid: boolean]
 }
