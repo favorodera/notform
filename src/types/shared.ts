@@ -17,4 +17,5 @@ export type ValidationMode = 'lazy' | 'eager'
  */
 export type ValidationTriggers = 'blur' | 'change' | 'input' | 'mount' | 'focus'
 
+/** The schema used for validation */
 export type Schema = zod.$ZodType<object>
