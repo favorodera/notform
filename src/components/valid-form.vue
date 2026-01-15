@@ -146,28 +146,9 @@ const form: Form<TSchema> = {
 }
 
 
-// Lifecycle hooks TODO: Remove mount validation(move to fields)
-onMounted(async () => {
-
-  await nextTick()
-
-  if (props.validateOn.includes('mount')) {
-    form.validateForm()
-  }
-})
-
-
-// Watchers TODO: Remove state watcher(move to fields)
-
-
-// TODO:TEST ONLY - Will remove
-watch(() => props.state, () => {
-  form.validateForm()
-}, { deep: true })
-
-
 // Provide and inject factory
 provide(formFactoryKey, form)
+
 
 // Expose form factory to parent
 defineExpose(form)
