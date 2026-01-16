@@ -58,6 +58,7 @@
     "typescript": "~5.9.3",
     "vite": "beta",
     "vitest": "^4.0.16",
+    "vitest-browser-vue": "^2.0.1",
     "vue-tsc": "^3.2.2"
   },
   "packageManager": "pnpm@10.26.1",

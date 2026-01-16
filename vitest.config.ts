@@ -5,23 +5,21 @@ import { playwright } from '@vitest/browser-playwright'
 export default defineConfig({
   plugins: [vue()],
   test: {
+    api: {
+      port: 8080,
+      host: 'localhost',
+    },
     typecheck: { enabled: true },
     environment: 'jsdom',
     include: ['tests/unit/**/*.{test,spec}.ts'],
     browser: {
       enabled: true,
-      provider: playwright({
-        launchOptions: {
-          channel: 'chromium',
-        },
-      }),
+      provider: playwright(),
       headless: true,
       instances: [
         { browser: 'chromium' },
-        {
-          browser: 'firefox',
-          provider: playwright(),
-        },
+        { browser: 'firefox' },
+        { browser: 'webkit' },
       ],
     },
   },

@@ -90,6 +90,9 @@ importers:
       vitest:
         specifier: ^4.0.16
         version: 4.0.17(@types/node@24.10.8)(@vitest/browser-playwright@4.0.17)(@vitest/browser-preview@4.0.17)(@vitest/ui@4.0.17)(jiti@2.6.1)(jsdom@27.4.0)
+      vitest-browser-vue:
+        specifier: ^2.0.1
+        version: 2.0.1(vitest@4.0.17)(vue@3.5.26(typescript@5.9.3))
       vue-tsc:
         specifier: ^3.2.2
         version: 3.2.2(typescript@5.9.3)
@@ -1763,6 +1766,12 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  vitest-browser-vue@2.0.1:
+    resolution: {integrity: sha512-IfTJY3Olr27AXCVAhOqx4g5iUgzdWLmYr40svg7rOrunjsqc9trrzi/eI3i11+UYddbKXu3HJl2bo8o8lqKm4A==}
+    peerDependencies:
+      vitest: ^4.0.0-0
+      vue: ^3.0.0
 
   vitest@4.0.17:
     resolution: {integrity: sha512-FQMeF0DJdWY0iOnbv466n/0BudNdKj1l5jYgl5JVTwjSsZSlqyXFt/9+1sEyhR6CLowbZpV7O1sCHrzBhucKKg==}
@@ -3623,6 +3632,12 @@ snapshots:
       punycode: 2.3.1
 
   util-deprecate@1.0.2: {}
+
+  vitest-browser-vue@2.0.1(vitest@4.0.17)(vue@3.5.26(typescript@5.9.3)):
+    dependencies:
+      '@vue/test-utils': 2.4.6
+      vitest: 4.0.17(@types/node@24.10.8)(@vitest/browser-playwright@4.0.17)(@vitest/browser-preview@4.0.17)(@vitest/ui@4.0.17)(jiti@2.6.1)(jsdom@27.4.0)
+      vue: 3.5.26(typescript@5.9.3)
 
   vitest@4.0.17(@types/node@24.10.8)(@vitest/browser-playwright@4.0.17)(@vitest/browser-preview@4.0.17)(@vitest/ui@4.0.17)(jiti@2.6.1)(jsdom@27.4.0):
     dependencies:

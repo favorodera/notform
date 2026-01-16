@@ -102,7 +102,7 @@ export type Form<TSchema extends Schema = Schema> = {
  * Props for the Form component
  * @template TSchema - The zod schema of the form
 */
-export type FormProps<TSchema extends Schema = Schema> = Partial<Pick<Form<TSchema>, 'mode' | 'validateOn'>> & FormHTMLAttributes & {
+export type FormProps<TSchema extends Schema = Schema> = Partial<Pick<Form<TSchema>, 'mode' | 'validateOn'>> & /* @vue-ignore */ FormHTMLAttributes & {
   /** The schema used for validation */
   schema: TSchema
 

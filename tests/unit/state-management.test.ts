@@ -1,6 +1,6 @@
 // tests/unit/state-management.test.ts
 import { describe, expect, test } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { render } from 'vitest-browser-vue'
 import { h, reactive } from 'vue'
 import { z } from 'zod'
 import ValidForm from '../../src/components/valid-form.vue'
@@ -14,43 +14,36 @@ describe('state management', () => {
   test('Input fields update form state correctly', async () => {
     const state = reactive<Partial<z.infer<typeof schema>>>({})
 
-    const wrapper = mount(ValidForm, {
+    const { getByRole } = render(ValidForm, {
       props: {
         schema,
         state,
       },
       slots: {
-        default: () => [
-          h('input', {
-            name: 'name',
-            value: state.name,
-            onInput: (event: Event) => {
-              state.name = (event.target as HTMLInputElement).value
-            },
-          }),
-          h('input', {
-            name: 'age',
-            type: 'number',
-            value: state.age,
-            onInput: (event: Event) => {
-              state.age = Number((event.target as HTMLInputElement).value)
-            },
-          }),
-        ],
+        default: () => h({
+          setup() {
+            return { state }
+          },
+          template: `
+            <label for="name">name</label>
+            <input id="name" name="name" type="text" v-model="state.name" />
+
+            <label for="age">age</label>
+            <input id="age" name="age" type="number" v-model.number="state.age" />
+          `,
+        }),
       },
     })
 
-    expect(wrapper.exists()).toBe(true)
+    const nameInput = getByRole('textbox', { name: 'name' })
+    const ageInput = getByRole('spinbutton', { name: 'age' })
 
-    const nameInput = wrapper.find('input[name="name"]')
-    const ageInput = wrapper.find('input[name="age"]')
+    await nameInput.fill('John Doe')
+    await ageInput.fill('30')
 
-    expect(nameInput.exists()).toBe(true)
-    expect(ageInput.exists()).toBe(true)
-
-    await nameInput.setValue('John Doe')
-    await ageInput.setValue('30')
-
+    await expect.element(nameInput).toHaveValue('John Doe')
+    await expect.element(ageInput).toHaveValue(30)
+    
     expect(state.name).toBe('John Doe')
     expect(state.age).toBe(30)
   })
