@@ -3,7 +3,7 @@ import { getProperty, parsePath, setProperty } from 'dot-prop'
 import { klona } from 'klona'
 import { computed, provide, ref, toRaw, useId, type ComputedRef } from 'vue'
 import * as zod from 'zod/v4/core'
-import type { Form, FormEmits, FormProps, SubmitResult } from '../types/form'
+import type { Form, FormEmits, FormExpose, FormProps, FormSlots, SubmitResult } from '../types/form'
 import type { Schema } from '../types/shared'
 import type { InferOutput, InputPaths, InputPathValue, OutputPaths, OutputPathValue } from '../types/utils'
 import { formFactoryKey } from '../utils/symbol-keys'
@@ -19,6 +19,10 @@ const props = withDefaults(defineProps<FormProps<TSchema>>(), {
 
 // Emits
 const emit = defineEmits<FormEmits<TSchema>>()
+
+
+// Slots
+defineSlots<FormSlots<TSchema>>()
 
 // Internal state
 /**
@@ -53,6 +57,8 @@ const _errors = computed(() => {
 // Form factory
 const form: Form<TSchema> = {
   state: computed(() => props.state),
+
+  initialState: _initialState,
 
   errors: _errors,
 
@@ -101,25 +107,32 @@ const form: Form<TSchema> = {
 
   async validateForm() {
 
-    try {
-      await zod.parseAsync(props.schema, props.state)
+    const { success, data, error } = await zod.safeParseAsync(props.schema, props.state)
 
-      _issues.value = []
-
-      emit('validate', true)
-
-      return true
-    }
-    catch (error) {
-      if (error instanceof zod.$ZodError) {
-        // Replace current issues with fresh ones from Zod
-        _issues.value = [...error.issues]
-
-        emit('error', _errors.value as ComputedRef<zod.$ZodErrorTree<TSchema>['properties']>)
-        emit('validate', false)
-      }
+    if (!success) {
+      // Schema validation failed
+      _issues.value = [...error.issues]
+      emit('error', _errors.value as ComputedRef<zod.$ZodErrorTree<TSchema>['properties']>)
+      emit('validate', false)
       return false
     }
+
+    // Schema validation passed, now run custom validation if provided
+    if (props.validate) {
+      const isValid = await props.validate(data, form)
+
+      if (!isValid) {
+        // Custom validation failed (assume it set errors via setError)
+        emit('validate', false)
+        return false
+      }
+    }
+
+    // All validation passed
+    _issues.value = []
+    emit('validate', true)
+    return true
+
   },
 
   async submit<TData = void, TError = Error>(event: Event, callback?: (values: InferOutput<TSchema>) => TData | Promise<TData>): Promise<SubmitResult<TData, TError>> {
@@ -169,12 +182,21 @@ provide(formFactoryKey, form)
 
 
 // Expose form factory to parent
-defineExpose(form)
+defineExpose<FormExpose<TSchema>>({
+  submit: form.submit,
+  errors: form.errors,
+  clearErrors: form.clearErrors,
+  clearError: form.clearError,
+  getError: form.getError,
+  isSubmitting: form.isSubmitting,
+  isValid: form.isValid,
+  initialState: form.initialState,
+})
+
 </script>
 
 <template>
 <form v-bind="props" @submit="form.submit">
-  <slot />
-  {{ _initialState }}
+  <slot :errors="form.errors" :isSubmitting="form.isSubmitting" :isValid="form.isValid" :initialState="form.initialState" />
 </form>
 </template>
