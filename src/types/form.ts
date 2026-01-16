@@ -13,6 +13,9 @@ export type Form<TSchema extends Schema = Schema> = {
   /** Reactive reference to the current form state (values) */
   state: ComputedRef<DeepPartial<InferOutput<TSchema>> | InferOutput<TSchema>>
 
+  /** Reference to the initial form state (values) */
+  initialState: DeepPartial<InferOutput<TSchema>> | InferOutput<TSchema>
+
   /** Reactive reference to the current form errors */
   errors: ComputedRef<zod.$ZodErrorTree<TSchema>['properties']>
 
@@ -114,9 +117,32 @@ export type FormProps<TSchema extends Schema = Schema> = Partial<Pick<Form<TSche
    * Runs after internal schema validation passes.
    *
    * @param values - The values to validate
+   * @param form - The form instance
    * @returns Promise resolving to true if valid
    */
-  validate?: (values: InferOutput<TSchema>) => Promise<boolean>
+  validate?: (values: InferOutput<TSchema>, form: Form<TSchema>) => Promise<boolean>
+}
+
+export type FormExpose<TSchema extends Schema = Schema> = Pick<
+  Form<TSchema>,
+  'submit'
+  | 'errors'
+  | 'clearErrors'
+  | 'clearError'
+  | 'getError'
+  | 'isSubmitting'
+  | 'isValid'
+  | 'initialState'
+>
+
+export type FormSlots<TSchema extends Schema = Schema> = {
+  default: (props: Pick<
+    Form<TSchema>,
+    'errors'
+    | 'isSubmitting'
+    | 'isValid'
+    | 'initialState'
+  >) => void
 }
 
 /**
