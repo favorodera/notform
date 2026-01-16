@@ -1,9 +1,9 @@
 <script lang="ts" setup generic="TSchema extends Schema">
 import { getProperty, parsePath, setProperty } from 'dot-prop'
 import { klona } from 'klona'
-import { computed, provide, ref, toRaw, type ComputedRef } from 'vue'
+import { computed, provide, ref, toRaw, useId, type ComputedRef } from 'vue'
 import * as zod from 'zod/v4/core'
-import type { Form, FormEmits, FormProps } from '../types/form'
+import type { Form, FormEmits, FormProps, SubmitResult } from '../types/form'
 import type { Schema } from '../types/shared'
 import type { InferOutput, InputPaths, InputPathValue, OutputPaths, OutputPathValue } from '../types/utils'
 import { formFactoryKey } from '../utils/symbol-keys'
@@ -11,7 +11,9 @@ import { formFactoryKey } from '../utils/symbol-keys'
 // Props
 const props = withDefaults(defineProps<FormProps<TSchema>>(), {
   mode: 'lazy',
-  validateOn: () => ['blur', 'input'],
+  novalidate: true,
+  id: () => useId(),
+  validateOn: () => ['blur', 'input', 'change'],
 })
 
 
@@ -46,26 +48,6 @@ const _errors = computed(() => {
 
 
 // Methods
-async function submit(event: Event) {
-  event.preventDefault()
-  event.stopPropagation()
-
-  _isSubmitting.value = true
-
-  try {
-    const isValid = await form.validateForm()
-
-    if (isValid) {
-      emit('submit', props.state as InferOutput<TSchema>)
-    }
-  }
-  catch {
-    // Silent
-  }
-  finally {
-    _isSubmitting.value = false
-  }
-}
 
 
 // Form factory
@@ -109,6 +91,7 @@ const form: Form<TSchema> = {
   clearError<TPath extends OutputPaths<TSchema>>(field: TPath) {
     const path = parsePath(field)
     const normalizedPath = path.join('.')
+
     _issues.value = _issues.value.filter(issue => issue.path.join('.') !== normalizedPath)
   },
 
@@ -120,18 +103,53 @@ const form: Form<TSchema> = {
 
     try {
       await zod.parseAsync(props.schema, props.state)
+
       _issues.value = []
+
       emit('validate', true)
+
       return true
     }
     catch (error) {
       if (error instanceof zod.$ZodError) {
         // Replace current issues with fresh ones from Zod
         _issues.value = [...error.issues]
+
         emit('error', _errors.value as ComputedRef<zod.$ZodErrorTree<TSchema>['properties']>)
         emit('validate', false)
       }
       return false
+    }
+  },
+
+  async submit<TData = void, TError = Error>(event: Event, callback?: (values: InferOutput<TSchema>) => TData | Promise<TData>): Promise<SubmitResult<TData, TError>> {
+    event.preventDefault()
+
+    _isSubmitting.value = true
+
+    try {
+      const isValid = await form.validateForm()
+
+      if (!isValid) {
+        return { success: false }
+      }
+
+      const state = props.state as InferOutput<TSchema>
+      let data: TData | undefined
+
+      if (callback) {
+        data = await callback(state)
+      }
+
+      emit('submit', state)
+
+      return { success: true, data }
+    }
+    catch (error) {
+      return { success: false, error: error as TError }
+    }
+    finally {
+      _isSubmitting.value = false
     }
   },
 
@@ -155,7 +173,7 @@ defineExpose(form)
 </script>
 
 <template>
-<form novalidate @submit="submit">
+<form v-bind="props" @submit="form.submit">
   <slot />
   {{ _initialState }}
 </form>
