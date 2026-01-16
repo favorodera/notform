@@ -1,14 +1,29 @@
-import { fileURLToPath } from 'node:url'
-import { mergeConfig, defineConfig, configDefaults } from 'vitest/config'
-import viteConfig from './vite.config'
+import { defineConfig } from 'vitest/config'
+import vue from '@vitejs/plugin-vue'
+import { playwright } from '@vitest/browser-playwright'
 
-export default mergeConfig(
-  viteConfig,
-  defineConfig({
-    test: {
-      environment: 'jsdom',
-      exclude: [...configDefaults.exclude, 'e2e/**'],
-      root: fileURLToPath(new URL('./', import.meta.url)),
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    typecheck: { enabled: true },
+    environment: 'jsdom',
+    include: ['tests/unit/**/*.{test,spec}.ts'],
+    browser: {
+      enabled: true,
+      provider: playwright({
+        launchOptions: {
+          channel: 'chromium',
+        },
+      }),
+      headless: true,
+      instances: [
+        { browser: 'chromium' },
+        {
+          browser: 'firefox',
+          provider: playwright(),
+        },
+      ],
     },
-  }),
-)
+  },
+})
+

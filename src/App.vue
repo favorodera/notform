@@ -6,19 +6,19 @@ import { z } from 'zod'
 const schema = z.object({
   // String testing
   username: z.string().min(3, 'Username must be at least 3 chars'),
-  
+
   // Number testing
   age: z.number().min(18, 'Must be at least 18'),
-  
+
   // Object testing
   profile: z.object({
     bio: z.string().min(10, 'Bio too short'),
     rank: z.number().max(10),
   }),
-  
+
   // Array of strings testing
   hobbies: z.array(z.string().min(2, 'Hobby too short')).min(1, 'Add at least one hobby'),
-  
+
   // Array of objects testing
   friends: z.array(z.object({
     name: z.string().min(2, 'Name required'),
@@ -49,7 +49,7 @@ function handleSubmit() {
     <h1>ValidForm Comprehensive Test</h1>
 
     <ValidForm ref="form" :schema :state :validate-on="['input', 'blur']">
-      
+
       <!-- Basic Fields -->
       <section>
         <h3>Basic Fields</h3>

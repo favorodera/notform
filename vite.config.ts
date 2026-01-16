@@ -7,21 +7,6 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  test: {
-    reporters: ['default', 'html'],
-    outputFile: './.vitest/report.html',
-    typecheck: { enabled: true },
-    projects: [
-      {
-        test: {
-          name: 'unit',
-          root: './src',
-          environment: 'node',
-          include: ['../src/tests/unit/*.test.ts'],
-        },
-      },
-    ],
-  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
