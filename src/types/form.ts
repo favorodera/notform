@@ -1,4 +1,4 @@
-import { type ComputedRef } from 'vue'
+import { type ComputedRef, type FormHTMLAttributes } from 'vue'
 import * as zod from 'zod/v4/core'
 import type { Schema, ValidationMode, ValidationTriggers } from './shared'
 import type { DeepPartial, InferOutput, InputPaths, InputPathValue, OutputPaths, OutputPathValue } from './utils'
@@ -78,6 +78,16 @@ export type Form<TSchema extends Schema = Schema> = {
   /** Validate the form */
   validateForm(): Promise<boolean>
 
+  /**
+   * Submit the form
+   * @template TData - Type of data returned by callback
+   * @template TError - Type of error that might be thrown
+   * @param event - The event to prevent default on
+   * @param callback - The callback to run if the form is valid
+   * @returns Promise with submission result containing success status, data, and error
+   */
+  submit<TData = void, TError = Error>(event: Event, callback?: (values: InferOutput<TSchema>) => TData | Promise<TData>): Promise<SubmitResult<TData, TError>>
+
   /** Reactive boolean indicating if the form is currently submitting */
   isSubmitting: ComputedRef<boolean>
 
@@ -92,7 +102,7 @@ export type Form<TSchema extends Schema = Schema> = {
  * Props for the Form component
  * @template TSchema - The zod schema of the form
 */
-export type FormProps<TSchema extends Schema = Schema> = Partial<Pick<Form<TSchema>, 'mode' | 'validateOn'>> & {
+export type FormProps<TSchema extends Schema = Schema> = Partial<Pick<Form<TSchema>, 'mode' | 'validateOn'>> & FormHTMLAttributes & {
   /** The schema used for validation */
   schema: TSchema
 
@@ -123,4 +133,18 @@ export type FormEmits<TSchema extends Schema = Schema> = {
 
   /** Emitted whenever validation runs, with the result boolean. */
   validate: [isValid: boolean]
+}
+
+/**
+ * Result returned from form submission
+ * @template TData - The data returned from the submit callback
+ * @template TError - The error thrown by the submit callback
+ */
+export type SubmitResult<TData = unknown, TError = unknown> = {
+  /** Whether the submission was successful (validation passed and callback executed without error) */
+  success: boolean
+  /** Data returned from the submit callback (if successful) */
+  data?: TData
+  /** Error thrown by the submit callback (if failed) */
+  error?: TError
 }
