@@ -10,12 +10,10 @@ export default defineConfig({
       host: 'localhost',
     },
     typecheck: { enabled: true },
-    environment: 'jsdom',
     include: ['tests/unit/**/*.{test,spec}.ts'],
     browser: {
       enabled: true,
       provider: playwright(),
-      headless: true,
       instances: [
         { browser: 'chromium' },
         { browser: 'firefox' },
