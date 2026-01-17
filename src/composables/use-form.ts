@@ -1,10 +1,10 @@
 import { inject } from 'vue'
-import type { Form } from '../types/form'
+import type { Form } from '../types/valid-form'
 import type { Schema } from '../types/shared'
 import { formFactoryKey } from '../utils/symbol-keys'
 
 /** The form context composable used to attach fields to a form */
-export default function<TSchema extends Schema = Schema> () {
+export default function<TSchema extends Schema = Schema>() {
   const context = inject(formFactoryKey)
 
   if (!context) {
