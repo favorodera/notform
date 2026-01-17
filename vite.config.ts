@@ -15,12 +15,6 @@ export default defineConfig({
     },
     rollupOptions: {
       external: ['vue', 'zod'],
-      output: {
-        globals: {
-          vue: 'Vue',
-          zod: 'Zod',
-        },
-      },
     },
   },
 })

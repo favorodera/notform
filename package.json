@@ -9,8 +9,8 @@
   "exports": {
     ".": {
       "import": "./dist/valid.es.js",
-      "require": "./dist/valid.umd.js",
-      "types": "./dist/types/index.d.ts"
+      "require": "./dist/valid.cjs.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
@@ -19,7 +19,7 @@
   "scripts": {
     "dev": "vite build --watch",
     "preview": "vite preview",
-    "build": "vue-tsc --build && vite build",
+    "build": "rm -rf dist && rm -f node_modules/.tmp/tsconfig.app.tsbuildinfo && vite build && vue-tsc -p tsconfig.app.json",
     "test:unit": "vitest --ui --watch --browser",
     "test:e2e": "playwright test --ui",
     "typecheck": "vue-tsc --build",
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
+    "@microsoft/api-extractor": "^7.55.2",
     "@playwright/test": "^1.57.0",
     "@stylistic/eslint-plugin": "^5.7.0",
     "@tsconfig/node24": "^24.0.3",
