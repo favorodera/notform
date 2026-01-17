@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest'
 import { render } from 'vitest-browser-vue'
 import { h, reactive } from 'vue'
 import { z } from 'zod'
-import ValidForm from '../../src/components/valid-form.vue'
+import { ValidForm } from '../src'
 
 const schema = z.object({
   name: z.string(),
