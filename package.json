@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite build --watch",
     "preview": "vite preview",
     "build": "vue-tsc --build && vite build",
     "test:unit": "vitest --ui --watch --browser",
