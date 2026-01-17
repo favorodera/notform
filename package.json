@@ -63,6 +63,7 @@
     "vue-tsc": "^3.2.2"
   },
   "dependencies": {
+    "@standard-schema/spec": "^1.1.0",
     "dot-prop": "^10.1.0",
     "klona": "^2.0.6"
   },

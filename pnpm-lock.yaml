@@ -8,12 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@standard-schema/spec':
+        specifier: ^1.1.0
+        version: 1.1.0
       dot-prop:
         specifier: ^10.1.0
         version: 10.1.0
       klona:
         specifier: ^2.0.6
         version: 2.0.6
+      zod:
+        specifier: ^4.3.5
+        version: 4.3.5
     devDependencies:
       '@stylistic/eslint-plugin':
         specifier: ^5.7.0
@@ -75,9 +81,6 @@ importers:
       vue-tsc:
         specifier: ^3.2.2
         version: 3.2.2(typescript@5.9.3)
-      zod:
-        specifier: ^4.3.5
-        version: 4.3.5
 
 packages:
 
