@@ -14,6 +14,11 @@ export type * from './types/shared'
 export type * from './types/utils'
 
 /**
+ * Export types from dependency libraries for convenience.
+ */
+export type * from './types/convenience'
+
+/**
  * The primary Form component used to wrap and provide context to form fields.
  */
 export { default as Form } from './components/Form.vue'
@@ -27,3 +32,8 @@ export { default as useForm } from './composables/use-form'
  * Utility function to access the form context for a specific form ID.
  */
 export { withContext } from './utils/form-context'
+
+/**
+ * Export standard schema for convenience
+ */
+export type { StandardSchemaV1 } from '@standard-schema/spec'

@@ -37,6 +37,43 @@ export type UseFormOptions<TSchema extends ObjectSchema> = {
    * A list of event names that should trigger a validation check for individual fields.
    */
   validateOn?: ValidationTriggers[]
+  /**
+   * Optional callback that runs after schema validation succeeds.
+   * Use this for custom validation logic such as:
+   * - Cross-field validation
+   * - Server-side validation (API calls)
+   * - Business logic checks
+   * - Custom error transformations
+   *
+   * @param data The successfully validated and transformed data from the schema
+   * @returns
+   * - `true` or `void`: Validation passed
+   * - `false`: Validation failed (form-level, no specific field errors)
+   * - `StandardSchemaV1.Issue[]`: Validation failed with specific field errors
+   *
+   * @example
+   * ```ts
+   * // Field-specific error
+   * onValidate: async (data) => {
+   *   const exists = await checkEmailExists(data.email)
+   *   if (exists) {
+   *     return [{
+   *       message: 'Email already taken',
+   *       path: ['email']
+   *     }]
+   *   }
+   * }
+   *
+   * // Form-level error (no specific field)
+   * onValidate: async (data) => {
+   *   const canSubmit = await checkPermissions(data)
+   *   if (!canSubmit) {
+   *     return false // or throw an error
+   *   }
+   * }
+   * ```
+   */
+  onValidate?: (data: StandardSchemaV1.InferOutput<TSchema>) => boolean | void | StandardSchemaV1.Issue[] | Promise<boolean | void | StandardSchemaV1.Issue[]>
 }
 
 /**

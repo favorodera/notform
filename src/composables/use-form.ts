@@ -17,10 +17,11 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
   const {
     id = useId(),
     schema: _schema,
-    initialErrors = [],
+    initialErrors: _initialErrors = [],
     initialState: _initialState = {},
     mode = 'lazy',
     validateOn = ['blur', 'input', 'change'],
+    onValidate,
   } = options
 
   // Create a computed reference for the schema to support dynamic updates
@@ -32,6 +33,9 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
   // Initialize the reactive form state with a clone of the initial state
   const state = ref(structuredClone(initialState)) as Ref<StandardSchemaV1.InferInput<TSchema>>
 
+  // Initialize the reactive form errors with a clone of the initial errors
+  const initialErrors = structuredClone(_initialErrors) as StandardSchemaV1.Issue[]
+
   // Initialize reactive errors with any provided initial validation issues
   const errors = ref<StandardSchemaV1.Issue[]>([...initialErrors])
 
@@ -40,21 +44,55 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
 
   /**
    * Validates the current form state against the resolved schema.
+   * If schema validation passes and an onValidate callback is provided,
+   * executes the callback for additional custom validation.
    * Updates the errors reactive reference with any issues found.
    * @returns A promise resolving to the validation result containing either issues or parsed data.
    */
   async function validate(): Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>> {
     isValidating.value = true
-
-    // Execute the validation logic defined in the standard schema
-    const result = await schema.value['~standard'].validate(state.value)
-
-    // Assign any validation issues back to the reactive errors array
-    errors.value = result.issues ? [...result.issues] : []
-    isValidating.value = false
-
-    // Return the result following the Standard Schema result structure
-    return result.issues ? { issues: result.issues } : { value: result.value }
+    
+    try {
+      // Execute the validation logic defined in the standard schema
+      const result = await schema.value['~standard'].validate(state.value)
+      
+      // If schema validation failed, return early with issues
+      if (result.issues) {
+        errors.value = [...result.issues]
+        return { issues: result.issues }
+      }
+      
+      // Schema validation passed - run custom validation if provided
+      if (onValidate) {
+        const customResult = await onValidate(result.value)
+        
+        // Handle different return types
+        if (customResult === false) {
+          // Form-level validation failed (no specific field errors)
+          const formLevelError: StandardSchemaV1.Issue = {
+            message: 'Validation failed',
+            path: [],
+          }
+          errors.value = [formLevelError]
+          return { issues: [formLevelError] }
+        }
+        
+        if (Array.isArray(customResult) && customResult.length > 0) {
+          // Field-specific validation errors
+          errors.value = customResult
+          return { issues: customResult }
+        }
+        
+        // customResult is true, void, or empty array - validation passed
+      }
+      
+      // All validations passed
+      errors.value = []
+      return { value: result.value }
+    }
+    finally {
+      isValidating.value = false
+    }
   }
 
   /**
@@ -64,7 +102,7 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     // Restore the form state from the initial snapshot
     state.value = structuredClone(initialState)
     // Clear or restore the initial errors
-    errors.value = [...initialErrors]
+    errors.value = structuredClone(initialErrors)
     // Ensure validation status is reset
     isValidating.value = false
   }
