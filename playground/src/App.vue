@@ -403,7 +403,7 @@ function removeTag(index: number) {
         <summary class="cursor-pointer text-xs text-green-800 hover:text-green-500 uppercase list-none">
           [+] EXPAND_MEMORY_DUMP
         </summary>
-        <div class="mt-2 text-sm opacity-70 font-mono p-4 border border-green-900/50 bg-black">
+        <div class="mt-2 text-sm opacity-70 font-mono p-4 border border-green-900/50 bg-black overflow-x-auto">
           <pre>{{ JSON.stringify({ state, isValidating, errors }, null, 2) }}</pre>
         </div>
       </details>
