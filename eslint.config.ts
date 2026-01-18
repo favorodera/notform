@@ -38,6 +38,7 @@ export default defineConfigWithVueTs(
       '@stylistic/no-multiple-empty-lines': ['error', { max: 2, maxEOF: 2, maxBOF: 0 }],
       '@stylistic/padded-blocks': 'off',
       '@stylistic/no-trailing-spaces': ['error', { skipBlankLines: true }],
+      'vue/multi-word-component-names': 'off',
     },
   },
 )

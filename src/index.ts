@@ -1,9 +1,29 @@
+/**
+ * Export all form-related type definitions.
+ */
+export type * from './types/form'
+
+/**
+ * Export all shared validation and schema type definitions.
+ */
 export type * from './types/shared'
+
+/**
+ * Export all internal utility type definitions.
+ */
 export type * from './types/utils'
-export type * from './types/valid-form'
-export type * from './types/valid-field'
 
+/**
+ * The primary Form component used to wrap and provide context to form fields.
+ */
+export { default as Form } from './components/Form.vue'
 
-export { default as ValidForm } from './components/valid-form.vue'
+/**
+ * The main composable function for creating and managing form instances.
+ */
+export { default as useForm } from './composables/use-form'
 
-export { default as ValidField } from './components/valid-field.vue'
+/**
+ * Utility function to access the form context for a specific form ID.
+ */
+export { withContext } from './utils/form-context'
