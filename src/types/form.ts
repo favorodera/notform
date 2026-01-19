@@ -74,6 +74,22 @@ export type UseFormOptions<TSchema extends ObjectSchema> = {
    * ```
    */
   onValidate?: (data: StandardSchemaV1.InferOutput<TSchema>) => boolean | void | StandardSchemaV1.Issue[] | Promise<boolean | void | StandardSchemaV1.Issue[]>
+  /**
+   * Optional callback that runs when the form is reset.
+   * Use this for custom reset logic such as:
+   * - Clearing custom state
+   * - Resetting custom errors
+   * - Custom cleanup
+   *
+   * @example
+   * ```ts
+   * // Clear custom state
+   * onReset: () => {
+   *   customState.value = null
+   * }
+   * ```
+   */
+  onReset?: () => void
 }
 
 /**
@@ -146,12 +162,53 @@ export type FormContext<TSchema extends ObjectSchema> = {
   validateField: (field: Paths<StandardSchemaV1.InferInput<TSchema>>) => Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>>
   /**
    * Reverts the form state and errors back to their initial values.
+   * @param _state Optional partial state to apply instead of the initial state.
+   * @param _errors Optional array of validation issues to apply instead of the initial errors.
+   * @param _validate Optional boolean to indicate whether to validate the form after resetting - defaults to false.
    */
-  reset: () => void
+  reset: (_state?: DeepPartial<StandardSchemaV1.InferInput<TSchema>>, _errors?: StandardSchemaV1.Issue[], _validate?: boolean) => void
   /**
    * A reactive boolean indicating whether a validation operation is currently in progress.
    */
   isValidating: Ref<boolean>
+  /**
+   * A reactive boolean indicating whether the form is valid.
+   */
+  isValid: ComputedRef<boolean>
+  /**
+   * A reactive boolean indicating whether at least one field has been touched(blurred).
+   */
+  isTouched: ComputedRef<boolean>
+  /**
+   * Touches a specific field, marking it as interacted with.
+   * @param field The field to touch.
+   */
+  touchField: (field: Paths<StandardSchemaV1.InferInput<TSchema>>) => void
+  /**
+   * Touches all fields, marking them as interacted with.
+   */
+  touchAllFields: () => void
+  /**
+   * A reactive set of touched fields.
+   */
+  touchedFields: Ref<Set<Paths<StandardSchemaV1.InferInput<TSchema>>>>
+  /**
+   * A reactive boolean indicating whether the form is dirty(i.e. the user has interacted with it).
+   */
+  isDirty: ComputedRef<boolean>
+  /**
+   * A reactive set of dirty fields.
+   */
+  dirtyFields: Ref<Set<Paths<StandardSchemaV1.InferInput<TSchema>>>>
+  /**
+   * Marks a specific field as dirty.
+   * @param field The field to mark as dirty.
+   */
+  dirtyField: (field: Paths<StandardSchemaV1.InferInput<TSchema>>) => void
+  /**
+   * Marks all fields as dirty.
+   */
+  dirtyAllFields: () => void
 }
 
 /**
