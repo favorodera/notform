@@ -355,7 +355,7 @@ function removeTag(index: number) {
         </button>
         <button
           type="button"
-          @click="reset"
+          @click="reset()"
           :disabled="isValidating"
           class="px-6 py-3 border border-green-800 text-green-700 uppercase font-medium hover:border-green-500 hover:text-green-500 transition-colors"
         >
