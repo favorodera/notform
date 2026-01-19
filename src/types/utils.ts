@@ -1,4 +1,4 @@
-import type { PartialDeep } from 'type-fest'
+import type { PartialDeep, Paths as TypeFestPaths } from 'type-fest'
 
 /**
  * Constructs a type where all properties of the input type are optional.
@@ -11,3 +11,15 @@ export type DeepPartial<TData> = PartialDeep<TData, {
   recurseIntoArrays: true
   allowUndefinedInNonTupleArrays: true
 }>
+
+/**
+ * Constructs a type that represents all possible dot-separated paths to the leaves of an object.
+ * This type is useful for creating string literal types that can be used as keys for accessing nested properties.
+ * @template TReference The object type for which to generate paths.
+ */
+export type Paths<TReference> = TypeFestPaths<TReference, {
+  maxRecursionDepth: 10
+  bracketNotation: true
+  leavesOnly: false
+}>
+  
