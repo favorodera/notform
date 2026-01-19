@@ -1,7 +1,7 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { ComputedRef, FormHTMLAttributes, MaybeRefOrGetter, Ref } from 'vue'
 import type { ObjectSchema, ValidationMode, ValidationTriggers } from './shared'
-import type { DeepPartial } from './utils'
+import type { DeepPartial, Paths } from './utils'
 
 /**
  * Configuration options for initializing a new form instance via useForm.
@@ -91,6 +91,12 @@ export type FormContext<TSchema extends ObjectSchema> = {
    */
   state: Ref<StandardSchemaV1.InferInput<TSchema>>
   /**
+   * A function to update the form state.
+   * @param _state The new state to apply to the form.
+   * @param _validate Whether to validate the form after updating the state - defaults to true.
+   */
+  setState: (_state: DeepPartial<StandardSchemaV1.InferInput<TSchema>>, _validate?: boolean) => void
+  /**
    * A static representation of the form's data at the moment of initialization.
    */
   initialState: StandardSchemaV1.InferInput<TSchema>
@@ -98,6 +104,16 @@ export type FormContext<TSchema extends ObjectSchema> = {
    * A reactive array containing all validation issues currently identified in the form.
    */
   errors: Ref<StandardSchemaV1.Issue[]>
+  /**
+   * A function to update the form errors.
+   * @param _errors The new errors to apply to the form.
+   */
+  setErrors: (_errors: StandardSchemaV1.Issue[]) => void
+  /**
+   * A function to get the errors for a specific field.
+   * @param field The field to get the errors for.
+   */
+  getFieldErrors: (field: Paths<StandardSchemaV1.InferInput<TSchema>>) => StandardSchemaV1.Issue[]
   /**
    * The original list of validation issues provided when the form was created.
    */
@@ -115,11 +131,19 @@ export type FormContext<TSchema extends ObjectSchema> = {
    */
   validateOn: ValidationTriggers[]
   /**
-   * Executes the validation logic against the current form state.
-   * It returns a promise that resolves with the validation result.
-   * The result either contains the successfully parsed data output or a list of issues.
+   * Validates the current form state against the resolved schema.
+   * If schema validation passes and an onValidate callback is provided,
+   * executes the callback for additional custom validation.
+   * Updates the errors reactive reference with any issues found.
+   * @returns A promise resolving to the validation result containing either issues or parsed data.
    */
   validate: () => Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>>
+  /**
+   * Validates a specific field in the form.
+   * @param field The field to validate.
+   * @returns A promise resolving to the validation result containing either issues or parsed data.
+   */
+  validateField: (field: Paths<StandardSchemaV1.InferInput<TSchema>>) => Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>>
   /**
    * Reverts the form state and errors back to their initial values.
    */
