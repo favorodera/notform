@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import * as v from 'valibot'
-import { useForm } from '../../../src'
+import { useForm, Form } from '../../../src'
 import { withSetup } from '../../utils'
 
 describe('use_form_methods_valibot', () => {
@@ -12,15 +12,25 @@ describe('use_form_methods_valibot', () => {
 
   test('validates single field correctly', async () => {
     // init form
-    const { result } = withSetup(() => useForm({
-      schema,
-      initialState: { email: '', password: '' },
-    }))
+    const { validateField, getFieldErrors, getByRole } = withSetup(() => {
+      const { validateField, state, getFieldErrors, id } = useForm({
+        schema,
+        initialState: { email: '', password: '' },
+      })
+      return { validateField, state, getFieldErrors, id }
+    }).render(
+      `
+        <Form :id="id">
+            <input name="email" v-model="state.email" aria-label="email" />
+        </Form>
+        `,
+      { Form },
+    )
 
-    const { validateField, state, getFieldErrors } = result
+    const emailInput = getByRole('textbox', { name: 'email' })
 
     // set invalid email
-    state.value.email = 'invalid-email'
+    await emailInput.fill('invalid-email')
 
     // validation should fail
     const resultFail = await validateField('email')
@@ -28,7 +38,7 @@ describe('use_form_methods_valibot', () => {
     expect(getFieldErrors('email')).toHaveLength(1)
 
     // set valid email
-    state.value.email = 'test@example.com'
+    await emailInput.fill('test@example.com')
 
     // validation should pass
     const validResult = await validateField('email')
@@ -41,14 +51,23 @@ describe('use_form_methods_valibot', () => {
     expect(getFieldErrors('email')).toHaveLength(0)
   })
 
-  test('handles field touching', () => {
+  test('handles field touching', async () => {
     // init form
-    const { result } = withSetup(() => useForm({
-      schema,
-      initialState: { email: '', password: '' },
-    }))
-
-    const { touchField, isTouched, touchedFields, touchAllFields } = result
+    const { touchField, isTouched, touchedFields, touchAllFields } = withSetup(() => {
+      const { touchField, isTouched, touchedFields, touchAllFields, id, state } = useForm({
+        schema,
+        initialState: { email: '', password: '' },
+      })
+      return { touchField, isTouched, touchedFields, touchAllFields, id, state }
+    }).render(
+      `
+        <Form :id="id">
+            <input name="email" v-model="state.email" aria-label="email" />
+            <input name="password" v-model="state.password" aria-label="password" />
+        </Form>
+        `,
+      { Form },
+    )
 
     // initially not touched
     expect(isTouched.value).toBe(false)
@@ -66,14 +85,24 @@ describe('use_form_methods_valibot', () => {
     expect(touchedFields.value.has('password')).toBe(true)
   })
 
-  test('handles dirty state correctly', () => {
+  test('handles dirty state correctly', async () => {
     // init form with initial state
-    const { result } = withSetup(() => useForm({
-      schema,
-      initialState: { email: 'test@example.com', password: 'password123' },
-    }))
+    const { dirtyField, isDirty, dirtyFields, getByRole } = withSetup(() => {
+      const { dirtyField, isDirty, dirtyFields, state, id } = useForm({
+        schema,
+        initialState: { email: 'test@example.com', password: 'password123' },
+      })
+      return { dirtyField, isDirty, dirtyFields, state, id }
+    }).render(
+      `
+        <Form :id="id">
+            <input name="email" v-model="state.email" aria-label="email" />
+        </Form>
+        `,
+      { Form },
+    )
 
-    const { dirtyField, isDirty, dirtyFields, state } = result
+    const emailInput = getByRole('textbox', { name: 'email' })
 
     // initially not dirty
     dirtyField('email')
@@ -82,7 +111,7 @@ describe('use_form_methods_valibot', () => {
     expect(isDirty.value).toBe(false)
 
     // change value
-    state.value.email = 'changed@example.com'
+    await emailInput.fill('changed@example.com')
     dirtyField('email')
 
     // verify dirty state
@@ -90,7 +119,7 @@ describe('use_form_methods_valibot', () => {
     expect(dirtyFields.value.has('email')).toBe(true)
 
     // revert value
-    state.value.email = 'test@example.com'
+    await emailInput.fill('test@example.com')
     dirtyField('email')
 
     // verify clean state again
@@ -99,15 +128,25 @@ describe('use_form_methods_valibot', () => {
 
   test('reset restores initial state and clear errors', async () => {
     // init form
-    const { result } = withSetup(() => useForm({
-      schema,
-      initialState: { email: '', password: '' },
-    }))
+    const { state, errors, reset, validate, getByRole } = withSetup(() => {
+      const { state, errors, reset, validate, id } = useForm({
+        schema,
+        initialState: { email: '', password: '' },
+      })
+      return { state, errors, reset, validate, id }
+    }).render(
+      `
+        <Form :id="id">
+            <input name="email" v-model="state.email" aria-label="email" />
+        </Form>
+        `,
+      { Form },
+    )
 
-    const { state, errors, reset, validate } = result
+    const emailInput = getByRole('textbox', { name: 'email' })
 
     // set some values and errors
-    state.value.email = 'test@test.com'
+    await emailInput.fill('test@test.com')
     await validate()
 
     // verify we have errors or changed state
@@ -120,4 +159,22 @@ describe('use_form_methods_valibot', () => {
     expect(state.value.email).toBe('')
     expect(errors.value).toEqual([])
   })
+
+  test('submit handler (mocked)', async () => {
+    // // TODO: Implement actual submit handler test when available
+    const submitHandler = vi.fn()
+
+    const { validate, state } = withSetup(() => {
+      const { validate, state } = useForm({ schema })
+      return { validate, state }
+    }).render('<div></div>')
+
+    const result = await validate()
+    if (!('issues' in result)) {
+      submitHandler(state.value)
+    }
+
+    expect(submitHandler).not.toHaveBeenCalled()
+  })
 })
+

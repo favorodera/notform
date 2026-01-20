@@ -1,27 +1,27 @@
-import { defineComponent, h } from 'vue'
+import { defineComponent } from 'vue'
 import { render } from 'vitest-browser-vue'
 
-/**
- * Helper function to run code inside setup
- *
- * @param composable - The composable function to run
- * @returns The result of the composable function
- */
-export function withSetup<T>(composable: () => T): { result: T } {
-  let result: T | undefined
-
-  const component = defineComponent({
-    setup() {
-      result = composable()
-      return () => h('div')
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function withSetup<T extends Record<string, any>>(setup: () => T) {
+  let context: T | undefined
+  
+  return {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    render(template: string, components?: Record<string, any>) {
+      const rendered = render(defineComponent({
+        setup() {
+          context = setup()
+          return context
+        },
+        template,
+        components,
+      }))
+      
+      if (context === undefined) {
+        throw new Error('withSetup: Setup was not called.')
+      }
+      
+      return { ...context, ...rendered }
     },
-  })
-
-  render(component)
-
-  if (result === undefined) {
-    throw new Error('withSetup: Composable did not return a result or setup was not called.')
   }
-
-  return { result }
 }

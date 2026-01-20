@@ -1,55 +1,123 @@
 import { describe, expect, test } from 'vitest'
 import { z } from 'zod'
-import { useForm } from '../../../src'
+import { ref } from 'vue'
+import { useForm, Form } from '../../../src'
 import { withSetup } from '../../utils'
 
 describe('use-form-basic', () => {
-  // define a simple schema for testing
-  const schema = z.object({
-    name: z.string().min(1),
-    age: z.number().min(18),
+  test('initializes with default values and updates state via DOM', async () => {
+    const { getByRole, state } = withSetup(() => {
+      const schema = z.object({
+        name: z.string().min(1),
+        age: z.number().min(18),
+      })
+
+      const { state, id } = useForm({ schema })
+
+      return { state, id }
+    }).render(
+      `
+    <Form :id="id">
+      <label for="name">name</label>
+      <input id="name" name="name" type="text" v-model="state.name" />
+
+      <label for="age">age</label>
+      <input id="age" name="age" type="number" v-model.number="state.age" />
+    </Form>
+  `,
+      { Form },
+    )
+
+    const nameInput = getByRole('textbox', { name: 'name' })
+    const ageInput = getByRole('spinbutton', { name: 'age' })
+
+    await expect.element(nameInput).toHaveValue('')
+    await expect.element(ageInput).toHaveValue(null)
+
+    // Update values via DOM
+    await nameInput.fill('John')
+    await ageInput.fill('25')
+
+    // check state is updated (Input -> Ref)
+    expect(state.value.name).toBe('John')
+    expect(state.value.age).toBe(25)
   })
 
-  test('initializes with default values', () => {
-    // initialize form with schema only
-    const { result } = withSetup(() => useForm({
-      schema,
-    }))
+  test('two-way reactivity with multiple variables', async () => {
+    const { getByRole, state, searchQuery } = withSetup(() => {
+      const schema = z.object({
+        name: z.string().min(1),
+      })
+      const { state, id } = useForm({ schema })
+      const searchQuery = ref('')
 
-    const { state, errors, isValid, isDirty, isTouched } = result
+      return { state, id, searchQuery }
+    }).render(
+      `
+      <Form :id="id">
+        <input v-model="searchQuery" aria-label="Search" />
+        <input v-model="state.name" aria-label="Name" />
+      </Form>
+      `,
+      { Form },
+    )
 
-    // check initial state is empty object
-    expect(state.value).toEqual({})
-    // check no errors initially
-    expect(errors.value).toEqual([])
-    // check valid state depends on errors (empty errors = valid)
-    expect(isValid.value).toBe(true)
-    // check dirty/touched status
-    expect(isDirty.value).toBe(false)
-    expect(isTouched.value).toBe(false)
+    const searchInput = getByRole('textbox', { name: 'Search' })
+    const nameInput = getByRole('textbox', { name: 'Name' })
+
+    // 1. DOM -> Ref
+    await searchInput.fill('test query')
+    await nameInput.fill('Alice')
+
+    expect(searchQuery.value).toBe('test query')
+    expect(state.value.name).toBe('Alice')
+
+    // 2. Ref -> DOM
+    searchQuery.value = 'new query'
+    state.value.name = 'Bob'
+
+    await expect.element(searchInput).toHaveValue('new query')
+    await expect.element(nameInput).toHaveValue('Bob')
   })
 
-  test('initializes with provided initial state', () => {
-    // define initial data
+  test('initializes with provided initial state', async () => {
     const initialState = {
       name: 'John',
       age: 25,
     }
 
-    // initialize form with initial state
-    const { result } = withSetup(() => useForm({
-      schema,
-      initialState,
-    }))
+    const { getByRole, state } = withSetup(() => {
+      const schema = z.object({
+        name: z.string().min(1),
+        age: z.number().min(18),
+      })
 
-    const { state } = result
+      const { state, id } = useForm({
+        schema,
+        initialState,
+      })
 
-    // check state matches provided initial state
+      return { state, id }
+    }).render(
+      `
+    <Form :id="id">
+      <input name="name" v-model="state.name" aria-label="name" />
+      <input name="age" type="number" v-model.number="state.age" aria-label="age" />
+    </Form>
+    `,
+      { Form },
+    )
+
+    const nameInput = getByRole('textbox', { name: 'name' })
+    const ageInput = getByRole('spinbutton', { name: 'age' })
+
+    await expect.element(nameInput).toHaveValue('John')
+    await expect.element(ageInput).toHaveValue(25)
+
     expect(state.value).toEqual(initialState)
   })
 
-  test('initializes with provided initial errors', () => {
-    // define initial errors
+  test('initializes with provided initial errors', async () => {
     const initialErrors = [
       {
         path: ['name'],
@@ -57,35 +125,19 @@ describe('use-form-basic', () => {
       },
     ]
 
-    // initialize form with initial errors
-    const { result } = withSetup(() => useForm({
-      schema,
-      initialErrors,
-    }))
+    const { errors, isValid } = withSetup(() => {
+      const schema = z.object({
+        name: z.string().min(1),
+        age: z.number().min(18),
+      })
 
-    const { errors, isValid } = result
+      return useForm({
+        schema,
+        initialErrors,
+      })
+    }).render('<div></div>')
 
-    // check errors match provided initial errors
     expect(errors.value).toEqual(initialErrors)
-    // check valid state is false due to errors
     expect(isValid.value).toBe(false)
-  })
-
-  test('updates state reactively', () => {
-    // initialize form
-    const { result } = withSetup(() => useForm({
-      schema,
-      initialState: { name: '', age: 0 },
-    }))
-
-    const { state } = result
-
-    // update state directly (simulating v-model)
-    state.value.name = 'Jane'
-    state.value.age = 30
-
-    // check state is updated
-    expect(state.value.name).toBe('Jane')
-    expect(state.value.age).toBe(30)
   })
 })

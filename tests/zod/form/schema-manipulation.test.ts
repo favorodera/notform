@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { z } from 'zod'
 import { ref } from 'vue'
-import { useForm } from '../../../src'
+import { useForm, Form } from '../../../src'
 import { withSetup } from '../../utils'
 
 describe('schema_manipulation', () => {
@@ -15,20 +15,31 @@ describe('schema_manipulation', () => {
       path: ['confirm'],
     })
 
-    const { result } = withSetup(() => useForm({
-      schema,
-      initialState: { password: 'abc', confirm: 'def' },
-    }))
-
-    const { state, validate, errors } = result
+    const { errors, validate, getByRole } = withSetup(() => {
+      const { errors, validate, id, state } = useForm({
+        schema,
+        initialState: { password: 'abc', confirm: 'def' },
+      })
+      return { errors, validate, id, state }
+    }).render(
+      `
+      <Form :id="id">
+        <input name="password" v-model="state.password" aria-label="password" />
+        <input name="confirm" v-model="state.confirm" aria-label="confirm" />
+      </Form>
+      `,
+      { Form },
+    )
 
     // should fail validation
     await validate()
     expect(errors.value.length).toBeGreaterThan(0)
     expect(errors.value[0].message).toBe("Passwords don't match")
 
-    // make valid
-    state.value.confirm = 'abc'
+    // make valid via input
+    const confirmInput = getByRole('textbox', { name: 'confirm' })
+    await confirmInput.fill('abc')
+
     await validate()
     expect(errors.value.length).toBe(0)
   })
@@ -47,17 +58,28 @@ describe('schema_manipulation', () => {
       field: schema,
     })
 
-    const { result } = withSetup(() => useForm({
-      schema: formSchema,
-      initialState: { field: 'too long string' },
-    }))
+    const { errors, validate, getByRole } = withSetup(() => {
+      const { errors, validate, id, state } = useForm({
+        schema: formSchema,
+        initialState: { field: 'too long string' },
+      })
+      return { errors, validate, id, state }
+    }).render(
+      `
+      <Form :id="id">
+        <input name="field" v-model="state.field" aria-label="field" />
+      </Form>
+      `,
+      { Form },
+    )
 
-    const { state, validate, errors } = result
+    const fieldInput = getByRole('textbox', { name: 'field' })
 
     await validate()
     expect(errors.value[0].message).toBe('Too long')
 
-    state.value.field = 'short'
+    await fieldInput.fill('short')
+
     await validate()
     expect(errors.value.length).toBe(0)
   })
@@ -73,12 +95,20 @@ describe('schema_manipulation', () => {
 
     const currentSchema = ref(schema1)
 
-    const { result } = withSetup(() => useForm({
-      schema: currentSchema,
-      initialState: { val: 15 },
-    }))
-
-    const { validate, errors } = result
+    const { errors, validate } = withSetup(() => {
+      const { errors, validate, id, state } = useForm({
+        schema: currentSchema,
+        initialState: { val: 15 },
+      })
+      return { errors, validate, id, state }
+    }).render(
+      `
+      <Form :id="id">
+        <input name="val" type="number" v-model.number="state.val" aria-label="val" />
+      </Form>
+      `,
+      { Form },
+    )
 
     // fails under schema1 (max 10)
     await validate()
