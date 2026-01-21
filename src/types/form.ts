@@ -126,6 +126,10 @@ export type FormContext<TSchema extends ObjectSchema> = {
    */
   setErrors: (_errors: StandardSchemaV1.Issue[]) => void
   /**
+   * A function to clear the form errors.
+   */
+  clearErrors: () => void
+  /**
    * A function to get the errors for a specific field.
    * @param field The field to get the errors for.
    */
@@ -209,6 +213,12 @@ export type FormContext<TSchema extends ObjectSchema> = {
    * Marks all fields as dirty.
    */
   dirtyAllFields: () => void
+  /**
+   * Submits the form.
+   * @param event Optional `Event` object for the form submission - `preventDefault` and `stopPropagation` are automatically called on it.
+   * @param callback Optional callback to execute on form submission - called only if validation is successful.
+   */
+  submit: (event?: Event, callback?: (data: StandardSchemaV1.InferOutput<TSchema>) => void | Promise<void>) => Promise<void>
 }
 
 /**
