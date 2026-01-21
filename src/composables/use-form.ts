@@ -182,6 +182,11 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     errors.value = [...errors.value, ..._errors]
   }
 
+  /** @see {@link FormContext.clearErrors} */
+  function clearErrors() {
+    errors.value = []
+  }
+
   /** @see {@link FormContext.validateField} */
   async function validateField(path: Paths<StandardSchemaV1.InferInput<TSchema>>) {
     isValidating.value = true
@@ -246,7 +251,7 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     // Use onResetState if available (custom reset was called), otherwise use initialState
     const baselineState = onResetState.value ?? initialState
     const baselineValue = getProperty(baselineState, field)
-    
+
     if (currentValue !== baselineValue) {
       dirtyFields.value.add(field)
     }
@@ -261,6 +266,37 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     dirtyFields.value = new Set(paths)
   }
 
+  /**
+ * Submits the form.
+ */
+  async function submit(event?: Event, callback?: (data: StandardSchemaV1.InferOutput<TSchema>) => void | Promise<void>) {
+    // Prevent default event behavior
+    event?.preventDefault()
+    event?.stopPropagation()
+
+    // Validate the form
+    const result = await validate()
+
+    // If there are errors, return the result
+    if (result.issues) {
+      errors.value = [...result.issues]
+      return
+    }
+
+    // Validation is successful...
+
+    // Mark all fields as touched
+    touchAllFields()
+
+    // Mark all fields as dirty
+    dirtyAllFields()
+
+    // Call the callback if provided
+    if (callback) {
+      await callback(result.value)
+    }
+  }
+
   // Assemble the form context object with all state and methods
   /** @see {@link FormContext} */
   const context: FormContext<TSchema> = {
@@ -270,6 +306,7 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     initialState,
     errors,
     setErrors,
+    clearErrors,
     getFieldErrors,
     initialErrors,
     schema,
@@ -288,6 +325,7 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     touchAllFields,
     dirtyField,
     dirtyAllFields,
+    submit,
   }
 
   // Register and provide the form context using a unique injection key
