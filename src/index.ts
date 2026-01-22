@@ -9,6 +9,11 @@ export type * from './types/form'
 export type * from './types/field'
 
 /**
+ * Export all message type definitions.
+ */
+export type * from './types/message'
+
+/**
  * Export all shared validation and schema type definitions.
  */
 export type * from './types/shared'
@@ -27,6 +32,11 @@ export { default as Form } from './components/Form.vue'
  * The Field component used to create and manage form fields.
  */
 export { default as Field } from './components/Field.vue'
+
+/**
+ * The Message component used to display validation messages for form fields.
+ */
+export { default as Message } from './components/Message.vue'
 
 /**
  * The main composable function for creating and managing form instances.
