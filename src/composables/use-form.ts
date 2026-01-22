@@ -26,6 +26,7 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     validateOn = ['blur', 'input', 'change'],
     onValidate,
     onReset,
+    onError,
   } = options
 
   // Create a computed reference for the schema to support dynamic updates
@@ -91,6 +92,12 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
       // If schema validation failed, return early with issues
       if (result.issues) {
         errors.value = [...result.issues]
+
+        // Call onError if provided
+        if (onError) {
+          onError([...result.issues])
+        }
+
         return { issues: result.issues }
       }
 
@@ -106,12 +113,24 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
             path: [],
           }
           errors.value = [formLevelError]
+
+          // Call onError if provided
+          if (onError) {
+            onError([formLevelError])
+          }
+
           return { issues: [formLevelError] }
         }
 
         if (Array.isArray(customResult) && customResult.length > 0) {
           // Field-specific validation errors
           errors.value = customResult
+
+          // Call onError if provided
+          if (onError) {
+            onError(customResult)
+          }
+
           return { issues: customResult }
         }
 
