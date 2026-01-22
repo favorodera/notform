@@ -26,7 +26,7 @@ provide(CURRENT_FORM_ID_KEY, props.id)
 </script>
 
 <template>
-  <form>
+  <form v-bind="$attrs" :id="id">
     <!-- Render the content and expose the form context properties -->
     <slot v-bind="form" />
   </form>
