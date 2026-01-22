@@ -10,6 +10,12 @@ import type { ObjectSchema } from '../types/shared'
 const formContextKeys = new Map<string, InjectionKey<FormContext<any>>>()
 
 /**
+ * Injection key for the ID of the current form.
+ * This is used to allow descendant components (like Field) to locate the correct form context.
+ */
+export const CURRENT_FORM_ID_KEY: InjectionKey<string> = Symbol('valid:form:id')
+
+/**
  * Retrieves an existing injection key or creates a new one for a specific form ID.
  * This key is utilized by provide and inject functions to manage form state across components.
  * @template TSchema The validation schema type derived from ObjectSchema.
