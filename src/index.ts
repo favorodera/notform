@@ -4,6 +4,11 @@
 export type * from './types/form'
 
 /**
+ * Export all field type definitions.
+ */
+export type * from './types/field'
+
+/**
  * Export all shared validation and schema type definitions.
  */
 export type * from './types/shared'
@@ -14,14 +19,14 @@ export type * from './types/shared'
 export type * from './types/utils'
 
 /**
- * Export types from dependency libraries for convenience.
- */
-export type * from './types/convenience'
-
-/**
  * The primary Form component used to wrap and provide context to form fields.
  */
 export { default as Form } from './components/Form.vue'
+
+/**
+ * The Field component used to create and manage form fields.
+ */
+export { default as Field } from './components/Field.vue'
 
 /**
  * The main composable function for creating and managing form instances.
