@@ -21,5 +21,5 @@ export type Paths<TReference> = TypeFestPaths<TReference, {
   maxRecursionDepth: 10
   bracketNotation: true
   leavesOnly: false
-}>
-  
+}> extends infer P ? [P] extends [never] ? string : P : never
+
