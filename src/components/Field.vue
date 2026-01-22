@@ -31,25 +31,25 @@ async function validate() {
 
 /** @see {@link FieldContext.methods} */
 const methods = {
-  onBlur: () => {
+  onBlur: function () {
     touchField(props.name)
     if (mode === 'eager' || validateOn.includes('blur')) {
       validate()
     }
   },
-  onChange: () => {
+  onChange: function () {
     dirtyField(props.name)
     if (mode === 'eager' || validateOn.includes('change')) {
       validate()
     }
   },
-  onInput: () => {
+  onInput: function () {
     dirtyField(props.name)
     if (mode === 'eager' || validateOn.includes('input')) {
       validate()
     }
   },
-  onFocus: () => {
+  onFocus: function () {
     dirtyField(props.name)
     if (mode === 'eager' || validateOn.includes('focus')) {
       validate()
@@ -66,7 +66,7 @@ const context = reactive({
   isValid: computed(() => getFieldErrors(props.name).length === 0),
   validate,
   methods,
-}) as unknown as FieldContext<TSchema>
+}) as FieldContext<TSchema>
 
 onMounted(async () => {
   await nextTick()
