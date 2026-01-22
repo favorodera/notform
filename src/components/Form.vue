@@ -1,7 +1,8 @@
 <script setup lang="ts" generic="TSchema extends ObjectSchema">
+import { provide } from 'vue'
 import type { FormProps, FormSlots } from '../types/form'
 import type { ObjectSchema } from '../types/shared'
-import { withContext } from '../utils/form-context'
+import { CURRENT_FORM_ID_KEY, withContext } from '../utils/form-context'
 
 /**
  * A wrapper component that provides form context to its descendants.
@@ -19,6 +20,9 @@ defineSlots<FormSlots<TSchema>>()
 
 // Access the form context created by the useForm composable using the provided ID
 const form = withContext<TSchema>(props.id)
+
+// Provide the current form ID to descendant components
+provide(CURRENT_FORM_ID_KEY, props.id)
 </script>
 
 <template>
