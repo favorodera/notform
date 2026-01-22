@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { ComputedRef, FormHTMLAttributes, MaybeRefOrGetter, Ref } from 'vue'
+import type { ComputedRef, FormHTMLAttributes, MaybeRefOrGetter, Ref, VNodeChild } from 'vue'
 import type { ObjectSchema, ValidationMode, ValidationTriggers } from './shared'
 import type { DeepPartial, Paths } from './utils'
 
@@ -90,6 +90,22 @@ export type UseFormOptions<TSchema extends ObjectSchema> = {
    * ```
    */
   onReset?: () => void
+  /**
+   * Optional callback that runs when the form validation fails.
+   * Use this for custom error handling such as:
+   * - Displaying custom error messages
+   * - Logging errors
+   * - Custom error reporting
+   *
+   * @example
+   * ```ts
+   * // Display custom error messages
+   * onError: (errors) => {
+   *   console.error('Form validation failed:', errors)
+   * }
+   * ```
+   */
+  onError?: (errors: StandardSchemaV1.Issue[]) => void
 }
 
 /**
@@ -236,24 +252,7 @@ export type FormSlots<TSchema extends ObjectSchema> = {
    * The default slot receives the entire form context as its scope.
    * This allows child components to access state, errors, and methods.
    */
-  default: (props: FormContext<TSchema>) => void
-}
-
-/**
- * Events emitted by the Form component.
- * @template TSchema The validation schema type derived from ObjectSchema.
- */
-export type FormEmits<TSchema extends ObjectSchema> = {
-  /**
-   * Triggered when the form is submitted and validation passes successfully.
-   * It provides the validated and transformed data as the first argument.
-   */
-  submit: [data: StandardSchemaV1.InferOutput<TSchema>]
-  /**
-   * Triggered when a validation check fails.
-   * It provides an array of validation issues as the first argument.
-   */
-  error: [errors: StandardSchemaV1.Issue[]]
+  default: (props: FormContext<TSchema>) => VNodeChild
 }
 
 /**
