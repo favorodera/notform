@@ -1,54 +1,35 @@
-/**
- * Export all form-related type definitions.
- */
+/** Form-related type definitions */
 export type * from './types/form'
 
-/**
- * Export all field type definitions.
- */
+/** Field type definitions */
 export type * from './types/field'
 
-/**
- * Export all message type definitions.
- */
+/** Validation message type definitions */
 export type * from './types/message'
 
-/**
- * Export all shared validation and schema type definitions.
- */
+/** Shared validation and schema types */
 export type * from './types/shared'
 
-/**
- * Export all internal utility type definitions.
- */
+/** Internal utility types */
 export type * from './types/utils'
 
-/**
- * The primary Form component used to wrap and provide context to form fields.
- */
+/** Component for wrapping and providing form context */
 export { default as Form } from './components/Form.vue'
 
-/**
- * The Field component used to create and manage form fields.
- */
+/** Component for individual form fields */
 export { default as Field } from './components/Field.vue'
 
-/**
- * The Message component used to display validation messages for form fields.
- */
+/** Component for displaying field validation messages */
 export { default as Message } from './components/Message.vue'
 
-/**
- * The main composable function for creating and managing form instances.
- */
+/** Component for managing array-based fields */
+export { default as ArrayField } from './components/ArrayField.vue'
+
+/** Main composable for form initialization and management */
 export { default as useForm } from './composables/use-form'
 
-/**
- * Utility function to access the form context for a specific form ID.
- */
+/** Utility for accessing form context by its unique identifier */
 export { withContext } from './utils/form-context'
 
-/**
- * Export standard schema for convenience
- */
+/** Standard Schema specification types */
 export type { StandardSchemaV1 } from '@standard-schema/spec'

@@ -1,18 +1,27 @@
-<script setup lang="ts" generic="TSchema extends ObjectSchema">
+<script setup lang="ts">
 import type { FieldContext, FieldProps, FieldSlots } from '../types/field'
-import type { ObjectSchema } from '../types/shared'
 import { computed, inject, nextTick, onMounted, reactive } from 'vue'
 import { CURRENT_FORM_ID_KEY, withContext } from '../utils/form-context'
 
-const props = defineProps<FieldProps<TSchema>>()
-defineSlots<FieldSlots<TSchema>>()
+/**
+ * Component for individual form fields.
+ * Manages field-level state, validation triggers, and events.
+ */
+const props = defineProps<FieldProps>()
 
+/**
+ * Slots provided by the Field component.
+ */
+defineSlots<FieldSlots>()
+
+// Retrieve the ID of the form this field belongs to
 const formID = inject(CURRENT_FORM_ID_KEY)
 
 if (!formID) {
-  throw new Error('Field must be used inside a Form component with a valid form ID')
+  throw new Error('Field must be used inside a Form component')
 }
 
+// Access parent form context
 const {
   mode,
   validateOn,
@@ -22,55 +31,73 @@ const {
   getFieldErrors,
   touchField,
   dirtyField,
-} = withContext<TSchema>(formID)
+} = withContext(formID)
 
-/** @see {@link FieldContext.validate} */
+/**
+ * Triggers validation for this specific field.
+ * @returns Promise resolving to the validation result.
+ */
 async function validate() {
-  return await validateField(props.name)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return await validateField(props.name as any)
 }
 
-/** @see {@link FieldContext.methods} */
+/**
+ * Collection of event handlers for common field interactions.
+ */
 const methods = {
+  /** Handles focus loss */
   onBlur: function () {
-    touchField(props.name)
-    if (mode === 'eager' || validateOn.includes('blur')) {
-      validate()
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    touchField(props.name as any)
+    if (mode === 'eager' || validateOn.includes('blur')) validate()
   },
+  /** Handles value commitment */
   onChange: function () {
-    dirtyField(props.name)
-    if (mode === 'eager' || validateOn.includes('change')) {
-      validate()
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dirtyField(props.name as any)
+    if (mode === 'eager' || validateOn.includes('change')) validate()
   },
+  /** Handles streaming input */
   onInput: function () {
-    dirtyField(props.name)
-    if (mode === 'eager' || validateOn.includes('input')) {
-      validate()
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dirtyField(props.name as any)
+    if (mode === 'eager' || validateOn.includes('input')) validate()
   },
+  /** Handles field focus */
   onFocus: function () {
-    dirtyField(props.name)
-    if (mode === 'eager' || validateOn.includes('focus')) {
-      validate()
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dirtyField(props.name as any)
+    if (mode === 'eager' || validateOn.includes('focus')) validate()
   },
 }
 
-/** @see {@link FieldContext} */
+/**
+ * The consolidated reactive state exposed to the component's template.
+ */
 const context = reactive({
+  /** Path identifier */
   name: computed(() => props.name),
-  errors: computed(() => getFieldErrors(props.name).map(error => error.message)),
-  isTouched: computed(() => touchedFields.value.has(props.name)),
-  isDirty: computed(() => dirtyFields.value.has(props.name)),
-  isValid: computed(() => getFieldErrors(props.name).length === 0),
+  /** First error message if any */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  errors: computed(() => getFieldErrors(props.name as any).map(error => error.message)),
+  /** Interacted status */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isTouched: computed(() => touchedFields.value.has(props.name as any)),
+  /** Modification status */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isDirty: computed(() => dirtyFields.value.has(props.name as any)),
+  /** Current validity status */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isValid: computed(() => getFieldErrors(props.name as any).length === 0),
+  /** Manual validation trigger */
   validate,
+  /** Interaction methods */
   methods,
-}) as FieldContext<TSchema>
+}) as FieldContext
 
 onMounted(async () => {
   await nextTick()
-
   if (validateOn.includes('mount')) {
     await validate()
   }

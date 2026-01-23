@@ -1,33 +1,41 @@
 <script lang="ts" setup generic="TSchema extends ObjectSchema">
-import type { MessageProps, MessageSlots } from '../types/message'
+import { type MessageContext, type MessageProps, type MessageSlots } from '../types/message'
 import type { ObjectSchema } from '../types/shared'
 import { computed, inject, reactive } from 'vue'
 import { CURRENT_FORM_ID_KEY, withContext } from '../utils/form-context'
-import type { Paths } from '../types/utils'
-import type { StandardSchemaV1 } from '@standard-schema/spec'
 
+/**
+ * Displays validation error messages for a specific form field.
+ * @template TSchema The validation schema type derived from ObjectSchema.
+ */
 const props = defineProps<MessageProps<TSchema>>()
-defineSlots<MessageSlots<TSchema>>()
 
+/**
+ * Slots provided by the Message component.
+ */
+defineSlots<MessageSlots>()
+
+// Retrieve the ID of the form this message belongs to
 const formID = inject(CURRENT_FORM_ID_KEY)
 
 if (!formID) {
-  throw new Error('Message must be used inside a Form component with a valid form ID')
+  throw new Error('Message must be used inside a Form component')
 }
 
+// Access parent form context
 const { getFieldErrors } = withContext<TSchema>(formID)
 
+/**
+ * The reactive state provided to the component's slot.
+ */
 const context = reactive({
-  message: computed(() => getFieldErrors(props.name as Paths<StandardSchemaV1.InferInput<TSchema>>).map(error => error.message)[0]),
-})
+  /** The first identified error message for the field */
+  message: computed(() => getFieldErrors(props.name).map(error => error.message)[0]),
+}) as MessageContext
 </script>
 
 <template>
-  
-<slot v-bind="context" v-show="context.message">
-
-  <span>{{ context.message }}</span>
-
-</slot>
-
+  <slot v-bind="context">
+    <span v-show="context.message">{{ context.message }}</span>
+  </slot>
 </template>

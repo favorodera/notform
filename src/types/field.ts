@@ -1,69 +1,49 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { ObjectSchema } from './shared'
-import type { Paths } from './utils'
 import { type VNodeChild } from 'vue'
+import type { ObjectSchema } from './shared'
 
-/**
- * Properties accepted by the Field component.
- * @template TSchema The validation schema type derived from ObjectSchema.
- */
-export type FieldProps<TSchema extends ObjectSchema> = {
-  /**
-   * The name of the field.
-   */
-  name: Paths<StandardSchemaV1.InferInput<TSchema>>
+/** Configuration properties for the Field component */
+export type FieldProps = {
+  /** The unique name/path identifying the field within the form state */
+  name: string
 }
 
 /**
- * The context provided to the Field component.
- * @template TSchema The validation schema type derived from ObjectSchema.
+ * State and methods provided to the Field component's scope.
  */
-export type FieldContext<TSchema extends ObjectSchema> = {
-  /**
-   * The name of the field.
-   */
-  name: Paths<StandardSchemaV1.InferInput<TSchema>>
-  /**
-   * The validation errors for the field.
-   */
+export type FieldContext = {
+  /** The name/path of the field */
+  name: string
+  /** Array of validation error messages currently active for this field */
   errors: string[]
-  /**
-   * Whether the field has been touched.
-   */
+  /** Indicates if the field has been interacted with (focus lost) */
   isTouched: boolean
-  /**
-   * Whether the field has been modified.
-   */
+  /** Indicates if the field's current value differs from its initial value */
   isDirty: boolean
-  /**
-   * Whether the field is valid.
-   */
+  /** Indicates if the field currently passes all validation rules */
   isValid: boolean
   /**
-   * Methods to handle field events.
+   * Triggers a manual validation check for only this field.
+   * @returns Resolve with the validation result object.
    */
-  validate: () => Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>>
+  validate: () => Promise<StandardSchemaV1.Result<ObjectSchema>>
+
   methods: {
-    /**
-     * Handles the blur event for the field.
-     */
+    /** Logic to execute when the field loses focus */
     onBlur: () => void
-    /**
-     * Handles the change event for the field.
-     */
+    /** Logic to execute when the field's value is committed */
     onChange: () => void
-    /**
-     * Handles the input event for the field.
-     */
+    /** Logic to execute when the field receives user input */
     onInput: () => void
-    /**
-     * Handles the focus event for the field.
-     */
+    /** Logic to execute when the field gains focus */
     onFocus: () => void
   }
 }
 
-export type FieldSlots<TSchema extends ObjectSchema> = {
-  default: (props: FieldContext<TSchema>) => VNodeChild
+/**
+ * Slots provided by the Field component.
+ */
+export type FieldSlots = {
+  /** The default slot receives the field context for use within templates */
+  default: (props: FieldContext) => VNodeChild
 }
-

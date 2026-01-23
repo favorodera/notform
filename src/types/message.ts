@@ -5,32 +5,26 @@ import type { FieldContext } from './field'
 import type { VNodeChild } from 'vue'
 
 /**
- * Properties accepted by the Message component.
+ * Configuration properties for the Message component.
  * @template TSchema The validation schema type derived from ObjectSchema.
  */
 export type MessageProps<TSchema extends ObjectSchema> = {
-  /**
-   * The name of the field.
-   */
+  /** The name/path of the field whose error message should be displayed */
   name: Paths<StandardSchemaV1.InferInput<TSchema>>
 }
 
-
 /**
- * The context provided to the Message component.
- * @template TSchema The validation schema type derived from ObjectSchema.
+ * State provided to the Message component's scope.
  */
-export type MessageContext<TSchema extends ObjectSchema> = {
-  /**
-   * The validation error for the field.
-   */
-  message: FieldContext<TSchema>['errors'][number]
+export type MessageContext = {
+  /** The first active validation error message for the specified field */
+  message: FieldContext['errors'][number]
 }
 
 /**
- * The slots provided to the Message component.
- * @template TSchema The validation schema type derived from ObjectSchema.
+ * Slots provided by the Message component.
  */
-export type MessageSlots<TSchema extends ObjectSchema> = {
-  default: (props: MessageContext<TSchema>) => VNodeChild
+export type MessageSlots = {
+  /** The default slot receives the error message context for custom rendering */
+  default: (props: MessageContext) => VNodeChild
 }

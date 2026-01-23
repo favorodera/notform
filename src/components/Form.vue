@@ -5,29 +5,25 @@ import type { ObjectSchema } from '../types/shared'
 import { CURRENT_FORM_ID_KEY, withContext } from '../utils/form-context'
 
 /**
- * A wrapper component that provides form context to its descendants.
- * It uses the withContext utility to retrieve a form instance previously initialized with useForm.
- * This component handles the structural rendering of the form element and binds the context to the default slot.
+ * Provides form context and a structural wrapper for form fields.
+ * @template TSchema The validation schema type derived from ObjectSchema.
  */
-
 const props = defineProps<FormProps<TSchema>>()
 
 /**
- * Available slots for the Form component.
- * default: Receives the full form context for custom rendering.
+ * Slots provided by the Form component.
  */
 defineSlots<FormSlots<TSchema>>()
 
-// Access the form context created by the useForm composable using the provided ID
+// Access the form context by its unique identifier
 const form = withContext<TSchema>(props.id)
 
-// Provide the current form ID to descendant components
+// Provide the current form ID to child components
 provide(CURRENT_FORM_ID_KEY, props.id)
 </script>
 
 <template>
-  <form v-bind="$attrs" :id="id">
-    <!-- Render the content and expose the form context properties -->
+  <form v-bind="$attrs" :id="props.id">
     <slot v-bind="form" />
   </form>
 </template>

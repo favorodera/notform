@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Form, useForm } from '../../src'
+import { Form, useForm,ArrayField } from '../../src'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -30,6 +30,24 @@ const schema = z.object({
   
   // Array field
   tags: z.array(z.string().min(5)).min(1, 'At least one tag required'),
+
+  customers: z.array(
+    z.object({
+      name: z.string().min(1, 'Name is required'),
+      age: z.number().min(18, 'Must be 18 or older'),
+      subscribe: z.boolean(),
+      role: z.enum(['admin', 'user', 'guest']),
+      contact: z.union([
+        z.email(),
+        z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number'),
+      ]),
+      address: z.object({
+        street: z.string(),
+        city: z.string(),
+        zipCode: z.string(),
+      }),
+    })
+  ).min(1, 'At least one tag required'),
 })
 
 const { state, id, validate, reset, isValidating, errors } = useForm({
@@ -301,6 +319,16 @@ function removeTag(index: number) {
           </div>
         </div>
       </div>
+
+      <ArrayField
+          v-slot="{ append }"
+          :schema="schema.shape.customers"
+          name="customers"
+        >
+          <button @click="append('')">
+            Add
+          </button>
+        </ArrayField>
 
       <!-- Array Field -->
       <div>
