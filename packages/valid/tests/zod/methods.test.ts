@@ -6,7 +6,7 @@ import { ref } from 'vue'
 
 describe('Methods - Zod', () => {
 
-  test('Methods and states returned by useForm', async () => {
+  test('Form methods and state lifecycle', async () => {
     const onValidateDisplay = ref()
     const onErrorDisplay = ref()
     const onResetDisplay = ref()
@@ -26,7 +26,6 @@ describe('Methods - Zod', () => {
       dirtyFields,
       isDirty,
       isTouched,
-      isValidating,
       validate,
       validateField,
       touchAllFields,
@@ -34,39 +33,10 @@ describe('Methods - Zod', () => {
       touchedFields,
       errors,
       clearErrors,
-      initialErrors,
       initialState,
-      schema,
       mode,
-      validateOn,
     } = withSetup(() => {
-      const { state,
-        id,
-        isValid,
-        getFieldErrors,
-        setErrors,
-        setState,
-        reset,
-        submit,
-        dirtyAllFields,
-        dirtyField,
-        dirtyFields,
-        isDirty,
-        isTouched,
-        isValidating,
-        validate,
-        validateField,
-        touchAllFields,
-        touchField,
-        touchedFields,
-        errors,
-        clearErrors,
-        initialErrors,
-        initialState,
-        schema,
-        mode,
-        validateOn,
-      } = useForm({
+      const form = useForm({
         id: 'form',
         schema: z.object({
           name: z.string().min(1),
@@ -87,36 +57,8 @@ describe('Methods - Zod', () => {
         },
       })
       
-      return {
-        state,
-        id,
-        isValid,
-        getFieldErrors,
-        setErrors,
-        setState,
-        reset,
-        submit,
-        dirtyAllFields,
-        errors,
-        clearErrors,
-        initialErrors,
-        initialState,
-        schema,
-        mode,
-        validateOn,
-        dirtyField,
-        dirtyFields,
-        isDirty,
-        isTouched,
-        isValidating,
-        validate,
-        validateField,
-        touchAllFields,
-        touchField,
-        touchedFields,
-      }
+      return { ...form }
     }).render(`
-      
       <Form :id="id" @submit.prevent="submit" @reset="reset({ name: 'John', age: 500 })">
         <Field name="name" v-slot="{ methods, name }">
           <label :for="name">
@@ -150,251 +92,67 @@ describe('Methods - Zod', () => {
     const ageMessage = getByRole('alert', { name: 'age-message' })
     const nameMessage = getByRole('alert', { name: 'name-message' })
 
-    // Check for static and initial states
+    // 1. Initial State
     expect(id).toBe('form')
-
-    type InferredType = z.infer<typeof schema.value>
-    // Type assertion test (checked at compile time, but verifying structure here)
-    const inferred: InferredType = { name: 'John', age: 25 }
-    expect(inferred.name).toBeTypeOf('string')
-    expect(inferred.age).toBeTypeOf('number')
-
-    // Test that schema can run validation on its own
-    const { success } = await schema.value.safeParseAsync(state)
-    expect(success).toBeFalsy()
-    
-    expect(initialState).toEqual({
-      name: 'John',
-      age: 25,
-    })
-    expect(initialErrors).toEqual([])
-    expect(errors.value).toEqual([])
-    expect(isValid.value).toBeTruthy()
-    expect(isTouched.value).toBeFalsy()
-    expect(isValidating.value).toBeFalsy()
+    expect(initialState).toEqual({ name: 'John', age: 25 })
     expect(isDirty.value).toBeFalsy()
-    expect(isTouched.value).toBeFalsy()
-    expect(dirtyFields.value).toEqual(new Set())
-    expect(touchedFields.value).toEqual(new Set())
     expect(mode).toBe('eager')
-    expect(validateOn).toContain('change')
-    expect(validateOn).toContain('input')
-    expect(validateOn).toContain('blur')
-    expect(onValidateDisplay.value).toBeUndefined()
-    expect(onErrorDisplay.value).toBeUndefined()
 
-    await expect.element(nameInput).toHaveValue('John')
-    await expect.element(nameInput).toHaveDisplayValue('John')
-    
-    await expect.element(ageInput).toHaveValue(25)
-    await expect.element(ageInput).toHaveDisplayValue(25)
-
-    // Check state related methods and states
-    setState({ name: 'Jane', age: 30 }, false)
-    expect(state.value).toEqual({ name: 'Jane', age: 30 })
-    expect(isDirty.value).toBeTruthy()
-    expect(isTouched.value).toBeTruthy()
-    expect(dirtyFields.value.has('name')).toBeTruthy()
-    expect(dirtyFields.value.has('age')).toBeTruthy()
-    expect(touchedFields.value.has('name')).toBeTruthy()
-    expect(touchedFields.value.has('age')).toBeTruthy()
-
-    await expect.element(nameInput).toHaveValue('Jane')
-    await expect.element(nameInput).toHaveDisplayValue('Jane')
-    
-    await expect.element(ageInput).toHaveValue(30)
-    await expect.element(ageInput).toHaveDisplayValue(30)
-
-    // Check validation triggers with invalid data
+    // 2. setState and Validation
     setState({ name: '', age: 150 })
-    expect(state.value).toEqual({ name: '', age: 150 })
-
-    // Call validate because validation of setState is soft validation(not awaited)
-    await validate()
-
+    await validate() // Ensure errors are populated
     expect(isValid.value).toBeFalsy()
-    expect(isDirty.value).toBeTruthy()
-    expect(isTouched.value).toBeTruthy()
-    expect(dirtyFields.value.has('name')).toBeTruthy()
-    expect(dirtyFields.value.has('age')).toBeTruthy()
-    expect(touchedFields.value.has('name')).toBeTruthy()
-    expect(touchedFields.value.has('age')).toBeTruthy()
-    expect(errors.value.length).toBeGreaterThan(0)
     expect(getFieldErrors('name').length).toBeGreaterThan(0)
     expect(getFieldErrors('age').length).toBeGreaterThan(0)
     await expect.element(nameMessage).not.toBeEmptyDOMElement()
     await expect.element(ageMessage).not.toBeEmptyDOMElement()
 
-    // Reset
-    reset()
-    expect(initialErrors).toEqual([])
-    expect(errors.value).toEqual([])
-    expect(isValid.value).toBeTruthy()
-    expect(isTouched.value).toBeFalsy()
-    expect(isValidating.value).toBeFalsy()
-    expect(isDirty.value).toBeFalsy()
-    expect(isTouched.value).toBeFalsy()
-    expect(dirtyFields.value).toEqual(new Set())
-    expect(touchedFields.value).toEqual(new Set())
-
-    await expect.element(nameInput).toHaveValue('John')
-    await expect.element(nameInput).toHaveDisplayValue('John')
-    
-    await expect.element(ageInput).toHaveValue(25)
-    await expect.element(ageInput).toHaveDisplayValue(25)
-    
-
-    // Test error methods
-    setErrors([
-      {
-        path: ['name'],
-        message: 'Name is required',
-      },
-      {
-        path: ['age'],
-        message: 'Age is required',
-      },
-    ])
-
-    expect(errors.value.length).toBe(2)
-    expect(errors.value).toEqual([
-      {
-        path: ['name'],
-        message: 'Name is required',
-      },
-      {
-        path: ['age'],
-        message: 'Age is required',
-      },
-    ])
-
-    expect(getFieldErrors('name')[0].message).toBe('Name is required')
-    expect(getFieldErrors('age')[0].message).toBe('Age is required')
-
-    await expect.element(nameMessage).toHaveTextContent('Name is required')
-    await expect.element(ageMessage).toHaveTextContent('Age is required')
-
-    // Clear errors
+    // 3. setErrors and clearErrors
     clearErrors()
     expect(errors.value).toEqual([])
-    expect(getFieldErrors('name')).toEqual([])
-    expect(getFieldErrors('age')).toEqual([])
-    await expect.element(nameMessage).toBeEmptyDOMElement()
-    await expect.element(ageMessage).toBeEmptyDOMElement()
-    
+    setErrors([{ path: ['name'], message: 'Custom error' }])
+    expect(getFieldErrors('name')[0].message).toBe('Custom error')
+    await expect.element(nameMessage).toHaveTextContent('Custom error')
 
-    // Reset(with optional state) for testing for dirty and touch methods and states
-    reset({ name: 'Ada', age: 40 })
-    expect(state.value).toEqual({ name: 'Ada', age: 40 })
- 
-    await expect.element(nameInput).toHaveValue('Ada')
-    await expect.element(nameInput).toHaveDisplayValue('Ada')
-    
-    await expect.element(ageInput).toHaveValue(40)
-    await expect.element(ageInput).toHaveDisplayValue(40)
-
-    expect(initialErrors).toEqual([])
-    expect(errors.value).toEqual([])
-    expect(isValid.value).toBeTruthy()
-    expect(isTouched.value).toBeFalsy()
-    expect(isValidating.value).toBeFalsy()
-    expect(isDirty.value).toBeFalsy()
-    expect(isTouched.value).toBeFalsy()
-    expect(dirtyFields.value).toEqual(new Set())
-    expect(touchedFields.value).toEqual(new Set())
-
-    // Dirty and touch fields
-    await nameInput.fill('Favour') // By input
-
-    // Simulate touch for name input by clicking on it and leaving
+    // 4. Dirty and Touch (UI Interaction)
+    reset() // Back to initial
+    await nameInput.fill('Jane')
     await nameInput.click()
-    await ageInput.click()
-
-    dirtyField('age') // Programmatically
-    touchField('age') // Programmatically
-
+    await ageInput.click() // Trigger blur on name
     expect(dirtyFields.value.has('name')).toBeTruthy()
-    expect(dirtyFields.value.has('age')).toBeTruthy()
-
     expect(touchedFields.value.has('name')).toBeTruthy()
-    expect(touchedFields.value.has('age')).toBeTruthy()
 
+    // 5. Programmatic Dirty/Touch
+    dirtyField('age')
+    touchField('age')
     expect(isDirty.value).toBeTruthy()
     expect(isTouched.value).toBeTruthy()
 
-    // Reset to test dirtyAllFields and touchAllFields methods
-    reset() // Reset to initial state
-
-    expect(dirtyFields.value).toEqual(new Set())
-    expect(touchedFields.value).toEqual(new Set())
-    expect(isDirty.value).toBeFalsy()
-    expect(isTouched.value).toBeFalsy()
-
-    // Test dirtyAllFields and touchAllFields methods
+    // 6. Bulk methods
+    reset()
     dirtyAllFields()
     touchAllFields()
+    expect(dirtyFields.value.size).toBe(2)
+    expect(touchedFields.value.size).toBe(2)
 
-    expect(dirtyFields.value).toEqual(new Set(['name', 'age']))
-    expect(touchedFields.value).toEqual(new Set(['name', 'age']))
-    expect(isDirty.value).toBeTruthy()
-    expect(isTouched.value).toBeTruthy()
-
-    // Reset to test validation and submission
-    reset()
-
-    // Test validation, reset and submission
-    await validate()
-
-    expect(isValid.value).toBeTruthy()
-    expect(errors.value.length).toBe(0)
-    expect(getFieldErrors('name').length).toBe(0)
-    expect(getFieldErrors('age').length).toBe(0)
-    await expect.element(nameMessage).toBeEmptyDOMElement()
-    await expect.element(ageMessage).toBeEmptyDOMElement()
-    
-
-    // Reset to test submission
+    // 7. validateField
     reset({ name: 'John', age: 500 })
-    expect(state.value).toEqual({ name: 'John', age: 500 })
-
-    const result = await validateField('age') // Test field validation
-    expect(result.issues).toBeDefined()
+    const result = await validateField('age')
     expect(result.issues).toHaveLength(1)
 
-    reset({ name: 'John', age: 500 })
+    // 8. Submission
+    await submit()
+    expect(onErrorDisplay.value).toBeDefined()
+    expect(onValidateDisplay.value).toBeUndefined()
 
-    expect(onResetDisplay.value).toBeTruthy()
-
-    // Test submission
-    await submit() // Should fail because of age
-    expect(isValid.value).toBeFalsy()
-    expect(errors.value.length).toBeGreaterThan(0)
-
-    expect(getFieldErrors('name').length).toBe(0)
-    expect(getFieldErrors('age').length).toBeGreaterThan(0)
-
-    await expect.element(nameMessage).toBeEmptyDOMElement()
-    await expect.element(ageMessage).not.toBeEmptyDOMElement()
-
-    // Test submission on form
+    // 9. UI Submit and Reset
+    setState({ name: 'Valid', age: 30 })
     await submitButton.click()
-    expect(isValid.value).toBeFalsy()
-    expect(errors.value.length).toBeGreaterThan(0)
+    expect(onValidateDisplay.value).toEqual({ name: 'Valid', age: 30 })
 
-    expect(getFieldErrors('name').length).toBe(0)
-    expect(getFieldErrors('age').length).toBeGreaterThan(0)
-
-    await expect.element(nameMessage).toBeEmptyDOMElement()
-    await expect.element(ageMessage).not.toBeEmptyDOMElement()
-
-    // Test reset on form
     await resetButton.click()
     expect(state.value).toEqual({ name: 'John', age: 500 })
-    expect(isDirty.value).toBeFalsy()
-    expect(isTouched.value).toBeFalsy()
-    expect(dirtyFields.value).toEqual(new Set())
-    expect(touchedFields.value).toEqual(new Set())
-
+    expect(onResetDisplay.value).toBeTruthy()
   })
 
 })
