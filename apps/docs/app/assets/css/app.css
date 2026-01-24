@@ -1,0 +1,46 @@
+@import './tailwind.css';
+
+@theme static {
+ --font-sans: "Ubuntu", sans-serif;
+
+ --color-destructive-foreground: var(--destructive-foreground);
+ --color-vue: var(--vue);
+}
+
+:root {
+  --destructive-foreground: 210 40% 98%;
+  --vue:oklch(70.254% 0.13195 160.406);
+}
+
+.dark {
+  --destructive-foreground: 210 40% 98%;
+  --vue:oklch(70.254% 0.13195 160.406);
+}
+
+@utility page-padding {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+
+* {
+  scroll-behavior: smooth;
+}
+
+::-ms-reveal {
+  display: none;
+}
+
+.fade-out-in-enter-active,
+.fade-out-in-leave-active {
+  transition: all 300ms ease;
+}
+
+.fade-out-in-enter-from,
+.fade-out-in-leave-to {
+  opacity: 0;
+}
+
+.fade-out-in-enter-to,
+.fade-out-in-leave-from {
+  opacity: 1;
+}
