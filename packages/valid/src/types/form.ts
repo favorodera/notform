@@ -113,7 +113,7 @@ export type FormContext<TSchema extends ObjectSchema> = {
   /** Reactive set of dirty field paths */
   dirtyFields: Ref<Set<Paths<StandardSchemaV1.InferInput<TSchema>>>>
   /**
-   * Recalculates dirty status for a specific field.
+   * Programmatically marks a field as dirty.
    * @param field The path to the field.
    */
   dirtyField: (field: Paths<StandardSchemaV1.InferInput<TSchema>>) => void
