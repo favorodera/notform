@@ -20,7 +20,7 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     schema: _schema,
     initialErrors: _initialErrors = [],
     initialState: _initialState = {},
-    mode = 'lazy',
+    mode = 'eager',
     validateOn = ['blur', 'input', 'change'],
     onValidate,
     onReset,
@@ -57,10 +57,7 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
     isTouched: computed(() => context.touchedFields.value.size > 0),
     isDirty: computed(() => context.dirtyFields.value.size > 0),
 
-    /**
-     * Validates all form fields against the schema.
-     * @returns Result of the validation process.
-     */
+
     async validate() {
       context.isValidating.value = true
       try {
@@ -94,11 +91,6 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
       }
     },
 
-    /**
-     * Validates a single specified field in the form.
-     * @param path The path of the field to validate.
-     * @returns Result for the specific field.
-     */
     async validateField(path) {
       context.isValidating.value = true
       try {
@@ -121,12 +113,6 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
       }
     },
 
-    /**
-     * Reverts form state and errors to initial or custom baseline.
-     * @param _state Optional partial state to reset to.
-     * @param _errors Optional issues to reset to.
-     * @param _validate Re-validate after reset (default: false).
-     */
     reset(_state?: DeepPartial<StandardSchemaV1.InferInput<TSchema>>, _errors?: StandardSchemaV1.Issue[], _validate: boolean = false) {
       if (_state) {
         onResetState.value = structuredClone(_state) as StandardSchemaV1.InferInput<TSchema>
@@ -152,81 +138,53 @@ function useForm<TSchema extends ObjectSchema>(options: UseFormOptions<TSchema>)
       if (_validate) context.validate()
     },
 
-    /**
-     * Directly updates the form state object.
-     * @param _state Merged partial state update.
-     * @param _validate Trigger validation after update (default: true).
-     */
     setState(_state: DeepPartial<StandardSchemaV1.InferInput<TSchema>>, _validate: boolean = true) {
       context.state.value = { ...context.state.value, ..._state }
+
+      // Dirty and touch and validate fields
+      const paths = getObjectPaths(_state)
+
+      paths.forEach((path) => {
+        context.dirtyFields.value.add(path)
+        context.touchedFields.value.add(path)
+        context.validateField(path)
+      })
+
+      // Auto validate if allowed
       if (_validate) context.validate()
     },
 
-    /**
-     * Directly merges new issues into the errors list.
-     * @param _errors List of issues to add.
-     */
     setErrors(_errors) {
       context.errors.value = [...context.errors.value, ..._errors]
     },
 
-    /** Clears all validation issues for the entire form */
     clearErrors() {
       context.errors.value = []
     },
 
-    /**
-     * Returns active issues for a single field path.
-     * @param field The path to the field.
-     * @returns Array of issues.
-     */
     getFieldErrors(field) {
       const pathArray = parsePath(field)
       return context.errors.value.filter(error => isIssuePathEqual(error.path, pathArray))
     },
 
-    /**
-     * Registers a field as interacted with.
-     * @param field The path to the field.
-     */
     touchField(field) {
       context.touchedFields.value.add(field)
     },
 
-    /** Registers all existing form fields as touched */
     touchAllFields() {
       const paths = getObjectPaths(context.state.value) as Paths<StandardSchemaV1.InferInput<TSchema>>[]
       context.touchedFields.value = new Set(paths)
     },
 
-    /**
-     * Recalculates dirty status for a specific field path.
-     * @param field The path to the field.
-     */
     dirtyField(field) {
-      const currentValue = getProperty(context.state.value, field)
-      const baselineState = onResetState.value ?? initialState
-      const baselineValue = getProperty(baselineState, field)
-
-      if (currentValue !== baselineValue) {
-        context.dirtyFields.value.add(field)
-      }
-      else {
-        context.dirtyFields.value.delete(field)
-      }
+      context.dirtyFields.value.add(field)
     },
 
-    /** Registers all fields as having been modified (dirty) */
     dirtyAllFields() {
       const paths = getObjectPaths(context.state.value) as Paths<StandardSchemaV1.InferInput<TSchema>>[]
       context.dirtyFields.value = new Set(paths)
     },
 
-    /**
-     * Submits the form after successful validation.
-     * @param event Form submission event.
-     * @param callback Logic to run if validation passes.
-     */
     async submit(event, callback) {
       event?.preventDefault()
       event?.stopPropagation()
