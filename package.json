@@ -8,6 +8,7 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
+    "test:watch": "turbo test:watch",
     "postinstall": "turbo postinstall",
     "preview": "turbo preview",
     "release": "turbo release",
