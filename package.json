@@ -11,8 +11,8 @@
     "test:watch": "turbo test:watch",
     "postinstall": "turbo postinstall",
     "preview": "turbo preview",
-    "release": "turbo release",
-    "prepublishOnly": "turbo prepublishOnly"
+    "prepublishOnly": "turbo prepublishOnly",
+    "set": "pnpm dlx @changesets/cli"
   },
   "devDependencies": {
     "turbo": "latest"

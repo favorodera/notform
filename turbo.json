@@ -36,10 +36,10 @@
     "preview": {
       "cache": false
     },
-    "release": {
+    "prepublishOnly": {
       "cache": false
     },
-    "prepublishOnly": {
+    "changeset": {
       "cache": false
     }
   }
