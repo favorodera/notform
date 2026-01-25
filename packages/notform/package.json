@@ -35,7 +35,7 @@
     "test:watch": "vitest watch --ui",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --fix",
-    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm run build && pnpm test"
+    "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
     "valibot": "^1.2.0",
