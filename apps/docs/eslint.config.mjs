@@ -12,7 +12,7 @@ export default withNuxt()
     rules: { ...betterTailwind.configs['recommended-error'].rules },
     settings: {
       'better-tailwindcss': {
-        entryPoint: './assets/css/main.css'
+        entryPoint: './app/assets/css/main.css'
       }
     }
   })
