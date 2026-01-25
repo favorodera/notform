@@ -5,7 +5,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Smooth Vue Forms Validation",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
@@ -76,7 +76,6 @@
     "vue-tsc": "^3.2.2"
   },
   "dependencies": {
-    "@changesets/cli": "^2.29.8",
     "@standard-schema/spec": "^1.1.0",
     "dot-prop": "^10.1.0"
   },

@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@changesets/cli':
+        specifier: ^2.29.8
+        version: 2.29.8(@types/node@25.0.10)
       turbo:
         specifier: latest
         version: 2.7.6
@@ -93,9 +96,6 @@ importers:
 
   packages/notform:
     dependencies:
-      '@changesets/cli':
-        specifier: ^2.29.8
-        version: 2.29.8(@types/node@25.0.10)
       '@standard-schema/spec':
         specifier: ^1.1.0
         version: 1.1.0
