@@ -1,6 +1,6 @@
 ---
 seo:
-  title: Valid Documentation
+  title: NotForm Documentation
   description: Effortless Vue Forms Validation
 ---
 
@@ -12,10 +12,10 @@ orientation: horizontal
 :hero-background
 
 #title
-Effortless [Vue]{class="text-vue"} Form [Valid]{class="text-vue"}ation.
+Effortless [Vue]{class="text-vue"} Form [NotForm]{class="text-vue"}ation.
 
 #description
-Valid is a standard-schema based validation library for Vue that handles errors, validation, submission, and form state—so you can focus on building great user experiences.
+NotForm is a standard-schema based validation library for Vue that handles errors, validation, submission, and form state—so you can focus on building great user experiences.
 
 #links
   :::u-button
@@ -33,7 +33,7 @@ Valid is a standard-schema based validation library for Vue that handles errors,
   color: neutral
   variant: outline
   size: xl
-  to: https://github.com/favorodera/valid
+  to: https://github.com/favorodera/notform
   target: _blank
   ---
   Star on GitHub
@@ -44,7 +44,7 @@ Valid is a standard-schema based validation library for Vue that handles errors,
   ---
   code: |
     <script setup lang="ts">
-    import {useForm,Form,Field} from 'valid'
+    import {useForm,Form,Field} from 'notform'
     import {z} from 'zod'
 
     const {state,id,submit}= useForm({
@@ -65,7 +65,7 @@ Valid is a standard-schema based validation library for Vue that handles errors,
 
   ```vue [index.vue]
   <script setup lang="ts">
-  import {useForm,Form,Field} from 'valid'
+  import {useForm,Form,Field} from 'notform'
   import {z} from 'zod'
 
   const {state,id,submit}= useForm({

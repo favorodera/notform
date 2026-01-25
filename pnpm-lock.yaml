@@ -88,7 +88,7 @@ importers:
         specifier: ^3.2.2
         version: 3.2.3(typescript@5.9.3)
 
-  packages/valid:
+  packages/notform:
     dependencies:
       '@standard-schema/spec':
         specifier: ^1.1.0

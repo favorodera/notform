@@ -1,5 +1,5 @@
 {
-  "name": "valid",
+  "name": "notform",
   "type": "module",
   "private": false,
   "publishConfig": {
@@ -9,13 +9,13 @@
   "description": "Smooth Vue Forms Validation",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/favorodera/valid#readme",
+  "homepage": "https://github.com/favorodera/notform#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/favorodera/valid.git"
+    "url": "git+https://github.com/favorodera/notform.git"
   },
   "bugs": {
-    "url": "https://github.com/favorodera/valid/issues"
+    "url": "https://github.com/favorodera/notform/issues"
   },
   "exports": {
     ".": "./dist/index.js",
@@ -88,7 +88,7 @@
     "node": ">=24.0.0"
   },
   "keywords": [
-    "valid",
+    "notform",
     "vue",
     "form",
     "vue form",
