@@ -16,15 +16,14 @@ export default withNuxt()
       }
     }
   })
-  .append({
-    ignores: ['./app/components/**/*.vue, ./app/components/**/*.ts'],
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off'
-    }
-  })
   .overrideRules({
-    'better-tailwindcss/no-unregistered-classes': ['warn', {
-      ignore: ['toaster']
+    'better-tailwindcss/no-unregistered-classes': 'off',
+    'better-tailwindcss/no-unknown-classes': ['warn', {
+      ignore: [
+        'stars',
+        'star-layer',
+        'star'
+      ]
     }],
     '@typescript-eslint/no-empty-object-type': [
       'error',

@@ -55,7 +55,7 @@ const description = computed(() => (props.description || '').slice(0, 200))
     <div class="pl-[100px]">
       <p
         v-if="headline"
-        class="mb-4 text-[24px] font-semibold text-[#00DC82] uppercase"
+        class="mb-4 text-[24px] font-semibold text-vue uppercase"
       >
         {{ headline }}
       </p>
