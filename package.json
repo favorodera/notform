@@ -1,6 +1,5 @@
 {
   "name": "notform-monorepo",
-  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "turbo dev",
@@ -11,8 +10,7 @@
     "test:watch": "turbo test:watch",
     "postinstall": "turbo postinstall",
     "preview": "turbo preview",
-    "prepublishOnly": "turbo prepublishOnly",
-    "sets": "pnpm dlx @changesets/cli"
+    "prepublishOnly": "turbo prepublishOnly"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",

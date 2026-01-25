@@ -11,12 +11,7 @@ const { header } = useAppConfig()
     :ui="{ center: 'flex-1' }"
     :to="header?.to || '/'"
   >
-    <UContentSearchButton
-      v-if="header?.search"
-      :collapsed="false"
-      class="w-full"
-    />
-
+    
     <template
       v-if="header?.logo?.dark || header?.logo?.light || header?.title"
       #title
@@ -42,13 +37,11 @@ const { header } = useAppConfig()
         <AppLogo class="h-6 w-auto shrink-0" />
       </NuxtLink>
 
-      <TemplateMenu />
     </template>
 
     <template #right>
       <UContentSearchButton
         v-if="header?.search"
-        class="lg:hidden"
       />
 
       <UColorModeButton v-if="header?.colorMode" />

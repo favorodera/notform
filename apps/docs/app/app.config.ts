@@ -12,7 +12,7 @@ export default defineAppConfig({
     }
   },
   seo: {
-    siteName: 'Valid Docs'
+    siteName: 'NotForm Docs'
   },
   header: {
     title: '',
@@ -26,42 +26,39 @@ export default defineAppConfig({
     colorMode: true,
     links: [{
       'icon': 'i-simple-icons-github',
-      'to': 'https://github.com/valid/docs',
+      'to': 'https://github.com/favorodera/notform/docs',
       'target': '_blank',
       'aria-label': 'GitHub'
     }]
   },
   footer: {
-    credits: `Valid • © ${new Date().getFullYear()}`,
+    credits: `NotForm • © ${new Date().getFullYear()}`,
     colorMode: false,
     links: [{
       'icon': 'i-simple-icons-x',
       'to': 'https://x.com/favorodera',
       'target': '_blank',
-      'aria-label': 'Valid on X'
+      'aria-label': 'NotForm on X'
     }, {
       'icon': 'i-simple-icons-github',
-      'to': 'https://github.com/valid',
+      'to': 'https://github.com/notform',
       'target': '_blank',
-      'aria-label': 'Valid on GitHub'
+      'aria-label': 'NotForm on GitHub'
     }]
   },
   toc: {
     title: 'Table of Contents',
     bottom: {
       title: 'Community',
-      edit: 'https://github.com/valid/docs/edit/main/content',
-      links: [{
-        icon: 'i-lucide-star',
-        label: 'Star on GitHub',
-        to: 'https://github.com/valid',
-        target: '_blank'
-      }, {
-        icon: 'i-lucide-book-open',
-        label: 'Valid docs',
-        to: 'https://valid.dev/docs/getting-started/installation/nuxt',
-        target: '_blank'
-      }]
+      edit: 'https://github.com/notform/docs/edit/main/content',
+      links: [
+        {
+          icon: 'i-lucide-star',
+          label: 'Star on GitHub',
+          to: 'https://github.com/notform',
+          target: '_blank'
+        }
+      ]
     }
   }
 })

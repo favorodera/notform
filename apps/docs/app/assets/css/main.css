@@ -6,8 +6,7 @@
 @theme static {
   --container-8xl: 90rem;
   --font-sans: 'Public Sans', sans-serif;
-
-  --color-vue: #00DC82;
+  --font-mono: 'Space Mono', monospace;
 }
 
 :root {
