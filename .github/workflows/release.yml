@@ -1,7 +1,16 @@
 name: Release
+
 on:
-  push:
-    branches: [main, beta, alpha]
+  workflow_run:
+    workflows: ["CI"]
+    branches:
+      - main
+      - beta
+      - alpha
+    types:
+      - completed
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
@@ -11,23 +20,34 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Only run if the triggering CI workflow was a success
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-      
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Packages
+        run: pnpm build
+
       - name: Create Version PR or Publish
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: pnpm dlx @changesets/cli publish
+          publish: pnpm dlx @changesets/cli publish --provenance
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
