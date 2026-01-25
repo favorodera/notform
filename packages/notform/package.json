@@ -31,8 +31,7 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "play": "vite",
-    "test": "vitest run",
+    "test": "vitest",
     "test:watch": "vitest watch --ui",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --fix",

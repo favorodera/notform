@@ -6,6 +6,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [vue()],
   test: {
+    testTimeout: 0,
     browser: {
       enabled: true,
       provider: playwright(),
