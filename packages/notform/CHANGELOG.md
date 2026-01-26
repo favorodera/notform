@@ -1,5 +1,11 @@
 # notform
 
+## 1.0.0-alpha.5
+
+### Patch Changes
+
+- f3bf2c6: Core cleanup
+
 ## 1.0.0-alpha.4
 
 ### Patch Changes
