@@ -9,7 +9,7 @@
   "description": "Effortless Vue Forms Validation",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/favorodera/notform#readme",
+  "homepage": "https://notform-docs.vercel.app/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/favorodera/notform.git"

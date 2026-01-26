@@ -6,7 +6,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [vue()],
   optimizeDeps: {
-    include: ['yup', 'valibot', 'zod']
+    include: ['yup', 'valibot', 'zod'],
   },
   test: {
     testTimeout: 0,
