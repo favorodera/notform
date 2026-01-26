@@ -34,11 +34,8 @@
   "files": [
     "dist"
   ],
-  "workspaces": [
-    "playground"
-  ],
   "scripts": {
-    "build": "nuxt-module-build build",
+    "build": "nuxt-module-build prepare && nuxt-module-build build",
     "dev": "nuxt-module-build build --stub && nuxt-module-build prepare",
     "lint": "eslint . --fix",
     "typecheck": "vue-tsc --noEmit",
