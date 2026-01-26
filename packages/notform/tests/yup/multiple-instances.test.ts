@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { withSetup } from '../utils'
-import { Field, Form, Message, useForm } from '../../src'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
 import * as yup from 'yup'
 
 describe('Multiple form instances - Yup', () => {
@@ -11,13 +11,13 @@ describe('Multiple form instances - Yup', () => {
 
   test('Maintains isolated states and validation', async () => {
     const { getByRole, formOne, formTwo } = withSetup(() => {
-      const formOne = useForm({
+      const formOne = useNotForm({
         schema,
         initialState: {
           field: 'value1',
         },
       })
-      const formTwo = useForm({
+      const formTwo = useNotForm({
         schema,
         initialState: {
           field: 'value2',
@@ -26,8 +26,8 @@ describe('Multiple form instances - Yup', () => {
       return { formOne, formTwo }
     }).render(`
       <div>
-        <Form :id="formOne.id" title="Form One" @submit.prevent="formOne.submit">
-          <Field name="field" v-slot="{ methods, name }">
+        <NotForm :id="formOne.id" title="Form One" @submit.prevent="formOne.submit">
+          <NotField name="field" v-slot="{ methods, name }">
             <label :for="name">
               Field
               <input 
@@ -38,14 +38,14 @@ describe('Multiple form instances - Yup', () => {
                 :id="name"
               />
             </label>
-            <Message :name="name" v-slot="{ message }">
+            <NotMessage :name="name" v-slot="{ message }">
               <span role="alert" title="field-message-one">{{ message }}</span>
-            </Message>
-          </Field>
+            </NotMessage>
+          </NotField>
           <button type="submit">Submit Form One</button>
-        </Form>
-        <Form :id="formTwo.id" title="Form Two" @submit.prevent="formTwo.submit">
-          <Field name="field" v-slot="{ methods, name }">
+        </NotForm>
+        <NotForm :id="formTwo.id" title="Form Two" @submit.prevent="formTwo.submit">
+          <NotField name="field" v-slot="{ methods, name }">
             <label :for="name">
               Field
               <input 
@@ -56,14 +56,14 @@ describe('Multiple form instances - Yup', () => {
                 :id="name"
               />
             </label>
-            <Message :name="name" v-slot="{ message }">
+            <NotMessage :name="name" v-slot="{ message }">
               <span role="alert" title="field-message-two">{{ message }}</span>
-            </Message>
-          </Field>
+            </NotMessage>
+          </NotField>
           <button type="submit">Submit Form Two</button>
-        </Form>
+        </NotForm>
       </div>
-    `, { Form, Field, Message })
+    `, { NotForm, NotField, NotMessage })
 
     const inputs = getByRole('textbox')
     const input1 = inputs.first()

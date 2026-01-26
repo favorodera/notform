@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import * as v from 'valibot'
-import { Field, Form, ArrayField, Message, useForm } from '../../src'
+import { NotField, NotForm, NotArrayField, NotMessage, useNotForm } from '../../src'
 import { withSetup } from '../utils'
 
 describe('Array Field - Valibot', () => {
@@ -17,7 +17,7 @@ describe('Array Field - Valibot', () => {
         ),
       })
 
-      const { state, id, getFieldErrors, touchedFields } = useForm({
+      const { state, id, getFieldErrors, touchedFields } = useNotForm({
         schema,
         initialState: {
           users: [
@@ -28,28 +28,28 @@ describe('Array Field - Valibot', () => {
 
       return { state, id, getFieldErrors, touchedFields, schema }
     }).render(`
-      <Form :id="id">
-        <ArrayField name="users" :schema="schema.entries.users" v-slot="{ fields, append, prepend, remove, insert, update }">
+      <NotForm :id="id">
+        <NotArrayField name="users" :schema="schema.entries.users" v-slot="{ fields, append, prepend, remove, insert, update }">
           <div v-for="(field, index) in fields" :key="field.key">
-            <Field :name="'users.' + index + '.name'" v-slot="{ methods, name }">
+            <NotField :name="'users.' + index + '.name'" v-slot="{ methods, name }">
               <label :for="name">
                 Name {{ index }}
                 <input type="text" v-model="state.users[index].name" v-bind="methods" :name="name" :id="name"/>
               </label>
-              <Message :name="name" v-slot="{ message }">
+              <NotMessage :name="name" v-slot="{ message }">
                 <span role="alert" :title="'name-error-' + index">{{ message }}</span>
-              </Message>
-            </Field>
+              </NotMessage>
+            </NotField>
 
-            <Field :name="'users.' + index + '.age'" v-slot="{ methods, name }">
+            <NotField :name="'users.' + index + '.age'" v-slot="{ methods, name }">
               <label :for="name">
                 Age {{ index }}
                 <input type="number" v-model.number="state.users[index].age" v-bind="methods" :name="name" :id="name"/>
               </label>
-              <Message :name="name" v-slot="{ message }">
+              <NotMessage :name="name" v-slot="{ message }">
                 <span role="alert" :title="'age-error-' + index">{{ message }}</span>
-              </Message>
-            </Field>
+              </NotMessage>
+            </NotField>
 
             <button type="button" @click="remove(index)">Remove {{ index }}</button>
             <button type="button" @click="update(index, { name: 'Updated', age: 30 })">Update {{ index }}</button>
@@ -58,9 +58,9 @@ describe('Array Field - Valibot', () => {
 
           <button type="button" @click="append({ name: '', age: 0 })">Append</button>
           <button type="button" @click="prepend({ name: 'First', age: 22 })">Prepend</button>
-        </ArrayField>
-      </Form>
-    `, { Form, Field, ArrayField, Message })
+        </NotArrayField>
+      </NotForm>
+    `, { NotForm, NotField, NotArrayField, NotMessage })
 
     // Initial state
     expect(state.value.users).toHaveLength(1)

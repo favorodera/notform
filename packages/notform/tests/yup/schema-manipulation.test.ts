@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { withSetup } from '../utils'
-import { Field, Form, Message, useForm } from '../../src'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
 import * as yup from 'yup'
 import { ref } from 'vue'
 
@@ -18,7 +18,7 @@ describe('Schema Manipulation - Yup', () => {
         return true
       })
 
-      const { state, id, submit, isValid } = useForm({
+      const { state, id, submit, isValid } = useNotForm({
         schema,
         initialState: {
           password: 'abc',
@@ -29,30 +29,30 @@ describe('Schema Manipulation - Yup', () => {
       return { state, id, submit, isValid }
     }).render(`
       
-      <Form :id="id" @submit.prevent="submit">
-        <Field name="password" v-slot="{ methods, name }">
+      <NotForm :id="id" @submit.prevent="submit">
+        <NotField name="password" v-slot="{ methods, name }">
           <label :for="name">
             Password
             <input type="text" v-model="state.password" v-bind="methods" :name="name" :id="name"/>
           </label>
-          <Message name="password" v-slot="{message}">
+          <NotMessage name="password" v-slot="{message}">
             <span role="alert" title="password-message">{{ message }}</span>
-          </Message>
-        </Field>
+          </NotMessage>
+        </NotField>
 
-        <Field name="confirm" v-slot="{ methods, name }">
+        <NotField name="confirm" v-slot="{ methods, name }">
           <label :for="name">
             Confirm
             <input type="text" v-model="state.confirm" v-bind="methods" :name="name" :id="name"/>
           </label>
-          <Message name="confirm" v-slot="{message}">
+          <NotMessage name="confirm" v-slot="{message}">
             <span role="alert" title="confirm-message">{{ message }}</span>
-          </Message>
-        </Field>
+          </NotMessage>
+        </NotField>
 
         <button type="submit">Submit</button>
-      </Form>
-    `, { Form, Field, Message })
+      </NotForm>
+    `, { NotForm, NotField, NotMessage })
 
     const confirmInput = getByRole('textbox', { name: 'confirm' })
     const submitButton = getByRole('button', { name: 'Submit' })
@@ -89,7 +89,7 @@ describe('Schema Manipulation - Yup', () => {
 
       const activeSchema = ref(schemaOne)
 
-      const { state, id, submit, isValid } = useForm({
+      const { state, id, submit, isValid } = useNotForm({
         schema: activeSchema,
         initialState: {
           amount: 15,
@@ -99,20 +99,20 @@ describe('Schema Manipulation - Yup', () => {
       return { state, id, submit, isValid, schemaOne, schemaTwo, activeSchema }
     }).render(`
     
-    <Form :id="id" @submit.prevent="submit">
-      <Field name="amount" v-slot="{ methods, name }">
+    <NotForm :id="id" @submit.prevent="submit">
+      <NotField name="amount" v-slot="{ methods, name }">
         <label :for="name">
           Amount
           <input type="text" v-model="state.amount" v-bind="methods" :name="name" :id="name"/>
         </label>
-        <Message name="amount" v-slot="{message}">
+        <NotMessage name="amount" v-slot="{message}">
           <span role="alert" title="amount-message">{{ message }}</span>
-        </Message>
-      </Field>
+        </NotMessage>
+      </NotField>
 
       <button type="submit">Submit</button>
-    </Form>
-  `, { Form, Field, Message })
+    </NotForm>
+  `, { NotForm, NotField, NotMessage })
 
     const submitButton = getByRole('button', { name: 'Submit' })
     const amountMessage = getByRole('alert', { name: 'amount-message' })

@@ -44,10 +44,10 @@ Effortless [Vue]{class="text-primary"} Forms Validation.
   ---
   code: |
     <script setup lang="ts">
-    import { useForm, Form, Field, Message } from 'notform'
+    import { useNotForm, NotForm, NotField, NotMessage } from 'notform'
     import { z } from 'zod'
 
-    const { state, id, submit } = useForm({
+    const { state, id, submit } = useNotForm({
       schema: z.object({
         name: z.string().min(2, 'Name must be at least 2 characters')
       }),
@@ -58,8 +58,8 @@ Effortless [Vue]{class="text-primary"} Forms Validation.
     </script>
 
     <template>
-      <Form :id="id" @submit="submit">
-        <Field name="name" v-slot="{ methods, name }">
+      <NotForm :id="id" @submit="submit">
+        <NotField name="name" v-slot="{ methods, name }">
           <label :for="name">
             Name
             <input 
@@ -70,23 +70,23 @@ Effortless [Vue]{class="text-primary"} Forms Validation.
               v-bind="methods"
               placeholder="Enter your name"
             />
-            <Message :name="name" />
+            <NotMessage :name="name" />
           </label>
-        </Field>
+        </NotField>
 
 
 
         <button type="submit">Submit</button>
-      </Form>
+      </NotForm>
     </template>
   filename: index.vue
   ---
   ```vue [index.vue]
   <script setup lang="ts">
-  import { useForm, Form, Field, Message } from 'notform'
+  import { useNotForm, NotForm, NotField, NotMessage } from 'notform'
   import { z } from 'zod'
 
-  const { state, id, submit } = useForm({
+  const { state, id, submit } = useNotForm({
     schema: z.object({
       name: z.string().min(2)
     })
@@ -94,16 +94,16 @@ Effortless [Vue]{class="text-primary"} Forms Validation.
   </script>
 
   <template>
-    <Form :id="id" @submit="submit">
-      <Field name="name" v-slot="{ methods, name }">
+    <NotForm :id="id" @submit="submit">
+      <NotField name="name" v-slot="{ methods, name }">
         <label :for="name">
           Name
           <input v-model="state.name" type="text" :id="name" :name="name" v-bind="methods"/>
-          <Message :name="name" />
+          <NotMessage :name="name" />
         </label>
-      </Field>
+      </NotField>
       <button type="submit">Submit</button>
-    </Form>
+    </NotForm>
   </template>
   ```
   :::

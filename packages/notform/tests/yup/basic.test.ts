@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import * as yup from 'yup'
-import { Field, Form, Message, useForm } from '../../src'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
 import { withSetup } from '../utils'
 
 describe('Basic Form - Yup', () => {
@@ -11,7 +11,7 @@ describe('Basic Form - Yup', () => {
         name: yup.string().required(),
         age: yup.number().required().min(18),
       })
-      const { state, id, getFieldErrors } = useForm({
+      const { state, id, getFieldErrors } = useNotForm({
         schema,
         initialState: {
           name: 'John',
@@ -28,25 +28,25 @@ describe('Basic Form - Yup', () => {
       return { state, id, getFieldErrors }
     }).render(`
       
-      <Form :id="id">
-        <Field name="name" v-slot="{ methods, name }">
+      <NotForm :id="id">
+        <NotField name="name" v-slot="{ methods, name }">
           <label :for="name">
             Name
             <input type="text" v-model="state.name" v-bind="methods" :name="name" :id="name"/>
           </label>
-        </Field>
+        </NotField>
 
-        <Field name="age" v-slot="{ methods, name }">
+        <NotField name="age" v-slot="{ methods, name }">
           <label :for="name">
             Age
-            <input type="number" v-model="state.age" v-bind="methods" :name="name" :id="name"/>
+            <input type="number" v-model.number="state.age" v-bind="methods" :name="name" :id="name"/>
           </label>
-          <Message name="age" v-slot="{message}">
+          <NotMessage name="age" v-slot="{message}">
             <span role="alert" title="age-message">{{ message }}</span>
-          </Message>
-        </Field>
-      </Form>
-    `, { Form, Field, Message })
+          </NotMessage>
+        </NotField>
+      </NotForm>
+    `, { NotForm, NotField, NotMessage })
 
     const nameInput = getByRole('textbox', { name: 'name' })
 

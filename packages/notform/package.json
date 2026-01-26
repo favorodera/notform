@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.7.0",
-    "@types/node": "^25.0.3",
+    "@types/node": "^25.0.10",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vitest/browser-playwright": "^4.0.16",
     "@vitest/eslint-plugin": "^1.6.6",

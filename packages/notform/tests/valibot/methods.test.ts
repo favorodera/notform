@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { withSetup } from '../utils'
-import { Field, Form, Message, useForm } from '../../src'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
 import * as v from 'valibot'
 import { ref } from 'vue'
 
@@ -10,6 +10,7 @@ describe('Methods - Valibot', () => {
     const onValidateDisplay = ref()
     const onErrorDisplay = ref()
     const onResetDisplay = ref()
+    const onSubmitDisplay = ref()
 
     const {
       getByRole,
@@ -36,7 +37,7 @@ describe('Methods - Valibot', () => {
       initialState,
       mode,
     } = withSetup(() => {
-      const form = useForm({
+      const form = useNotForm({
         id: 'form',
         schema: v.object({
           name: v.pipe(v.string(), v.minLength(1)),
@@ -55,35 +56,38 @@ describe('Methods - Valibot', () => {
         onReset() {
           onResetDisplay.value = true
         },
+        onSubmit(data) {
+          onSubmitDisplay.value = data
+        },
       })
 
       return { ...form }
     }).render(`
-      <Form :id="id" @submit.prevent="submit" @reset="reset({ name: 'John', age: 500 })">
-        <Field name="name" v-slot="{ methods, name }">
+      <NotForm :id="id" @submit.prevent="submit" @reset="reset({ name: 'John', age: 500 })">
+        <NotField name="name" v-slot="{ methods, name }">
           <label :for="name">
             Name
             <input type="text" v-model="state.name" v-bind="methods" :name="name" :id="name"/>
           </label>
-          <Message :name="name" v-slot="{message}">
+          <NotMessage :name="name" v-slot="{message}">
             <span role="alert" title="name-message">{{ message }}</span>
-          </Message>
-        </Field>
+          </NotMessage>
+        </NotField>
 
-        <Field name="age" v-slot="{ methods, name }">
+        <NotField name="age" v-slot="{ methods, name }">
           <label :for="name">
             Age
             <input type="number" v-model.number="state.age" v-bind="methods" :name="name" :id="name"/>
           </label>
-          <Message :name="name" v-slot="{message}">
+          <NotMessage :name="name" v-slot="{message}">
             <span role="alert" title="age-message">{{ message }}</span>
-          </Message>
-        </Field>
+          </NotMessage>
+        </NotField>
 
         <button type="submit">Submit</button>
         <button type="reset">Reset</button>
-      </Form>
-    `, { Form, Field, Message })
+      </NotForm>
+    `, { NotForm, NotField, NotMessage })
 
     const nameInput = getByRole('textbox', { name: 'name' })
     const ageInput = getByRole('spinbutton', { name: 'age' })
@@ -142,14 +146,16 @@ describe('Methods - Valibot', () => {
     expect(result.issues).toHaveLength(1)
 
     // 8. Submission
-    await submit()
+    await submit(new Event('submit'))
     expect(onErrorDisplay.value).toBeDefined()
     expect(onValidateDisplay.value).toBeUndefined()
+    expect(onSubmitDisplay.value).toBeUndefined()
 
     // 9. UI Submit and Reset
     setState({ name: 'Valid', age: 30 })
     await submitButton.click()
     expect(onValidateDisplay.value).toEqual({ name: 'Valid', age: 30 })
+    expect(onSubmitDisplay.value).toEqual({ name: 'Valid', age: 30 })
 
     await resetButton.click()
     expect(state.value).toEqual({ name: 'John', age: 500 })
