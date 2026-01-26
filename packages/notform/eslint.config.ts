@@ -3,11 +3,6 @@ import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescri
 import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
 import stylistic from '@stylistic/eslint-plugin'
-import { fileURLToPath } from 'node:url'
-import { dirname } from 'node:path'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
 
 export default defineConfigWithVueTs(
   {
@@ -22,14 +17,6 @@ export default defineConfigWithVueTs(
     '**/playwright-report/**',
     '**/test-results/**',
   ]),
-
-  {
-    languageOptions: {
-      parserOptions: {
-        tsconfigRootDir: __dirname,
-      },
-    },
-  },
 
   ...pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
