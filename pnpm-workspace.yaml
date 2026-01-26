@@ -1,6 +1,7 @@
 packages:
   - apps/*
   - packages/*
+  - playground/vue/*
 
 ignoredBuiltDependencies:
   - '@parcel/watcher'
