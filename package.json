@@ -10,7 +10,8 @@
     "test:watch": "turbo test:watch",
     "postinstall": "turbo postinstall",
     "preview": "turbo preview",
-    "prepublishOnly": "turbo prepublishOnly"
+    "prepublishOnly": "turbo prepublishOnly",
+    "ready":"pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
