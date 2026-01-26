@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@source "../../../content/**/*";
+
+@theme static {
+  --container-8xl: 90rem;
+  --font-sans: 'Public Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+:root {
+  --ui-container: var(--container-8xl);
+  --ui-radius: 0.5rem;
+}
