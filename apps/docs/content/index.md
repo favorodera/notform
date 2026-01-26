@@ -12,8 +12,6 @@ orientation: horizontal
 :hero-background
 
 #title
-:name-text
-
 Effortless [Vue]{class="text-primary"} Forms Validation.
 
 #description
