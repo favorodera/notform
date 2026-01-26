@@ -24,7 +24,7 @@ Effortless [Vue]{class="text-primary"} Forms Validation.
   ---
   to: /getting-started
   size: xl
-  trailing-icon: i-lucide-arrow-right
+  trailing-icon: i-tabler-arrow-right
   ---
   Get started
   :::
@@ -118,7 +118,7 @@ Everything you need
 #features
   :::u-page-feature
   ---
-  icon: i-lucide-palette
+  icon: i-tabler-palette
   ---
   #title
   UI Agnostic
@@ -129,7 +129,7 @@ Everything you need
 
   :::u-page-feature
   ---
-  icon: i-lucide-type
+  icon: i-tabler-text-recognition
   ---
   #title
   Field and Form Level Validation
@@ -140,7 +140,7 @@ Everything you need
 
   :::u-page-feature
   ---
-  icon: i-lucide-layers
+  icon: i-tabler-stack-2
   ---
   #title
   Array Fields
@@ -151,7 +151,7 @@ Everything you need
 
   :::u-page-feature
   ---
-  icon: i-lucide-search
+  icon: i-tabler-search
   ---
   #title
   Composition API
@@ -162,7 +162,7 @@ Everything you need
 
   :::u-page-feature
   ---
-  icon: i-lucide-shield-check
+  icon: i-tabler-shield-check
   ---
   #title
   Schema-Based Validation
@@ -173,7 +173,7 @@ Everything you need
 
   :::u-page-feature
   ---
-  icon: i-lucide-zap
+  icon: i-tabler-bolt
   ---
   #title
   V-Model Support
@@ -196,7 +196,7 @@ Building forms shouldn't be complicated. NotForm removes the boilerplate and giv
 
     :::card
     ---
-    icon: i-lucide-shield-check
+    icon: i-tabler-shield-check
     title: Type-Safe by Default
     ---
     Full TypeScript support with inferred types from your schema. Get autocomplete, type checking, and compile-time safety throughout your form logic.
@@ -204,7 +204,7 @@ Building forms shouldn't be complicated. NotForm removes the boilerplate and giv
 
     :::card
     ---
-    icon: i-lucide-layers
+    icon: i-tabler-stack-2
     title: Minimal Bundle Size
     ---
     Lightweight core with zero dependencies beyond your chosen validation library. Tree-shakeable exports ensure you only ship what you use.
@@ -212,7 +212,7 @@ Building forms shouldn't be complicated. NotForm removes the boilerplate and giv
 
     :::card
     ---
-    icon: i-lucide-code
+    icon: i-tabler-code
     title: Developer Experience
     ---
     Intuitive API designed for Vue developers. Clear documentation, helpful error messages, and patterns that feel natural in Vue applications.
@@ -220,7 +220,7 @@ Building forms shouldn't be complicated. NotForm removes the boilerplate and giv
 
     :::card
     ---
-    icon: i-lucide-rocket
+    icon: i-tabler-rocket
     title: Production Ready
     ---
     Battle-tested in real-world applications. Handle complex forms with nested fields, async validation, and advanced state management with confidence.
