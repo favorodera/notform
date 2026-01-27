@@ -1,5 +1,11 @@
 # notform
 
+## 1.0.0-alpha.6
+
+### Patch Changes
+
+- f843ef7: refactor: enhance types and cleanup internal structure
+
 ## 1.0.0-alpha.5
 
 ### Patch Changes
