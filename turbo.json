@@ -2,6 +2,9 @@
   "$schema": "https://turborepo.dev/schema.json",
   "tasks": {
     "build": {
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": [
         "dist/**",
         ".nuxt/**",
@@ -41,6 +44,9 @@
     },
     "dev": {
       "persistent": true,
+      "cache": false
+    },
+    "cleanup": {
       "cache": false
     }
   }

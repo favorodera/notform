@@ -11,6 +11,7 @@
     "postinstall": "turbo postinstall",
     "preview": "turbo preview",
     "prepublishOnly": "turbo prepublishOnly",
+    "cleanup":"turbo cleanup && rm -rf .turbo node_modules pnpm-lock.yaml",
     "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {
@@ -20,5 +21,10 @@
   "packageManager": "pnpm@10.28.0",
   "engines": {
     "node": ">=24.0.0"
+  },
+  "pnpm": {
+  "overrides": {
+    "vite": "latest"
   }
+}
 }

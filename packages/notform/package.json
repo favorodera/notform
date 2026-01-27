@@ -35,7 +35,8 @@
     "test:watch": "vitest watch --ui",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --fix",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "cleanup": "rm -rf dist node_modules .turbo package-lock.json"
   },
   "peerDependencies": {
     "valibot": "^1.2.0",

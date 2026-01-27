@@ -30,7 +30,8 @@ const { getFieldErrors } = withContext<TSchema>(formID)
  */
 const context = reactive({
   /** The first identified error message for the field */
-  message: computed(() => getFieldErrors(props.name).map(error => error.message)[0]),
+  message: computed(() => getFieldErrors(props.name)
+    .map(error => error.message)[0]),
 }) as NotMessageContext
 </script>
 

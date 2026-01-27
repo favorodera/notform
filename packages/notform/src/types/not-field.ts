@@ -27,7 +27,7 @@ export type NotFieldContext = {
    * @returns Resolve with the validation result object.
    */
   validate: () => Promise<StandardSchemaV1.Result<ObjectSchema>>
-
+  /** Collection of event handlers for common field interactions. */
   methods: {
     /** Logic to execute when the field loses focus */
     onBlur: () => void
