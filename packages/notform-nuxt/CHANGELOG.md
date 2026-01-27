@@ -1,5 +1,13 @@
 # notform-nuxt
 
+## 1.0.0-alpha.3
+
+### Patch Changes
+
+- f843ef7: feat: incorporate `notform` package in to module enabling auto-imports for components and composables
+- Updated dependencies [f843ef7]
+  - notform@1.0.0-alpha.6
+
 ## 1.0.0-alpha.2
 
 ### Patch Changes
