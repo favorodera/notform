@@ -1,14 +1,15 @@
 import { defineNuxtModule } from '@nuxt/kit'
+import type { NuxtModule } from '@nuxt/schema'
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
   enabled: boolean
 }
 
-export default defineNuxtModule<ModuleOptions>({
+const module: NuxtModule<ModuleOptions> = defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'my-module',
-    configKey: 'myModule',
+    name: 'notform-nuxt',
+    configKey: 'notform',
   },
   // Default configuration options of the Nuxt module
   defaults: {},
@@ -16,3 +17,5 @@ export default defineNuxtModule<ModuleOptions>({
     // const resolver = createResolver(import.meta.url)
   },
 })
+
+export default module
