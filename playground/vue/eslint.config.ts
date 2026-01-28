@@ -33,7 +33,8 @@ export default defineConfigWithVueTs(
     rules: { ...betterTailwind.configs['recommended-error'].rules },
     settings: {
       'better-tailwindcss': {
-        entryPoint: './main.css',
+        entryPoint: './src/main.css',
+        detectComponentClasses: true,
       },
     },
   },
