@@ -13,6 +13,7 @@ export default withNuxt()
     settings: {
       'better-tailwindcss': {
         entryPoint: './app/assets/main.css',
+        detectComponentClasses: true,
       },
     },
   })
