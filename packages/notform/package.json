@@ -5,7 +5,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "Effortless Vue Forms Validation",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
