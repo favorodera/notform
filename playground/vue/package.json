@@ -9,7 +9,7 @@
     "build-only": "vite build",
     "typecheck": "vue-tsc --build",
     "lint": "eslint . --fix",
-    "cleanup": "rm -rf node_modules dist"
+    "cleanup": "rm -rf node_modules dist .turbo"
   },
   "dependencies": {
     "vue": "^3.5.26",

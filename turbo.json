@@ -28,6 +28,9 @@
       ]
     },
     "postinstall": {
+      "dependsOn": [
+        "^build"
+      ],
       "cache": false
     },
     "test": {

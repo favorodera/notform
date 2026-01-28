@@ -5,12 +5,11 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint . --fix",
     "typecheck": "nuxt typecheck",
-    "cleanup": "rm -rf node_modules .turbo .nuxt"
+    "cleanup": "rm -rf node_modules .turbo .nuxt .output"
   },
   "dependencies": {
     "@nuxt/eslint": "1.13.0",
