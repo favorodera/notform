@@ -39,6 +39,7 @@
     "build": "nuxt-module-build build",
     "prepack": "nuxt-module-build build",
     "dev": "nuxt-module-build prepare && nuxt-module-build build --stub",
+    "postinstall": "nuxt-module-build prepare && nuxt-module-build build --stub",
     "lint": "eslint . --fix",
     "typecheck": "vue-tsc --noEmit",
     "prepublishOnly": "pnpm run build",
