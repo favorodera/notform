@@ -8,7 +8,7 @@ import { CURRENT_NOT_FORM_ID_KEY, withContext } from '../utils/not-form-context'
  * Displays validation error messages for a specific form field.
  * @template TSchema The validation schema type derived from ObjectSchema.
  */
-const props = defineProps<NotMessageProps<TSchema>>()
+const props = defineProps<NotMessageProps>()
 
 /**
  * Slots provided by the Message component.
