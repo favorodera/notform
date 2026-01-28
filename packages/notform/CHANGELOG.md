@@ -1,5 +1,13 @@
 # notform
 
+## 1.0.0-alpha.7
+
+### Patch Changes
+
+- 75bdc81: refactor: cleanup exportted types from `notform`
+  fix: fixed type components type inference issue on `notform-nuxt`
+  - vue@undefined
+
 ## 1.0.0-alpha.6
 
 ### Patch Changes
