@@ -1,5 +1,8 @@
-import { addComponent, addImports, defineNuxtModule } from '@nuxt/kit'
+import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 import type { NuxtModule } from '@nuxt/schema'
+
+// Re-export core notform for manual imports via the Nuxt entry.
+export * from 'notform'
 
 /** Nuxt module options for `notform` */
 export interface NotFormModuleOptions {
@@ -34,6 +37,10 @@ export default defineNuxtModule<NotFormModuleOptions>({
 
   // Module factory
   setup(options, nuxt) {
+    // Create a resolver for the runtime/notform file
+    const { resolve } = createResolver(import.meta.url)
+    const runtimeExports = resolve('./runtime/notform')
+
     // Exclude notform package from optimizeDeps
     nuxt.options.vite.optimizeDeps = nuxt.options.vite.optimizeDeps || {}
     nuxt.options.vite.optimizeDeps.exclude = nuxt.options.vite.optimizeDeps.exclude || []
@@ -46,7 +53,7 @@ export default defineNuxtModule<NotFormModuleOptions>({
         addComponent({
           name: component,
           export: component,
-          filePath: 'notform',
+          filePath: runtimeExports,
         })
       })
 
@@ -55,7 +62,7 @@ export default defineNuxtModule<NotFormModuleOptions>({
         addImports({
           name: composable,
           as: composable,
-          from: 'notform',
+          from: runtimeExports,
         })
       })
     }

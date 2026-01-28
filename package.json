@@ -1,6 +1,16 @@
 {
   "name": "notform-monorepo",
   "private": true,
+  "license": "MIT",
+  "author": "Favour Emeka <favorodera@gmail.com>",
+  "homepage": "https://notform-docs.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/favorodera/notform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/favorodera/notform/issues"
+  },
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
@@ -24,7 +34,8 @@
   },
   "pnpm": {
   "overrides": {
-    "vite": "latest"
+    "vite": "latest",
+    "vitest": "latest"
   }
 }
 }

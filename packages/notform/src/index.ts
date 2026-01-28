@@ -27,6 +27,3 @@ export { default as NotArrayField } from './components/not-array-field.vue'
 
 // Main composable for form initialization and management
 export { default as useNotForm } from './composables/use-not-form'
-
-// Form context symbols
-export { CURRENT_NOT_FORM_ID_KEY } from './utils/not-form-context'

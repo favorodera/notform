@@ -1,11 +1,10 @@
 import { globalIgnores } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
-import pluginVitest from '@vitest/eslint-plugin'
 import stylistic from '@stylistic/eslint-plugin'
-
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
+import betterTailwind from 'eslint-plugin-better-tailwindcss'
 
 const __filepath = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filepath)
@@ -16,21 +15,10 @@ export default defineConfigWithVueTs(
     files: ['**/*.{vue,ts,mts,tsx}'],
   },
 
-  globalIgnores([
-    '**/dist/**',
-    '**/dist-ssr/**',
-    '**/coverage/**',
-    '**/playwright-report/**',
-    '**/test-results/**',
-  ]),
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
   ...pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
-
-  {
-    ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
-  },
 
   {
     files: ['**/*.js', '**/*.mjs', '**/*.vue', '**/*.ts'],
@@ -39,9 +27,13 @@ export default defineConfigWithVueTs(
   },
 
   {
-    languageOptions: {
-      parserOptions: {
-        tsconfigRootDir: __dirname,
+    plugins: {
+      'better-tailwindcss': betterTailwind,
+    },
+    rules: { ...betterTailwind.configs['recommended-error'].rules },
+    settings: {
+      'better-tailwindcss': {
+        entryPoint: './main.css',
       },
     },
   },
@@ -53,10 +45,15 @@ export default defineConfigWithVueTs(
       '@stylistic/padded-blocks': 'off',
       '@stylistic/no-trailing-spaces': ['error', { skipBlankLines: true }],
       'vue/multi-word-component-names': 'off',
-      '@typescript-eslint/no-empty-object-type': [
-        'error',
-        { allowInterfaces: 'with-single-extends' },
-      ],
+      'better-tailwindcss/no-unregistered-classes': 'off',
+    },
+  },
+
+  {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+      },
     },
   },
 )
