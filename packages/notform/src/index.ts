@@ -1,35 +1,29 @@
-/** Form-related type definitions */
+// Form-related type definitions
 export type * from './types/not-form'
 
-/** Field type definitions */
+// Field type definitions
 export type * from './types/not-field'
 
-/** Validation message type definitions */
+// Validation message type definitions
 export type * from './types/not-message'
 
-/** Shared validation and schema types */
+// Shared validation and schema types
 export type * from './types/shared'
 
-/** Internal utility types */
+// Internal utility types
 export type * from './types/utils'
 
-/** Component for wrapping and providing form context */
+// Component for wrapping and providing form context
 export { default as NotForm } from './components/not-form.vue'
 
-/** Component for individual form fields */
+// Component for individual form fields
 export { default as NotField } from './components/not-field.vue'
 
-/** Component for displaying field validation messages */
+// Component for displaying field validation messages
 export { default as NotMessage } from './components/not-message.vue'
 
-/** Component for managing array-based fields */
+// Component for managing array-based fields
 export { default as NotArrayField } from './components/not-array-field.vue'
 
-/** Main composable for form initialization and management */
+// Main composable for form initialization and management
 export { default as useNotForm } from './composables/use-not-form'
-
-/** Utility for accessing form context by its unique identifier */
-export { withContext } from './utils/not-form-context'
-
-/** Standard Schema specification types */
-export type { StandardSchemaV1 } from '@standard-schema/spec'

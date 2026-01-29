@@ -112,7 +112,6 @@ function update(index: number, data: StandardSchemaV1.InferInput<TArraySchema>[n
 const context = reactive({
   fields,
   append,
-  push: append,
   prepend,
   remove,
   insert,

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TSchema extends ObjectSchema">
-import { provide } from 'vue'
+import { provide, useAttrs } from 'vue'
 import type { NotFormProps, NotFormSlots } from '../types/not-form'
 import type { ObjectSchema } from '../types/shared'
 import { CURRENT_NOT_FORM_ID_KEY, withContext } from '../utils/not-form-context'
@@ -15,6 +15,9 @@ const props = defineProps<NotFormProps<TSchema>>()
  */
 defineSlots<NotFormSlots<TSchema>>()
 
+// Retrieve attributes from the parent component
+const attributes = useAttrs()
+
 // Access the form context by its unique identifier
 const form = withContext<TSchema>(props.id)
 
@@ -23,7 +26,7 @@ provide(CURRENT_NOT_FORM_ID_KEY, props.id)
 </script>
 
 <template>
-  <form v-bind="$attrs" :id="props.id">
+  <form v-bind="attributes" :id="props.id">
     <slot v-bind="form" />
   </form>
 </template>

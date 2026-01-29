@@ -5,11 +5,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.7",
   "description": "Effortless Vue Forms Validation",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/favorodera/notform#readme",
+  "homepage": "https://notform-docs.vercel.app/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/favorodera/notform.git"
@@ -17,12 +17,16 @@
   "bugs": {
     "url": "https://github.com/favorodera/notform/issues"
   },
+  "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/index.js",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
@@ -35,7 +39,8 @@
     "test:watch": "vitest watch --ui",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --fix",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "cleanup": "rm -rf dist node_modules .turbo package-lock.json"
   },
   "peerDependencies": {
     "valibot": "^1.2.0",

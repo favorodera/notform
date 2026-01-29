@@ -1,6 +1,3 @@
-import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { Paths } from 'type-fest'
-import type { ObjectSchema } from './shared'
 import type { NotFieldContext } from './not-field'
 import type { VNodeChild } from 'vue'
 
@@ -8,9 +5,9 @@ import type { VNodeChild } from 'vue'
  * Configuration properties for the NotMessage component.
  * @template TSchema The validation schema type derived from ObjectSchema.
  */
-export type NotMessageProps<TSchema extends ObjectSchema> = {
+export type NotMessageProps = {
   /** The name/path of the field whose error message should be displayed */
-  name: Paths<StandardSchemaV1.InferInput<TSchema>>
+  name: string
 }
 
 /**

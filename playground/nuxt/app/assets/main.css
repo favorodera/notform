@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply min-h-screen bg-slate-50 text-slate-900 antialiased;
+  }
+}
+
+@layer components {
+  .nf-shell {
+    @apply mx-auto flex min-h-screen max-w-5xl flex-col px-4 py-6 sm:px-6 lg:px-8;
+  }
+
+  .nf-card {
+    @apply rounded-lg border border-slate-200 bg-white shadow-sm;
+  }
+
+  .nf-field {
+    @apply space-y-1;
+  }
+
+  .nf-label {
+    @apply block text-sm font-medium text-slate-800;
+  }
+
+  .nf-input,
+  .nf-select,
+  .nf-textarea {
+    @apply block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition
+           focus:border-sky-500 focus:ring-2 focus:ring-sky-500/60;
+  }
+
+  .nf-checkbox {
+    @apply h-4 w-4 rounded border-slate-300 text-sky-600 shadow-sm focus:ring-2 focus:ring-sky-500/60;
+  }
+
+  .nf-error {
+    @apply mt-1 text-xs text-red-600;
+  }
+
+  .nf-form-actions {
+    @apply mt-4 flex items-center gap-3;
+  }
+
+  .nf-button {
+    @apply inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-800
+           shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/70;
+  }
+
+  .nf-button-primary {
+    @apply border-sky-600 bg-sky-600 text-white hover:bg-sky-700;
+  }
+
+  .nf-tabs {
+    @apply inline-flex items-center gap-px rounded-md border border-slate-200 bg-slate-100 p-0.5;
+  }
+
+  .nf-tab {
+    @apply inline-flex cursor-pointer select-none items-center justify-center rounded px-3 py-1 text-xs font-medium text-slate-600 transition;
+  }
+
+  .nf-tab-active {
+    @apply bg-white text-slate-900 shadow-sm;
+  }
+}

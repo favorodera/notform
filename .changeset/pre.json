@@ -2,12 +2,18 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "notform": "1.0.0-alpha.1"
+    "notform": "1.0.0-alpha.1",
+    "notform-nuxt": "1.0.0-alpha.1"
   },
   "changesets": [
     "brown-geckos-judge",
+    "calm-terms-push",
     "chubby-lines-sit",
     "dull-boats-punch",
-    "soft-trains-serve"
+    "fair-points-hear",
+    "quiet-canyons-jog",
+    "soft-trains-serve",
+    "thick-socks-sing",
+    "true-chicken-see"
   ]
 }

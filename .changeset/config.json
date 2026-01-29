@@ -1,11 +1,11 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "changelog": ["@changesets/changelog-github",{ "repo": "favorodera/notform" }],
   "commit": false,
-  "fixed": [],
+  "fixed": [["notform", "notform-nuxt"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": ["notform-docs", "notform-nuxt-playground", "notform-vue-playground"]
 }

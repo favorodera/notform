@@ -8,7 +8,7 @@ import { CURRENT_NOT_FORM_ID_KEY, withContext } from '../utils/not-form-context'
  * Displays validation error messages for a specific form field.
  * @template TSchema The validation schema type derived from ObjectSchema.
  */
-const props = defineProps<NotMessageProps<TSchema>>()
+const props = defineProps<NotMessageProps>()
 
 /**
  * Slots provided by the Message component.
@@ -30,7 +30,8 @@ const { getFieldErrors } = withContext<TSchema>(formID)
  */
 const context = reactive({
   /** The first identified error message for the field */
-  message: computed(() => getFieldErrors(props.name).map(error => error.message)[0]),
+  message: computed(() => getFieldErrors(props.name)
+    .map(error => error.message)[0]),
 }) as NotMessageContext
 </script>
 

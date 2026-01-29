@@ -1,0 +1,43 @@
+{
+  "name": "notform-vue-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p typecheck \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "typecheck": "vue-tsc --build",
+    "lint": "eslint . --fix",
+    "cleanup": "rm -rf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "notform": "workspace:*",
+    "tailwindcss": "^4.1.18",
+    "valibot": "^1.2.0",
+    "vue": "^3.5.26",
+    "yup": "^1.6.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.7.0",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^24.10.9",
+    "@vitejs/plugin-vue": "^6.0.3",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/tsconfig": "^0.8.1",
+    "eslint": "^9.39.2",
+    "eslint-plugin-better-tailwindcss": "^4.0.2",
+    "eslint-plugin-vue": "~10.7.0",
+    "jiti": "^2.6.1",
+    "npm-run-all2": "^8.0.4",
+    "typescript": "~5.9.3",
+    "vite": "beta",
+    "vite-plugin-vue-devtools": "^8.0.5",
+    "vue-tsc": "^3.2.2"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}

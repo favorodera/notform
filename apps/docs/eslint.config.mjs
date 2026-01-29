@@ -16,6 +16,13 @@ export default withNuxt()
       }
     }
   })
+  .append({
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname
+      }
+    }
+  })
   .overrideRules({
     'better-tailwindcss/no-unregistered-classes': 'off',
     'better-tailwindcss/no-unknown-classes': ['warn', {

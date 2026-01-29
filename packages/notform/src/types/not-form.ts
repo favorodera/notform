@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { ComputedRef, FormHTMLAttributes, MaybeRefOrGetter, Ref, VNodeChild } from 'vue'
+import type { ComputedRef, MaybeRefOrGetter, Ref, VNodeChild } from 'vue'
 import type { ObjectSchema, ValidationMode, ValidationTriggers } from './shared'
 import type { DeepPartial, Paths } from './utils'
 
@@ -135,7 +135,7 @@ export type NotFormContext<TSchema extends ObjectSchema> = {
  * Properties accepted by the NotForm component.
  * @template TSchema The validation schema type derived from ObjectSchema.
  */
-export type NotFormProps<TSchema extends ObjectSchema> = Pick<NotFormContext<TSchema>, 'id'> & /* @vue-ignore */ Omit<FormHTMLAttributes, 'id'>
+export type NotFormProps<TSchema extends ObjectSchema> = Pick<NotFormContext<TSchema>, 'id'>
 
 /**
  * Slots provided by the NotForm component.

@@ -1,6 +1,16 @@
 {
   "name": "notform-monorepo",
   "private": true,
+  "license": "MIT",
+  "author": "Favour Emeka <favorodera@gmail.com>",
+  "homepage": "https://notform-docs.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/favorodera/notform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/favorodera/notform/issues"
+  },
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
@@ -11,14 +21,22 @@
     "postinstall": "turbo postinstall",
     "preview": "turbo preview",
     "prepublishOnly": "turbo prepublishOnly",
-    "ready":"pnpm install && pnpm lint && pnpm typecheck && pnpm test"
+    "cleanup": "turbo cleanup && rm -rf .turbo node_modules pnpm-lock.yaml",
+    "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.2",
     "@changesets/cli": "^2.29.8",
     "turbo": "latest"
   },
   "packageManager": "pnpm@10.28.0",
   "engines": {
     "node": ">=24.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "latest",
+      "vitest": "latest"
+    }
   }
 }

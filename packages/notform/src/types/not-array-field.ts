@@ -36,8 +36,6 @@ export type NotArrayFieldContext<TSchema extends ArraySchema> = {
   }>
   /** Adds a new item to the end of the collection */
   append: (data: StandardSchemaV1.InferInput<TSchema>[number]) => void
-  /** Adds a new item to the end of the collection (alias for append) */
-  push: (data: StandardSchemaV1.InferInput<TSchema>[number]) => void
   /** Adds a new item to the beginning of the collection */
   prepend: (data: StandardSchemaV1.InferInput<TSchema>[number]) => void
   /**

@@ -4,6 +4,12 @@ import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
 import stylistic from '@stylistic/eslint-plugin'
 
+import { fileURLToPath } from 'node:url'
+import { dirname } from 'node:path'
+
+const __filepath = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filepath)
+
 export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
@@ -33,12 +39,24 @@ export default defineConfigWithVueTs(
   },
 
   {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+      },
+    },
+  },
+
+  {
     rules: {
       '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
       '@stylistic/no-multiple-empty-lines': ['error', { max: 2, maxEOF: 2, maxBOF: 0 }],
       '@stylistic/padded-blocks': 'off',
       '@stylistic/no-trailing-spaces': ['error', { skipBlankLines: true }],
       'vue/multi-word-component-names': 'off',
+      '@typescript-eslint/no-empty-object-type': [
+        'error',
+        { allowInterfaces: 'with-single-extends' },
+      ],
     },
   },
 )
