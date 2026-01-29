@@ -17,7 +17,8 @@
     "tailwindcss": "^4.1.18",
     "valibot": "^1.2.0",
     "vue": "^3.5.26",
-    "yup": "^1.6.0",
+    "yup": "^1.7.1",
+    "arktype": "^2.1.29",
     "zod": "^4.3.6"
   },
   "devDependencies": {

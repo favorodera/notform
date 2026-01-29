@@ -1,16 +1,15 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
-import { z } from 'zod'
+import { withSetup } from '../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
+import { notRules } from '../utils'
 
-describe('Multiple form instances - Zod', () => {
-  // define shared schema
-  const schema = z.object({
-    field: z.string().min(1),
+describe('Multiple form instances - Core', () => {
+  const schema = notRules.object({
+    field: notRules.string(1),
   })
 
-  test('Maintains isolated states and validation', async () => {
-    const { getByRole, formOne, formTwo } = withSetup(() => {
+  function setupForm() {
+    const rendered = withSetup(() => {
       const formOne = useNotForm({
         schema,
         initialState: {
@@ -65,41 +64,68 @@ describe('Multiple form instances - Zod', () => {
       </div>
     `, { NotForm, NotField, NotMessage })
 
-    const inputs = getByRole('textbox')
+    const inputs = rendered.getByRole('textbox')
     const input1 = inputs.first()
     const input2 = inputs.last()
+    const formOne = rendered.formOne
+    const formTwo = rendered.formTwo
 
+    return {
+      ...rendered,
+      input1,
+      input2,
+      formOne,
+      formTwo,
+    }
 
-    // Verify forms do not have same id
+  }
+
+  test('Verify forms do not have same id', () => {
+    const { formOne, formTwo } = setupForm()
     expect(formOne.id).not.toBe(formTwo.id)
+  })
 
-    // verify initial separation
+  test('verify initial separation', async () => {
+    const { input1, input2 } = setupForm()
+
     await expect.element(input1).toHaveValue('value1')
     await expect.element(input2).toHaveValue('value2')
+  })
 
-    // update first form
+  test('update first form and verify second form is unaffected', async () => {
+    const { input1, input2, formOne, formTwo } = setupForm()
+
     await input1.fill('updated1')
 
-    // verify second form is unaffected
     await expect.element(input1).toHaveValue('updated1')
     await expect.element(input2).toHaveValue('value2')
     expect(formOne.state.value.field).toBe('updated1')
     expect(formTwo.state.value.field).toBe('value2')
+  })
 
-    // Make FormOne Invalid
-    await input1.fill('')
-    await expect.element(input1).toHaveValue('')
-
-    // submit forms to trigger validation
-    await getByRole('button', { name: 'Submit Form One' }).click()
-    await getByRole('button', { name: 'Submit Form Two' }).click()
-
-    // check results
-    expect(formOne.isValid.value).toBeFalsy()
-    expect(formTwo.isValid.value).toBeTruthy()
-
-    // check messages
-    expect(getByRole('alert', { name: 'field-message-one' })).not.toBeEmptyDOMElement()
-    expect(getByRole('alert', { name: 'field-message-two' })).toBeEmptyDOMElement()
+  describe('Submission', () => {
+  
+    test('triggers validation on form submission', async () => {
+      const { input1, formOne, formTwo, getByRole } = setupForm()
+    
+      await input1.fill('')
+    
+      await getByRole('button', { name: 'Submit Form One' }).click()
+      await getByRole('button', { name: 'Submit Form Two' }).click()
+    
+      expect(formOne.isValid.value).toBeFalsy()
+      expect(formTwo.isValid.value).toBeTruthy()
+    })
+  
+    test('displays correct error messages after submission', async () => {
+      const { input1, getByRole } = setupForm()
+    
+      await input1.fill('')
+      await getByRole('button', { name: 'Submit Form One' }).click()
+      await getByRole('button', { name: 'Submit Form Two' }).click()
+    
+      expect(getByRole('alert', { name: 'field-message-one' })).not.toBeEmptyDOMElement()
+      expect(getByRole('alert', { name: 'field-message-two' })).toBeEmptyDOMElement()
+    })
   })
 })

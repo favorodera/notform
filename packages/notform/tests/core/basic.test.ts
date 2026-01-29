@@ -1,17 +1,16 @@
 import { describe, expect, test } from 'vitest'
-import { z } from 'zod'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
-import { withSetup } from '../../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
+import { notRules, withSetup } from '../utils'
 
-describe('Basic Form - Zod', () => {
+describe('Basic Form Test', () => {
+  const schema = notRules.object({
+    name: notRules.string(1),
+    age: notRules.number(18),
+  })
 
-  test('Initializes with default state and errors', async () => {
-    const { state, getByRole, getFieldErrors } = withSetup(() => {
-      const schema = z.object({
-        name: z.string().min(1),
-        age: z.number().min(18),
-      })
-      const { state, id, getFieldErrors } = useNotForm({
+  function setupForm() {
+    const rendered = withSetup(() => {
+      const { state, getFieldErrors, id } = useNotForm({
         schema,
         initialState: {
           name: 'John',
@@ -24,10 +23,8 @@ describe('Basic Form - Zod', () => {
           },
         ],
       })
-
-      return { state, id, getFieldErrors }
+      return { state, getFieldErrors, id }
     }).render(`
-      
       <NotForm :id="id">
         <NotField name="name" v-slot="{ methods, name }">
           <label :for="name">
@@ -35,7 +32,6 @@ describe('Basic Form - Zod', () => {
             <input type="text" v-model="state.name" v-bind="methods" :name="name" :id="name"/>
           </label>
         </NotField>
-
         <NotField name="age" v-slot="{ methods, name }">
           <label :for="name">
             Age
@@ -48,23 +44,37 @@ describe('Basic Form - Zod', () => {
       </NotForm>
     `, { NotForm, NotField, NotMessage })
 
-    const nameInput = getByRole('textbox', { name: 'name' })
 
-    const ageInput = getByRole('spinbutton', { name: 'age' })
-    const ageMessage = getByRole('alert', { name: 'age-message' })
+    const nameInput = rendered.getByRole('textbox', { name: 'name' })
+    const ageInput = rendered.getByRole('spinbutton', { name: 'age' })
+    const ageMessage = rendered.getByRole('alert', { name: 'age-message' })
+
+    return {
+      ...rendered,
+      nameInput,
+      ageInput,
+      ageMessage,
+    }
+  }
+
+  test('State', async () => {
+    const { state, nameInput, ageInput } = setupForm()
 
     expect(state.value).toEqual({
       name: 'John',
       age: 15,
     })
-
     await expect.element(nameInput).toHaveValue('John')
     await expect.element(ageInput).toHaveValue(15)
-    await expect.element(ageMessage).toHaveTextContent('Not up to 18')
+  })
+
+  test('Errors', async () => {
+    const { getFieldErrors, ageMessage } = setupForm()
 
     expect(getFieldErrors('age')).toEqual([{
       path: ['age'],
       message: 'Not up to 18',
     }])
+    await expect.element(ageMessage).toHaveTextContent('Not up to 18')
   })
 })

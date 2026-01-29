@@ -1,48 +1,25 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
-import * as v from 'valibot'
+import { withSetup } from '../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
+import { notRules } from '../utils'
 import { ref } from 'vue'
 
-describe('Methods - Valibot', () => {
+describe('Methods - Core', () => {
+  const schema = notRules.object({
+    name: notRules.string(1),
+    age: notRules.number(0, 120),
+  })
 
-  test('Form methods and state lifecycle', async () => {
+  function setupForm() {
     const onValidateDisplay = ref()
     const onErrorDisplay = ref()
     const onResetDisplay = ref()
     const onSubmitDisplay = ref()
 
-    const {
-      getByRole,
-      id,
-      isValid,
-      state,
-      getFieldErrors,
-      setErrors,
-      setState,
-      reset,
-      submit,
-      dirtyAllFields,
-      dirtyField,
-      dirtyFields,
-      isDirty,
-      isTouched,
-      validate,
-      validateField,
-      touchAllFields,
-      touchField,
-      touchedFields,
-      errors,
-      clearErrors,
-      initialState,
-      mode,
-    } = withSetup(() => {
+    const rendered = withSetup(() => {
       const form = useNotForm({
         id: 'form',
-        schema: v.object({
-          name: v.pipe(v.string(), v.minLength(1)),
-          age: v.pipe(v.number(), v.maxValue(120)),
-        }),
+        schema,
         initialState: {
           name: 'John',
           age: 25,
@@ -89,71 +66,120 @@ describe('Methods - Valibot', () => {
       </NotForm>
     `, { NotForm, NotField, NotMessage })
 
-    const nameInput = getByRole('textbox', { name: 'name' })
-    const ageInput = getByRole('spinbutton', { name: 'age' })
-    const submitButton = getByRole('button', { name: 'Submit' })
-    const resetButton = getByRole('button', { name: 'Reset' })
-    const ageMessage = getByRole('alert', { name: 'age-message' })
-    const nameMessage = getByRole('alert', { name: 'name-message' })
+    return {
+      ...rendered,
+      onValidateDisplay,
+      onErrorDisplay,
+      onResetDisplay,
+      onSubmitDisplay,
+      nameInput: rendered.getByRole('textbox', { name: 'name' }),
+      ageInput: rendered.getByRole('spinbutton', { name: 'age' }),
+      submitButton: rendered.getByRole('button', { name: 'Submit' }),
+      resetButton: rendered.getByRole('button', { name: 'Reset' }),
+      ageMessage: rendered.getByRole('alert', { name: 'age-message' }),
+      nameMessage: rendered.getByRole('alert', { name: 'name-message' }),
+    }
+  }
 
-    // 1. Initial State
+  test('Initial State', async () => {
+    const { id, initialState, isDirty, mode } = setupForm()
     expect(id).toBe('form')
     expect(initialState).toEqual({ name: 'John', age: 25 })
     expect(isDirty.value).toBeFalsy()
     expect(mode).toBe('eager')
+  })
 
-    // 2. setState and Validation
+  test('setState and Validation', async () => {
+    const { setState, validate, isValid, getFieldErrors, nameMessage, ageMessage } = setupForm()
+
     setState({ name: '', age: 150 })
     await validate()
+
     expect(isValid.value).toBeFalsy()
     expect(getFieldErrors('name').length).toBeGreaterThan(0)
     expect(getFieldErrors('age').length).toBeGreaterThan(0)
     await expect.element(nameMessage).not.toBeEmptyDOMElement()
     await expect.element(ageMessage).not.toBeEmptyDOMElement()
+  })
 
-    // 3. setErrors and clearErrors
+  test('setErrors and clearErrors', async () => {
+    const { clearErrors, errors, setErrors, getFieldErrors, nameMessage } = setupForm()
+
     clearErrors()
     expect(errors.value).toEqual([])
+
     setErrors([{ path: ['name'], message: 'Custom error' }])
     expect(getFieldErrors('name')[0].message).toBe('Custom error')
     await expect.element(nameMessage).toHaveTextContent('Custom error')
+  })
 
-    // 4. Dirty and Touch (UI Interaction)
-    reset()
+  test('Dirty and Touch (UI Interaction)', async () => {
+    const { nameInput, ageInput, dirtyFields, touchedFields } = setupForm()
+
     await nameInput.fill('Jane')
     await nameInput.click()
     await ageInput.click()
+
     expect(dirtyFields.value.has('name')).toBeTruthy()
     expect(touchedFields.value.has('name')).toBeTruthy()
+  })
 
-    // 5. Programmatic Dirty/Touch
+  test('Programmatic Dirty/Touch', async () => {
+    const { dirtyField, touchField, isDirty, isTouched } = setupForm()
+
     dirtyField('age')
     touchField('age')
+
     expect(isDirty.value).toBeTruthy()
     expect(isTouched.value).toBeTruthy()
+  })
 
-    // 6. Bulk methods
+  test('Bulk methods', async () => {
+    const { reset, dirtyAllFields, touchAllFields, dirtyFields, touchedFields } = setupForm()
+
     reset()
     dirtyAllFields()
     touchAllFields()
+
     expect(dirtyFields.value.size).toBe(2)
     expect(touchedFields.value.size).toBe(2)
+  })
 
-    // 7. validateField
+  test('validateField', async () => {
+    const { reset, validateField } = setupForm()
+
     reset({ name: 'John', age: 500 })
     const result = await validateField('age')
-    expect(result.issues).toBeDefined()
     expect(result.issues).toHaveLength(1)
+  })
 
-    // 8. Submission
+  test('Submission failure', async () => {
+    const { setState, submit, onErrorDisplay, onValidateDisplay, onSubmitDisplay } = setupForm()
+
+    setState({ name: 'John', age: 500 })
     await submit(new Event('submit'))
+
     expect(onErrorDisplay.value).toBeDefined()
     expect(onValidateDisplay.value).toBeUndefined()
     expect(onSubmitDisplay.value).toBeUndefined()
+  })
 
-    // 9. UI Submit and Reset
+  test('Submission success', async () => {
+    const { submit, onErrorDisplay, onValidateDisplay, onSubmitDisplay } = setupForm()
+
+    await submit(new Event('submit'))
+
+    expect(onErrorDisplay.value).toBeUndefined()
+    expect(onValidateDisplay.value).toEqual({ name: 'John', age: 25 })
+    expect(onSubmitDisplay.value).toEqual({ name: 'John', age: 25 })
+  })
+
+  test('UI Submit and Reset', async () => {
+    const { setState, submitButton, onValidateDisplay, onSubmitDisplay, resetButton, state, onResetDisplay } = setupForm()
+
     setState({ name: 'Valid', age: 30 })
     await submitButton.click()
+
     expect(onValidateDisplay.value).toEqual({ name: 'Valid', age: 30 })
     expect(onSubmitDisplay.value).toEqual({ name: 'Valid', age: 30 })
 
@@ -161,5 +187,4 @@ describe('Methods - Valibot', () => {
     expect(state.value).toEqual({ name: 'John', age: 500 })
     expect(onResetDisplay.value).toBeTruthy()
   })
-
 })
