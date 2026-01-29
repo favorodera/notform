@@ -36,7 +36,7 @@ provide(CURRENT_NOT_FORM_ID_KEY, form.id)
 
 <template>
   <template v-if="props.asChild">
-    <slot v-bind="form" />
+    <slot v-bind="{...form, attributes:mergedAttrs}" />
   </template>
 
   <component v-else :is="props.as" v-bind="mergedAttrs">
