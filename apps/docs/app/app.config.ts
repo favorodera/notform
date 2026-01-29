@@ -99,7 +99,7 @@ export default defineAppConfig({
         {
           icon: 'i-tabler-star',
           label: 'Star on GitHub',
-          to: 'https://github.com/notform',
+          to: 'https://github.com/favorodera/notform',
           target: '_blank'
         }
       ]
