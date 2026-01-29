@@ -11,75 +11,70 @@ export const schemaOptions: Array<{ id: SchemaId, label: string }> = [
   { id: 'valibot', label: 'Valibot' },
 ]
 
-const phoneRegex = /^(\+?\d{1,3})?[ -]?\d{7,14}$/
-
+// Zod Schema
 const zodSchema = z.object({
   text: z.string().min(3, 'Text must be at least 3 characters'),
-  email: z.email('Please enter a valid email'),
-  textarea: z.string().min(10, 'Textarea must be at least 10 characters'),
   select: z.string().min(1, 'Please select an option'),
-  tel: z
-    .string()
-    .min(1, 'Phone number is required')
-    .regex(phoneRegex, 'Enter a valid phone number'),
+  number: z.coerce.number().min(1, 'Number must be at least 1'),
+  range: z.coerce.number().min(0).max(100),
+  date: z.iso.date('Please enter a valid date'),
+  file: z.file('File is required').nonoptional('Please upload a file'),
   checkbox: z.literal(true, 'You must agree to continue'),
+  radio: z.enum(['option1', 'option2', 'option3'], 'Please select an option'),
+  array: z.array(z.string().min(5, 'Array item must be at least 5 characters'))
+    .min(1, 'Array must have at least one item'),
 })
 
+// Yup Schema
 const yupSchema = yup.object({
   text: yup
     .string()
     .min(3, 'Text must be at least 3 characters')
     .required('Text is required'),
-  email: yup
-    .string()
-    .email('Please enter a valid email')
-    .required('Email is required'),
-  textarea: yup
-    .string()
-    .min(10, 'Textarea must be at least 10 characters')
-    .required('Textarea is required'),
   select: yup.string().required('Please select an option'),
-  tel: yup
-    .string()
-    .required('Phone number is required')
-    .matches(phoneRegex, 'Enter a valid phone number'),
+  number: yup
+    .number()
+    .min(1, 'Number must be at least 1')
+    .required('Number is required'),
+  range: yup.number().min(0).max(100).required('Range is required'),
+  date: yup.string().required('Date is required'),
+  file: yup
+    .mixed<File>()
+    .required('Please upload a file')
+    .test('fileType', 'File is required', value => value instanceof File),
   checkbox: yup
     .bool()
-    .oneOf([true], 'You must agree to continue'),
+    .oneOf([true], 'You must agree to continue')
+    .required('You must agree to continue'),
+  radio: yup
+    .string()
+    .oneOf(['option1', 'option2', 'option3'], 'Please select an option')
+    .required('Please select an option'),
+  array: yup.array(yup.string()
+    .min(5, 'Array item must be at least 5 characters'))
+    .min(1, 'Array must have at least one item'),
 })
 
+// Valibot Schema
 const valibotSchema = v.object({
-  text: v.pipe(
-    v.string(),
-    v.minLength(3, 'Text must be at least 3 characters'),
+  text: v.pipe(v.string(), v.minLength(3, 'Text must be at least 3 characters')),
+  select: v.pipe(v.string(), v.minLength(1, 'Please select an option')),
+  number: v.pipe(v.number(), v.minValue(1, 'Number must be at least 1')),
+  range: v.pipe(v.number(), v.minValue(0), v.maxValue(100)),
+  date: v.pipe(v.string(), v.minLength(1, 'Date is required')),
+  file: v.pipe(
+    v.nullable(v.instance(File)),
+    v.check(file => file !== null, 'Please upload a file'),
   ),
-  email: v.pipe(
-    v.string(),
-    v.email('Please enter a valid email'),
-  ),
-  textarea: v.pipe(
-    v.string(),
-    v.minLength(10, 'Textarea must be at least 10 characters'),
-  ),
-  select: v.pipe(
-    v.string(),
-    v.minLength(1, 'Please select an option'),
-  ),
-  tel: v.pipe(
-    v.string(),
-    v.minLength(1, 'Phone number is required'),
-    v.regex(phoneRegex, 'Enter a valid phone number'),
-  ),
-  checkbox: v.pipe(
-    v.boolean(),
-    v.literal(true, 'You must agree to continue'),
-  ),
+  checkbox: v.pipe(v.boolean(), v.literal(true, 'You must agree to continue')),
+  radio: v.picklist(['option1', 'option2', 'option3']),
+  array: v.pipe(v.array(v.pipe(v.string(), v.minLength(5, 'Array item must be at least 5 characters'))),
+    v.minLength(1, 'Array must have at least one item')),
 })
 
 const activeSchema = ref<SchemaId>('zod')
 
 export default function () {
-
   function setSchema(id: SchemaId) {
     activeSchema.value = id
   }
@@ -103,4 +98,3 @@ export default function () {
     schema,
   }
 }
-

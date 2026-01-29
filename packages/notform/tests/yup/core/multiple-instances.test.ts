@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import * as v from 'valibot'
+import { withSetup } from '../../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import * as yup from 'yup'
 
-describe('Multiple form instances - Valibot', () => {
+describe('Multiple form instances - Yup', () => {
   // define shared schema
-  const schema = v.object({
-    field: v.pipe(v.string(), v.minLength(1)),
+  const schema = yup.object({
+    field: yup.string().required(),
   })
 
   test('Maintains isolated states and validation', async () => {

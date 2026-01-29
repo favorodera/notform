@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import { z } from 'zod'
+import { withSetup } from '../../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import * as yup from 'yup'
 import { ref } from 'vue'
 
-describe('Methods - Zod', () => {
+describe('Methods - Yup', () => {
 
   test('Form methods and state lifecycle', async () => {
     const onValidateDisplay = ref()
@@ -39,9 +39,9 @@ describe('Methods - Zod', () => {
     } = withSetup(() => {
       const form = useNotForm({
         id: 'form',
-        schema: z.object({
-          name: z.string().min(1),
-          age: z.number().max(120),
+        schema: yup.object({
+          name: yup.string().required(),
+          age: yup.number().max(120),
         }),
         initialState: {
           name: 'John',
@@ -60,7 +60,7 @@ describe('Methods - Zod', () => {
           onSubmitDisplay.value = data
         },
       })
-      
+
       return { ...form }
     }).render(`
       <NotForm :id="id" @submit.prevent="submit" @reset="reset({ name: 'John', age: 500 })">

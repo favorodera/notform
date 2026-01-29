@@ -1,17 +1,20 @@
 import { describe, expect, test } from 'vitest'
-import * as yup from 'yup'
-import { NotField, NotForm, NotArrayField, NotMessage, useNotForm } from '../../src'
-import { withSetup } from '../utils'
+import * as v from 'valibot'
+import { NotField, NotForm, NotArrayField, NotMessage, useNotForm } from '../../../src'
+import { withSetup } from '../../utils'
 
-describe('Array Field - Yup', () => {
+describe('Array Field - Valibot', () => {
 
   test('Manages array items correctly', async () => {
     const { state, getByRole, touchedFields } = withSetup(() => {
-      const schema = yup.object({
-        users: yup.array(yup.object({
-          name: yup.string().required('Name is required'),
-          age: yup.number().required().min(18, 'Must be at least 18'),
-        })).min(1, 'At least one user is required'),
+      const schema = v.object({
+        users: v.pipe(
+          v.array(v.object({
+            name: v.pipe(v.string(), v.minLength(1, 'Name is required')),
+            age: v.pipe(v.number(), v.minValue(18, 'Must be at least 18')),
+          })),
+          v.minLength(1, 'At least one user is required'),
+        ),
       })
 
       const { state, id, getFieldErrors, touchedFields } = useNotForm({
@@ -26,7 +29,7 @@ describe('Array Field - Yup', () => {
       return { state, id, getFieldErrors, touchedFields, schema }
     }).render(`
       <NotForm :id="id">
-        <NotArrayField name="users" :schema="schema.fields.users" v-slot="{ fields, append, prepend, remove, insert, update }">
+        <NotArrayField name="users" :schema="schema.entries.users" v-slot="{ fields, append, prepend, remove, insert, update }">
           <div v-for="(field, index) in fields" :key="field.key">
             <NotField :name="'users.' + index + '.name'" v-slot="{ methods, name }">
               <label :for="name">

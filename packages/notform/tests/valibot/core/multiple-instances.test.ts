@@ -1,14 +1,14 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import { z } from 'zod'
+import { withSetup } from '../../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import * as v from 'valibot'
 
-describe('Multiple form instances - Zod', () => {
+describe('Multiple form instances - Valibot', () => {
   // define shared schema
-  const schema = z.object({
-    field: z.string().min(1),
+  const schema = v.object({
+    field: v.pipe(v.string(), v.minLength(1)),
   })
-    
+
   test('Maintains isolated states and validation', async () => {
     const { getByRole, formOne, formTwo } = withSetup(() => {
       const formOne = useNotForm({
@@ -64,22 +64,22 @@ describe('Multiple form instances - Zod', () => {
         </NotForm>
       </div>
     `, { NotForm, NotField, NotMessage })
-    
+
     const inputs = getByRole('textbox')
     const input1 = inputs.first()
     const input2 = inputs.last()
-    
-    
+
+
     // Verify forms do not have same id
     expect(formOne.id).not.toBe(formTwo.id)
-    
+
     // verify initial separation
     await expect.element(input1).toHaveValue('value1')
     await expect.element(input2).toHaveValue('value2')
-    
+
     // update first form
     await input1.fill('updated1')
-    
+
     // verify second form is unaffected
     await expect.element(input1).toHaveValue('updated1')
     await expect.element(input2).toHaveValue('value2')

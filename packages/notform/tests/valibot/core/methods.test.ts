@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import * as yup from 'yup'
+import { withSetup } from '../../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import * as v from 'valibot'
 import { ref } from 'vue'
 
-describe('Methods - Yup', () => {
+describe('Methods - Valibot', () => {
 
   test('Form methods and state lifecycle', async () => {
     const onValidateDisplay = ref()
@@ -39,9 +39,9 @@ describe('Methods - Yup', () => {
     } = withSetup(() => {
       const form = useNotForm({
         id: 'form',
-        schema: yup.object({
-          name: yup.string().required(),
-          age: yup.number().max(120),
+        schema: v.object({
+          name: v.pipe(v.string(), v.minLength(1)),
+          age: v.pipe(v.number(), v.maxValue(120)),
         }),
         initialState: {
           name: 'John',
@@ -104,7 +104,7 @@ describe('Methods - Yup', () => {
 
     // 2. setState and Validation
     setState({ name: '', age: 150 })
-    await validate() // Ensure errors are populated
+    await validate()
     expect(isValid.value).toBeFalsy()
     expect(getFieldErrors('name').length).toBeGreaterThan(0)
     expect(getFieldErrors('age').length).toBeGreaterThan(0)
@@ -119,10 +119,10 @@ describe('Methods - Yup', () => {
     await expect.element(nameMessage).toHaveTextContent('Custom error')
 
     // 4. Dirty and Touch (UI Interaction)
-    reset() // Back to initial
+    reset()
     await nameInput.fill('Jane')
     await nameInput.click()
-    await ageInput.click() // Trigger blur on name
+    await ageInput.click()
     expect(dirtyFields.value.has('name')).toBeTruthy()
     expect(touchedFields.value.has('name')).toBeTruthy()
 
@@ -142,6 +142,7 @@ describe('Methods - Yup', () => {
     // 7. validateField
     reset({ name: 'John', age: 500 })
     const result = await validateField('age')
+    expect(result.issues).toBeDefined()
     expect(result.issues).toHaveLength(1)
 
     // 8. Submission

@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import * as yup from 'yup'
+import { withSetup } from '../../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import { z } from 'zod'
 
-describe('Multiple form instances - Yup', () => {
+describe('Multiple form instances - Zod', () => {
   // define shared schema
-  const schema = yup.object({
-    field: yup.string().required(),
+  const schema = z.object({
+    field: z.string().min(1),
   })
 
   test('Maintains isolated states and validation', async () => {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useNotForm, NotForm, NotField, NotMessage } from 'notform'
-import { ref, watch } from 'vue'
+import { useNotForm, NotForm, NotField, NotMessage, NotArrayField } from 'notform'
+import { computed, ref, watch } from 'vue'
 import useSchema from './composables/use-schema'
 import SchemaTabs from './components/schema-tabs.vue'
 
@@ -8,13 +8,31 @@ const { schema, activeSchema } = useSchema()
 
 const form = useNotForm({
   schema,
+  initialState: {
+    array: [''],
+  },
   onSubmit: async (data) => {
-     
     console.log('Combined form submitted:', data)
   },
 })
 
 const currentTab = ref<'preview' | 'raw'>('preview')
+
+const arraySchema = computed(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const objectSchema = schema.value as any
+  
+  switch (activeSchema.value) {
+    case 'yup':
+      return objectSchema.fields.array
+
+    case 'valibot':
+      return objectSchema.entries.array
+
+    default:
+      return objectSchema.shape.array
+  }
+})
 
 watch(activeSchema, () => {
   form.validate()
@@ -81,10 +99,7 @@ watch(activeSchema, () => {
           sm:p-5
         "
       >
-      
-        <section
-          class="space-y-4"
-        >
+        <section class="space-y-4">
           <NotForm
             v-if="currentTab === 'preview'"
             :id="form.id"
@@ -92,122 +107,32 @@ watch(activeSchema, () => {
             @submit="form.submit"
             @reset="form.reset()"
           >
-            <div
-              class="
-                grid gap-4
-                md:grid-cols-2
-              "
-            >
-              <NotField
-                v-slot="{ methods, name }"
-                name="text"
-              >
+            <div class="
+              grid gap-4
+              md:grid-cols-2
+            ">
+              <NotField v-slot="{ methods, name }" name="text">
                 <div class="nf-field">
-                  <label
-                    class="nf-label"
-                    :for="name"
-                  >
-                    Text
-                  </label>
+                  <label class="nf-label" :for="name">Text</label>
                   <input
                     :id="name"
                     v-model="form.state.value.text"
                     class="nf-input"
                     type="text"
-                    autocomplete="username"
                     :name="name"
                     v-bind="methods"
                   >
-                  <NotMessage
-                    v-slot="{ message }"
-                    :name="name"
-                  >
+                  <NotMessage v-slot="{ message }" :name="name">
                     <p class="nf-error capitalize" v-if="message">
-                    {{ activeSchema }} : {{ message }}
-                  </p>
+                      {{ activeSchema }} : {{ message }}
+                    </p>
                   </NotMessage>
                 </div>
               </NotField>
 
-              <NotField
-                v-slot="{ methods, name }"
-                name="email"
-              >
+              <NotField v-slot="{ methods, name }" name="select">
                 <div class="nf-field">
-                  <label
-                    class="nf-label"
-                    :for="name"
-                  >
-                    Email
-                  </label>
-                  <input
-                    :id="name"
-                    v-model="form.state.value.email"
-                    class="nf-input"
-                    type="email"
-                    autocomplete="email"
-                    :name="name"
-                    v-bind="methods"
-                  >
-                  <NotMessage
-                    v-slot="{ message }"
-                    :name="name"
-                  >
-                    <p class="nf-error capitalize" v-if="message">
-                    {{ activeSchema }} : {{ message }}
-                  </p>
-                  </NotMessage>
-                </div>
-              </NotField>
-            </div>
-
-            <NotField
-              v-slot="{ methods, name }"
-              name="textarea"
-            >
-              <div class="nf-field">
-                <label
-                  class="nf-label"
-                  :for="name"
-                >
-                  Textarea
-                </label>
-                <textarea
-                  :id="name"
-                  v-model="form.state.value.textarea"
-                  class="nf-textarea"
-                  rows="3"
-                  :name="name"
-                  v-bind="methods"
-                />
-                <NotMessage
-                  v-slot="{ message }"
-                  :name="name"
-                >
-                  <p class="nf-error capitalize" v-if="message">
-                    {{ activeSchema }} : {{ message }}
-                  </p>
-                </NotMessage>
-              </div>
-            </NotField>
-
-            <div
-              class="
-                grid gap-4
-                md:grid-cols-2
-              "
-            >
-              <NotField
-                v-slot="{ methods, name }"
-                name="select"
-              >
-                <div class="nf-field">
-                  <label
-                    class="nf-label"
-                    :for="name"
-                  >
-                    Select
-                  </label>
+                  <label class="nf-label" :for="name">Select</label>
                   <select
                     :id="name"
                     v-model="form.state.value.select"
@@ -215,67 +140,135 @@ watch(activeSchema, () => {
                     :name="name"
                     v-bind="methods"
                   >
-                    <option value="">
-                      Select a country
-                    </option>
-                    <option value="ng">
-                      Nigeria
-                    </option>
-                    <option value="us">
-                      United States
-                    </option>
-                    <option value="uk">
-                      United Kingdom
-                    </option>
+                    <option value="">Select a country</option>
+                    <option value="ng">Nigeria</option>
+                    <option value="us">United States</option>
+                    <option value="uk">United Kingdom</option>
                   </select>
-                  <NotMessage
-                    v-slot="{ message }"
-                    :name="name"
-                  >
+                  <NotMessage v-slot="{ message }" :name="name">
                     <p class="nf-error capitalize" v-if="message">
-                    {{ activeSchema }} : {{ message }}
-                  </p>
+                      {{ activeSchema }} : {{ message }}
+                    </p>
                   </NotMessage>
                 </div>
               </NotField>
 
-              <NotField
-                v-slot="{ methods, name }"
-                name="tel"
-              >
+              <NotField v-slot="{ methods, name }" name="number">
                 <div class="nf-field">
-                  <label
-                    class="nf-label"
-                    :for="name"
-                  >
-                    Tel
-                  </label>
+                  <label class="nf-label" :for="name">Number</label>
                   <input
                     :id="name"
-                    v-model="form.state.value.tel"
+                    v-model="form.state.value.number"
                     class="nf-input"
-                    type="tel"
-                    inputmode="tel"
-                    autocomplete="tel"
+                    type="number"
                     :name="name"
                     v-bind="methods"
                   >
-                  <NotMessage
-                    v-slot="{ message }"
-                    :name="name"
-                  >
+                  <NotMessage v-slot="{ message }" :name="name">
                     <p class="nf-error capitalize" v-if="message">
-                    {{ activeSchema }} : {{ message }}
-                  </p>
+                      {{ activeSchema }} : {{ message }}
+                    </p>
                   </NotMessage>
                 </div>
               </NotField>
+
+              <NotField v-slot="{ methods, name }" name="range">
+                <div class="nf-field">
+                  <label class="nf-label" :for="name">
+                    Range ({{ form.state.value.range || 50 }})
+                  </label>
+                  <input
+                    :id="name"
+                    v-model="form.state.value.range"
+                    class="w-full"
+                    type="range"
+                    min="0"
+                    max="100"
+                    :name="name"
+                    v-bind="methods"
+                  >
+                  <NotMessage v-slot="{ message }" :name="name">
+                    <p class="nf-error capitalize" v-if="message">
+                      {{ activeSchema }} : {{ message }}
+                    </p>
+                  </NotMessage>
+                </div>
+              </NotField>
+
+              <NotField v-slot="{ methods, name }" name="date">
+                <div class="nf-field">
+                  <label class="nf-label" :for="name">Date</label>
+                  <input
+                    :id="name"
+                    v-model="form.state.value.date"
+                    class="nf-input"
+                    type="date"
+                    :name="name"
+                    v-bind="methods"
+                  >
+                  <NotMessage v-slot="{ message }" :name="name">
+                    <p class="nf-error capitalize" v-if="message">
+                      {{ activeSchema }} : {{ message }}
+                    </p>
+                  </NotMessage>
+                </div>
+              </NotField>
+
+              <NotField v-slot="{ methods, name }" name="file">
+                <div class="nf-field">
+                  <label class="nf-label" :for="name">File</label>
+                  <input
+                    :id="name"
+                    class="nf-input"
+                    type="file"
+                    :name="name"
+                    v-bind="methods"
+                    @change="(e) => form.state.value.file = (e.target as HTMLInputElement).files?.[0] || null"
+                  >
+                  <NotMessage v-slot="{ message }" :name="name">
+                    <p class="nf-error capitalize" v-if="message">
+                      {{ activeSchema }} : {{ message }}
+                    </p>
+                  </NotMessage>
+                </div>
+              </NotField>
+
+              <NotArrayField :schema="arraySchema" name="array" v-slot="{fields,append,remove}">
+
+                <div v-for="field, index in fields" :key="field.key">
+
+                <NotField v-slot="{ methods, name }" :name="'array.' + index">
+                <div class="nf-field">
+                  <label class="nf-label" :for="name">Item {{ index }}</label>
+                 
+                  <div class="flex items-center gap-2">
+                     <input
+                    :id="name"
+                    v-model="form.state.value.array![index]"
+                    class="nf-input"
+                    type="text"
+                    :name="name"
+                    v-bind="methods"
+                  >
+
+                  <button @click="remove(index)" class="nf-button font-bold" :disabled="index === 0">x</button>
+                  <button @click="append('')" class="nf-button font-bold">+</button>
+                  </div>
+
+                  <NotMessage v-slot="{ message }" :name="name">
+                    <p class="nf-error capitalize" v-if="message">
+                      {{ activeSchema }} : {{ message }}
+                    </p>
+                  </NotMessage>
+                </div>
+              </NotField>
+
+                </div>
+
+              </NotArrayField>
             </div>
 
-            <NotField
-              v-slot="{ methods, name }"
-              name="checkbox"
-            >
+            <NotField v-slot="{ methods, name }" name="checkbox">
               <div class="nf-field">
                 <label class="nf-label flex items-center gap-2">
                   <input
@@ -287,10 +280,53 @@ watch(activeSchema, () => {
                   >
                   <span>Checkbox</span>
                 </label>
-                <NotMessage
-                  v-slot="{ message }"
-                  :name="name"
-                >
+                <NotMessage v-slot="{ message }" :name="name">
+                  <p class="nf-error capitalize" v-if="message">
+                    {{ activeSchema }} : {{ message }}
+                  </p>
+                </NotMessage>
+              </div>
+            </NotField>
+
+            <NotField v-slot="{ methods, name }" name="radio">
+              <div class="nf-field">
+                <label class="nf-label mb-2 block">Radio</label>
+                <div class="space-y-2">
+                  <label class="flex items-center gap-2">
+                    <input
+                      v-model="form.state.value.radio"
+                      class="nf-checkbox"
+                      type="radio"
+                      value="option1"
+                      :name="name"
+                      v-bind="methods"
+                    >
+                    <span>Option 1</span>
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input
+                      v-model="form.state.value.radio"
+                      class="nf-checkbox"
+                      type="radio"
+                      value="option2"
+                      :name="name"
+                      v-bind="methods"
+                    >
+                    <span>Option 2</span>
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input
+                      v-model="form.state.value.radio"
+                      class="nf-checkbox"
+                      type="radio"
+                      value="option3"
+                      :name="name"
+                      v-bind="methods"
+                    >
+                    <span>Option 3</span>
+                  </label>
+                </div>
+                <NotMessage v-slot="{ message }" :name="name">
                   <p class="nf-error capitalize" v-if="message">
                     {{ activeSchema }} : {{ message }}
                   </p>
@@ -299,17 +335,10 @@ watch(activeSchema, () => {
             </NotField>
 
             <div class="nf-form-actions">
-              <button
-                type="submit"
-                class="nf-button nf-button-primary"
-              >
+              <button type="submit" class="nf-button nf-button-primary">
                 Submit form
               </button>
-
-              <button
-                type="reset"
-                class="nf-button"
-              >
+              <button type="reset" class="nf-button">
                 Reset form
               </button>
               <p class="text-xs text-slate-500">
@@ -317,17 +346,13 @@ watch(activeSchema, () => {
               </p>
             </div>
           </NotForm>
-         
+
           <pre
             v-else
             class="max-h-[calc(100dvh-20rem)] overflow-auto"
           >{{ form }}</pre>
         </section>
-
       </section>
-
     </main>
-
   </div>
-
 </template>

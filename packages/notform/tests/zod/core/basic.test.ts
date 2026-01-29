@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { z } from 'zod'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import { withSetup } from '../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import { withSetup } from '../../utils'
 
 describe('Basic Form - Zod', () => {
 
@@ -24,7 +24,7 @@ describe('Basic Form - Zod', () => {
           },
         ],
       })
-      
+
       return { state, id, getFieldErrors }
     }).render(`
       
@@ -47,7 +47,7 @@ describe('Basic Form - Zod', () => {
         </NotField>
       </NotForm>
     `, { NotForm, NotField, NotMessage })
-    
+
     const nameInput = getByRole('textbox', { name: 'name' })
 
     const ageInput = getByRole('spinbutton', { name: 'age' })

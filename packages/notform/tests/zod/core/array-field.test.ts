@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { z } from 'zod'
-import { NotField, NotForm, NotArrayField, NotMessage, useNotForm } from '../../src'
-import { withSetup } from '../utils'
+import { NotField, NotForm, NotArrayField, NotMessage, useNotForm } from '../../../src'
+import { withSetup } from '../../utils'
 
 describe('Array Field - Zod', () => {
 

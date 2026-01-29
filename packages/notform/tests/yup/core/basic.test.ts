@@ -1,15 +1,15 @@
 import { describe, expect, test } from 'vitest'
-import * as v from 'valibot'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import { withSetup } from '../utils'
+import * as yup from 'yup'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import { withSetup } from '../../utils'
 
-describe('Basic Form - Valibot', () => {
+describe('Basic Form - Yup', () => {
 
   test('Initializes with default state and errors', async () => {
     const { state, getByRole, getFieldErrors } = withSetup(() => {
-      const schema = v.object({
-        name: v.pipe(v.string(), v.minLength(1)),
-        age: v.pipe(v.number(), v.minValue(18)),
+      const schema = yup.object({
+        name: yup.string().required(),
+        age: yup.number().required().min(18),
       })
       const { state, id, getFieldErrors } = useNotForm({
         schema,

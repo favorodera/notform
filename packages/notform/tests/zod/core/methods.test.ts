@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import * as v from 'valibot'
+import { withSetup } from '../../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import { z } from 'zod'
 import { ref } from 'vue'
 
-describe('Methods - Valibot', () => {
+describe('Methods - Zod', () => {
 
   test('Form methods and state lifecycle', async () => {
     const onValidateDisplay = ref()
@@ -39,9 +39,9 @@ describe('Methods - Valibot', () => {
     } = withSetup(() => {
       const form = useNotForm({
         id: 'form',
-        schema: v.object({
-          name: v.pipe(v.string(), v.minLength(1)),
-          age: v.pipe(v.number(), v.maxValue(120)),
+        schema: z.object({
+          name: z.string().min(1),
+          age: z.number().max(120),
         }),
         initialState: {
           name: 'John',
@@ -104,7 +104,7 @@ describe('Methods - Valibot', () => {
 
     // 2. setState and Validation
     setState({ name: '', age: 150 })
-    await validate()
+    await validate() // Ensure errors are populated
     expect(isValid.value).toBeFalsy()
     expect(getFieldErrors('name').length).toBeGreaterThan(0)
     expect(getFieldErrors('age').length).toBeGreaterThan(0)
@@ -119,10 +119,10 @@ describe('Methods - Valibot', () => {
     await expect.element(nameMessage).toHaveTextContent('Custom error')
 
     // 4. Dirty and Touch (UI Interaction)
-    reset()
+    reset() // Back to initial
     await nameInput.fill('Jane')
     await nameInput.click()
-    await ageInput.click()
+    await ageInput.click() // Trigger blur on name
     expect(dirtyFields.value.has('name')).toBeTruthy()
     expect(touchedFields.value.has('name')).toBeTruthy()
 
@@ -142,7 +142,6 @@ describe('Methods - Valibot', () => {
     // 7. validateField
     reset({ name: 'John', age: 500 })
     const result = await validateField('age')
-    expect(result.issues).toBeDefined()
     expect(result.issues).toHaveLength(1)
 
     // 8. Submission

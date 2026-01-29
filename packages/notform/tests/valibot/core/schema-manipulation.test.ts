@@ -1,22 +1,26 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import * as yup from 'yup'
+import { withSetup } from '../../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../../../src'
+import * as v from 'valibot'
 import { ref } from 'vue'
 
-describe('Schema Manipulation - Yup', () => {
+describe('Schema Manipulation - Valibot', () => {
 
   test('Handles refinements', async () => {
     const { isValid, getByRole } = withSetup(() => {
-      const schema = yup.object({
-        password: yup.string(),
-        confirm: yup.string(),
-      }).test('passwords-match', "Passwords don't match", function (value) {
-        if (value.password !== value.confirm) {
-          return this.createError({ path: 'confirm', message: "Passwords don't match" })
-        }
-        return true
-      })
+      const schema = v.pipe(
+        v.object({
+          password: v.string(),
+          confirm: v.string(),
+        }),
+        v.forward(
+          v.check(
+            input => input.password === input.confirm,
+            "Passwords don't match",
+          ),
+          ['confirm'],
+        ),
+      )
 
       const { state, id, submit, isValid } = useNotForm({
         schema,
@@ -79,15 +83,15 @@ describe('Schema Manipulation - Yup', () => {
 
   test('Supports dynamic schema updates', async () => {
     const { isValid, schemaTwo, activeSchema, getByRole } = withSetup(() => {
-      const schemaOne = yup.object({
-        amount: yup.number().max(10),
+      const schemaOne = v.object({
+        amount: v.pipe(v.number(), v.maxValue(10)),
       })
 
-      const schemaTwo = yup.object({
-        amount: yup.number().max(20),
+      const schemaTwo = v.object({
+        amount: v.pipe(v.number(), v.maxValue(20)),
       })
 
-      const activeSchema = ref(schemaOne)
+      const activeSchema = ref<typeof schemaOne | typeof schemaTwo>(schemaOne)
 
       const { state, id, submit, isValid } = useNotForm({
         schema: activeSchema,
