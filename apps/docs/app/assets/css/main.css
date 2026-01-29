@@ -11,5 +11,10 @@
 
 :root {
   --ui-container: var(--container-8xl);
-  --ui-radius: 0.5rem;
+  --ui-radius: 0rem;
+  --ui-bg: var(--color-white);
+}
+
+.dark {
+  --ui-bg: #060606;
 }
