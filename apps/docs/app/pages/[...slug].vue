@@ -28,20 +28,24 @@ useSeoMeta({
   title,
   ogTitle: title,
   description,
-  ogDescription: description
+  twitterDescription: description,
+  twitterTitle: title,
+  ogDescription: description,
+  ogUrl: () => `https://notform-docs.vercel.app${route.fullPath}`
 })
 
 const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
 
-defineOgImageComponent('Docs', {
-  headline: headline.value
-})
+defineOgImageComponent('Docs', [
+  { headline },
+  { headline, key: 'whatsapp', width: 800, height: 800 }
+])
 
 const links = computed(() => {
   const links = []
   if (toc?.bottom?.edit) {
     links.push({
-      icon: 'i-lucide-external-link',
+      icon: 'i-tabler-external-link',
       label: 'Edit this page',
       to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
       target: '_blank'

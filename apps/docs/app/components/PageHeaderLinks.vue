@@ -4,9 +4,8 @@ import { useClipboard } from '@vueuse/core'
 const route = useRoute()
 const toast = useToast()
 const { copy, copied } = useClipboard()
-const site = useSiteConfig()
 
-const mdPath = computed(() => `${site.url}/raw${route.path}.md`)
+const mdPath = computed(() => `https://notform-docs.vercel.app/raw${route.path}.md`)
 
 const items = [
   {

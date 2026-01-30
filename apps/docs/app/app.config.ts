@@ -56,10 +56,10 @@ export default defineAppConfig({
     }
   },
   seo: {
-    siteName: 'NotForm Docs'
+    siteName: 'NotForm'
   },
   header: {
-    title: 'NotForm',
+    title: 'NOTFORM',
     to: '/',
     logo: {
       alt: 'NOTFORM',
