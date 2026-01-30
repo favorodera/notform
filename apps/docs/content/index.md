@@ -108,6 +108,7 @@ Forms shouldn't slow you down. NotForm lets you focus on building features inste
     ---
     Your schema types automatically propagate through field values, error states, and submission data. No manual type annotations needed.
     :::
+
     :::card
     ---
     icon: i-tabler-code
@@ -115,6 +116,7 @@ Forms shouldn't slow you down. NotForm lets you focus on building features inste
     ---
     Clear APIs and straightforward patterns mean you can be productive quickly. The documentation respects your time and gets you building fast.
     :::
+
     :::card
     ---
     icon: i-tabler-rocket
@@ -122,6 +124,7 @@ Forms shouldn't slow you down. NotForm lets you focus on building features inste
     ---
     Handle nested objects, async validation, conditional fields, multi-step forms, and file uploads. Build the forms your application needs without juggling multiple libraries.
     :::
+
     :::card
     ---
     icon: i-tabler-stack-2
