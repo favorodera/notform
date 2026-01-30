@@ -1,7 +1,6 @@
 packages:
   - apps/*
   - packages/*
-  - playground/*
 
 ignoredBuiltDependencies:
   - '@parcel/watcher'
