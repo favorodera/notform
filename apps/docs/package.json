@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@favorodera/nuxt-eslint-config": "^1.1.0",
+    "@iconify-json/tabler": "^1.2.26",
     "@nuxt/eslint": "^1.12.1",
     "eslint": "^9.39.2",
     "eslint-plugin-better-tailwindcss": "^4.0.1",
