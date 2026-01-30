@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "scripts/**/*.ts"
+  ],
+  "exclude": [
+    "packages/**/*",
+    "apps/**/*",
+    "playground/**/*",
+    "docs/**/*"
+  ]
+}

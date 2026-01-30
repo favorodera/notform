@@ -5,8 +5,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0-alpha.7",
-  "description": "Effortless Vue Forms Validation",
+  "version": "1.0.0-alpha.8",
+  "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
   "homepage": "https://notform-docs.vercel.app/",
@@ -42,23 +42,6 @@
     "prepublishOnly": "pnpm run build",
     "cleanup": "rm -rf dist node_modules .turbo package-lock.json"
   },
-  "peerDependencies": {
-    "valibot": "^1.2.0",
-    "vue": "^3.0.0",
-    "yup": "^1.6.0",
-    "zod": "^4.3.5"
-  },
-  "peerDependenciesMeta": {
-    "valibot": {
-      "optional": true
-    },
-    "zod": {
-      "optional": true
-    },
-    "yup": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.7.0",
     "@types/node": "^25.0.10",
@@ -78,7 +61,8 @@
     "vitest": "^4.0.16",
     "vitest-browser-vue": "^2.0.1",
     "vue": "^3.5.25",
-    "vue-tsc": "^3.2.2"
+    "vue-tsc": "^3.2.2",
+    "yup": "^1.7.1"
   },
   "dependencies": {
     "@standard-schema/spec": "^1.1.0",

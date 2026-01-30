@@ -1,227 +1,136 @@
 ---
 seo:
-  title: NotForm - Effortless Vue Forms Validation
-  description: A powerful, schema-based form validation library for Vue 3 with built-in error handling, field tracking, and seamless submission management.
+  title: NotForm - Vue Forms Without the Friction
+  description: Schema-powered form validation for Vue 3 that actually gets out of your way. Stop wrestling with form state and start shipping features.
 ---
-
-::u-page-hero{class="dark:bg-gradient-to-b from-neutral-900 to-neutral-950"}
----
-orientation: horizontal
----
-#top
-:hero-background
-
+::u-page-hero{class="dark:bg-default"}
 #title
-Effortless [Vue]{class="text-primary"} Forms Validation.
-
+Forms that feel natural.
 #description
-:name-text is a standard-schema based validation library for [Vue 3]{class="text-primary"} that handles errors, validation, submission, and form state—so you can focus on building great user experiences.
-
+:name-text brings schema-based validation to [Vue 3]{class="text-primary"} without the usual headaches. Connect your schemas, handle submissions, and track changes—all with the simplicity you'd expect.
 #links
   :::u-button
   ---
   to: /getting-started
-  size: xl
+  size: md
   trailing-icon: i-tabler-arrow-right
   ---
   Get started
   :::
-
-  :::u-button
+  :::input-copy
   ---
-  icon: i-simple-icons-github
-  color: neutral
-  variant: outline
-  size: xl
-  to: https://github.com/favorodera/notform
-  target: _blank
+  value: "npm install notform"
   ---
-  Star on GitHub
-  :::
-
-#default
-  :::prose-pre
-  ---
-  code: |
-    <script setup lang="ts">
-    import { useNotForm, NotForm, NotField, NotMessage } from 'notform'
-    import { z } from 'zod'
-
-    const { state, id, submit } = useNotForm({
-      schema: z.object({
-        name: z.string().min(2, 'Name must be at least 2 characters')
-      }),
-      onSubmit: async (data) => {
-        console.log('Form submitted:', data)
-      }
-    })
-    </script>
-
-    <template>
-      <NotForm :id="id" @submit="submit">
-        <NotField name="name" v-slot="{ methods, name }">
-          <label :for="name">
-            Name
-            <input 
-              v-model="state.name" 
-              type="text" 
-              :id="name"
-              :name="name" 
-              v-bind="methods"
-              placeholder="Enter your name"
-            />
-            <NotMessage :name="name" />
-          </label>
-        </NotField>
-
-
-
-        <button type="submit">Submit</button>
-      </NotForm>
-    </template>
-  filename: index.vue
-  ---
-  ```vue [index.vue]
-  <script setup lang="ts">
-  import { useNotForm, NotForm, NotField, NotMessage } from 'notform'
-  import { z } from 'zod'
-
-  const { state, id, submit } = useNotForm({
-    schema: z.object({
-      name: z.string().min(2)
-    })
-  })
-  </script>
-
-  <template>
-    <NotForm :id="id" @submit="submit">
-      <NotField name="name" v-slot="{ methods, name }">
-        <label :for="name">
-          Name
-          <input v-model="state.name" type="text" :id="name" :name="name" v-bind="methods"/>
-          <NotMessage :name="name" />
-        </label>
-      </NotField>
-      <button type="submit">Submit</button>
-    </NotForm>
-  </template>
-  ```
   :::
 ::
-
-::u-page-section{class="dark:bg-neutral-950"}
+::u-page-section
+---
+ui:
+  root: bg-gradient-to-b border-t border-default from-muted dark:from-muted/40 to-default
+  title: 'text-left'
+  description: 'text-left'
+---
 #title
-Everything you need
-
+What makes it different
 #features
   :::u-page-feature
   ---
   icon: i-tabler-palette
+  orientation: vertical
   ---
   #title
-  UI Agnostic
-
+  Style it your way
   #description
-  :name-text works with any UI framework or component library. Bring your own design system or use headless components—NotForm adapts to your styling approach without forcing opinions.
+  :name-text works with your existing components and design system. Whether you're using Tailwind, shadcn/vue, or custom CSS, the validation layer adapts to your choices.
   :::
-
   :::u-page-feature
   ---
   icon: i-tabler-text-recognition
+  orientation: vertical
   ---
   #title
-  Field and Form Level Validation
-
+  Validation on your terms
   #description
-  Validate individual fields on blur, change, or submit. Run form-wide validation rules and cross-field dependencies. Get granular control over when and how validation runs.
+  Choose when validation happens—on blur, change, or submit. Set field-level rules, form-wide constraints, or cross-field dependencies. You're in control of the validation flow.
   :::
-
   :::u-page-feature
   ---
   icon: i-tabler-stack-2
+  orientation: vertical
   ---
   #title
-  Array Fields
-
+  Dynamic fields made easy
   #description
-  Dynamically add and remove form fields with full validation support. Perfect for managing lists, nested forms, and complex data structures with type-safe schema validation.
+  Add, remove, or reorder fields on the fly. Nest them as deep as you need. Each item gets validated with full type safety built in.
   :::
-
   :::u-page-feature
   ---
   icon: i-tabler-search
+  orientation: vertical
   ---
   #title
-  Composition API
-
+  Built for Composition API
   #description
-  Built from the ground up with Vue 3's Composition API. Enjoy full TypeScript support, reactive state management, and composable form logic that integrates seamlessly with your components.
+  Designed from the ground up for Vue 3's Composition API. TypeScript inference works naturally, reactive state stays reactive, and composables actually compose.
   :::
-
   :::u-page-feature
   ---
   icon: i-tabler-shield-check
+  orientation: vertical
   ---
   #title
-  Schema-Based Validation
-
+  Use your preferred schema
   #description
-  Use Zod, Yup, or any standard-schema compatible library. Define your validation rules once and let NotForm handle the rest—from error messages to field-level feedback.
+  Works with Zod, Yup, Valibot, ArkType, and any library that follows the standard-schema pattern. Define your validation rules once and use them consistently across your app.
   :::
-
   :::u-page-feature
   ---
   icon: i-tabler-bolt
+  orientation: vertical
   ---
   #title
-  V-Model Support
-
+  Native Vue patterns
   #description
-  Works naturally with Vue's v-model directive. Maintain familiar Vue patterns while getting powerful form validation, state management, and submission handling out of the box.
+  `v-model`{lang="ts-type"} works just like you expect. No special bindings or custom directives required—just standard Vue with powerful form features underneath.
   :::
 ::
-
 ::u-page-section
 #title
-Why NotForm?
-
+Why we built this
 #description
-Building forms shouldn't be complicated. NotForm removes the boilerplate and gives you powerful primitives to build forms that just work.
-
+Forms shouldn't slow you down. NotForm lets you focus on building features instead of fighting with form state.
 #default
-
   ::card-group
-
     :::card
     ---
     icon: i-tabler-shield-check
-    title: Type-Safe by Default
+    title: Types that flow naturally
     ---
-    Full TypeScript support with inferred types from your schema. Get autocomplete, type checking, and compile-time safety throughout your form logic.
-    :::
-
-    :::card
-    ---
-    icon: i-tabler-stack-2
-    title: Minimal Bundle Size
-    ---
-    Lightweight core with zero dependencies beyond your chosen validation library. Tree-shakeable exports ensure you only ship what you use.
+    Your schema types automatically propagate through field values, error states, and submission data. No manual type annotations needed.
     :::
 
     :::card
     ---
     icon: i-tabler-code
-    title: Developer Experience
+    title: Quick to learn, easy to use
     ---
-    Intuitive API designed for Vue developers. Clear documentation, helpful error messages, and patterns that feel natural in Vue applications.
+    Clear APIs and straightforward patterns mean you can be productive quickly. The documentation respects your time and gets you building fast.
     :::
 
     :::card
     ---
     icon: i-tabler-rocket
-    title: Production Ready
+    title: Ready for real-world needs
     ---
-    Battle-tested in real-world applications. Handle complex forms with nested fields, async validation, and advanced state management with confidence.
+    Handle nested objects, async validation, conditional fields, multi-step forms, and file uploads. Build the forms your application needs without juggling multiple libraries.
+    :::
+
+    :::card
+    ---
+    icon: i-tabler-stack-2
+    title: Keep your options open
+    ---
+    Built on standard schemas and Vue patterns. Your forms remain portable and you're free to switch approaches if your needs change.
     :::
   ::
 ::

@@ -1,12 +1,12 @@
 {
   "name": "notform-nuxt",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.8",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
   "type": "module",
-  "description": "Official notform nuxt module - Effortless Vue Forms Validation",
+  "description": "Official notform nuxt module - Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
   "homepage": "https://notform-docs.vercel.app/",

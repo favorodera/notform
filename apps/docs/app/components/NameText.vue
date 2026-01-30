@@ -1,3 +1,5 @@
 <template>
-  <span class="text-primary">NotForm</span>
+  <ProseCode color="primary">
+    notform
+  </ProseCode>
 </template>

@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { ComputedRef, MaybeRefOrGetter, Ref, VNodeChild } from 'vue'
+import type { ComputedRef, MaybeRefOrGetter, Ref, useAttrs, VNodeChild } from 'vue'
 import type { ObjectSchema, ValidationMode, ValidationTriggers } from './shared'
 import type { DeepPartial, Paths } from './utils'
 
@@ -135,7 +135,12 @@ export type NotFormContext<TSchema extends ObjectSchema> = {
  * Properties accepted by the NotForm component.
  * @template TSchema The validation schema type derived from ObjectSchema.
  */
-export type NotFormProps<TSchema extends ObjectSchema> = Pick<NotFormContext<TSchema>, 'id'>
+export type NotFormProps<TSchema extends ObjectSchema> = Pick<NotFormContext<TSchema>, 'id'> & {
+  /** Render `NotForm` as it nearest child - use to make it renderless and override `as` option */
+  asChild?: boolean
+  /** HTML Tag `NotForm` should render as - default is `form`. */
+  as?: string
+}
 
 /**
  * Slots provided by the NotForm component.
@@ -143,7 +148,7 @@ export type NotFormProps<TSchema extends ObjectSchema> = Pick<NotFormContext<TSc
  */
 export type NotFormSlots<TSchema extends ObjectSchema> = {
   /** The default slot receives the form context as its scope */
-  default: (props: NotFormContext<TSchema>) => VNodeChild
+  default: (props: NotFormContext<TSchema> & { attributes?: ReturnType<typeof useAttrs> }) => VNodeChild
 }
 
 /**

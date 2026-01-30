@@ -69,12 +69,12 @@ export default defineNuxtConfig({
   },
 
   llms: {
-    domain: 'https://valid.nuxt.dev/',
-    title: 'Valid Documentation',
+    domain: 'https://notform-docs.vercel.app/',
+    title: 'NotForm Documentation',
     description: 'Effortless Vue Forms Validation',
     full: {
-      title: 'Valid Documentation - Full Documentation',
-      description: 'This is the full documentation for the Valid Documentation.'
+      title: 'NotForm Documentation - Full Documentation',
+      description: 'This is the full documentation for the NotForm Documentation.'
     },
     sections: [
       {
@@ -85,16 +85,23 @@ export default defineNuxtConfig({
         ]
       },
       {
-        title: 'Essentials',
+        title: 'Composables',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/essentials%' }
+          { field: 'path', operator: 'LIKE', value: '/composables%' }
+        ]
+      },
+      {
+        title: 'Components',
+        contentCollection: 'docs',
+        contentFilters: [
+          { field: 'path', operator: 'LIKE', value: '/components%' }
         ]
       }
     ]
   },
 
   mcp: {
-    name: 'Valid documentation'
+    name: 'NotForm documentation'
   }
 })

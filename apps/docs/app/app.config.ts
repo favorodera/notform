@@ -45,7 +45,7 @@ export default defineAppConfig({
       warning: 'i-tabler-alert-triangle'
     },
     colors: {
-      primary: 'green',
+      primary: 'emerald',
       neutral: 'zinc'
     },
     footer: {
@@ -59,12 +59,12 @@ export default defineAppConfig({
     siteName: 'NotForm Docs'
   },
   header: {
-    title: '',
+    title: 'NotForm',
     to: '/',
     logo: {
-      alt: '',
-      light: '',
-      dark: ''
+      alt: 'NOTFORM',
+      light: '/logo.svg',
+      dark: '/logo.svg'
     },
     search: true,
     colorMode: true,
@@ -76,10 +76,10 @@ export default defineAppConfig({
     }]
   },
   footer: {
-    credits: `NotForm • © ${new Date().getFullYear()}`,
+    credits: `NOTFORM • © ${new Date().getFullYear()}`,
     colorMode: false,
     links: [{
-      'icon': 'i-simple-icons-x',
+      'icon': 'i-tabler-brand-x',
       'to': 'https://x.com/favorodera',
       'target': '_blank',
       'aria-label': 'NotForm on X'
@@ -99,7 +99,7 @@ export default defineAppConfig({
         {
           icon: 'i-tabler-star',
           label: 'Star on GitHub',
-          to: 'https://github.com/notform',
+          to: 'https://github.com/favorodera/notform',
           target: '_blank'
         }
       ]

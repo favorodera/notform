@@ -21,7 +21,8 @@
     "valibot": "^1.2.0",
     "vue": "^3.5.27",
     "vue-router": "^4.6.4",
-    "yup": "^1.6.0",
+    "yup": "^1.7.1",
+    "arktype": "^2.1.29",
     "zod": "^4.3.6"
   },
   "devDependencies": {
