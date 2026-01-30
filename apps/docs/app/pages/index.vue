@@ -12,10 +12,14 @@ useSeoMeta({
   title,
   ogTitle: title,
   description,
+  twitterDescription: description,
+  twitterTitle: title,
   ogDescription: description,
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png',
-  twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png'
+  twitterCreator: 'favorodera',
+  twitterSite: 'favorodera'
 })
+
+defineOgImage({ url: '/screenshot.png' })
 </script>
 
 <template>

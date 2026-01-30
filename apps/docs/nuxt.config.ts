@@ -7,7 +7,8 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nuxt-og-image',
     'nuxt-llms',
-    '@nuxtjs/mcp-toolkit'
+    '@nuxtjs/mcp-toolkit',
+    '@nuxtjs/seo'
   ],
 
   devtools: {
@@ -15,6 +16,11 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  site: {
+    url: 'https://notform-docs.vercel.app',
+    name: 'NotForm Documentation'
+  },
 
   content: {
     build: {

@@ -1,76 +1,75 @@
-<script lang="ts" setup>
-const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string }>(), {
+<script setup lang="ts">
+const props = withDefaults(defineProps<{
+  title?: string
+  description?: string
+  headline?: string
+}>(), {
   title: 'title',
-  description: 'description'
+  description: 'description',
+  headline: ''
 })
-
 const title = computed(() => (props.title || '').slice(0, 60))
 const description = computed(() => (props.description || '').slice(0, 200))
+const headline = computed(() => (props.headline || '').slice(0, 60))
 </script>
 
 <template>
-  <div class="flex size-full flex-col justify-center bg-[#020420]">
-    <svg
-      class="absolute top-0 right-0"
-      width="629"
-      height="593"
-      viewBox="0 0 629 593"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g filter="url(#filter0_f_199_94966)">
-        <path
-          d="M628.5 -578L639.334 -94.4223L806.598 -548.281L659.827 -87.387L965.396 -462.344L676.925 -74.0787L1087.69 -329.501L688.776 -55.9396L1160.22 -164.149L694.095 -34.9354L1175.13 15.7948L692.306 -13.3422L1130.8 190.83L683.602 6.50012L1032.04 341.989L668.927 22.4412L889.557 452.891L649.872 32.7537L718.78 511.519L628.5 36.32L538.22 511.519L607.128 32.7537L367.443 452.891L588.073 22.4412L224.955 341.989L573.398 6.50012L126.198 190.83L564.694 -13.3422L81.8734 15.7948L562.905 -34.9354L96.7839 -164.149L568.224 -55.9396L169.314 -329.501L580.075 -74.0787L291.604 -462.344L597.173 -87.387L450.402 -548.281L617.666 -94.4223L628.5 -578Z"
-          fill="#00DC82"
-        />
-      </g>
-      <defs>
-        <filter
-          id="filter0_f_199_94966"
-          x="0.873535"
-          y="-659"
-          width="1255.25"
-          height="1251.52"
-          filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
-        >
-          <feFlood
-            flood-opacity="0"
-            result="BackgroundImageFix"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          />
-          <feGaussianBlur
-            stdDeviation="40.5"
-            result="effect1_foregroundBlur_199_94966"
-          />
-        </filter>
-      </defs>
-    </svg>
+  <div
+    class="flex size-full flex-col bg-[#060606] p-16"
+    style="background-size: 120px 120px; background-image: linear-gradient(to right, #27272a 1px, transparent 1px), linear-gradient(to bottom, #27272a 1px, transparent 1px);"
+  >
+    <div class="mb-16 flex items-start justify-between">
 
-    <div class="pl-[100px]">
-      <p
-        v-if="headline"
-        class="mb-4 text-[24px] font-semibold text-primary uppercase"
+      <span class="text-2xl font-bold tracking-wider text-[#00d492]">
+        DOCS
+      </span>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
       >
-        {{ headline }}
-      </p>
-      <h1
-        v-if="title"
-        class="m-0 mb-4 flex items-center text-[75px] font-semibold text-white"
-      >
-        <span>{{ title }}</span>
-      </h1>
-      <p
-        v-if="description"
-        class="w-[700px] text-[32px] leading-tight text-[#E4E4E7]"
-      >
+        <path
+          fill="none"
+          stroke="#00d492"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M8 4H5v16h3m8-16h3v16h-3"
+        />
+      </svg>
+
+    </div>
+    
+    <div class="max-w-3xl">
+
+      <div class="mb-4 flex items-center gap-3">
+
+        <h1 class="text-3xl font-medium text-[#00d492]">
+          {{ title }}
+        </h1>
+
+        <span
+          v-if="headline"
+          class="text-3xl font-medium text-[#bebec7]"
+        >
+          >
+        </span>
+
+        <h2
+          v-if="headline"
+          class="text-3xl font-medium text-[#bebec7]"
+        >
+          {{ headline }}
+        </h2>
+
+      </div>
+
+      <p class="text-xl text-[#a1a1aa]">
         {{ description }}
       </p>
+      
     </div>
   </div>
 </template>
