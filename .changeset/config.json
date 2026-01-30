@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["notform-docs", "notform-nuxt-playground", "notform-vue-playground"]
+  "ignore": ["notform-docs"]
 }
