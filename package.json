@@ -23,7 +23,8 @@
     "prepublishOnly": "turbo prepublishOnly",
     "cleanup": "turbo cleanup && rm -rf .turbo node_modules pnpm-lock.yaml",
     "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test",
-    "changelog": "tsx scripts/changelog.ts"
+    "changelog": "tsx scripts/changelog.ts",
+    "version": "pnpm changeset version && pnpm run changelog"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.2",
