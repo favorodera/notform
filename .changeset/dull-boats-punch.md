@@ -1,5 +1,0 @@
----
-"notform": patch
----
-
-Documentation initialization
