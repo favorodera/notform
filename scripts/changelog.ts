@@ -174,23 +174,50 @@ function combineChangelogsByVersion(entries: ChangelogEntry[]): void {
 
   // Sort versions (newest first)
   const sortedVersions = Array.from(versionDataMap.keys()).sort((versionA, versionB) => {
-    // Simple version comparison (works for semver-like versions)
-    const partsA = versionA.split(/[.-]/).map(part => isNaN(Number(part)) ? part : Number(part));
-    const partsB = versionB.split(/[.-]/).map(part => isNaN(Number(part)) ? part : Number(part));
+    if (versionA === versionB) return 0;
 
-    const maxLength = Math.max(partsA.length, partsB.length);
-    for (let index = 0; index < maxLength; index++) {
-      const partA = partsA[index] ?? 0;
-      const partB = partsB[index] ?? 0;
+    // Split into base and pre-release
+    const [baseA, preReleaseA] = versionA.split('-');
+    const [baseB, preReleaseB] = versionB.split('-');
 
-      if (typeof partA === 'number' && typeof partB === 'number') {
-        if (partA !== partB) return partB - partA;
-      } else {
-        const stringA = String(partA);
-        const stringB = String(partB);
-        if (stringA !== stringB) return stringB.localeCompare(stringA);
+    const basePartsA = baseA.split('.').map(Number);
+    const basePartsB = baseB.split('.').map(Number);
+
+    // Compare base versions (major.minor.patch)
+    for (let index = 0; index < 3; index++) {
+      const partA = basePartsA[index] || 0;
+      const partB = basePartsB[index] || 0;
+      if (partA !== partB) return partB - partA;
+    }
+
+    // Base versions are the same, compare pre-release
+    // A version WITHOUT a pre-release is NEWER than one WITH a pre-release
+    if (!preReleaseA && preReleaseB) return -1;
+    if (preReleaseA && !preReleaseB) return 1;
+
+    if (preReleaseA && preReleaseB) {
+      const prePartsA = preReleaseA.split('.');
+      const prePartsB = preReleaseB.split('.');
+      const maxPreLength = Math.max(prePartsA.length, prePartsB.length);
+
+      for (let index = 0; index < maxPreLength; index++) {
+        const prePartA = prePartsA[index];
+        const prePartB = prePartsB[index];
+
+        if (prePartA === undefined) return 1;
+        if (prePartB === undefined) return -1;
+
+        const numericA = parseInt(prePartA, 10);
+        const numericB = parseInt(prePartB, 10);
+
+        if (!isNaN(numericA) && !isNaN(numericB)) {
+          if (numericA !== numericB) return numericB - numericA;
+        } else {
+          if (prePartA !== prePartB) return prePartB.localeCompare(prePartA);
+        }
       }
     }
+
     return 0;
   });
 
