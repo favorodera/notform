@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.0-alpha.9]
+
+### notform
+
+### Patch Changes
+
+- [`18a8afe`](https://github.com/favorodera/notform/commit/18a8afec42012e626c10cac218ad963baf6856c3) Thanks [@favorodera](https://github.com/favorodera)! - Core refactor
+
+### notform-nuxt
+
+### Patch Changes
+
+- [`18a8afe`](https://github.com/favorodera/notform/commit/18a8afec42012e626c10cac218ad963baf6856c3) Thanks [@favorodera](https://github.com/favorodera)! - Core refactor
+
+- Updated dependencies [[`18a8afe`](https://github.com/favorodera/notform/commit/18a8afec42012e626c10cac218ad963baf6856c3)]:
+  - notform@1.0.0-alpha.9
+
+---
+
 ## [1.0.0-alpha.8]
 
 ### notform

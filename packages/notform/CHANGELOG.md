@@ -1,5 +1,11 @@
 # notform
 
+## 1.0.0-alpha.9
+
+### Patch Changes
+
+- [`18a8afe`](https://github.com/favorodera/notform/commit/18a8afec42012e626c10cac218ad963baf6856c3) Thanks [@favorodera](https://github.com/favorodera)! - Core refactor
+
 ## 1.0.0-alpha.8
 
 ### Patch Changes
