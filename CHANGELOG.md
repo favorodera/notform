@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1]
+
+### notform
+
+### Patch Changes
+
+- [#19](https://github.com/favorodera/notform/pull/19) [`8c63aee`](https://github.com/favorodera/notform/commit/8c63aee3fed29b3758834243b9bc2d6ae0fc4634) Thanks [@favorodera](https://github.com/favorodera)! - Refine validation triggers for `eager` and `lazy` modes and clarify `ValidationMode` descriptions
+
+### notform-nuxt
+
+### Patch Changes
+
+- Updated dependencies [[`8c63aee`](https://github.com/favorodera/notform/commit/8c63aee3fed29b3758834243b9bc2d6ae0fc4634)]:
+  - notform@1.0.1
+
+---
+
 ## [1.0.0]
 
 ### notform

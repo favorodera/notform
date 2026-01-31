@@ -1,5 +1,11 @@
 # notform
 
+## 1.0.1
+
+### Patch Changes
+
+- [#19](https://github.com/favorodera/notform/pull/19) [`8c63aee`](https://github.com/favorodera/notform/commit/8c63aee3fed29b3758834243b9bc2d6ae0fc4634) Thanks [@favorodera](https://github.com/favorodera)! - Refine validation triggers for `eager` and `lazy` modes and clarify `ValidationMode` descriptions
+
 ## 1.0.0
 
 ### Patch Changes
