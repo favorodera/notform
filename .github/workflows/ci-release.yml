@@ -57,7 +57,7 @@ jobs:
       - name: Build Packages
         run: pnpm build
       - name: Publish Preview
-        run: pnpm dlx pkg-pr-new publish
+        run: pnpm dlx pkg-pr-new publish ./packages/*
 
   release:
     needs: ci # Ensures release only runs if CI passes
