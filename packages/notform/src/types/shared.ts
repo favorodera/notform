@@ -1,9 +1,9 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 
 /**
- * Defines the strategy for when validation checks are executed.
- * - 'lazy': Validation occurs only on blur or form submission.
- * - 'eager': Validation occurs immediately on every value change.
+ * Validation execution strategy.
+ * - `lazy`: Validates on blur or submission.
+ * - `eager`: Validates on blur, then on every change if an error exists.
  */
 export type ValidationMode = 'lazy' | 'eager'
 
