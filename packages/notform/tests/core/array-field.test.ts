@@ -163,12 +163,19 @@ describe('Array Field - Core', () => {
     const { getByRole } = setupForm()
 
     const nameInput0 = getByRole('textbox', { name: 'Name 0' })
+    const ageInput0 = getByRole('spinbutton', { name: 'Age 0' })
+
+    // Simulate blur by clicking outside the input0
     await nameInput0.fill('')
+    await ageInput0.click()
+
     const nameError0 = getByRole('alert', { name: 'name-error-0' })
     await expect.element(nameError0).toHaveTextContent('Must be at least 1 characters')
 
-    const ageInput0 = getByRole('spinbutton', { name: 'Age 0' })
+    // Simulate blur by clicking outside the input0
     await ageInput0.fill('15')
+    await nameInput0.click()
+
     const ageError0 = getByRole('alert', { name: 'age-error-0' })
     await expect.element(ageError0).toHaveTextContent('Must be at least 18')
   })
