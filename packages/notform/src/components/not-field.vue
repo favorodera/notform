@@ -45,22 +45,51 @@ async function validate() {
 const methods: NotFieldContext['methods'] = {
   onBlur: function () {
     touchField(props.name)
-    if (mode === 'eager' || validateOn.includes('blur')) validate()
+   
+    // Blur must be in validateOn for either mode to use it
+    if (!validateOn.includes('blur')) return
+
+    validate()
   },
 
   onChange: function () {
     dirtyField(props.name)
-    if (mode === 'eager' || validateOn.includes('change')) validate()
+
+    // Change must be in validateOn
+    if (!validateOn.includes('change')) return
+    
+    // Lazy: never validates on change
+    if (mode === 'lazy') return
+
+    // Eager: validates on change if field has error
+    if (mode === 'eager' && getFieldErrors(props.name).length > 0) {
+      validate()
+    }
   },
 
   onInput: function () {
     dirtyField(props.name)
-    if (mode === 'eager' || validateOn.includes('input')) validate()
-  },
 
+    // Input must be in validateOn
+    if (!validateOn.includes('input')) return
+    
+    // Lazy: never validates on input
+    if (mode === 'lazy') return
+    
+    // Eager: validates on input if field has error
+    if (mode === 'eager' && getFieldErrors(props.name).length > 0) {
+      validate()
+    }
+  },
   onFocus: function () {
-    dirtyField(props.name)
-    if (mode === 'eager' || validateOn.includes('focus')) validate()
+    // Focus does NOT mark as touched or dirty
+    // Touched happens on BLUR (when leaving the field)
+    // Dirty happens on actual value CHANGE
+    
+    // Focus must be in validateOn
+    if (!validateOn.includes('focus')) return
+    
+    validate()
   },
 }
 
