@@ -85,7 +85,7 @@ export default defineAppConfig({
       'aria-label': 'NotForm on X'
     }, {
       'icon': 'i-simple-icons-github',
-      'to': 'https://github.com/notform',
+      'to': 'https://github.com/favorodera/notform',
       'target': '_blank',
       'aria-label': 'NotForm on GitHub'
     }]
@@ -94,7 +94,7 @@ export default defineAppConfig({
     title: 'Table of Contents',
     bottom: {
       title: 'Community',
-      edit: 'https://github.com/notform/apps/docs/edit/main/content',
+      edit: 'https://github.com/favorodera/notform/edit/main/apps/docs/content/',
       links: [
         {
           icon: 'i-tabler-star',
