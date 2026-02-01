@@ -70,7 +70,7 @@ export default defineAppConfig({
     colorMode: true,
     links: [{
       'icon': 'i-simple-icons-github',
-      'to': 'https://github.com/favorodera/notform/docs',
+      'to': 'https://github.com/favorodera/notform',
       'target': '_blank',
       'aria-label': 'GitHub'
     }]
