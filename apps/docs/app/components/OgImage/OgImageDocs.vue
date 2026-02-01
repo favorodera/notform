@@ -46,8 +46,11 @@ const headline = computed(() => (props.headline || '').slice(0, 60))
 
       <div class="mb-4 flex items-center gap-3">
 
-        <h1 class="text-3xl font-medium text-[#00d492]">
-          {{ title }}
+        <h1
+          v-if="headline"
+          class="text-3xl font-medium text-[#00d492]"
+        >
+          {{ headline }}
         </h1>
 
         <span
@@ -57,11 +60,8 @@ const headline = computed(() => (props.headline || '').slice(0, 60))
           >
         </span>
 
-        <h2
-          v-if="headline"
-          class="text-3xl font-medium text-[#bebec7]"
-        >
-          {{ headline }}
+        <h2 class="text-3xl font-medium text-[#00d492]">
+          {{ title }}
         </h2>
 
       </div>
