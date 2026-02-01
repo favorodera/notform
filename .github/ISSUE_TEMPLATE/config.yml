@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://notform-docs.vercel.app/
+    about: Check our documentation for guides and API reference
+  - name: Questions & Discussions
+    url: https://github.com/favorodera/notform/discussions
+    about: Ask questions and discuss ideas
+  - name: StackBlitz Playground
+    url: https://stackblitz.com/edit/notform-playground
+    about: Try NotForm in the interactive playground
