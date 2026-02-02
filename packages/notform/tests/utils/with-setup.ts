@@ -9,12 +9,12 @@ export function withSetup<T extends Record<string, any>>(setup: () => T) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     render(template: string, components?: Record<string, any>) {
       const rendered = render(defineComponent({
+        components,
         setup() {
           context = setup()
           return context
         },
         template,
-        components,
       }))
       
       if (context === undefined) {
