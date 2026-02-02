@@ -39,7 +39,11 @@ provide(CURRENT_NOT_FORM_ID_KEY, form.id)
     <slot v-bind="{...form, attributes:mergedAttrs}" />
   </template>
 
-  <component v-else :is="props.as" v-bind="mergedAttrs">
+  <component
+    :is="props.as"
+    v-else
+    v-bind="mergedAttrs"
+  >
     <slot v-bind="form" />
   </component>
 </template>

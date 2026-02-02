@@ -109,5 +109,9 @@ export default defineNuxtConfig({
 
   mcp: {
     name: 'NotForm documentation'
+  },
+
+  sitemap: {
+    zeroRuntime: true
   }
 })
