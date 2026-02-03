@@ -41,7 +41,7 @@ What makes it different
   #title
   Style it your way
   #description
-  :name-text works with your existing components and design system. Whether you're using Tailwind, shadcn/vue, or custom CSS, the validation layer adapts to your choices.
+  :name-text works with your existing components and design system. Whether you're using [Tailwind]{class="text-primary"}, [shadcn/vue]{class="text-primary"}, or custom [CSS]{class="text-primary"}, the validation layer adapts to your choices.
   :::
   :::u-page-feature
   ---
@@ -51,7 +51,7 @@ What makes it different
   #title
   Validation on your terms
   #description
-  Choose when validation happens—on blur, change, or submit. Set field-level rules, form-wide constraints, or cross-field dependencies. You're in control of the validation flow.
+  Choose when validation happens—on `blur`{lang="ts-type"}, `change`{lang="ts-type"}, or `submit`{lang="ts-type"}. Set field-level rules, form-wide constraints, or cross-field dependencies. You're in control of the validation flow.
   :::
   :::u-page-feature
   ---
@@ -61,7 +61,7 @@ What makes it different
   #title
   Dynamic fields made easy
   #description
-  Add, remove, or reorder fields on the fly. Nest them as deep as you need. Each item gets validated with full type safety built in.
+  [Add]{class="text-primary"}, [remove]{class="text-primary"}, or [reorder]{class="text-primary"} fields on the fly. Nest them as deep as you need. Each item gets validated with full type safety built in.
   :::
   :::u-page-feature
   ---
@@ -71,7 +71,7 @@ What makes it different
   #title
   Built for Composition API
   #description
-  Designed from the ground up for Vue 3's Composition API. TypeScript inference works naturally, reactive state stays reactive, and composables actually compose.
+  Designed from the ground up for [Vue 3's Composition API]{class="text-primary"}. TypeScript inference works naturally, reactive state stays reactive, and composables actually compose.
   :::
   :::u-page-feature
   ---
@@ -81,7 +81,7 @@ What makes it different
   #title
   Use your preferred schema
   #description
-  Works with Zod, Yup, Valibot, ArkType, and any library that follows the standard-schema pattern. Define your validation rules once and use them consistently across your app.
+  Works with [Zod]{class="text-primary"}, [Yup]{class="text-primary"}, [Valibot]{class="text-primary"}, [ArkType]{class="text-primary"}, and any library that follows the standard-schema pattern. Define your validation rules once and use them consistently across your app.
   :::
   :::u-page-feature
   ---
@@ -91,7 +91,7 @@ What makes it different
   #title
   Native Vue patterns
   #description
-  `v-model`{lang="ts-type"} works just like you expect. No special bindings or custom directives required—just standard Vue with powerful form features underneath.
+  `v-model`{lang="ts-type"} works just like you expect. No special bindings or custom directives required—just standard [Vue]{class="text-primary"} with powerful form features underneath.
   :::
 ::
 ::u-page-section
