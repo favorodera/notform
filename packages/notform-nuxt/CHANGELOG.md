@@ -1,5 +1,12 @@
 # notform-nuxt
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`dfe1571`](https://github.com/favorodera/notform/commit/dfe1571fbaf6b1273ce9edf3691dc12e27df38d4)]:
+  - notform@1.0.2
+
 ## 1.0.1
 
 ### Patch Changes
