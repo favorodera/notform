@@ -1,5 +1,18 @@
 # notform
 
+## 1.0.3
+
+### Patch Changes
+
+- [#29](https://github.com/favorodera/notform/pull/29) [`a227c41`](https://github.com/favorodera/notform/commit/a227c41d76533b37dcda9a150315caa7451b93b2) Thanks [@favorodera](https://github.com/favorodera)! - refactor: change setState validation from form-level to field-level
+
+  Refactored setState to use field-level validation instead of form-level validation for better performance and more precise error feedback.
+
+  - Changed from validating entire form to validating only changed fields
+  - Improves performance significantly for large forms
+  - Provides more precise validation feedback scoped to modified fields
+  - Maintains existing validation modes (lazy/eager) behavior
+
 ## 1.0.2
 
 ### Patch Changes
