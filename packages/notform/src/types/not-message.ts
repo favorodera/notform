@@ -1,5 +1,5 @@
 import type { NotFieldContext } from './not-field'
-import type { VNodeChild } from 'vue'
+import type { useAttrs, VNodeChild } from 'vue'
 
 /**
  * Configuration properties for the NotMessage component.
@@ -8,6 +8,8 @@ import type { VNodeChild } from 'vue'
 export type NotMessageProps = {
   /** The name/path of the field whose error message should be displayed */
   name: string
+  /** HTML Tag `NotMessage` should render as - default is `span`. */
+  as?: string
 }
 
 /**
@@ -23,5 +25,5 @@ export type NotMessageContext = {
  */
 export type NotMessageSlots = {
   /** The default slot receives the error message context for custom rendering */
-  default: (props: NotMessageContext) => VNodeChild
+  default: (props: NotMessageContext & { attributes?: ReturnType<typeof useAttrs> }) => VNodeChild
 }
