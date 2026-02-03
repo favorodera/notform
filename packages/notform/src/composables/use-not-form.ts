@@ -148,11 +148,10 @@ function useNotForm<TSchema extends ObjectSchema>(options: UseNotFormOptions<TSc
       paths.forEach((path) => {
         context.dirtyFields.value.add(path)
         context.touchedFields.value.add(path)
-        context.validateField(path)
-      })
 
-      // Auto validate if allowed
-      if (_validate) context.validate()
+        // Auto validate if allowed
+        if (_validate)context.validateField(path)
+      })
     },
 
     setErrors(_errors) {
