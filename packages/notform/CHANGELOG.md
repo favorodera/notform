@@ -1,5 +1,15 @@
 # notform
 
+## 1.0.2
+
+### Patch Changes
+
+- [#27](https://github.com/favorodera/notform/pull/27) [`dfe1571`](https://github.com/favorodera/notform/commit/dfe1571fbaf6b1273ce9edf3691dc12e27df38d4) Thanks [@favorodera](https://github.com/favorodera)! - - **NotMessage**:
+  - Add `as` prop to specify custom HTML tag (defaults to `span`, e.g., `as="p"`, `as="div"`)
+  - Support attribute forwarding: attributes like `class`, `role`, `title` are now applied to the root element
+  - When using default slot, attributes are passed via `attributes` prop for manual binding with `v-bind`
+  - Improves flexibility for styling and accessibility customization
+
 ## 1.0.1
 
 ### Patch Changes
