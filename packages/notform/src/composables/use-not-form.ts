@@ -51,6 +51,7 @@ function useNotForm<TSchema extends ObjectSchema>(options: UseNotFormOptions<TSc
     state: ref(structuredClone(initialState)) as Ref<StandardSchemaV1.InferInput<TSchema>>,
     errors: ref([...initialErrors]),
     isValidating: ref(false),
+    isSubmitting: ref(false),
     touchedFields: ref(new Set<string>()) as Ref<Set<Paths<StandardSchemaV1.InferInput<TSchema>>>>,
     dirtyFields: ref(new Set<string>()) as Ref<Set<Paths<StandardSchemaV1.InferInput<TSchema>>>>,
 
@@ -186,6 +187,7 @@ function useNotForm<TSchema extends ObjectSchema>(options: UseNotFormOptions<TSc
     },
 
     async submit(event: Event) {
+      context.isSubmitting.value = true
 
       try {
         // Mark all fields as touched/dirty
@@ -235,6 +237,9 @@ function useNotForm<TSchema extends ObjectSchema>(options: UseNotFormOptions<TSc
             path: [],
           },
         ])
+      }
+      finally {
+        context.isSubmitting.value = false
       }
     },
 

@@ -100,6 +100,8 @@ export type NotFormContext<TSchema extends ObjectSchema> = {
   reset: (_state?: DeepPartial<StandardSchemaV1.InferInput<TSchema>>, _errors?: StandardSchemaV1.Issue[], _validate?: boolean) => void
   /** Reactive status of async validation process */
   isValidating: Ref<boolean>
+  /** Reactive status of form submission */
+  isSubmitting: Ref<boolean>
   /** Computed status of form validity */
   isValid: ComputedRef<boolean>
   /** Computed status of field interactions */
