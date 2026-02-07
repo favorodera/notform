@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.4]
+
+### notform
+
+### Patch Changes
+
+- [#32](https://github.com/favorodera/notform/pull/32) [`9747edf`](https://github.com/favorodera/notform/commit/9747edfb3b831054713eff1bd13fe7bf40da17c6) Thanks [@favorodera](https://github.com/favorodera)! - Add `isSubmitting` state to track form submission status
+
+### notform-nuxt
+
+### Patch Changes
+
+- Updated dependencies [[`9747edf`](https://github.com/favorodera/notform/commit/9747edfb3b831054713eff1bd13fe7bf40da17c6)]:
+  - notform@1.0.4
+
+---
+
 ## [1.0.3]
 
 ### notform
