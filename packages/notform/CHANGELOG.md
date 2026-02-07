@@ -1,5 +1,11 @@
 # notform
 
+## 1.0.4
+
+### Patch Changes
+
+- [#32](https://github.com/favorodera/notform/pull/32) [`9747edf`](https://github.com/favorodera/notform/commit/9747edfb3b831054713eff1bd13fe7bf40da17c6) Thanks [@favorodera](https://github.com/favorodera)! - Add `isSubmitting` state to track form submission status
+
 ## 1.0.3
 
 ### Patch Changes
