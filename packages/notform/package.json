@@ -61,8 +61,7 @@
     "vitest": "^4.0.16",
     "vitest-browser-vue": "^2.0.1",
     "vue": "^3.5.25",
-    "vue-tsc": "^3.2.2",
-    "yup": "^1.7.1"
+    "vue-tsc": "^3.2.2"
   },
   "dependencies": {
     "@standard-schema/spec": "^1.1.0",
