@@ -1,14 +1,9 @@
 import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 import type { NuxtModule } from '@nuxt/schema'
 
-// Re-export core notform for manual imports via the Nuxt entry.
-export * from 'notform'
-
 /** Nuxt module options for `notform` */
-export interface NotFormModuleOptions {
-  /** Enable auto imports for components and composables */
-  autoImport?: boolean
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface NotFormModuleOptions {}
 
 const components = [
   'NotForm',
@@ -30,13 +25,8 @@ export default defineNuxtModule<NotFormModuleOptions>({
     },
   },
 
-  // Default configuration options of the Nuxt module
-  defaults: {
-    autoImport: true,
-  },
-
   // Module factory
-  setup(options, nuxt) {
+  setup(_options, nuxt) {
     // Create a resolver for the runtime/notform file
     const { resolve } = createResolver(import.meta.url)
     const runtimeExports = resolve('./runtime/notform')
@@ -46,26 +36,23 @@ export default defineNuxtModule<NotFormModuleOptions>({
     nuxt.options.vite.optimizeDeps.exclude = nuxt.options.vite.optimizeDeps.exclude || []
     nuxt.options.vite.optimizeDeps.exclude.push('notform')
 
-    // Add components and composables if auto imports is true
-    if (options.autoImport) {
-      // Add components
-      components.forEach((component) => {
-        addComponent({
-          name: component,
-          export: component,
-          filePath: runtimeExports,
-        })
+    // Add components and composables
+    components.forEach((component) => {
+      addComponent({
+        name: component,
+        export: component,
+        filePath: runtimeExports,
       })
+    })
 
-      // Add composables
-      composables.forEach((composable) => {
-        addImports({
-          name: composable,
-          as: composable,
-          from: runtimeExports,
-        })
+    // Add composables
+    composables.forEach((composable) => {
+      addImports({
+        name: composable,
+        as: composable,
+        from: runtimeExports,
       })
-    }
+    })
   },
 
 }) as NuxtModule<NotFormModuleOptions>
