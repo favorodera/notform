@@ -27,11 +27,6 @@ export default defineConfig({
     packages: ['packages/*'],
     buildCmd: 'pnpm build',
   },
-  repo: {
-    domain: 'github.com',
-    repo: 'favorodera/notform',
-    provider: 'github',
-  },
   types: {
     feat: { title: 'Added', },
     fix: { title: 'Fixed' },
