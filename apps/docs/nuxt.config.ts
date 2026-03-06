@@ -11,9 +11,7 @@ export default defineNuxtConfig({
     '@nuxtjs/seo'
   ],
 
-  devtools: {
-    enabled: true
-  },
+  devtools: false,
 
   css: ['~/assets/css/main.css'],
 
@@ -77,7 +75,7 @@ export default defineNuxtConfig({
   llms: {
     domain: 'https://notform-docs.vercel.app/',
     title: 'NotForm Documentation',
-    description: 'Effortless Vue Forms Validation',
+    description: 'Vue Forms Without the Friction',
     full: {
       title: 'NotForm Documentation - Full Documentation',
       description: 'This is the full documentation for the NotForm Documentation.'
@@ -102,6 +100,13 @@ export default defineNuxtConfig({
         contentCollection: 'docs',
         contentFilters: [
           { field: 'path', operator: 'LIKE', value: '/components%' }
+        ]
+      },
+      {
+        title: 'Integrations',
+        contentCollection: 'docs',
+        contentFilters: [
+          { field: 'path', operator: 'LIKE', value: '/integrations%' }
         ]
       }
     ]
