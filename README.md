@@ -29,10 +29,9 @@ Playground can be found at:
 
 This is a monorepo managed with `pnpm` and `turbo`.
 
-- `packages/notform`: The core Vue library.
-- `packages/notform-nuxt`: The official Nuxt module.
-- `apps/docs`: Documentation site built with Nuxt Content.
-- `playground`: A development playground for testing.
+- [`packages/notform`](./packages/notform): The core Vue library.
+- [`packages/notform-nuxt`](./packages/notform-nuxt): The official Nuxt module.
+- [`apps/docs`](./apps/docs): Documentation site built with Nuxt Content.
 
 ## Development
 
