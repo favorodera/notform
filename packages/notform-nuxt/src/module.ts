@@ -35,9 +35,11 @@ export default defineNuxtModule<NotFormModuleOptions>({
     const composablesRuntime = resolve('./runtime/composables')
 
     // Exclude notform package from optimizeDeps
-    nuxt.options.vite.optimizeDeps = nuxt.options.vite.optimizeDeps || {}
-    nuxt.options.vite.optimizeDeps.exclude = nuxt.options.vite.optimizeDeps.exclude || []
-    nuxt.options.vite.optimizeDeps.exclude.push('notform')
+    nuxt.options.vite.optimizeDeps = nuxt.options.vite.optimizeDeps ||= {}
+    nuxt.options.vite.optimizeDeps.exclude = nuxt.options.vite.optimizeDeps.exclude ||= []
+    if (!nuxt.options.vite.optimizeDeps.exclude.includes('notform')) {
+      nuxt.options.vite.optimizeDeps.exclude.push('notform')
+    }
 
     // Add components
     components.forEach((name) => {
@@ -59,6 +61,8 @@ export default defineNuxtModule<NotFormModuleOptions>({
   },
 
 }) as NuxtModule<NotFormModuleOptions>
+
+export type * from 'notform'
 
 declare module '@nuxt/schema' {
   interface NuxtConfig {
