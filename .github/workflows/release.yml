@@ -59,7 +59,7 @@ jobs:
         run: pnpm build
 
       - name: Release with Relizy
-        run: pnpm relizy release  ${{ github.event.inputs.release_type }} --yes ${{ inputs.dry_run && '--dry-run' || '' }}
+        run: pnpm relizy release --${{ github.event.inputs.release_type }} --yes ${{ inputs.dry_run && '--dry-run' || '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
