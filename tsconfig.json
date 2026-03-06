@@ -11,13 +11,8 @@
       "node"
     ]
   },
-  "include": [
-    "scripts/**/*.ts"
-  ],
   "exclude": [
     "packages/**/*",
     "apps/**/*",
-    "playground/**/*",
-    "docs/**/*"
   ]
 }
