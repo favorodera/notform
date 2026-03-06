@@ -18,22 +18,22 @@ By participating in this project, you agree to abide by the [Contributor Covenan
 1. Fork the repository
 2. Clone your fork:
 
-   ```bash
-   git clone https://github.com/<your-username>/notform.git
-   cd notform
-   ```
+```bash
+git clone https://github.com/<your-username>/notform.git
+cd notform
+```
 
 3. Install dependencies:
 
-   ```bash
-   pnpm install
-   ```
+```bash
+pnpm install
+```
 
 4. Start development:
 
-   ```bash
-   pnpm dev
-   ```
+```bash
+pnpm dev
+```
 
 ## Development Workflow
 
@@ -102,16 +102,10 @@ This helps us validate upcoming features before they are fully integrated.
 3. Add or update tests as appropriate
 4. Run the full validation suite:
 
-   ```bash
-   pnpm ready
-   ```
-
-5. Create a changeset for your changes:
-
-   ```bash
-   pnpm changeset
-   ```
-
+```bash
+pnpm ready
+```
+5. Commit your changes using Conventional Commits. Our release system uses these messages to automatically generate changelogs.
 6. Push your branch and open a Pull Request
 
 ## Reporting Bugs
