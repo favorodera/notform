@@ -40,8 +40,8 @@ export default defineConfig({
     style: { title: 'Styling' },
     refactor: { title: 'Refactors' },
     test: { title: 'Tests' },
-    ci: { title: 'CI/CD' },
-    chore: { title: 'Chores' },
     build: false,
+    ci: false,
+    chore: false,
   },
 })
