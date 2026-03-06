@@ -1,11 +1,11 @@
 {
   "name": "notform",
+  "version": "1.0.4",
   "type": "module",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.4",
   "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
