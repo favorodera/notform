@@ -1,6 +1,8 @@
 import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 import type { NuxtModule } from '@nuxt/schema'
 
+export type * from 'notform'
+
 /** Nuxt module options for `notform` */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NotFormModuleOptions {}
@@ -61,8 +63,6 @@ export default defineNuxtModule<NotFormModuleOptions>({
   },
 
 }) as NuxtModule<NotFormModuleOptions>
-
-export type * from 'notform'
 
 declare module '@nuxt/schema' {
   interface NuxtConfig {
