@@ -8,9 +8,6 @@ export default defineConfig({
       'packages/*',
     ],
   },
-  changelog: {
-    formatCmd: 'pnpm dlx prettier --write CHANGELOG.md',
-  },
   excludeAuthors: [
     'dependabot[bot]',
     'renovate[bot]',
