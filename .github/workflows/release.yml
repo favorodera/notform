@@ -18,7 +18,7 @@ on:
         default: false
 
 concurrency:
-  group: production-release
+  group: release
   cancel-in-progress: false
 
 permissions:
