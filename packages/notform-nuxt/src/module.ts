@@ -27,21 +27,24 @@ export default defineNuxtModule<NotFormModuleOptions>({
 
   // Module factory
   setup(_options, nuxt) {
-    // Create a resolver for the runtime/notform file
+    // Create a resolver
     const { resolve } = createResolver(import.meta.url)
-    const runtimeExports = resolve('./runtime/notform')
+
+    // Create a resolver for the runtime files
+    const componentsRuntime = resolve('./runtime/components')
+    const composablesRuntime = resolve('./runtime/composables')
 
     // Exclude notform package from optimizeDeps
     nuxt.options.vite.optimizeDeps = nuxt.options.vite.optimizeDeps || {}
     nuxt.options.vite.optimizeDeps.exclude = nuxt.options.vite.optimizeDeps.exclude || []
     nuxt.options.vite.optimizeDeps.exclude.push('notform')
 
-    // Add components and composables
-    components.forEach((component) => {
+    // Add components
+    components.forEach((name) => {
       addComponent({
-        name: component,
-        export: component,
-        filePath: runtimeExports,
+        name,
+        export: name,
+        filePath: componentsRuntime,
       })
     })
 
@@ -50,7 +53,7 @@ export default defineNuxtModule<NotFormModuleOptions>({
       addImports({
         name: composable,
         as: composable,
-        from: runtimeExports,
+        from: composablesRuntime,
       })
     })
   },
