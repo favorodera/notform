@@ -6,10 +6,6 @@ export default defineConfig({
     versionMode: 'unified',
     packages: [
       'packages/*',
-      'apps/**'
-    ],
-    ignorePackageNames: [
-      'notform-docs'
     ],
   },
   changelog: {
