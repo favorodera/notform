@@ -1,0 +1,47 @@
+import { defineConfig } from 'relizy'
+
+export default defineConfig({
+  projectName: 'notform-monorepo',
+  monorepo: {
+    versionMode: 'unified',
+    packages: [
+      'packages/*',
+      'apps/**'
+    ],
+    ignorePackageNames: [
+      'notform-docs'
+    ],
+  },
+  changelog: {
+    formatCmd: 'pnpm dlx prettier --write CHANGELOG.md',
+  },
+  excludeAuthors: [
+    'dependabot[bot]',
+    'renovate[bot]',
+    'github-actions[bot]',
+  ],
+  publish:{
+    packageManager: 'pnpm',
+    registry: 'https://registry.npmjs.org',
+    access: 'public',
+    packages: ['packages/*'],
+    buildCmd: 'pnpm build',
+  },
+  repo: {
+    domain: 'github.com',
+    repo: 'favorodera/notform',
+    provider: 'github',
+  },
+  types: {
+    feat: { title: 'Added', },
+    fix: { title: 'Fixed' },
+    perf: { title: 'Performance' },
+    docs: { title: 'Documentation' },
+    style: { title: 'Styling' },
+    refactor: { title: 'Refactors' },
+    test: { title: 'Tests' },
+    ci: { title: 'CI/CD' },
+    chore: { title: 'Chores' },
+    build: false,
+  },
+})
