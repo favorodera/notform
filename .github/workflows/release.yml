@@ -36,8 +36,9 @@ jobs:
       - name: Verify CI Status
         run: |
           SHA=$(git rev-parse HEAD)
-          gh run list --workflow CI --branch main --commit $SHA --limit 1 --json conclusion \
-            | grep -q '"conclusion":"success"' || { echo "CI must pass before releasing"; exit 1; }
+          CONCLUSION=$(gh api "repos/${{ github.repository }}/actions/workflows/ci.yml/runs?head_sha=$SHA&per_page=1" \
+            --jq '.workflow_runs[0].conclusion')
+          [ "$CONCLUSION" = "success" ] || { echo "CI must pass before releasing. Status: $CONCLUSION"; exit 1; }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
