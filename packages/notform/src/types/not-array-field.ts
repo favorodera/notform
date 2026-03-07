@@ -18,6 +18,10 @@ export type NotArrayFieldProps<TSchema extends ArraySchema> = {
  * @template TSchema The schema of the array field.
  */
 export type NotArrayFieldContext<TSchema extends ArraySchema> = {
+  /** The unique name/path identifying the array field in the form state */
+  name: string
+  /** Array-level validation errors for the field path */
+  errors: string[]
   /**
    * Array of individual field contexts for each item in the collection.
    * Useful for mapping components to array elements.
