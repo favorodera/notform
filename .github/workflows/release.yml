@@ -1,4 +1,5 @@
 name: Release
+
 on:
   workflow_dispatch:
     inputs:
@@ -10,11 +11,7 @@ on:
           - patch
           - minor
           - major
-      dry_run:
-        description: Dry run - Preview
-        required: false
-        type: boolean
-        default: false
+          - canary
 
 concurrency:
   group: release
@@ -38,8 +35,9 @@ jobs:
 
       - name: Verify CI Status
         run: |
-          echo "Checking if the latest CI run on main was successful..."
-          gh run list --workflow CI --branch main --limit 1 --json conclusion | grep -q '"conclusion":"success"' || { echo "CI must pass before releasing"; exit 1; }
+          SHA=$(git rev-parse HEAD)
+          gh run list --workflow CI --branch main --commit $SHA --limit 1 --json conclusion \
+            | grep -q '"conclusion":"success"' || { echo "CI must pass before releasing"; exit 1; }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -49,7 +47,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
 
       - name: Install Dependencies
@@ -60,11 +58,11 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "favorodera"
+          git config user.email "favorodera@gmail.com"
 
       - name: Release with Relizy
-        run: pnpm relizy release --${{ github.event.inputs.release_type }} --yes ${{ inputs.dry_run && '--dry-run' || '' }} --no-clean
+        run: pnpm relizy release --${{ inputs.release_type }} --yes --no-clean
         env:
           RELIZY_GITHUB_TOKEN: ${{ secrets.RELIZY_GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
