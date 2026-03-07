@@ -1,5 +1,12 @@
 # notform-nuxt
 
+## notform-nuxt@1.0.5...v1.0.6
+
+[compare changes](https://github.com/favorodera/notform/compare/notform-nuxt@1.0.5...v1.0.6)
+
+No relevant changes for this release
+
+
 ## 1.0.4
 
 ### Patch Changes
