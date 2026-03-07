@@ -2,17 +2,14 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   ci:
     name: Lint, Typecheck, Build & Test
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -51,7 +48,6 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
