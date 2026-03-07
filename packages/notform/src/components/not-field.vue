@@ -99,7 +99,7 @@ const methods: NotFieldContext['methods'] = {
 const context = reactive({
   /** Path identifier */
   name: computed(() => props.name),
-  /** First error message if any */
+  /** Array of validation error messages currently active for this field */
   errors: computed(() => getFieldErrors(props.name).map(error => error.message)),
   /** Interacted status */
   isTouched: computed(() => touchedFields.value.has(props.name)),
