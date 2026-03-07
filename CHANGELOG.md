@@ -1,5 +1,12 @@
 # Changelog
 
+## notform-nuxt@1.0.4...v1.0.4
+
+[compare changes](https://github.com/favorodera/notform/compare/notform-nuxt@1.0.4...v1.0.4)
+
+No relevant changes for this release
+
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
