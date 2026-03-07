@@ -27,7 +27,7 @@ if (!formID) {
 }
 
 // Access parent form context
-const { state, validateField } = withContext<TObjectSchema>(formID)
+const { state, validateField, getFieldErrors } = withContext<TObjectSchema>(formID)
 
 /**
  * Reactive bridge between the form state and the specific array field.
@@ -110,11 +110,21 @@ function update(index: number, data: StandardSchemaV1.InferInput<TArraySchema>[n
  * Reactive context object exposed to the NotArrayField slot.
  */
 const context = reactive({
+  /** Path identifier */
+  name: computed(() => props.name),
+  /** Array-level validation errors for the field path */
+  errors: computed(() => getFieldErrors(props.name).map(error => error.message)),
+  /** Array of individual field contexts for each item in the collection */
   fields,
+  /** Adds a new item to the end of the collection */
   append,
+  /** Adds a new item to the beginning of the collection */
   prepend,
+  /** Removes the item at the specified index */
   remove,
+  /** Inserts a new item at a specific index */
   insert,
+  /** Replaces the data at a specific index */
   update,
 }) as NotArrayFieldContext<TArraySchema>
 </script>
