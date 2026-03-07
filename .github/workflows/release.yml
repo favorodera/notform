@@ -58,8 +58,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "favorodera"
-          git config user.email "favorodera@gmail.com"
+          git config --global user.name "favorodera"
+          git config --global user.email "favorodera@gmail.com"
 
       - name: Release with Relizy
         run: pnpm relizy release --${{ inputs.release_type }} --yes --no-clean
