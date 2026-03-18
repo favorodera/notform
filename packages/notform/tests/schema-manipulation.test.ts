@@ -1,10 +1,9 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import { notRules } from '../utils'
 import { ref } from 'vue'
+import { NotField, NotForm, NotMessage, useNotForm } from '../src'
+import { notRules, withSetup } from './utils'
 
-describe('Schema Manipulation - Core', () => {
+describe('Schema Manipulation', () => {
 
   test('Supports dynamic schema updates', async () => {
     const { isValid, schemaTwo, activeSchema, getByRole } = await withSetup(() => {

@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { withSetup } from '../utils'
-import { NotField, NotForm, NotMessage, useNotForm } from '../../src'
-import { notRules } from '../utils'
+import { NotField, NotForm, NotMessage, useNotForm } from '../src'
+import { notRules, withSetup } from './utils'
 
 describe('Multiple form instances - Core', () => {
   const schema = notRules.object({
