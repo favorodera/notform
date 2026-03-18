@@ -1,12 +1,13 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { NotFormContext, UseNotFormOptions, UseNotFormReturn } from '../types/not-form'
+import { getProperty, parsePath } from 'dot-prop'
+import { isEqual } from 'es-toolkit/predicate'
 import type { Ref } from 'vue'
 import { computed, provide, ref, toValue, useId } from 'vue'
+import type { NotFormContext, UseNotFormOptions, UseNotFormReturn } from '../types/not-form'
 import type { ObjectSchema } from '../types/shared'
-import { getNotFormContextKey } from '../utils/not-form-context'
 import type { DeepPartial, Paths } from '../types/utils'
-import { getProperty, parsePath } from 'dot-prop'
 import { getObjectPaths, isIssuePathEqual } from '../utils/helpers'
+import { getNotFormContextKey } from '../utils/not-form-context'
 
 /**
  * Initializes a form instance with validation logic, reactive state, and lifecycle methods.
@@ -147,8 +148,17 @@ function useNotForm<TSchema extends ObjectSchema>(options: UseNotFormOptions<TSc
       const paths = getObjectPaths(_state)
 
       paths.forEach((path) => {
-        context.dirtyFields.value.add(path)
         context.touchedFields.value.add(path)
+
+        const currentValue = getProperty(context.state.value, path)
+        const initialValue = getProperty(onResetState.value ?? initialState, path)
+
+        if (!isEqual(currentValue, initialValue)) {
+          context.dirtyFields.value.add(path)
+        }
+        else {
+          context.dirtyFields.value.delete(path)
+        }
 
         // Auto validate if allowed
         if (_validate)context.validateField(path)
@@ -178,12 +188,28 @@ function useNotForm<TSchema extends ObjectSchema>(options: UseNotFormOptions<TSc
     },
 
     dirtyField(field) {
-      context.dirtyFields.value.add(field)
+      const currentValue = getProperty(context.state.value, field)
+      const initialValue = getProperty(onResetState.value ?? initialState, field)
+
+      if (!isEqual(currentValue, initialValue)) {
+        context.dirtyFields.value.add(field)
+      }
+      else {
+        context.dirtyFields.value.delete(field)
+      }
     },
 
     dirtyAllFields() {
       const paths = getObjectPaths(context.state.value) as Paths<StandardSchemaV1.InferInput<TSchema>>[]
-      context.dirtyFields.value = new Set(paths)
+      const newDirty = new Set<string>()
+      paths.forEach((path) => {
+        const currentValue = getProperty(context.state.value, path)
+        const initialValue = getProperty(onResetState.value ?? initialState, path)
+        if (!isEqual(currentValue, initialValue)) {
+          newDirty.add(path)
+        }
+      })
+      context.dirtyFields.value = newDirty
     },
 
     async submit(event: Event) {
