@@ -1,10 +1,10 @@
 <script setup lang="ts" generic="TArraySchema extends ArraySchema,TObjectSchema extends ObjectSchema = ObjectSchema">
+import type { StandardSchemaV1 } from '@standard-schema/spec'
+import { getProperty, setProperty } from 'dot-prop'
+import { computed, inject, reactive } from 'vue'
 import type { NotArrayFieldContext, NotArrayFieldProps, NotArrayFieldSlots } from '../types/not-array-field'
 import type { ArraySchema, ObjectSchema } from '../types/shared'
-import { computed, inject, reactive } from 'vue'
 import { CURRENT_NOT_FORM_ID_KEY, withContext } from '../utils/not-form-context'
-import { getProperty, setProperty } from 'dot-prop'
-import type { StandardSchemaV1 } from '@standard-schema/spec'
 
 /**
  * Component for managing array-based form fields.
