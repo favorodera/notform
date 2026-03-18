@@ -65,7 +65,8 @@
   },
   "dependencies": {
     "@standard-schema/spec": "^1.1.0",
-    "dot-prop": "^10.1.0"
+    "dot-prop": "^10.1.0",
+    "es-toolkit": "^1.45.1"
   },
   "packageManager": "pnpm@10.28.0",
   "engines": {

@@ -81,19 +81,7 @@ pnpm test:watch
 
 ### Writing Tests
 
-When adding new features or fixing bugs, please include tests. Create test files in the `future` folder within the respective package:
-
-```
-packages/
-├── notform/
-│   └── future/          # Add test files here for notform features
-│       └── your-feature.test.ts
-└── notform-nuxt/
-    └── future/          # Add test files here for nuxt module features
-        └── your-feature.test.ts
-```
-
-This helps us validate upcoming features before they are fully integrated.
+When adding new features or fixing bugs, please include tests as this helps us validate upcoming features before they are fully integrated.
 
 ## Pull Request Process
 

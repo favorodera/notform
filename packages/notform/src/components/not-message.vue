@@ -1,7 +1,7 @@
 <script lang="ts" setup generic="TSchema extends ObjectSchema">
+import { computed, inject, reactive, useAttrs } from 'vue'
 import { type NotMessageContext, type NotMessageProps, type NotMessageSlots } from '../types/not-message'
 import type { ObjectSchema } from '../types/shared'
-import { computed, inject, reactive, useAttrs } from 'vue'
 import { CURRENT_NOT_FORM_ID_KEY, withContext } from '../utils/not-form-context'
 
 /**

@@ -1,0 +1,33 @@
+{
+  "name": "notform-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "build": "vite build",
+    "typecheck": "vue-tsc --build",
+    "lint": "eslint . --fix",
+    "cleanup": "rm -rf dist node_modules .turbo package-lock.json"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.7.0",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^24.11.0",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vue/eslint-config-typescript": "^14.7.0",
+    "@vue/tsconfig": "^0.8.1",
+    "eslint": "^10.0.2",
+    "eslint-plugin-vue": "~10.8.0",
+    "jiti": "^2.6.1",
+    "notform": "workspace:*",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vue": "^3.5.29",
+    "vue-tsc": "^3.2.5",
+    "zod": "^4.3.6"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}

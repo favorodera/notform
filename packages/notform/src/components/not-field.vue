@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { NotFieldContext, NotFieldProps, NotFieldSlots } from '../types/not-field'
 import { computed, inject, nextTick, onMounted, reactive } from 'vue'
+import type { NotFieldContext, NotFieldProps, NotFieldSlots } from '../types/not-field'
 import { CURRENT_NOT_FORM_ID_KEY, withContext } from '../utils/not-form-context'
 
 /**
