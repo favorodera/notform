@@ -12,9 +12,9 @@ NotForm is a powerful, yet simple form validation and state management library f
 Full documentation and examples can be found at:
 **[notform-docs.vercel.app](https://notform-docs.vercel.app/)**
 
-## Playground
+## StackBlitz Playground
 
-Playground can be found at:
+StackBlitz Playground can be found at:
 **[notform-playground](https://stackblitz.com/edit/notform-playground)**
 
 ## Features
@@ -32,6 +32,7 @@ This is a monorepo managed with `pnpm` and `turbo`.
 - [`packages/notform`](./packages/notform): The core Vue library.
 - [`packages/notform-nuxt`](./packages/notform-nuxt): The official Nuxt module.
 - [`apps/docs`](./apps/docs): Documentation site built with Nuxt Content.
+- [`apps/playground`](./apps/playground): Vue playground app for testing on the go.
 
 ## Development
 
