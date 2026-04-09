@@ -4,16 +4,14 @@ export default defineConfig({
   projectName: 'notform-monorepo',
   monorepo: {
     versionMode: 'unified',
-    packages: [
-      'packages/*',
-    ],
+    packages: ['packages/*'],
   },
   excludeAuthors: [
     'dependabot[bot]',
     'renovate[bot]',
     'github-actions[bot]',
   ],
-  publish:{
+  publish: {
     packageManager: 'pnpm',
     registry: 'https://registry.npmjs.org',
     access: 'public',
@@ -21,7 +19,7 @@ export default defineConfig({
     buildCmd: 'pnpm build',
   },
   types: {
-    feat: { title: 'Added', },
+    feat: { title: 'Added' },
     fix: { title: 'Fixed' },
     perf: { title: 'Performance' },
     docs: { title: 'Documentation' },

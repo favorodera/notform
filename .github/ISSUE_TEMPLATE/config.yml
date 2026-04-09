@@ -6,6 +6,3 @@ contact_links:
   - name: Questions & Discussions
     url: https://github.com/favorodera/notform/discussions
     about: Ask questions and discuss ideas
-  - name: StackBlitz Playground
-    url: https://stackblitz.com/edit/notform-playground
-    about: Try NotForm in the interactive playground
