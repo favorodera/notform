@@ -8,19 +8,15 @@ import type { PartialDeep, Paths as TypeFestPaths } from 'type-fest'
  */
 export type ValidationMode = 'lazy' | 'eager'
 
-/** Interaction events that can trigger a validation check for a field. */
-export type ValidationTriggers = {
-  /** Trigger validation when the field is blurred. */
-  onBlur?: boolean
-  /** Trigger validation when the field value changes. */
-  onChange?: boolean
-  /** Trigger validation when the field value is input. */
-  onInput?: boolean
-  /** Trigger validation when the field is mounted. */
-  onMount?: boolean
-  /** Trigger validation when the field is focused. */
-  onFocus?: boolean
-}
+/**
+ * Interaction events that can trigger a validation check for a field.
+ * - onBlur: Trigger validation when the field is blurred.
+ * - onChange: Trigger validation when the field value changes.
+ * - onInput: Trigger validation when the field value is input.
+ * - onMount: Trigger validation when the field is mounted.
+ * - onFocus: Trigger validation when the field is focused.
+ */
+export type ValidationTrigger = 'onBlur' | 'onChange' | 'onInput' | 'onMount' | 'onFocus'
 
 /**
  * Constructs a type where all properties of the input type are optional recursively.
@@ -35,11 +31,7 @@ export type DeepPartial<TData> = PartialDeep<TData, {
  * Constructs a type representing all possible dot-separated paths within an object.
  * @template TReference The object type for which to generate paths.
  */
-export type Paths<TReference> = TypeFestPaths<TReference, {
-  maxRecursionDepth: 10
-  bracketNotation: true
-  leavesOnly: false
-}> | (string & {})
+export type Paths<TReference> = Extract<TypeFestPaths<TReference, { maxRecursionDepth: 10 }>, string> | (string & {})
 
 
 /**
