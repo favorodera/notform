@@ -30,7 +30,7 @@ jobs:
       #             build -> dependsOn [^lint, ^typecheck, ^build]
       # turbo resolves the full chain: lint + typecheck -> build -> test
       - name: CI
-        run: pnpm turbo test
+        run: pnpm test
 
   preview:
     name: Publish Preview Packages
@@ -56,7 +56,7 @@ jobs:
       # turbo.json: build -> dependsOn [^lint, ^typecheck, ^build]
       # turbo resolves the full chain: lint + typecheck -> build
       - name: Build Packages
-        run: pnpm turbo build
+        run: pnpm build
 
       - name: Publish Preview to pkg-pr-new
         run: pnpm dlx pkg-pr-new publish './packages/*'
