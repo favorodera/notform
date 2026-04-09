@@ -52,7 +52,10 @@
   },
   "dependencies": {
     "@standard-schema/spec": "^1.1.0",
-    "es-toolkit": "^1.45.1"
+    "dequal": "^2.0.3",
+    "dlv": "^1.1.3",
+    "dset": "^3.1.4",
+    "klona": "^2.0.6"
   },
   "keywords": [
     "notform",
