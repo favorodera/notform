@@ -74,7 +74,7 @@ export type UseNotFormInstance<TSchema extends ObjectSchema> = {
    * A flat object mapping paths to their first error message.
    * Useful for quick template access: errorsMap['user.email']
    */
-  errorsMap: ComputedRef<Record<Paths<StandardSchemaV1.InferInput<TSchema>>, string>>
+  errorsMap: ComputedRef<Partial<Record<Paths<StandardSchemaV1.InferInput<TSchema>>, string>>>
   /**
    * Directly sets a single field error.
    * @param error The error to apply.
