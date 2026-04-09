@@ -86,7 +86,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
           token: ${{ secrets.NOTFORM_GITHUB_PAT }}
 
