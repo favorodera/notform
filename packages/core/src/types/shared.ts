@@ -25,7 +25,7 @@ export type DeepPartial<TData> = PartialDeep<TData, {
  * @template TReference The object type for which to generate paths.
  */
 export type Paths<TReference> = Extract<
-  TypeFestPaths<TReference, { maxRecursionDepth: 10, bracketNotation: true }>,
+  TypeFestPaths<TReference, { maxRecursionDepth: 10 }>,
   string
 > | (string & {})
 
