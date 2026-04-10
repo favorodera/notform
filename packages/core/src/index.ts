@@ -5,7 +5,7 @@ export type * from './types/shared'
 export type * from './types/use-not-form'
 
 // useNotForm composable
-export * from './composables/use-not-form'
+export { default as useNotForm } from './composables/use-not-form'
 
 // NotForm component types
 export type * from './types/not-form'
