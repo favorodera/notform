@@ -26,13 +26,14 @@ const { instance, values, submit, reset } = useNotForm({
     >
 
       <NotField
-        v-slot="{ errors,value }"
+        v-slot="{ errors,value,events }"
         :instance="instance"
         path="name"
       >
         <input
           v-model="values.name"
           type="text"
+          v-bind="events"
         >
         <p>{{ errors }},{{ value }}</p>
       </NotField>
