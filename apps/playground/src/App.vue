@@ -24,19 +24,7 @@ const { instance, values, submit, reset } = useNotForm({
       @submit="submit"
       @reset="reset()"
     >
-
-      <NotField
-        v-slot="{ errors,value,events }"
-        :instance="instance"
-        path="name"
-      >
-        <input
-          v-model="values.name"
-          type="text"
-          v-bind="events"
-        >
-        <p>{{ errors }},{{ value }}</p>
-      </NotField>
+    
 
       <NotField
         v-slot="{ errors }"
@@ -60,6 +48,20 @@ const { instance, values, submit, reset } = useNotForm({
         Reset
       </button>
     </NotForm>
+
+    <NotField
+      v-slot="{ errors,value,events }"
+      :form="instance"
+      :instance="instance"
+      path="name"
+    >
+      <input
+        v-model="values.name"
+        type="text"
+        v-bind="events"
+      >
+      <p>{{ errors }},{{ value }}</p>
+    </NotField>
 
   </div>
 </template>
