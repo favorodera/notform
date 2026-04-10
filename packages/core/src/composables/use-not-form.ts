@@ -17,7 +17,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
   // BASELINE
   let initialValues = klona(config.initialValues ?? ({} as DeepPartial<TInput>))
-  let initialErrors = [...(config.initialErrors ?? [])]
+  let initialErrors = klona(config.initialErrors ?? [])
 
 
   // OPTIONS
@@ -41,7 +41,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
   const isSubmitting = ref(false)
 
-  const validatingFields = ref(new Set<Paths<TInput>>()) as Ref<Set<Paths<TInput>>>
+  const isValidating = ref(false)
 
 
   // COMPUTED STATE
@@ -59,8 +59,6 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   const isDirty = computed(() => dirtyFields.value.size > 0)
 
   const isTouched = computed(() => touchedFields.value.size > 0)
-
-  const isValidating = computed(() => validatingFields.value.size > 0)
 
   const isValid = computed(() => errors.value.length === 0)
 
@@ -110,10 +108,13 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
     if (isFieldClean) {
       unDirtyField(path)
-      return
+    } else {
+      dirtyField(path)
     }
 
-    dirtyField(path)
+    if (validateOn.onChange) {
+      validateField(path)
+    }
   }
 
   const setValues: TInstance['setValues'] = (newValues) => {
@@ -150,9 +151,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
   // VALIDATION
   const validate: TInstance['validate'] = async () => {
-    // Use all field paths as the validating signal for full-form validation
-    const allPaths = deepKeys(values.value) as Paths<TInput>[]
-    allPaths.forEach(path => validatingFields.value.add(path))
+    isValidating.value = true
 
     try {
       const schema = toValue(config.schema)
@@ -166,12 +165,12 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
       clearErrors()
       return { value: result.value }
     } finally {
-      validatingFields.value.clear()
+      isValidating.value = false
     }
   }
 
   const validateField: TInstance['validateField'] = async (path) => {
-    validatingFields.value.add(path)
+    isValidating.value = true
 
     try {
       const schema = toValue(config.schema)
@@ -193,7 +192,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
       return { value: getProperty(result.value, path) }
     } finally {
-      validatingFields.value.delete(path)
+      isValidating.value = false
     }
   }
 
@@ -230,10 +229,10 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   // RESET
   const reset: TInstance['reset'] = (newValues, newErrors) => {
     if (newValues) initialValues = klona(newValues)
-    if (newErrors) initialErrors = [...newErrors]
+    if (newErrors) initialErrors = klona(newErrors)
 
-    values.value = klona(initialValues) as TInput
-    errors.value = [...initialErrors]
+    values.value = klona(initialValues)
+    errors.value = klona(initialErrors)
 
     touchedFields.value.clear()
     dirtyFields.value.clear()
@@ -271,7 +270,6 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     clearErrors,
     getFieldErrors,
 
-    validatingFields,
     isValidating,
     validate,
     validateField,
