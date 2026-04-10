@@ -37,13 +37,6 @@ importers:
         version: 6.0.2
 
   apps/playground:
-    dependencies:
-      notform:
-        specifier: workspace:*
-        version: link:../../packages/core
-      vue:
-        specifier: ^3.5.31
-        version: 3.5.32(typescript@6.0.2)
     devDependencies:
       '@tsconfig/node24':
         specifier: ^24.0.4
@@ -54,9 +47,15 @@ importers:
       '@vue/tsconfig':
         specifier: ^0.9.1
         version: 0.9.1(typescript@6.0.2)(vue@3.5.32(typescript@6.0.2))
+      notform:
+        specifier: workspace:*
+        version: link:../../packages/core
       vite:
         specifier: ^8.0.3
         version: 8.0.8(@types/node@25.5.2)(jiti@2.6.1)
+      vue:
+        specifier: ^3.5.31
+        version: 3.5.32(typescript@6.0.2)
       vue-tsc:
         specifier: ^3.2.6
         version: 3.2.6(typescript@6.0.2)
