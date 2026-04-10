@@ -3,7 +3,7 @@
   TPath extends Paths<StandardSchemaV1.InferInput<TSchema>>
 "
 >
-import { computed, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { getProperty } from 'dot-prop'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { NotFieldProps, NotFieldSlots, NotFieldInstance } from '../types/not-field'
@@ -50,18 +50,65 @@ const validate = async () => {
 }
 
 
+// TRIGGERS
+const validateOn = computed(() => ({
+  ...formInstance.validateOn,
+  ...props.validateOn, // field-level override wins
+}))
+
+const onBlur = () => {
+  touch()
+  if (validateOn.value.onBlur) validate()
+}
+
+const onChange = () => {
+  if (validateOn.value.onChange) validate()
+}
+
+const onInput = () => {
+  if (validateOn.value.onInput) validate()
+}
+
+const onFocus = () => {
+  if (validateOn.value.onFocus) validate()
+}
+
+const events = computed(() => ({
+  onBlur,
+  onInput,
+  onChange,
+  onFocus,
+}))
+
+
 // INSTANCE
 const fieldInstance = reactive({
   path,
+
   value,
+
   isValidating,
-  errors,
   validate,
+
+  errors,
+  
   touch,
   unTouch,
+  
   dirty,
   unDirty,
-}) as NotFieldInstance<TSchema, TPath>
+
+  events,
+  onBlur,
+  onInput,
+  onChange,
+  onFocus,
+}) // as NotFieldInstance<TSchema, TPath>
+
+onMounted(async () => {
+  await nextTick()
+  if (validateOn.value.onMount) validate()
+})
 </script>
 
 <template>
