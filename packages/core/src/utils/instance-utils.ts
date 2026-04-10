@@ -25,7 +25,7 @@ export function useNotFormInstance<TSchema extends ObjectSchema>(explicitInstanc
   const instance = explicitInstance ?? injected
 
   if (!instance) {
-    throw new Error('[NotForm] No form instance found. Add a <NotForm :form="..."> ancestor or pass :form directly.')
+    throw new Error('[NotForm] No form instance found. Add a <NotForm :instance="..."> ancestor or pass :form directly.')
   }
 
   return instance
