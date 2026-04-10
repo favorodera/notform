@@ -1,6 +1,6 @@
 {
   "name": "notform",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "type": "module",
   "private": false,
   "description": "Vue Forms Without the Friction",

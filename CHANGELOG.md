@@ -1,5 +1,30 @@
 # Changelog
 
+## v2.0.0-alpha.1...v2.0.0-alpha.2
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.1...v2.0.0-alpha.2)
+
+### Added
+
+- Add NotForm instance provide/inject utilities ([369a6df](https://github.com/favorodera/notform/commit/369a6df))
+- Add form utilities for path normalization and comparison ([d1e7517](https://github.com/favorodera/notform/commit/d1e7517))
+- Expand NotFormInstance type with detailed properties ([ab8ed40](https://github.com/favorodera/notform/commit/ab8ed40))
+- Add NotField component types ([f846e9e](https://github.com/favorodera/notform/commit/f846e9e))
+- Export NotForm and NotField components ([e0fc885](https://github.com/favorodera/notform/commit/e0fc885))
+- Add NotForm component ([ec65a58](https://github.com/favorodera/notform/commit/ec65a58))
+- Introduce NotField component ([2a3eac2](https://github.com/favorodera/notform/commit/2a3eac2))
+
+### Refactors
+
+- Remove unused validation utility functions ([a3b910c](https://github.com/favorodera/notform/commit/a3b910c))
+- Remove unused type imports in use-not-form.ts ([2e04c2f](https://github.com/favorodera/notform/commit/2e04c2f))
+- Rename `UseNotFormInstance` to `NotFormInstance` and update imports ([44f0464](https://github.com/favorodera/notform/commit/44f0464))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-alpha.0...v2.0.0-alpha.1
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.0...v2.0.0-alpha.1)
