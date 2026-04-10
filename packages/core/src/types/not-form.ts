@@ -8,7 +8,7 @@ import type { UseNotFormConfig } from './use-not-form'
  * The core state and methods provided by a form instance.
  * @template TSchema The validation schema type derived from ObjectSchema.
  */
-export type NotFormInstance<TSchema extends ObjectSchema> = Omit<UseNotFormConfig<TSchema>, 'schema' | 'onSubmit'> & {
+export type NotFormInstance<TSchema extends ObjectSchema> = {
 
   /**
    * A convenience self-reference to the form instance.
@@ -19,6 +19,17 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Omit<UseNotFormConfi
    * // <NotForm :form="instance" />
    */
   instance: NotFormInstance<TSchema>
+
+
+  /** The initial values the form was created or last reset with */
+  readonly initialValues: UseNotFormConfig<TSchema>['initialValues']
+  /** The initial errors the form was created or last reset with */
+  readonly initialErrors: UseNotFormConfig<TSchema>['initialErrors']
+  /**
+   * The validation triggers of the form.
+   * @default { onBlur: true, onChange: true, onInput: true }
+   */
+  readonly validateOn: UseNotFormConfig<TSchema>['validateOn']
 
 
   /** Deeply reactive object of field values */
@@ -107,14 +118,8 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Omit<UseNotFormConfi
   getFieldErrors: (path: Paths<StandardSchemaV1.InferInput<TSchema>>) => StandardSchemaV1.Issue[]
 
 
-  /**
-   * Reactive set of field paths currently being validated.
-   * Empty when no validation is in progress.
-   * Populated with all paths during full-form validation.
-   */
-  validatingFields: Ref<Set<Paths<StandardSchemaV1.InferInput<TSchema>>>>
   /** Whether any field or the full form is currently being validated */
-  isValidating: ComputedRef<boolean>
+  isValidating: Ref<boolean>
   /**
    * Validates the entire form against the schema.
    * @returns A promise resolving to the validation result.
