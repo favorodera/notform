@@ -5,13 +5,14 @@ import { dequal } from 'dequal'
 import { deepKeys, getProperty, parsePath, setProperty } from 'dot-prop'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { DeepPartial, ObjectSchema, Paths } from '../types/shared'
-import type { UseNotFormConfig, UseNotFormInstance } from '../types/use-not-form'
-import { isIssuePathEqual } from '../utils'
+import type { UseNotFormConfig } from '../types/use-not-form'
+import type { NotFormInstance } from '../types/not-form'
+import { isIssuePathEqual } from '../utils/form-utils'
 
-export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): UseNotFormInstance<TSchema> {
+export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): NotFormInstance<TSchema> {
   type TInput = StandardSchemaV1.InferInput<TSchema>
   type TIssue = StandardSchemaV1.Issue
-  type TInstance = UseNotFormInstance<TSchema>
+  type TInstance = NotFormInstance<TSchema>
 
 
   // BASELINE
