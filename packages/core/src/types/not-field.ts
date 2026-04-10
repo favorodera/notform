@@ -1,6 +1,18 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { ObjectSchema, Paths } from './shared'
+import type { ObjectSchema, Paths, ValidationTrigger } from './shared'
 import type { NotFormInstance } from './not-form'
+
+/** The event handlers provided by a field instance for binding to native or custom inputs. */
+export type NotFieldEvents = {
+  /** Triggered when the field loses focus */
+  onBlur: () => void
+  /** Triggered on every keystroke or value change */
+  onInput: () => void
+  /** Triggered when the field value is committed */
+  onChange: () => void
+  /** Triggered when the field gains focus */
+  onFocus: () => void
+}
 
 /**
  * Props for the NotField component
@@ -15,6 +27,11 @@ export type NotFieldProps<
   path: TPath
   /** Optional form instance — takes priority over injected context */
   form?: NotFormInstance<TSchema>
+  /**
+   * Per-field validation trigger overrides.
+   * Merged over the form-wide validateOn config — only the keys you specify are overridden.
+   */
+  validateOn?: Partial<Record<ValidationTrigger, boolean>>
 }
 
 /**
@@ -35,12 +52,11 @@ export type NotFieldInstance<
 
   /** Whether the field is currently being validated */
   isValidating: boolean
+  /** Validates this field against the form schema */
+  validate: () => ReturnType<NotFormInstance<TSchema>['validateField']>
 
   /** The validation issues for this field */
   errors: StandardSchemaV1.Issue[]
-
-  /** Validates this field against the form schema */
-  validate: () => ReturnType<NotFormInstance<TSchema>['validateField']>
 
   /** Marks the field as touched */
   touch: () => void
@@ -51,6 +67,20 @@ export type NotFieldInstance<
   dirty: () => void
   /** Marks the field as not dirty */
   unDirty: () => void
+
+  /**
+   * All event handlers combined — spread directly onto native inputs.
+   * @example <input v-bind="events" />
+   */
+  events: NotFieldEvents
+  /** Triggered when the field loses focus */
+  onBlur: NotFieldEvents['onBlur']
+  /** Triggered on every keystroke or value change */
+  onInput: NotFieldEvents['onInput']
+  /** Triggered when the field value is committed */
+  onChange: NotFieldEvents['onChange']
+  /** Triggered when the field gains focus */
+  onFocus: NotFieldEvents['onFocus']
 }
 
 /**
