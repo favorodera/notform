@@ -1,5 +1,36 @@
 # Changelog
 
+## v2.0.0-alpha.2...v2.0.0-alpha.3
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.2...v2.0.0-alpha.3)
+
+### Added
+
+- Enhance not-field component with validation, touch, and dirty states ([26b5606](https://github.com/favorodera/notform/commit/26b5606))
+- Implement `validateOn.onChange` and refactor validation state ([9d164a1](https://github.com/favorodera/notform/commit/9d164a1))
+- Enhance NotField component with generic path typing and additional instance properties ([e26bcca](https://github.com/favorodera/notform/commit/e26bcca))
+- Add validation triggers to NotField component ([2984d97](https://github.com/favorodera/notform/commit/2984d97))
+- Add NotFieldEvents and validateOn to NotFieldProps ([71ab1d5](https://github.com/favorodera/notform/commit/71ab1d5))
+
+### Fixed
+
+- Correct error message for missing form instance ([467e218](https://github.com/favorodera/notform/commit/467e218))
+
+### Refactors
+
+- Export useNotForm as default export ([c51bc18](https://github.com/favorodera/notform/commit/c51bc18))
+- Introduce readonly initialValues, initialErrors, and validateOn to NotFormInstance ([3910251](https://github.com/favorodera/notform/commit/3910251))
+
+  This commit refactors the `NotFormInstance` type to expose `initialValues`, `initialErrors`, and `validateOn` as readonly properties. These properties were previously omitted from `UseNotFormConfig` but are now directly accessible for better type clarity and immutability.
+  Additionally, the `isValidating` property has been changed from a `ComputedRef` to a `Ref`, simplifying its usage and reflecting a more direct state management approach. The `validatingFields` property has been removed as its functionality is now implicitly handled by `isValidating`.
+
+- Remove `bracketNotation` from `TypeFestPaths` configuration ([83e578e](https://github.com/favorodera/notform/commit/83e578e))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-alpha.1...v2.0.0-alpha.2
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.1...v2.0.0-alpha.2)
