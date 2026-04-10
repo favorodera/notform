@@ -9,3 +9,13 @@ export * from './composables/use-not-form'
 
 // NotForm component types
 export type * from './types/not-form'
+
+// NotForm component
+export { default as NotForm } from './components/not-form.vue'
+
+// NotField component types
+export type * from './types/not-field'
+
+// NotField component
+export { default as NotField } from './components/not-field.vue'
+
