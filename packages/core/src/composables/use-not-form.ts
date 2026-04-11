@@ -14,6 +14,12 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   type TIssue = StandardSchemaV1.Issue
   type TInstance = NotFormInstance<TSchema>
 
+  // INTERNALS
+  const runSchema = () => {
+    const schema = toValue(config.schema)
+    return schema['~standard'].validate(values.value)
+  }
+
 
   // BASELINE
   let initialValues = klona(config.initialValues ?? ({} as DeepPartial<TInput>))
@@ -127,20 +133,21 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   // ERRORS
   const setError: TInstance['setError'] = (newIssue) => {
     const newPath = newIssue.path?.join('.')
-    // Filter out any existing error for this path then append the new one
-    // ensures the array stays unique by path
-    errors.value = [
-      ...errors.value.filter(error => error.path?.join('.') !== newPath),
-      newIssue,
-    ]
+    const index = errors.value.findIndex(error => error.path?.join('.') === newPath)
+
+    if (index !== -1) {
+      errors.value.splice(index, 1, newIssue) // replace existing
+    } else {
+      errors.value.push(newIssue) // append new
+    }
   }
 
   const setErrors: TInstance['setErrors'] = (newIssues) => {
-    errors.value = [...newIssues]
+    errors.value.splice(0, errors.value.length, ...newIssues)
   }
 
   const clearErrors: TInstance['clearErrors'] = () => {
-    errors.value = []
+    errors.value.splice(0, errors.value.length)
   }
 
   const getFieldErrors: TInstance['getFieldErrors'] = (path) => {
@@ -154,8 +161,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     isValidating.value = true
 
     try {
-      const schema = toValue(config.schema)
-      const result = await schema['~standard'].validate(values.value)
+      const result = await runSchema()
 
       if (result?.issues) {
         setErrors([...result.issues])
@@ -173,19 +179,27 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     isValidating.value = true
 
     try {
-      const schema = toValue(config.schema)
-      const result = await schema['~standard'].validate(values.value)
+      const result = await runSchema()
       const pathArray = parsePath(path)
 
-      // Replace errors for this field only, leaving other fields untouched
-      errors.value = errors.value.filter(error => !isIssuePathEqual(error.path, pathArray))
+      // Remove this field's errors in-place
+      const toRemove = errors.value.reduce<number[]>((accumulator, error, index) => {
+        if (isIssuePathEqual(error.path, pathArray)) accumulator.push(index)
+        return accumulator
+      }, [])
+
+      for (let index = toRemove.length - 1; index >= 0; index--) {
+        errors.value.splice(toRemove[index], 1)
+      }
 
       if (result?.issues) {
         const fieldIssues = result.issues.filter(issue => isIssuePathEqual(issue.path, pathArray))
+
         if (fieldIssues.length > 0) {
-          errors.value = [...errors.value, ...fieldIssues]
+          errors.value.push(...fieldIssues) // in-place
           return { issues: fieldIssues }
         }
+
         // Form has issues but not for this field — return current field value from state
         return { value: getProperty(values.value, path) }
       }
@@ -232,10 +246,10 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     if (newErrors) initialErrors = klona(newErrors)
 
     values.value = klona(initialValues)
-    errors.value = klona(initialErrors)
+    errors.value.splice(0, errors.value.length, ...klona(initialErrors))
 
-    touchedFields.value.clear()
-    dirtyFields.value.clear()
+    unTouchAllFields()
+    unDirtyAllFields()
   }
 
 
