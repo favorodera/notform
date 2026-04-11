@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import { useNotForm, NotField, NotForm } from 'notform'
+import { useFormStore } from './stores/form'
 
-const { instance, values, submit, reset } = useNotForm({
-  schema: z.object({
-    name: z.string().min(3, 'Name must be at least 3 characters long'),
-    email: z.email('Invalid email address'),
-    min: z.number().min(1, 'Min must be at least 1'),
-  }),
-  initialValues: {
-    name: '',
-    email: '',
-  },
-})
+const form = useFormStore().form
+
+const { instance, values, submit, reset, isDirty, setValue } = form
 
 </script>
 
@@ -52,28 +45,15 @@ const { instance, values, submit, reset } = useNotForm({
     <NotField
       v-slot="{ errors,value,events }"
       :form="instance"
-      :instance="instance"
       path="name"
     >
       <input
-        v-model="values.name"
         type="text"
         v-bind="events"
       >
       <p>{{ errors }},{{ value }}</p>
     </NotField>
 
+    {{ isDirty }}
   </div>
 </template>
-
-<style scoped>
-div {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  min-height:100dvh;
-  min-width:100%;
-  align-items: center;
-  justify-content: center;
-}
-</style>
