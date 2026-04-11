@@ -9,27 +9,22 @@ import type { UseNotFormConfig } from './use-not-form'
  * @template TSchema The validation schema type derived from ObjectSchema.
  */
 export type NotFormInstance<TSchema extends ObjectSchema> = {
-
-  /**
-   * A convenience self-reference to the form instance.
-   * Useful when you prefer to destructure the composable return value but still need
-   * to pass the full instance to NotForm or other components.
-   * @example
-   * const { values, submit, instance } = useNotForm({ schema, onSubmit })
-   * // <NotForm :form="instance" />
-   */
-  instance: NotFormInstance<TSchema>
-
-
   /** The initial values the form was created or last reset with */
   readonly initialValues: UseNotFormConfig<TSchema>['initialValues']
   /** The initial errors the form was created or last reset with */
   readonly initialErrors: UseNotFormConfig<TSchema>['initialErrors']
+
+
   /**
    * The validation triggers of the form.
    * @default { onBlur: true, onChange: true, onInput: true }
    */
   readonly validateOn: UseNotFormConfig<TSchema>['validateOn']
+  /**
+   * The validation mode of the form.
+   * @default { eager: true }
+   */
+  readonly validationMode: UseNotFormConfig<TSchema>['validationMode']
 
 
   /** Deeply reactive object of field values */
@@ -70,6 +65,8 @@ export type NotFormInstance<TSchema extends ObjectSchema> = {
   touchAllFields: () => void
   /** Marks all fields in the form as not touched */
   unTouchAllFields: () => void
+  /** Whether all fields in the form have been touched */
+  allTouched: Ref<boolean>
 
 
   /** Reactive set of field paths that have been dirtied */
@@ -90,6 +87,8 @@ export type NotFormInstance<TSchema extends ObjectSchema> = {
   dirtyAllFields: () => void
   /** Marks all fields in the form as not dirty */
   unDirtyAllFields: () => void
+  /** Whether all fields in the form have been dirtied */
+  allDirty: Ref<boolean>
 
 
   /** The raw issues from the last validation */
