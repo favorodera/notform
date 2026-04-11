@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { z } from 'zod'
 import { useNotForm } from 'notform'
+import { toRefs } from 'vue'
 
 export const useFormStore = defineStore('form', () => {
   const form = useNotForm({
@@ -13,5 +14,5 @@ export const useFormStore = defineStore('form', () => {
     },
   })
 
-  return { form }
+  return { form: toRefs(form) }
 })
