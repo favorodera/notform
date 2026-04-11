@@ -10,16 +10,19 @@
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --fix"
   },
-  "devDependencies": {
-    "notform": "workspace:*",
-    "vue": "^3.5.31",
-    "@tsconfig/node24": "^24.0.4",
-    "@vitejs/plugin-vue": "^6.0.5",
-    "@vue/tsconfig": "^0.9.1",
-    "vite": "^8.0.3",
-    "vue-tsc": "^3.2.6",
-    "zod": "^4.3.6"
-  },
+"dependencies": {
+  "notform": "workspace:*",
+  "pinia": "^3.0.4",
+  "vue": "^3.5.31"
+},
+"devDependencies": {
+  "@tsconfig/node24": "^24.0.4",
+  "@vitejs/plugin-vue": "^6.0.5",
+  "@vue/tsconfig": "^0.9.1",
+  "vite": "^8.0.3",
+  "vue-tsc": "^3.2.6",
+  "zod": "^4.3.6"
+},
   "engines": {
     "node": ">=24.13.0"
   },
