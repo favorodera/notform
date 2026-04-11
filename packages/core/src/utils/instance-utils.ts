@@ -21,7 +21,7 @@ export function provideNotFormInstance<TSchema extends ObjectSchema>(instance: N
  * @throws If no instance is found from either source.
  */
 export function useNotFormInstance<TSchema extends ObjectSchema>(explicitInstance?: NotFormInstance<TSchema>) {
-  const injected = inject(NOT_FORM_INSTANCE_KEY) as NotFormInstance<TSchema>
+  const injected = inject(NOT_FORM_INSTANCE_KEY, undefined) as NotFormInstance<TSchema> | undefined
   const instance = explicitInstance ?? injected
 
   if (!instance) {
