@@ -9,6 +9,7 @@ import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { NotFieldProps, NotFieldSlots } from '../types/not-field'
 import type { ObjectSchema, Paths } from '../types/shared'
 import { useNotFormInstance } from '../utils/instance-utils'
+import { dequal } from 'dequal'
 
 defineOptions({ inheritAttrs: false })
 defineSlots<NotFieldSlots<TSchema, TPath>>()
@@ -23,10 +24,17 @@ const formInstance = useNotFormInstance(props.form)
 // STATE
 const isValidating = ref(false)
 
+
+// COMPUTED
 const path = computed(() => props.path)
+
 const value = computed(() => getProperty(formInstance.values.value, props.path))
 const errors = computed(() => formInstance.getFieldErrors(path.value))
 
+const isTouched = computed(() => formInstance.allTouched.value || formInstance.touchedFields.value?.has(path.value))
+const isDirty = computed(() => formInstance.allDirty.value || formInstance.dirtyFields.value?.has(path.value))
+
+const isValid = computed(() => errors.value.length === 0)
 
 // TOUCH
 const touch = () => formInstance.touchField(path.value)
@@ -53,21 +61,43 @@ const validate = async () => {
 // TRIGGERS
 const validateOn = computed(() => ({
   ...formInstance.validateOn,
-  ...props.validateOn, // field-level override wins
+  ...props.validateOn,
 }))
+
+const validationMode = computed(() => ({
+  ...formInstance.validationMode,
+  ...props.validationMode,
+}))
+
+/**
+ * Handles input or change events on the field to avoid double validation loops.
+ * @param eventType The type of event to handle.
+ */
+const handleOnInputOrChange = (eventType: 'onInput' | 'onChange') => {
+  dirty()
+
+  const isFieldClean = dequal(value.value, getProperty(formInstance.initialValues, path.value))
+
+  if (isFieldClean) unDirty()
+  else dirty()
+
+  // Exit early if this event type isn't supposed to trigger validation
+  if (!validateOn.value[eventType] || validationMode.value.lazy) return
+
+  // Eager: validates if there are errors
+  if (validationMode.value.eager && errors.value.length > 0) {
+    validate()
+  }
+}
 
 const onBlur = () => {
   touch()
   if (validateOn.value.onBlur) validate()
 }
 
-const onChange = () => {
-  if (validateOn.value.onChange) validate()
-}
+const onChange = () => handleOnInputOrChange('onChange')
 
-const onInput = () => {
-  if (validateOn.value.onInput) validate()
-}
+const onInput = () => handleOnInputOrChange('onInput')
 
 const onFocus = () => {
   if (validateOn.value.onFocus) validate()
@@ -89,14 +119,17 @@ const fieldInstance = reactive({
 
   isValidating,
   validate,
+  isValid,
 
   errors,
   
   touch,
   unTouch,
+  isTouched,
   
   dirty,
   unDirty,
+  isDirty,
 
   events,
   onBlur,
