@@ -2,7 +2,7 @@ import { computed, ref, toValue } from 'vue'
 import type { Ref } from 'vue'
 import { klona } from 'klona/full'
 import { dequal } from 'dequal'
-import { deepKeys, getProperty, parsePath, setProperty } from 'dot-prop'
+import { getProperty, parsePath, setProperty } from 'dot-prop'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { DeepPartial, ObjectSchema, Paths } from '../types/shared'
 import type { UseNotFormConfig } from '../types/use-not-form'
@@ -34,6 +34,10 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     onMount: config.validateOn?.onMount ?? false,
     onFocus: config.validateOn?.onFocus ?? false,
   }
+  const validationMode = {
+    eager: config.validationMode?.eager ?? true,
+    lazy: config.validationMode?.lazy ?? false,
+  }
 
 
   // REACTIVE STATE
@@ -41,13 +45,15 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
   const errors = ref<TIssue[]>([...initialErrors])
 
-  const touchedFields = ref(new Set<Paths<TInput>>()) as Ref<Set<Paths<TInput>>>
-
-  const dirtyFields = ref(new Set<Paths<TInput>>()) as Ref<Set<Paths<TInput>>>
-
   const isSubmitting = ref(false)
 
   const isValidating = ref(false)
+
+  const allTouched = ref(false)
+  const touchedFields = ref(new Set<Paths<TInput>>()) as Ref<Set<Paths<TInput>>>
+
+  const allDirty = ref(false)
+  const dirtyFields = ref(new Set<Paths<TInput>>()) as Ref<Set<Paths<TInput>>>
 
 
   // COMPUTED STATE
@@ -62,9 +68,9 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     }, {} as Partial<Record<Paths<TInput>, string>>)
   })
 
-  const isDirty = computed(() => dirtyFields.value.size > 0)
+  const isDirty = computed(() => dirtyFields.value.size > 0 || allDirty.value)
 
-  const isTouched = computed(() => touchedFields.value.size > 0)
+  const isTouched = computed(() => touchedFields.value.size > 0 || allTouched.value)
 
   const isValid = computed(() => errors.value.length === 0)
 
@@ -79,11 +85,12 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   }
 
   const touchAllFields: TInstance['touchAllFields'] = () => {
-    deepKeys(values.value).forEach(path => touchedFields.value.add(path as Paths<TInput>))
+    allTouched.value = true
   }
 
   const unTouchAllFields: TInstance['unTouchAllFields'] = () => {
     touchedFields.value.clear()
+    allTouched.value = false
   }
 
 
@@ -97,11 +104,12 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   }
 
   const dirtyAllFields: TInstance['dirtyAllFields'] = () => {
-    deepKeys(values.value).forEach(path => dirtyFields.value.add(path as Paths<TInput>))
+    allDirty.value = true
   }
 
   const unDirtyAllFields: TInstance['unDirtyAllFields'] = () => {
     dirtyFields.value.clear()
+    allDirty.value = false
   }
 
 
@@ -248,16 +256,18 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     values.value = klona(initialValues)
     errors.value.splice(0, errors.value.length, ...klona(initialErrors))
 
-    unTouchAllFields()
-    unDirtyAllFields()
+    unTouchAllFields() // also resets isSubmitted
+    unDirtyAllFields() // also resets allDirty
   }
 
 
   // INSTANCE
-  const instance = {
+  const instance: TInstance = {
     initialValues,
     initialErrors,
+
     validateOn,
+    validationMode,
 
     values,
     setValue,
@@ -269,6 +279,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     touchAllFields,
     unTouchAllFields,
     isTouched,
+    allTouched,
 
     dirtyFields,
     dirtyField,
@@ -276,6 +287,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     dirtyAllFields,
     unDirtyAllFields,
     isDirty,
+    allDirty,
 
     errors,
     errorsMap,
@@ -293,10 +305,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     submit,
 
     reset,
-  } satisfies Omit<TInstance, 'instance'>
+  }
 
-  const resolvedInstance = instance as TInstance
-  resolvedInstance.instance = resolvedInstance
-
-  return resolvedInstance
+  return instance
 }
