@@ -27,11 +27,18 @@ export type NotFieldProps<
   path: TPath
   /** Optional form instance — takes priority over injected context */
   form?: NotFormInstance<TSchema>
+
+
   /**
    * Per-field validation trigger overrides.
    * Merged over the form-wide validateOn config — only the keys you specify are overridden.
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
+  /**
+   * The validation mode of the field.
+   * @default { eager: true }
+   */
+  validationMode?: Partial<Record<ValidationTrigger, boolean>>
 }
 
 /**
@@ -45,29 +52,36 @@ export type NotFieldInstance<
 > = {
   /** The dot-separated path to the field within the form state */
   path: TPath
-
+ 
   /** The current value of the field */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any
-
+ 
   /** Whether the field is currently being validated */
   isValidating: boolean
   /** Validates this field against the form schema */
   validate: () => ReturnType<NotFormInstance<TSchema>['validateField']>
-
+ 
   /** The validation issues for this field */
   errors: StandardSchemaV1.Issue[]
-
+ 
+  /** Whether this field has been touched by the user, or the form has been submitted. */
+  isTouched: boolean
+  /** Whether this field's current value differs from its initial value. */
+  isDirty: boolean
+  /** Whether this field is valid */
+  isValid: boolean
+ 
   /** Marks the field as touched */
   touch: () => void
   /** Marks the field as not touched */
   unTouch: () => void
-
+ 
   /** Marks the field as dirty */
   dirty: () => void
   /** Marks the field as not dirty */
   unDirty: () => void
-
+ 
   /**
    * All event handlers combined — spread directly onto native inputs.
    * @example <input v-bind="events" />
