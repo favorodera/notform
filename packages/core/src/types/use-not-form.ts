@@ -1,6 +1,6 @@
 import type { MaybeRefOrGetter } from 'vue'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { DeepPartial, ObjectSchema, ValidationTrigger } from './shared'
+import type { DeepPartial, ObjectSchema, ValidationTrigger, ValidationMode } from './shared'
 
 /**
  * Configuration options for initializing a new form instance.
@@ -19,10 +19,13 @@ export type UseNotFormConfig<TSchema extends ObjectSchema> = {
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
   /**
+   * The validation mode of the form.
+   * @default { eager: true }
+   */
+  validationMode?: Partial<Record<ValidationMode, boolean>>
+  /**
    * Callback triggered when form validation passes and the form is submitted.
    * @param values The validated output data from the schema.
    */
   onSubmit?: (values: StandardSchemaV1.InferOutput<TSchema>) => void | Promise<void>
 }
-
-
