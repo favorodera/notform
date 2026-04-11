@@ -6,7 +6,7 @@
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { getProperty } from 'dot-prop'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { NotFieldProps, NotFieldSlots, NotFieldInstance } from '../types/not-field'
+import type { NotFieldProps, NotFieldSlots } from '../types/not-field'
 import type { ObjectSchema, Paths } from '../types/shared'
 import { useNotFormInstance } from '../utils/instance-utils'
 
@@ -24,7 +24,7 @@ const formInstance = useNotFormInstance(props.form)
 const isValidating = ref(false)
 
 const path = computed(() => props.path)
-const value = computed(() => getProperty(formInstance.values.value, props.path) as NotFieldInstance<TSchema, TPath>['value'])
+const value = computed(() => getProperty(formInstance.values.value, props.path))
 const errors = computed(() => formInstance.getFieldErrors(path.value))
 
 
