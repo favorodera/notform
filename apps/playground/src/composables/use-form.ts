@@ -1,8 +1,7 @@
-import { defineStore } from 'pinia'
 import { z } from 'zod'
 import { useNotForm } from 'notform'
 
-export const useFormStore = defineStore('form', () => {
+export function useForm() {
   const form = useNotForm({
     schema: z.object({
       name: z.string().min(2, 'Name is too short'),
@@ -17,5 +16,5 @@ export const useFormStore = defineStore('form', () => {
     },
   })
 
-  return { form }
-})
+  return (form)
+}

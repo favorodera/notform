@@ -2,9 +2,6 @@
 import FormOne from './components/FormOne.vue'
 import FormTwo from './components/FormTwo.vue'
 import FormThree from './components/FormThree.vue'
-import { useFormStore } from './stores/form'
-
-const { form } = useFormStore()
 </script>
 
 <template>
@@ -15,12 +12,6 @@ const { form } = useFormStore()
       <FormOne />
       <FormTwo />
       <FormThree />
-    </div>
-
-    <div class="state-monitor">
-      <h3>Global State Monitor</h3>
-      <pre>Values: {{ form.values }}</pre>
-      <pre>Is Dirty: {{ form.isDirty }}</pre>
     </div>
   </main>
 </template>
@@ -38,7 +29,7 @@ const { form } = useFormStore()
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .forms-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -83,6 +74,13 @@ p {
 .mb-2 {
   margin-bottom: 0.5rem;
 }
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.mt-4 {
+  margin-top: 1rem;
+}
 button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
@@ -105,13 +103,13 @@ button[type="reset"]:hover {
 }
 .state-monitor {
   background: #f3f4f6;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
-.state-monitor h3 {
+.state-monitor h4 {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 pre {
   margin: 0.5rem 0;
