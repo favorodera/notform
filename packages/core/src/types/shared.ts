@@ -2,6 +2,13 @@ import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { PartialDeep, Paths as TypeFestPaths } from 'type-fest'
 
 /**
+ * The validation mode determines when validation occurs.
+ * - `lazy`: Validates on blur or submission.
+ * - `eager`: Validates on blur, then on every change if an error exists.
+ */
+export type ValidationMode = 'eager' | 'lazy'
+
+/**
  * Interaction events that can trigger a validation check for a field.
  * - onBlur: Trigger validation when the field loses focus.
  * - onChange: Trigger validation when the field value is committed.
