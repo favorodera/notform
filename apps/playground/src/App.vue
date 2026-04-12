@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
-import { NotForm, NotField, useNotForm } from 'notform'
+import { NotForm, NotField, useNotForm, NotMessage } from 'notform'
 
 const form = useNotForm({
   schema: z.object({
@@ -51,12 +51,12 @@ const form = useNotForm({
               placeholder="you@example.com"
             >
             <div class="field-footer">
-              <span
-                v-if="errors.length"
+              
+              <NotMessage
+                id="email-error"
+                path="email"
                 class="error-msg"
-              >
-                {{ errors[0]?.message }}
-              </span>
+              />
               <div class="field-status">
                 <span
                   v-if="isDirty"
@@ -89,12 +89,11 @@ const form = useNotForm({
               placeholder="••••••••"
             >
             <div class="field-footer">
-              <span
-                v-if="errors.length"
+              <NotMessage
+                id="password-error"
+                path="password"
                 class="error-msg"
-              >
-                {{ errors[0]?.message }}
-              </span>
+              />
               <span
                 v-if="isDirty"
                 class="status-tag"
