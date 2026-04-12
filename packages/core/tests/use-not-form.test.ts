@@ -22,13 +22,11 @@ describe('useNotForm', () => {
       setup: () => ({ form }),
       template: `
         <NotForm :form="form" @submit="form.submit" @reset="form.reset()">
-          <NotField :form="form" path="name" v-slot="{ events }">
+          <NotField path="name" v-slot="{ events }">
             <input id="name" v-model="form.values.name" v-bind="events" />
-            <span id="name-error">{{ form.errorsMap['name'] }}</span>
           </NotField>
-          <NotField :form="form" path="email" v-slot="{ events }">
+          <NotField path="email" v-slot="{ events }">
             <input id="email" v-model="form.values.email" v-bind="events" />
-            <span id="email-error">{{ form.errorsMap['email'] }}</span>
           </NotField>
           <button id="submit" type="submit">Submit</button>
           <button id="reset" type="reset">Reset</button>
@@ -251,6 +249,7 @@ describe('useNotForm', () => {
 
     expect(form.touchedFields.has('name')).toBe(true)
     expect(form.touchedFields.has('email')).toBe(true)
+
     expect(form.dirtyFields.has('name')).toBe(true)
     expect(form.dirtyFields.has('email')).toBe(true)
   })
