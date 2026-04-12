@@ -76,7 +76,11 @@ export type NotFieldSlotProps<TSchema extends ObjectSchema> = {
   /** The dot-separated path to this field. */
   path: string
 
-  /** The current value of this field. */
+  /**
+   * The current value of this field — read-only snapshot for display purposes.
+   * Do not mutate directly or use with `v-model`.
+   * For two-way binding use `v-model="form.values.fieldName"` instead.
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any
 
