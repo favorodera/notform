@@ -12,7 +12,8 @@ export const useFormStore = defineStore('form', () => {
       name: '',
       email: '',
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      await new Promise(resolve => setTimeout(resolve, 2000))
       alert(`Shared Form submitted: ${JSON.stringify(values)}`)
     },
   })
