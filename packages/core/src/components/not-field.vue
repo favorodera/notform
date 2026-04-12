@@ -38,7 +38,7 @@ const isValidating = ref(false)
 // DERIVED
 
 
-const value = computed(() => getProperty(form.values as Record<string, unknown>, props.path))
+const value = computed(() => getProperty(form.values, props.path))
 const errors = computed(() => form.getFieldErrors(props.path))
 const isValid = computed(() => errors.value.length === 0)
 const isTouched = computed(() => form.touchedFields.has(props.path))
@@ -56,7 +56,7 @@ const isDirty = computed(() => form.dirtyFields.has(props.path))
 const updateDirty = () => {
   const isClean = dequal(
     value.value,
-    getProperty(form.initialValues as Record<string, unknown>, props.path),
+    getProperty(form.initialValues, props.path),
   )
   if (isClean) form.dirtyFields.delete(props.path)
   else form.dirtyField(props.path)
