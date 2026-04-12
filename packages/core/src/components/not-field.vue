@@ -1,149 +1,138 @@
-<script setup lang="ts" generic="
-  TSchema extends ObjectSchema,
-  TPath extends Paths<StandardSchemaV1.InferInput<TSchema>>
-"
->
-import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+<script setup lang="ts" generic="TSchema extends ObjectSchema">
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { getProperty } from 'dot-prop'
-import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { NotFieldProps, NotFieldSlots } from '../types/not-field'
-import type { ObjectSchema, Paths } from '../types/shared'
+import type { NotFieldProps, NotFieldSlots, NotFieldSlotProps } from '../types/not-field'
+import type { ObjectSchema } from '../types/shared'
 import { useNotFormInstance } from '../utils/instance-utils'
 import { dequal } from 'dequal'
 
 defineOptions({ inheritAttrs: false })
-defineSlots<NotFieldSlots<TSchema, TPath>>()
+defineSlots<NotFieldSlots<TSchema>>()
 
-const props = defineProps<NotFieldProps<TSchema, TPath>>()
+const props = defineProps<NotFieldProps>()
 
 
-// BASELINE
-const formInstance = useNotFormInstance(props.form)
+// INSTANCE
+
+
+// Explicit :form prop takes priority over whatever NotForm ancestor provided
+const form = useNotFormInstance(props.form)
+
+
+// OPTIONS
+
+
+// Per-field validateOn is merged over the form-wide config — only specified keys are overridden
+const validateOn = computed(() => ({
+  ...form.validateOn,
+  ...props.validateOn,
+}))
 
 
 // STATE
+
+
 const isValidating = ref(false)
 
 
-// COMPUTED
-const path = computed(() => props.path)
+// DERIVED
 
-const value = computed(() => getProperty(formInstance.values.value, props.path))
-const errors = computed(() => formInstance.getFieldErrors(path.value))
 
-const isTouched = computed(() => formInstance.allTouched.value || formInstance.touchedFields.value?.has(path.value))
-const isDirty = computed(() => formInstance.allDirty.value || formInstance.dirtyFields.value?.has(path.value))
-
+const value = computed(() => getProperty(form.values as Record<string, unknown>, props.path))
+const errors = computed(() => form.getFieldErrors(props.path))
 const isValid = computed(() => errors.value.length === 0)
-
-// TOUCH
-const touch = () => formInstance.touchField(path.value)
-const unTouch = () => formInstance.unTouchField(path.value)
+const isTouched = computed(() => form.touchedFields.has(props.path))
+const isDirty = computed(() => form.dirtyFields.has(props.path))
 
 
-// DIRTY
-const dirty = () => formInstance.dirtyField(path.value)
-const unDirty = () => formInstance.unDirtyField(path.value)
+// DIRTY TRACKING
+
+
+/**
+ * Syncs dirty state on input or change.
+ * Reads the already-updated value (v-model writes before the event fires)
+ * and compares it against the field's initial value.
+ */
+const updateDirty = () => {
+  const isClean = dequal(
+    value.value,
+    getProperty(form.initialValues as Record<string, unknown>, props.path),
+  )
+  if (isClean) form.dirtyFields.delete(props.path)
+  else form.dirtyField(props.path)
+}
 
 
 // VALIDATION
+
+
 const validate = async () => {
   isValidating.value = true
   try {
-    return await formInstance.validateField(path.value)
-  }
-  finally {
+    return await form.validateField(props.path)
+  } finally {
     isValidating.value = false
   }
 }
 
 
-// TRIGGERS
-const validateOn = computed(() => ({
-  ...formInstance.validateOn,
-  ...props.validateOn,
-}))
+// EVENT HANDLERS
 
-const validationMode = computed(() => ({
-  ...formInstance.validationMode,
-  ...props.validationMode,
-}))
-
-/**
- * Handles input or change events on the field to avoid double validation loops.
- * @param eventType The type of event to handle.
- */
-const handleOnInputOrChange = (eventType: 'onInput' | 'onChange') => {
-  dirty()
-
-  const isFieldClean = dequal(value.value, getProperty(formInstance.initialValues, path.value))
-
-  if (isFieldClean) unDirty()
-  else dirty()
-
-  // Exit early if this event type isn't supposed to trigger validation
-  if (!validateOn.value[eventType] || validationMode.value.lazy) return
-
-  // Eager: validates if there are errors
-  if (validationMode.value.eager && errors.value.length > 0) {
-    validate()
-  }
-}
 
 const onBlur = () => {
-  touch()
+  form.touchField(props.path)
   if (validateOn.value.onBlur) validate()
 }
 
-const onChange = () => handleOnInputOrChange('onChange')
+const onInput = () => {
+  updateDirty()
+  if (!validateOn.value.onInput) return
+  // Eager mode: only revalidate if there is already an error to clear
+  if (form.validationMode.eager && errors.value.length > 0) validate()
+}
 
-const onInput = () => handleOnInputOrChange('onInput')
+const onChange = () => {
+  updateDirty()
+  if (!validateOn.value.onChange) return
+  if (form.validationMode.eager && errors.value.length > 0) validate()
+}
 
 const onFocus = () => {
   if (validateOn.value.onFocus) validate()
 }
 
-const events = computed(() => ({
-  onBlur,
-  onInput,
-  onChange,
-  onFocus,
-}))
+const events = computed(() => ({ onBlur, onInput, onChange, onFocus }))
 
 
-// INSTANCE
-const fieldInstance = reactive({
-  path,
+// LIFECYCLE
 
-  value,
-
-  isValidating,
-  validate,
-  isValid,
-
-  errors,
-  
-  touch,
-  unTouch,
-  isTouched,
-  
-  dirty,
-  unDirty,
-  isDirty,
-
-  events,
-  onBlur,
-  onInput,
-  onChange,
-  onFocus,
-}) // as NotFieldInstance<TSchema, TPath>
 
 onMounted(async () => {
   await nextTick()
   if (validateOn.value.onMount) validate()
 })
+
+
+// SLOT PROPS
+
+
+const slotProps = computed<NotFieldSlotProps<TSchema>>(() => ({
+  path: props.path,
+  value: value.value,
+  errors: errors.value,
+  isValid: isValid.value,
+  isTouched: isTouched.value,
+  isDirty: isDirty.value,
+  isValidating: isValidating.value,
+  validate,
+  events: events.value,
+  onBlur,
+  onInput,
+  onChange,
+  onFocus,
+}))
 </script>
 
 <template>
-  <slot v-bind="fieldInstance" />
+  <slot v-bind="slotProps" />
 </template>
