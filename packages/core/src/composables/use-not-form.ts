@@ -119,7 +119,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
       const path = issue.path.map(normalizeSegment).join('.') as Paths<TInput>
 
       if (path && !errorsByPath[path]) errorsByPath[path] = issue.message
-      
+
       return errorsByPath
     }, {} as Partial<Record<Paths<TInput>, string>>)
   })
@@ -195,7 +195,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
         setErrors([...result.issues])
         return { issues: result.issues }
       }
-      
+
       clearErrors()
       return { value: result.value }
     } finally {
