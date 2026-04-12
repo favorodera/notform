@@ -19,3 +19,8 @@ export type * from './types/not-field'
 // NotField component
 export { default as NotField } from './components/not-field.vue'
 
+// NotMessage component types
+export type * from './types/not-message'
+
+// NotMessage component
+export { default as NotMessage } from './components/not-message.vue'
