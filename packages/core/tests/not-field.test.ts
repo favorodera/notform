@@ -30,7 +30,7 @@ describe('NotField', () => {
       setup: () => ({ form, fieldProps }),
       template: `
           <NotForm :form="form" @submit="form.submit">
-          <NotField :form="form" path="name" v-bind="fieldProps" v-slot="{ events }">
+          <NotField path="name" v-bind="fieldProps" v-slot="{ events }">
             <input id="name" v-model="form.values.name" v-bind="events" />
           </NotField>
         </NotForm>
