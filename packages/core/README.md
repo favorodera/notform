@@ -1,29 +1,16 @@
-# vue-components-starter
+# notform
 
-A starter for creating a Vue component library.
+[![npm version](https://img.shields.io/npm/v/notform.svg?style=flat-square)](https://www.npmjs.com/package/notform)
+[![npm downloads](https://img.shields.io/npm/dm/notform.svg?style=flat-square)](https://www.npmjs.com/package/notform)
+[![license](https://img.shields.io/github/license/favorodera/notform.svg?style=flat-square)](https://github.com/favorodera/notform/blob/main/LICENSE)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/notform.svg?style=flat-square)](https://bundlephobia.com/package/notform)
 
-## Development
+**The core engine for "Vue Forms Without the Friction."**
 
-- Install dependencies:
+`notform` is the backbone of the NotForm ecosystem, providing the core composables and state management logic for building robust forms in Vue 3.
 
-```bash
-npm install
-```
+## Documentation
 
-- Run the playground:
+For detailed guides, API reference, and examples, visit:
+**[notform-docs.vercel.app](https://notform-docs.vercel.app/)**
 
-```bash
-npm run playground
-```
-
-- Run the unit tests:
-
-```bash
-npm run test
-```
-
-- Build the library:
-
-```bash
-npm run build
-```
