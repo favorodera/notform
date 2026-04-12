@@ -1,244 +1,360 @@
 <script setup lang="ts">
-import PiniaComponentA from './components/PiniaComponentA.vue'
-import PiniaComponentB from './components/PiniaComponentB.vue'
-import PiniaSingleton from './components/PiniaSingleton.vue'
+import { z } from 'zod'
+import { NotForm, NotField, useNotForm } from 'notform'
 
-import ComposableComponentA from './components/ComposableComponentA.vue'
-import ComposableComponentB from './components/ComposableComponentB.vue'
-import ComposableSingleton from './components/ComposableSingleton.vue'
-
-import { useFormStore } from './stores/form'
-import { useSharedForm } from './composables/use-form'
-
-const piniaForm = useFormStore().form
-const composableForm = useSharedForm()
+const form = useNotForm({
+  schema: z.object({
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    rememberMe: z.boolean().optional(),
+  }),
+  initialValues: {
+    email: '',
+    password: '',
+    rememberMe: false,
+  },
+  onSubmit: async (values) => {
+    // Simulate API call
+    form.isSubmitting.value = true
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    console.log('Form Submitted:', values)
+    alert('Submission Successful: ' + JSON.stringify(values, null, 2))
+    form.isSubmitting.value = false
+  },
+})
 </script>
 
 <template>
-  <main class="app-container">
-    <h1>Shared Form State Playground (V2)</h1>
-    
-    <!-- Pinia Shared Instance -->
-    <section class="mb-10">
-      <div class="header-flex">
-        <h2>Pinia Shared Instance</h2>
-        <span class="badge badge-blue">Pinia Store</span>
-      </div>
-      <div class="forms-grid">
-        <PiniaComponentA />
-        <PiniaComponentB />
-        <PiniaSingleton />
-      </div>
-      <div class="state-monitor mt-4">
-        <h4>Pinia Internal State</h4>
-        <div class="field-api-tags mb-3">
-          <span :class="['api-tag', piniaForm.isDirty ? 'tag-active' : '']">isDirty: {{ piniaForm.isDirty }}</span>
-          <span :class="['api-tag', piniaForm.isTouched ? 'tag-active' : '']">isTouched: {{ piniaForm.isTouched }}</span>
-          <span :class="['api-tag', !piniaForm.isValid ? 'tag-error' : 'tag-active']">isValid: {{ piniaForm.isValid }}</span>
-          <span :class="['api-tag', piniaForm.isSubmitting.value ? 'tag-loading' : '']">isSubmitting: {{ piniaForm.isSubmitting.value }}</span>
-          <span :class="['api-tag', piniaForm.isValidating.value ? 'tag-loading' : '']">isValidating: {{ piniaForm.isValidating.value }}</span>
-        </div>
-        <div class="state-split">
-          <pre>Values: {{ piniaForm.values }}</pre>
-          <pre>Errors: {{ piniaForm.errorsMap }}</pre>
-        </div>
-      </div>
-    </section>
+  <div class="playground-root">
+    <div class="form-container shadow-xl">
+      <header class="form-header">
+        <h1>NotForm <span class="v2-badge">V2</span></h1>
+        <p>Simple Local Instance Test</p>
+      </header>
 
-    <!-- Composable Shared Instance -->
-    <section>
-      <div class="header-flex">
-        <h2>Composable Shared Instance</h2>
-        <span class="badge badge-emerald">Vue Composable</span>
-      </div>
-      <div class="forms-grid">
-        <ComposableComponentA />
-        <ComposableComponentB />
-        <ComposableSingleton />
-      </div>
-      <div class="state-monitor mt-4">
-        <h4>Composable Internal State</h4>
-        <div class="field-api-tags mb-3">
-          <span :class="['api-tag', composableForm.isDirty ? 'tag-active' : '']">isDirty: {{ composableForm.isDirty }}</span>
-          <span :class="['api-tag', composableForm.isTouched ? 'tag-active' : '']">isTouched: {{ composableForm.isTouched }}</span>
-          <span :class="['api-tag', !composableForm.isValid ? 'tag-error' : 'tag-active']">isValid: {{ composableForm.isValid }}</span>
-          <span :class="['api-tag', composableForm.isSubmitting.value ? 'tag-loading' : '']">isSubmitting: {{ composableForm.isSubmitting.value }}</span>
-          <span :class="['api-tag', composableForm.isValidating.value ? 'tag-loading' : '']">isValidating: {{ composableForm.isValidating.value }}</span>
+      <NotForm
+        :form="form"
+        class="form-body"
+        @submit="form.submit"
+      >
+        <NotField
+          v-slot="{ events, errors, isDirty }"
+          path="email"
+        >
+          <div :class="['field-group', { 'has-error': errors.length }]">
+            <label for="email">Email Address</label>
+            <input
+              id="email"
+              v-model="form.values.email"
+              v-bind="events"
+              type="email"
+              placeholder="you@example.com"
+            >
+            <div class="field-footer">
+              <span
+                v-if="errors.length"
+                class="error-msg"
+              >
+                {{ errors[0]?.message }}
+              </span>
+              <div class="field-status">
+                <span
+                  v-if="isDirty"
+                  class="status-tag"
+                >
+                  Dirty
+                </span>
+                <span
+                  v-if="form.isValidating.value"
+                  class="status-tag pulse"
+                >
+                  Validating...
+                </span>
+              </div>
+            </div>
+          </div>
+        </NotField>
+
+        <NotField
+          v-slot="{ events, errors, isDirty }"
+          path="password"
+        >
+          <div :class="['field-group', { 'has-error': errors.length }]">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              v-model="form.values.password"
+              v-bind="events"
+              type="password"
+              placeholder="••••••••"
+            >
+            <div class="field-footer">
+              <span
+                v-if="errors.length"
+                class="error-msg"
+              >
+                {{ errors[0]?.message }}
+              </span>
+              <span
+                v-if="isDirty"
+                class="status-tag"
+              >
+                Modified
+              </span>
+            </div>
+          </div>
+        </NotField>
+
+        <NotField
+          v-slot="{ events }"
+          path="rememberMe"
+        >
+          <div class="checkbox-group">
+            <input
+              id="remember"
+              v-model="form.values.rememberMe"
+              v-bind="events"
+              type="checkbox"
+            >
+            <label for="remember">Remember this machine</label>
+          </div>
+        </NotField>
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn-submit"
+            :disabled="form.isSubmitting.value || !form.isValid"
+          >
+            <span v-if="form.isSubmitting.value">Processing...</span>
+            <span v-else>Sign In</span>
+          </button>
+          
+          <button
+            v-if="form.isDirty"
+            type="button"
+            class="btn-reset"
+            @click="form.reset()"
+          >
+            Reset Changes
+          </button>
         </div>
-        <div class="state-split">
-          <pre>Values: {{ composableForm.values }}</pre>
-          <pre>Errors: {{ composableForm.errorsMap }}</pre>
+      </NotForm>
+
+      <footer class="form-state-footer">
+        <div class="state-indicator">
+          <span>Form Dirty: <strong>{{ form.isDirty }}</strong></span>
+          <span>Form Valid: <strong>{{ form.isValid }}</strong></span>
         </div>
-      </div>
-    </section>
-  </main>
+      </footer>
+    </div>
+  </div>
 </template>
 
 <style>
-.app-container {
-  padding: 2rem;
-  font-family: sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.header-flex {
+/* Reset and Globals */
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2d3436;
+  height: 100vh;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  justify-content: center;
 }
-.header-flex h2 {
-  margin: 0;
-}
-.badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: white;
-}
-.badge-blue { background-color: #3b82f6; }
-.badge-emerald { background-color: #10b981; }
 
-.forms-grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-@media (min-width: 1024px) {
-  .forms-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-.component-box {
-  padding: 1.5rem;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 8px;
-  background-color: white;
-  min-height: 250px;
-}
-.border-emerald-500 { border-color: #10b981; }
-.border-blue-500 { border-color: #3b82f6; }
-.border-orange-500 { border-color: #f97316; }
-
-label {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-weight: bold;
-  margin-top: 1rem;
-}
-input {
+.playground-root {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.form-container {
+  background: white;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.form-header {
+  padding: 30px;
+  text-align: center;
+  background: #f8f9fa;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.form-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #2d3748;
+}
+
+.v2-badge {
+  background: #3182ce;
+  color: white;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  vertical-align: middle;
+}
+
+.form-header p {
+  margin: 8px 0 0;
+  color: #718096;
+  font-size: 14px;
+}
+
+.form-body {
+  padding: 30px;
+}
+
+.field-group {
+  margin-bottom: 20px;
+}
+
+.field-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.field-group input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s;
   box-sizing: border-box;
 }
-p {
-  color: #ef4444;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-  min-height: 1.25rem;
-  margin-bottom: 0;
-}
-.text-sm {
-  font-size: 0.875rem;
-}
-.text-gray-500 {
-  color: #6b7280;
-}
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-.mb-3 {
-  margin-bottom: 0.75rem;
-}
-.mb-10 {
-  margin-bottom: 3rem;
-}
-.my-4 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-.mt-4 {
-  margin-top: 1rem;
-}
-.mt-2 {
-  margin-top: 0.5rem;
-}
-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  font-weight: 500;
-}
-button:hover {
-  background-color: #2563eb;
-}
-button[type="reset"] {
-  background-color: #6b7280;
-}
-button[type="reset"]:hover {
-  background-color: #4b5563;
+
+.field-group input:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
 }
 
-/* API Tags */
-.field-api-tags {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-.api-tag {
-  font-size: 0.7rem;
-  padding: 0.15rem 0.4rem;
-  border-radius: 4px;
-  background-color: #f3f4f6;
-  color: #6b7280;
-  border: 1px solid #d1d5db;
-  font-family: monospace;
-}
-.tag-active {
-  background-color: #dbeafe;
-  color: #2563eb;
-  border-color: #bfdbfe;
-}
-.tag-error {
-  background-color: #fee2e2;
-  color: #dc2626;
-  border-color: #fecaca;
-}
-.tag-loading {
-  background-color: #fef3c7;
-  color: #d97706;
-  border-color: #fde68a;
+.field-group.has-error input {
+  border-color: #e53e3e;
 }
 
-.state-monitor {
-  background: #f3f4f6;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-}
-.state-monitor h4 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-.state-split {
+.field-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 6px;
+  min-height: 20px;
 }
-pre {
-  margin: 0;
-  white-space: pre-wrap;
-  font-family: monospace;
+
+.error-msg {
+  color: #e53e3e;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.field-status {
+  display: flex;
+  gap: 8px;
+}
+
+.status-tag {
+  font-size: 10px;
+  background: #ebf8ff;
+  color: #2b6cb0;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pulse {
+  animation: pulse-animation 1s infinite alternate;
+}
+
+@keyframes pulse-animation {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.checkbox-group input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-group label {
+  font-size: 14px;
+  color: #4a5568;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #2b6cb0;
+}
+
+.btn-submit:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.btn-reset {
+  background: transparent;
+  color: #718096;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.form-state-footer {
+  padding: 15px 30px;
+  background: #fdfdfd;
+  border-top: 1px solid #edf2f7;
+}
+
+.state-indicator {
+  display: flex;
+  justify-content: space-around;
+  font-size: 11px;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.state-indicator strong {
+  color: #4a5568;
 }
 </style>
