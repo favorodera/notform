@@ -1,5 +1,30 @@
 # Changelog
 
+## v2.0.0-alpha.4...v2.0.0-alpha.5
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.4...v2.0.0-alpha.5)
+
+### Added
+
+- Export NotMessage component and its types ([1a3164a](https://github.com/favorodera/notform/commit/1a3164a))
+- Add NotMessage component ([1bbe563](https://github.com/favorodera/notform/commit/1bbe563))
+- Add NotMessage component types ([7548cc6](https://github.com/favorodera/notform/commit/7548cc6))
+
+### Refactors
+
+- Remove redundant type assertions for form values ([be0db65](https://github.com/favorodera/notform/commit/be0db65))
+- Remove unnecessary 'form' prop from NotField ([7850b98](https://github.com/favorodera/notform/commit/7850b98))
+- Simplify NotField usage by removing explicit form prop ([b49b859](https://github.com/favorodera/notform/commit/b49b859))
+
+### Documentation
+
+- Revamp README for NotForm project ([e9b9463](https://github.com/favorodera/notform/commit/e9b9463))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-alpha.3...v2.0.0-alpha.4
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.3...v2.0.0-alpha.4)
