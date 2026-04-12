@@ -1,5 +1,60 @@
 # Changelog
 
+## v2.0.0-alpha.3...v2.0.0-alpha.4
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.3...v2.0.0-alpha.4)
+
+### Added
+
+- Configure tsdown to not bundle common dependencies ([cbd5b02](https://github.com/favorodera/notform/commit/cbd5b02))
+- Add validationMode option to UseNotFormConfig ([5c15c76](https://github.com/favorodera/notform/commit/5c15c76))
+- Introduce ValidationMode type ([2cb9b32](https://github.com/favorodera/notform/commit/2cb9b32))
+- Add validation mode and form state flags to NotFormInstance ([5949fa4](https://github.com/favorodera/notform/commit/5949fa4))
+- Enhance NotField with validationMode and state flags ([d9179fb](https://github.com/favorodera/notform/commit/d9179fb))
+- Add validationMode and simplify all fields tracking in useNotForm ([af09d86](https://github.com/favorodera/notform/commit/af09d86))
+- Enhance NotField with validation modes and state tracking ([16a0e49](https://github.com/favorodera/notform/commit/16a0e49))
+
+### Fixed
+
+- Prevent inject from throwing error when key is not found ([29e7244](https://github.com/favorodera/notform/commit/29e7244))
+
+### Refactors
+
+- Simplify NotField type handling ([292ee00](https://github.com/favorodera/notform/commit/292ee00))
+- Optimize array mutations in `useNotForm` error handling ([1cc7333](https://github.com/favorodera/notform/commit/1cc7333))
+- Streamline NotFormInstance API and enhance documentation ([069953f](https://github.com/favorodera/notform/commit/069953f))
+- Streamline NotField component types and API ([cc9ba51](https://github.com/favorodera/notform/commit/cc9ba51))
+- Improve useNotForm composable reactivity and utilities ([56fd40e](https://github.com/favorodera/notform/commit/56fd40e))
+
+  This commit refactors the `useNotForm` composable to enhance its reactivity and introduce several new utility functions.
+  Key changes include:
+  - **Reactive State Management**: Replaced `ref()` with `reactive()` for `values`, `errors`, `touchedFields`, and `dirtyFields` to ensure better compatibility with Pinia and maintain consistent reactivity. `values` is now directly reactive, allowing for cleaner access like `form.values.email`.
+  - **New Utility Functions**:
+      - `runSchema()`: Validates the schema against the current form values.
+      - `touchAllFields()`: Marks all current leaf paths as touched.
+      - `dirtyAllFields()`: Marks all current leaf paths as dirty.
+      - `unDirtyField()`: Removes a path from the dirty set without public exposure.
+  - **Improved `setValue`**: The `setValue` function now correctly updates the `values` object, touches the field, and manages the dirty state based on comparison with `initialValues`. It also triggers validation on change if configured.
+  - **Enhanced Error Handling**: The `setError` and `setErrors` functions now correctly update the reactive `errors` array. `getFieldErrors` is more robust in path comparison.
+  - **Refined Validation**: `validateField` now correctly removes stale errors for the specific field before re-validating, ensuring accurate error reporting.
+  - **Reset Functionality**: The `reset` function has been improved to handle the replacement of `initialValues` and `initialErrors` more effectively, including updating the `values` object in-place to preserve reactive bindings. It also clears touched and dirty fields.
+  - **MarkRaw Instance**: The returned `NotFormInstance` is now marked as raw to prevent Vue from deeply unwrapping it, maintaining the intended reactive structure.
+  - **Removed Redundant State**: Removed `allTouched` and `allDirty` refs as their functionality is now handled by checking the size of `touchedFields` and `dirtyFields` respectively.
+  - **Code Cleanup**: Various minor code improvements for clarity and consistency.
+
+- Streamline NotForm generic types and form instance prop ([8853dc7](https://github.com/favorodera/notform/commit/8853dc7))
+- Simplify NotField generics and internal logic ([96af8b8](https://github.com/favorodera/notform/commit/96af8b8))
+
+### Documentation
+
+- Improve JSDoc comments and error message for NotForm instance utilities ([e7be8d7](https://github.com/favorodera/notform/commit/e7be8d7))
+- Add usage guidance for NotFieldSlotProps value prop ([26707cc](https://github.com/favorodera/notform/commit/26707cc))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-alpha.2...v2.0.0-alpha.3
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.2...v2.0.0-alpha.3)
