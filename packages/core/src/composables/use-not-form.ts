@@ -278,16 +278,21 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     if (newErrors) initialErrors = klona(newErrors)
 
     const freshValues = klona(initialValues)
+    const current = values
 
-    // Remove leaf paths that no longer exist in the new baseline
-    deepKeys(values).forEach((path) => {
-      if (!hasProperty(freshValues, path)) deleteProperty(values, path)
-    })
+    // Remove top-level keys no longer present in the baseline
+    for (const key of Object.keys(current)) {
+      if (!hasProperty(freshValues, key)) {
+        deleteProperty(values, key)
+      }
+    }
 
-    // Write new leaf values in-place so existing reactive bindings stay connected
-    deepKeys(freshValues).forEach((path) => {
-      setProperty(values, path, getProperty(freshValues, path))
-    })
+    // Restore baseline — top-level assignment lets Vue's reactive() re-wrap
+    // nested structures and avoids sparse-array holes that arise from
+    // leaf-by-leaf array element deletion
+    for (const key of Object.keys(freshValues)) {
+      setProperty(values, key, getProperty(freshValues, key))
+    }
 
     errors.splice(0, errors.length, ...klona(initialErrors))
     touchedFields.clear()
