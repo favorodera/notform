@@ -37,7 +37,7 @@ const slotProps = computed<NotMessageSlotProps>(() => ({
     <component
       :is="props.as"
       v-bind="attributes"
-      v-show="message"
+      v-if="message"
     >
       {{ message }}
     </component>
