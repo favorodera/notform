@@ -1,359 +1,167 @@
 <script setup lang="ts">
 import { z } from 'zod'
-import { NotForm, NotField, useNotForm, NotMessage } from 'notform'
+import { NotForm, NotField, NotArrayField, useNotForm } from 'notform'
+
+const userSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  age: z.number().min(18, 'Must be at least 18').optional(),
+})
 
 const form = useNotForm({
   schema: z.object({
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-    rememberMe: z.boolean().optional(),
+    users: z.array(userSchema).min(1, 'At least one user is required'),
   }),
   initialValues: {
-    email: '',
-    password: '',
-    rememberMe: false,
+    users: [{ name: '', age: 18 }],
   },
-  onSubmit: async (values) => {
-    // Simulate API call
-    form.isSubmitting.value = true
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    console.log('Form Submitted:', values)
-    alert('Submission Successful: ' + JSON.stringify(values, null, 2))
-    form.isSubmitting.value = false
+  onSubmit: (values) => {
+    console.log('Submitted:', values)
   },
 })
 </script>
 
 <template>
-  <div class="playground-root">
-    <div class="form-container shadow-xl">
-      <header class="form-header">
-        <h1>NotForm <span class="v2-badge">V2</span></h1>
-        <p>Simple Local Instance Test</p>
-      </header>
-
-      <NotForm
-        :form="form"
-        class="form-body"
-        @submit="form.submit"
+  <div style="padding: 2rem; max-width: 800px; margin: 0 auto; font-family: sans-serif;">
+    <h1>NotArrayField Test</h1>
+    <NotForm
+      :form="form"
+      @submit="form.submit"
+    >
+      <NotArrayField
+        v-slot="{ items, append, remove, swap, move, insert, prepend, update }"
+        path="users"
+        :item-schema="userSchema"
       >
-        <NotField
-          v-slot="{ events, errors, isDirty,path }"
-          path="email"
+        <div style="margin-bottom: 2rem;">
+          <button
+            type="button"
+            @click="append({ name: '', age: 18 })"
+          >
+            Append User
+          </button>
+          <button
+            type="button"
+            @click="prepend({ name: 'First', age: 20 })"
+          >
+            Prepend
+          </button>
+          <button
+            type="button"
+            @click="insert(1, { name: 'Inserted', age: 25 })"
+          >
+            Insert at 1
+          </button>
+        </div>
+
+        <div
+          v-for="(item, index) in items"
+          :key="item.key"
+          style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;"
         >
-          <div :class="['field-group', { 'has-error': errors.length }]">
-            <label :for="path">Email Address</label>
-            <input
-              :id="path"
-              v-model="form.values.email"
-              v-bind="events"
-              type="email"
-              placeholder="you@example.com"
-            >
-            <div class="field-footer">
-              
-              <NotMessage
-                :id="path + '-error'"
-                :path="path"
-                class="error-msg"
-              />
-              <div class="field-status">
-                <span
-                  v-if="isDirty"
-                  class="status-tag"
-                >
-                  Dirty
-                </span>
-                <span
-                  v-if="form.isValidating.value"
-                  class="status-tag pulse"
-                >
-                  Validating...
-                </span>
+          <h3>User {{ index }}</h3>
+          
+          <NotField
+            v-slot="{ events, errors }"
+            :path="`${item.path}.name`"
+          >
+            <div style="margin-bottom: 1rem;">
+              <label style="display: block; margin-bottom: 0.5rem;">Name:</label>
+              <input
+                v-model="form.values.users[index].name"
+                v-bind="events"
+                type="text"
+                style="padding: 0.5rem; width: 100%; box-sizing: border-box;"
+              >
+              <div
+                v-if="errors.length"
+                style="color: red; font-size: 0.8rem; margin-top: 0.2rem;"
+              >
+                {{ errors[0] }}
               </div>
             </div>
-          </div>
-        </NotField>
+          </NotField>
 
-        <NotField
-          v-slot="{ events, errors, isDirty,path,}"
-          path="password"
-        >
-          <div :class="['field-group', { 'has-error': errors.length }]">
-            <label :for="path">Password</label>
-            <input
-              :id="path"
-              v-model="form.values.password"
-              v-bind="events"
-              type="password"
-              placeholder="••••••••"
-            >
-            <div class="field-footer">
-              <NotMessage
-                :id="path + '-error'"
-                :path="path"
-                class="error-msg"
-              />
-              <span
-                v-if="isDirty"
-                class="status-tag"
+          <NotField
+            v-slot="{ events, errors }"
+            :path="`${item.path}.age`"
+          >
+            <div style="margin-bottom: 1rem;">
+              <label style="display: block; margin-bottom: 0.5rem;">Age:</label>
+              <input
+                v-model.number="form.values.users[index].age"
+                v-bind="events"
+                type="number"
+                style="padding: 0.5rem; width: 100%; box-sizing: border-box;"
               >
-                Modified
-              </span>
+              <div
+                v-if="errors.length"
+                style="color: red; font-size: 0.8rem; margin-top: 0.2rem;"
+              >
+                {{ errors[0] }}
+              </div>
             </div>
-          </div>
-        </NotField>
+          </NotField>
 
-        <NotField
-          v-slot="{ events }"
-          path="rememberMe"
-        >
-          <div class="checkbox-group">
-            <input
-              id="remember"
-              v-model="form.values.rememberMe"
-              v-bind="events"
-              type="checkbox"
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button
+              type="button"
+              @click="remove(index)"
             >
-            <label for="remember">Remember this machine</label>
+              Remove
+            </button>
+            <button
+              type="button"
+              :disabled="index === 0"
+              @click="swap(index, index - 1)"
+            >
+              Swap Up
+            </button>
+            <button
+              type="button"
+              :disabled="index === items.length - 1"
+              @click="swap(index, index + 1)"
+            >
+              Swap Down
+            </button>
+            <button
+              type="button"
+              :disabled="index === 0"
+              @click="move(index, 0)"
+            >
+              Move to Top
+            </button>
+            <button
+              type="button"
+              @click="update(index, { name: 'Updated', age: 99 })"
+            >
+              Update to 99
+            </button>
           </div>
-        </NotField>
-
-        <div class="form-actions">
-          <button
-            type="submit"
-            class="btn-submit"
-            :disabled="form.isSubmitting.value || !form.isValid"
-          >
-            <span v-if="form.isSubmitting.value">Processing...</span>
-            <span v-else>Sign In</span>
-          </button>
-          
-          <button
-            v-if="form.isDirty"
-            type="button"
-            class="btn-reset"
-            @click="form.reset()"
-          >
-            Reset Changes
-          </button>
         </div>
-      </NotForm>
+      </NotArrayField>
 
-      <footer class="form-state-footer">
-        <div class="state-indicator">
-          <span>Form Dirty: <strong>{{ form.isDirty }}</strong></span>
-          <span>Form Valid: <strong>{{ form.isValid }}</strong></span>
-        </div>
-      </footer>
-    </div>
+      <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+        <button
+          type="submit"
+          style="padding: 0.5rem 2rem; background: blue; color: white; border: none; cursor: pointer;"
+        >
+          Submit
+        </button>
+        <button
+          type="button"
+          style="padding: 0.5rem 2rem;"
+          @click="form.reset()"
+        >
+          Reset
+        </button>
+      </div>
+
+      <pre style="margin-top: 2rem; background: #eee; padding: 1rem; overflow: auto; max-height: 400px; font-size: 0.9rem;">
+isValid: {{ form.isValid }}
+isDirty: {{ form.isDirty }}
+values: {{ JSON.stringify(form.values, null, 2) }}
+errors: {{ JSON.stringify(form.errors, null, 2) }}
+      </pre>
+    </NotForm>
   </div>
 </template>
-
-<style>
-/* Reset and Globals */
-body {
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #2d3436;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.playground-root {
-  min-width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-}
-
-.form-container {
-  background: white;
-  width: 100%;
-  max-width: 450px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
-
-.form-header {
-  padding: 30px;
-  text-align: center;
-  background: #f8f9fa;
-  border-bottom: 1px solid #edf2f7;
-}
-
-.form-header h1 {
-  margin: 0;
-  font-size: 24px;
-  color: #2d3748;
-}
-
-.v2-badge {
-  background: #3182ce;
-  color: white;
-  font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 99px;
-  vertical-align: middle;
-}
-
-.form-header p {
-  margin: 8px 0 0;
-  color: #718096;
-  font-size: 14px;
-}
-
-.form-body {
-  padding: 30px;
-}
-
-.field-group {
-  margin-bottom: 20px;
-}
-
-.field-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: #4a5568;
-}
-
-.field-group input {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.2s;
-  box-sizing: border-box;
-}
-
-.field-group input:focus {
-  outline: none;
-  border-color: #3182ce;
-  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
-}
-
-.field-group.has-error input {
-  border-color: #e53e3e;
-}
-
-.field-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 6px;
-  min-height: 20px;
-}
-
-.error-msg {
-  color: #e53e3e;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.field-status {
-  display: flex;
-  gap: 8px;
-}
-
-.status-tag {
-  font-size: 10px;
-  background: #ebf8ff;
-  color: #2b6cb0;
-  padding: 1px 6px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.pulse {
-  animation: pulse-animation 1s infinite alternate;
-}
-
-@keyframes pulse-animation {
-  from { opacity: 0.5; }
-  to { opacity: 1; }
-}
-
-.checkbox-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.checkbox-group input {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-.checkbox-group label {
-  font-size: 14px;
-  color: #4a5568;
-  cursor: pointer;
-}
-
-.form-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.btn-submit {
-  width: 100%;
-  padding: 14px;
-  background: #3182ce;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-submit:hover:not(:disabled) {
-  background: #2b6cb0;
-}
-
-.btn-submit:disabled {
-  background: #cbd5e0;
-  cursor: not-allowed;
-}
-
-.btn-reset {
-  background: transparent;
-  color: #718096;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.form-state-footer {
-  padding: 15px 30px;
-  background: #fdfdfd;
-  border-top: 1px solid #edf2f7;
-}
-
-.state-indicator {
-  display: flex;
-  justify-content: space-around;
-  font-size: 11px;
-  color: #a0aec0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.state-indicator strong {
-  color: #4a5568;
-}
-</style>
