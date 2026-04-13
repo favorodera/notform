@@ -46,7 +46,7 @@ describe('NotField', () => {
   test('validates on blur when onBlur is enabled', async () => {
     const { form, wrapper } = mountForm({ validateOn: { onBlur: true } })
     
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
     
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
@@ -55,7 +55,7 @@ describe('NotField', () => {
   test('does not validate on blur when onBlur is disabled', async () => {
     const { form, wrapper } = mountForm()
     
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
     
     expect(form.getFieldErrors('name').length).toBe(0)
@@ -68,7 +68,7 @@ describe('NotField', () => {
   test('validates on focus when onFocus is enabled', async () => {
     const { form, wrapper } = mountForm({ validateOn: { onFocus: true } })
 
-    await wrapper.find('#name').trigger('focus')
+    await wrapper.get('#name').trigger('focus')
     await flushPromises()
     
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
@@ -77,7 +77,7 @@ describe('NotField', () => {
   test('does not validate on focus when onFocus is disabled', async () => {
     const { form, wrapper } = mountForm()
     
-    await wrapper.find('#name').trigger('focus')
+    await wrapper.get('#name').trigger('focus')
     await flushPromises()
     
     expect(form.getFieldErrors('name').length).toBe(0)
@@ -91,12 +91,12 @@ describe('NotField', () => {
     const { form, wrapper } = mountForm({ validateOn: { onInput: true } })
 
     // Blur to trigger errors
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
 
     // setValue sets the DOM value and fires the input event together
-    await wrapper.find('#name').setValue('Jane')
+    await wrapper.get('#name').setValue('Jane')
     await flushPromises()
     expect(form.getFieldErrors('name').length).toBe(0)
   })
@@ -104,13 +104,13 @@ describe('NotField', () => {
   test('does not revalidate on input when onInput is disabled', async () => {
     const { form, wrapper } = mountForm({ validateOn: { onBlur: true, onInput: false, onChange: false } })
 
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
 
     const errorsBefore = form.getFieldErrors('name').length
     expect(errorsBefore).toBeGreaterThan(0)
 
-    await wrapper.find('#name').setValue('Jane')
+    await wrapper.get('#name').setValue('Jane')
     await flushPromises()
     expect(form.getFieldErrors('name').length).toEqual(errorsBefore)
   })
@@ -118,11 +118,11 @@ describe('NotField', () => {
   test('revalidates on change in eager mode when errors exist', async () => {
     const { form, wrapper } = mountForm({ validateOn: { onChange: true } })
 
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
 
-    await wrapper.find('#name').setValue('Jane')
+    await wrapper.get('#name').setValue('Jane')
     await flushPromises()
     expect(form.getFieldErrors('name').length).toBe(0)
   })
@@ -130,12 +130,12 @@ describe('NotField', () => {
   test('does not revalidate on change when onChange is disabled', async () => {
     const { form, wrapper } = mountForm({ validateOn: { onBlur: true, onChange: false, onInput: false } })
 
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
     const errorsBefore = form.getFieldErrors('name').length
     expect(errorsBefore).toBeGreaterThan(0)
 
-    await wrapper.find('#name').setValue('Jane')
+    await wrapper.get('#name').setValue('Jane')
     await flushPromises()
     expect(form.getFieldErrors('name').length).toBe(errorsBefore)
   })
@@ -147,7 +147,7 @@ describe('NotField', () => {
   test('per-field override enables a trigger disabled at form level', async () => {
     const { form, wrapper } = mountForm({ }, { validateOn: { onBlur: true } })
 
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
 
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
@@ -156,7 +156,7 @@ describe('NotField', () => {
   test('per-field override disables a trigger enabled at form level', async () => {
     const { form, wrapper } = mountForm({ validateOn: { onBlur: true } }, { validateOn: { onBlur: false } })
 
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
 
     expect(form.getFieldErrors('name').length).toBe(0)
@@ -199,7 +199,7 @@ describe('NotField', () => {
       `,
     })
 
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
 
     expect(form.touchedFields.has('name')).toBe(true)
@@ -222,7 +222,7 @@ describe('NotField', () => {
       `,
     })
 
-    await wrapper.find('#name').trigger('blur')
+    await wrapper.get('#name').trigger('blur')
     await flushPromises()
 
     expect(secondaryForm.touchedFields.has('name')).toBe(true)
