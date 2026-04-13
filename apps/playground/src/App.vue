@@ -76,13 +76,13 @@ const form = useNotForm({
         </NotField>
 
         <NotField
-          v-slot="{ events, errors, isDirty }"
+          v-slot="{ events, errors, isDirty,path }"
           path="password"
         >
           <div :class="['field-group', { 'has-error': errors.length }]">
-            <label for="password">Password</label>
+            <label :for="path">Password</label>
             <input
-              id="password"
+              :id="path"
               v-model="form.values.password"
               v-bind="events"
               type="password"
@@ -90,8 +90,8 @@ const form = useNotForm({
             >
             <div class="field-footer">
               <NotMessage
-                id="password-error"
-                path="password"
+                :id="path + '-error'"
+                :path="path"
                 class="error-msg"
               />
               <span
@@ -165,7 +165,7 @@ body {
 }
 
 .playground-root {
-  width: 100%;
+  min-width: 100%;
   display: flex;
   justify-content: center;
   padding: 20px;
