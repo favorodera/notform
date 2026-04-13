@@ -38,13 +38,13 @@ const form = useNotForm({
         @submit="form.submit"
       >
         <NotField
-          v-slot="{ events, errors, isDirty }"
+          v-slot="{ events, errors, isDirty,path }"
           path="email"
         >
           <div :class="['field-group', { 'has-error': errors.length }]">
-            <label for="email">Email Address</label>
+            <label :for="path">Email Address</label>
             <input
-              id="email"
+              :id="path"
               v-model="form.values.email"
               v-bind="events"
               type="email"
@@ -53,8 +53,8 @@ const form = useNotForm({
             <div class="field-footer">
               
               <NotMessage
-                id="email-error"
-                path="email"
+                :id="path + '-error'"
+                :path="path"
                 class="error-msg"
               />
               <div class="field-status">
