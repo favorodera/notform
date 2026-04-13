@@ -76,7 +76,7 @@ const form = useNotForm({
         </NotField>
 
         <NotField
-          v-slot="{ events, errors, isDirty,path }"
+          v-slot="{ events, errors, isDirty,path,}"
           path="password"
         >
           <div :class="['field-group', { 'has-error': errors.length }]">
