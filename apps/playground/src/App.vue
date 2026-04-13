@@ -1,167 +1,398 @@
 <script setup lang="ts">
+import { nextTick, ref } from 'vue'
 import { z } from 'zod'
-import { NotForm, NotField, NotArrayField, useNotForm } from 'notform'
+import { NotForm, NotField, NotArrayField, NotMessage, useNotForm } from 'notform'
 
-const userSchema = z.object({
+const tagSchema = z.string().min(1, 'Tag cannot be empty')
+
+const schema = z.object({
   name: z.string().min(1, 'Name is required'),
-  age: z.number().min(18, 'Must be at least 18').optional(),
+  email: z.string().email('Invalid email'),
+  tags: z.array(tagSchema).min(1, 'At least one tag is required'),
 })
+
+const submissionResult = ref<unknown>(null)
 
 const form = useNotForm({
-  schema: z.object({
-    users: z.array(userSchema).min(1, 'At least one user is required'),
-  }),
-  initialValues: {
-    users: [{ name: '', age: 18 }],
-  },
+  schema,
   onSubmit: (values) => {
-    console.log('Submitted:', values)
+    submissionResult.value = values
   },
 })
+
+const handleReset = async () => {
+  form.reset()
+  await nextTick()
+  submissionResult.value = null
+}
 </script>
 
 <template>
-  <div style="padding: 2rem; max-width: 800px; margin: 0 auto; font-family: sans-serif;">
-    <h1>NotArrayField Test</h1>
-    <NotForm
-      :form="form"
-      @submit="form.submit"
-    >
-      <NotArrayField
-        v-slot="{ items, append, remove, swap, move, insert, prepend, update }"
-        path="users"
-        :item-schema="userSchema"
+  <div class="playground">
+    <div class="card">
+      <header class="card-header">
+        <h1>Contact Form (v2)</h1>
+        <p>A simple demonstration of NotForm v2.</p>
+      </header>
+
+      <NotForm
+        :form="form"
+        class="form-layout"
+        @submit="form.submit"
+        @reset="handleReset"
       >
-        <div style="margin-bottom: 2rem;">
-          <button
-            type="button"
-            @click="append({ name: '', age: 18 })"
+        <!-- Name Field -->
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <NotField
+            v-slot="{ events }"
+            path="name"
           >
-            Append User
-          </button>
-          <button
-            type="button"
-            @click="prepend({ name: 'First', age: 20 })"
-          >
-            Prepend
-          </button>
-          <button
-            type="button"
-            @click="insert(1, { name: 'Inserted', age: 25 })"
-          >
-            Insert at 1
-          </button>
+            <input
+              v-bind="events"
+              id="name"
+              v-model="form.values.name"
+              type="text"
+              placeholder="e.g. John Doe"
+              class="form-input"
+            >
+            <NotMessage
+              path="name"
+              class="error-message"
+            />
+          </NotField>
         </div>
 
-        <div
-          v-for="(item, index) in items"
-          :key="item.key"
-          style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;"
-        >
-          <h3>User {{ index }}</h3>
-          
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email">Email Address</label>
           <NotField
-            v-slot="{ events, errors }"
-            :path="`${item.path}.name`"
+            v-slot="{ events }"
+            path="email"
           >
-            <div style="margin-bottom: 1rem;">
-              <label style="display: block; margin-bottom: 0.5rem;">Name:</label>
-              <input
-                v-model="form.values.users[index]!.name"
-                v-bind="events"
-                type="text"
-                style="padding: 0.5rem; width: 100%; box-sizing: border-box;"
-              >
-              <div
-                v-if="errors.length"
-                style="color: red; font-size: 0.8rem; margin-top: 0.2rem;"
-              >
-                {{ errors[0] }}
-              </div>
-            </div>
+            <input
+              v-bind="events"
+              id="email"
+              v-model="form.values.email"
+              type="email"
+              placeholder="e.g. john@example.com"
+              class="form-input"
+            >
+            <NotMessage
+              path="email"
+              class="error-message"
+            />
           </NotField>
-
-          <NotField
-            v-slot="{ events, errors }"
-            :path="`${item.path}.age`"
-          >
-            <div style="margin-bottom: 1rem;">
-              <label style="display: block; margin-bottom: 0.5rem;">Age:</label>
-              <input
-                v-model.number="form.values.users[index]!.age"
-                v-bind="events"
-                type="number"
-                style="padding: 0.5rem; width: 100%; box-sizing: border-box;"
-              >
-              <div
-                v-if="errors.length"
-                style="color: red; font-size: 0.8rem; margin-top: 0.2rem;"
-              >
-                {{ errors[0] }}
-              </div>
-            </div>
-          </NotField>
-
-          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            <button
-              type="button"
-              @click="remove(index)"
-            >
-              Remove
-            </button>
-            <button
-              type="button"
-              :disabled="index === 0"
-              @click="swap(index, index - 1)"
-            >
-              Swap Up
-            </button>
-            <button
-              type="button"
-              :disabled="index === items.length - 1"
-              @click="swap(index, index + 1)"
-            >
-              Swap Down
-            </button>
-            <button
-              type="button"
-              :disabled="index === 0"
-              @click="move(index, 0)"
-            >
-              Move to Top
-            </button>
-            <button
-              type="button"
-              @click="update(index, { name: 'Updated', age: 99 })"
-            >
-              Update to 99
-            </button>
-          </div>
         </div>
-      </NotArrayField>
 
-      <div style="margin-top: 2rem; display: flex; gap: 1rem;">
-        <button
-          type="submit"
-          style="padding: 0.5rem 2rem; background: blue; color: white; border: none; cursor: pointer;"
-        >
-          Submit
-        </button>
-        <button
-          type="button"
-          style="padding: 0.5rem 2rem;"
-          @click="form.reset()"
-        >
-          Reset
-        </button>
-      </div>
+        <!-- Tags Array Field -->
+        <div class="form-group">
+          <label>Interest Tags</label>
+          <NotArrayField
+            v-slot="{ items, append, remove }"
+            path="tags"
+            :item-schema="tagSchema"
+          >
+            <div class="tags-list">
+              <div
+                v-for="(item, index) in items"
+                :key="item.key"
+                class="tag-item"
+              >
+                <NotField
+                  v-slot="{ events }"
+                  :path="item.path"
+                >
+                  <div class="input-with-action">
+                    <input
+                      v-bind="events"
+                      v-model="form.values.tags[index]"
+                      type="text"
+                      placeholder="Tag name"
+                      class="form-input"
+                    >
+                    <button
+                      type="button"
+                      class="btn-icon"
+                      title="Remove Tag"
+                      @click="remove(index)"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                  <NotMessage
+                    :path="item.path"
+                    class="error-message"
+                  />
+                </NotField>
+              </div>
+            </div>
 
-      <pre style="margin-top: 2rem; background: #eee; padding: 1rem; overflow: auto; max-height: 400px; font-size: 0.9rem;">
-isValid: {{ form.isValid }}
-isDirty: {{ form.isDirty }}
-values: {{ JSON.stringify(form.values, null, 2) }}
-errors: {{ JSON.stringify(form.errors, null, 2) }}
-      </pre>
-    </NotForm>
+            <button
+              type="button"
+              class="btn-text"
+              @click="append('')"
+            >
+              + Add New Tag
+            </button>
+            <NotMessage
+              path="tags"
+              class="error-message"
+            />
+          </NotArrayField>
+        </div>
+
+        <!-- Form Actions -->
+        <footer class="form-actions">
+          <button
+            type="submit"
+            class="btn-primary"
+            :disabled="!form.isDirty"
+          >
+            Submit Form
+          </button>
+          <button
+            type="reset"
+            class="btn-secondary"
+          >
+            Clear All
+          </button>
+        </footer>
+      </NotForm>
+    </div>
+
+    <!-- API Result Display -->
+    <div
+      v-if="submissionResult"
+      class="result-card"
+    >
+      <h3>Submission Received</h3>
+      <pre class="code-block">{{ JSON.stringify(submissionResult, null, 2) }}</pre>
+    </div>
   </div>
 </template>
+
+<style>
+:root {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --error: #ef4444;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+.playground {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 500px;
+}
+
+.card-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.card-header h1 {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.card-header p {
+  margin: 0.5rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.form-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.tags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.input-with-action {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input-with-action .form-input {
+  flex: 1;
+}
+
+.btn-icon {
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transition: background 0.2s;
+}
+
+.btn-icon:hover {
+  background: #fecaca;
+}
+
+.btn-text {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  width: fit-content;
+}
+
+.btn-text:hover {
+  text-decoration: underline;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-primary {
+  flex: 2;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  flex: 1;
+  background: white;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #f8fafc;
+  border-color: var(--text-muted);
+}
+
+.result-card {
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 500px;
+  animation: slideUp 0.3s ease-out;
+}
+
+.result-card h3 {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  color: #cbd5e1;
+}
+
+.code-block {
+  margin: 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
