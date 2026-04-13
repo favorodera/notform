@@ -24,3 +24,9 @@ export type * from './types/not-message'
 
 // NotMessage component
 export { default as NotMessage } from './components/not-message.vue'
+
+// NotArrayField component types
+export type * from './types/not-array-field'
+
+// NotArrayField component
+export { default as NotArrayField } from './components/not-array-field.vue'
