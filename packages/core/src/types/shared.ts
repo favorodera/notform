@@ -47,16 +47,3 @@ export type ObjectSchema = StandardSchemaV1 & {
     }
   }
 }
-
-/**
- * Represents a validation schema for array-based data structures.
- * Complies with the Standard Schema specification.
- */
-export type ArraySchema = StandardSchemaV1 & {
-  '~standard': StandardSchemaV1['~standard'] & {
-    types?: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      input: Array<any>
-    }
-  }
-}
