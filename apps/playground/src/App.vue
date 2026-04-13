@@ -67,7 +67,7 @@ const form = useNotForm({
             <div style="margin-bottom: 1rem;">
               <label style="display: block; margin-bottom: 0.5rem;">Name:</label>
               <input
-                v-model="form.values.users[index].name"
+                v-model="form.values.users[index]!.name"
                 v-bind="events"
                 type="text"
                 style="padding: 0.5rem; width: 100%; box-sizing: border-box;"
@@ -88,7 +88,7 @@ const form = useNotForm({
             <div style="margin-bottom: 1rem;">
               <label style="display: block; margin-bottom: 0.5rem;">Age:</label>
               <input
-                v-model.number="form.values.users[index].age"
+                v-model.number="form.values.users[index]!.age"
                 v-bind="events"
                 type="number"
                 style="padding: 0.5rem; width: 100%; box-sizing: border-box;"
