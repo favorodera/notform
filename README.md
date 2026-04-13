@@ -27,7 +27,7 @@ This is a monorepo managed with `pnpm` and `turbo`.
 - [`packages/core`](./packages/core): The core Vue library.
 - [`packages/nuxt`](./packages/nuxt): The official Nuxt module.
 - [`apps/docs`](./apps/docs): Documentation site built with Nuxt Content.
-- [`apps/playground`](./apps/playground): Vue playground app for testing on the go.
+- [`apps/vue-playground`](./apps/vue-playground): Vue playground app for testing on the go.
 
 ## Development
 
