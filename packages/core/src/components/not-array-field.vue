@@ -124,11 +124,11 @@ const validate = async () => {
  * after external changes (e.g. form.reset()).
  */
 const syncKeys = () => {
-  const arrLength = array.value.length
-  if (itemKeys.value.length > arrLength) {
-    itemKeys.value.length = arrLength
+  const arrayLength = array.value.length
+  if (itemKeys.value.length > arrayLength) {
+    itemKeys.value.length = arrayLength
   } else {
-    while (itemKeys.value.length < arrLength) {
+    while (itemKeys.value.length < arrayLength) {
       itemKeys.value.push(generateKey())
     }
   }
