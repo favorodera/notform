@@ -119,11 +119,28 @@ const validate = async () => {
 
 
 /**
+ * Re-aligns itemKeys with the current array length.
+ * Called at the start of every mutation so keys stay consistent
+ * after external changes (e.g. form.reset()).
+ */
+const syncKeys = () => {
+  const arrLength = array.value.length
+  if (itemKeys.value.length > arrLength) {
+    itemKeys.value.length = arrLength
+  } else {
+    while (itemKeys.value.length < arrLength) {
+      itemKeys.value.push(generateKey())
+    }
+  }
+}
+
+/**
  * Applies an update to a copy of the current array, writes it back to the form values,
  * and marks the array path as touched. Dirty state is derived from the form's Sets
  * automatically via the computed above so no explicit dirty call is needed here.
  */
 const mutate = (updater: (current: TItem[]) => void) => {
+  syncKeys()
   const current = [...array.value]
   updater(current)
   setProperty(form.values, props.path, current)
@@ -141,13 +158,13 @@ const mutate = (updater: (current: TItem[]) => void) => {
 
 
 const append = (value: TItem) => {
-  mutate(current => current.push(value))
   itemKeys.value.push(generateKey())
+  mutate(current => current.push(value))
 }
 
 const prepend = (value: TItem) => {
-  mutate(current => current.unshift(value))
   itemKeys.value.unshift(generateKey())
+  mutate(current => current.unshift(value))
 }
 
 const remove = (index: number) => {
@@ -156,8 +173,8 @@ const remove = (index: number) => {
 }
 
 const insert = (index: number, value: TItem) => {
-  mutate(current => current.splice(index, 0, value))
   itemKeys.value.splice(index, 0, generateKey())
+  mutate(current => current.splice(index, 0, value))
 }
 
 const update = (index: number, value: TItem) => {
