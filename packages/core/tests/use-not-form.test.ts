@@ -244,7 +244,7 @@ describe('useNotForm', () => {
   test('submit marks all fields as touched and dirty', async () => {
     const { form, wrapper } = mountForm()
 
-    await wrapper.find('form').trigger('submit')
+    await wrapper.get('form').trigger('submit')
     await nextTick()
 
     expect(form.touchedFields.has('name')).toBe(true)
@@ -259,7 +259,7 @@ describe('useNotForm', () => {
 
     const { wrapper } = mountForm(onSubmit)
 
-    await wrapper.find('form').trigger('submit')
+    await wrapper.get('form').trigger('submit')
     await nextTick()
 
     expect(onSubmit).not.toHaveBeenCalled()
@@ -273,7 +273,7 @@ describe('useNotForm', () => {
     form.setValue('name', 'Jane')
     form.setValue('email', 'jane@example.com')
 
-    await wrapper.find('form').trigger('submit')
+    await wrapper.get('form').trigger('submit')
     await nextTick()
 
     expect(onSubmit).toHaveBeenCalledWith({ name: 'Jane', email: 'jane@example.com' })
@@ -291,7 +291,7 @@ describe('useNotForm', () => {
     form.setValue('name', 'Jane')
     form.setValue('email', 'jane@example.com')
 
-    await wrapper.find('form').trigger('submit')
+    await wrapper.get('form').trigger('submit')
     await flushPromises()
 
     expect(submittingDuring).toBe(true)
@@ -305,7 +305,7 @@ describe('useNotForm', () => {
     const { form, wrapper } = mountForm()
 
     form.setValue('name', 'Jane')
-    await wrapper.find('form').trigger('reset')
+    await wrapper.get('form').trigger('reset')
 
     expect(form.values.name).toBe('')
   })
@@ -316,7 +316,7 @@ describe('useNotForm', () => {
     form.touchField('name')
     form.dirtyField('email')
 
-    await wrapper.find('form').trigger('reset')
+    await wrapper.get('form').trigger('reset')
 
     expect(form.touchedFields.size).toBe(0)
     expect(form.dirtyFields.size).toBe(0)
@@ -328,7 +328,7 @@ describe('useNotForm', () => {
     const { form, wrapper } = mountForm()
 
     form.setError({ message: 'Required', path: [{ key: 'name' }] })
-    await wrapper.find('form').trigger('reset')
+    await wrapper.get('form').trigger('reset')
 
     expect(form.errors.length).toBe(0)
   })
@@ -343,7 +343,7 @@ describe('useNotForm', () => {
 
     form.setValue('name', 'John')
 
-    await wrapper.find('form').trigger('reset')
+    await wrapper.get('form').trigger('reset')
     
     expect(form.values.name).toBe('Jane')
   })
