@@ -124,6 +124,9 @@ importers:
       '@nuxt/kit':
         specifier: ^4.4.2
         version: 4.4.2(magicast@0.5.2)
+      notform:
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
       '@nuxt/module-builder':
         specifier: ^1.0.2
