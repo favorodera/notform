@@ -1,5 +1,31 @@
 # Changelog
 
+## v2.0.0-alpha.5...v2.0.0-alpha.6
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.5...v2.0.0-alpha.6)
+
+### Added
+
+- Add NotArrayField component ([98b23bd](https://github.com/favorodera/notform/commit/98b23bd))
+- Add NotArrayField component ([3ccc1f7](https://github.com/favorodera/notform/commit/3ccc1f7))
+- Add NotArrayField type definitions ([e28d417](https://github.com/favorodera/notform/commit/e28d417))
+- Sync item keys with array length in not-array-field ([886af8e](https://github.com/favorodera/notform/commit/886af8e))
+
+### Fixed
+
+- Use v-if instead of v-show for message rendering ([ebd86ff](https://github.com/favorodera/notform/commit/ebd86ff))
+
+### Refactors
+
+- Remove unused ArraySchema type ([d9075b2](https://github.com/favorodera/notform/commit/d9075b2))
+- Improve handling of initial values in useNotForm ([f4343d7](https://github.com/favorodera/notform/commit/f4343d7))
+- Improve variable naming in syncKeys function ([a1ac046](https://github.com/favorodera/notform/commit/a1ac046))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-alpha.4...v2.0.0-alpha.5
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.4...v2.0.0-alpha.5)
