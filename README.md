@@ -28,6 +28,7 @@ This is a monorepo managed with `pnpm` and `turbo`.
 - [`packages/nuxt`](./packages/nuxt): The official Nuxt module.
 - [`apps/docs`](./apps/docs): Documentation site built with Nuxt Content.
 - [`apps/vue-playground`](./apps/vue-playground): Vue playground app for testing on the go.
+- [`apps/nuxt-playground`](./apps/nuxt-playground): Nuxt playground app for testing on the go.
 
 ## Development
 
