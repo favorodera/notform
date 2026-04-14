@@ -35,9 +35,9 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build build",
-    "dev": "nuxt-module-build build --stub && nuxt-module-build prepare",
-    "build": "nuxt-module-build build",
+    "prepack": "pnpm build",
+    "dev": "nuxt prepare && nuxt-module-build build --stub",
+    "build": "nuxt prepare && nuxt-module-build build",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --fix"
   },
