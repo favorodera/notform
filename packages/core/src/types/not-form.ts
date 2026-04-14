@@ -214,5 +214,6 @@ export type NotFormProps = {
 
 /** Slots for the `NotForm` component. */
 export type NotFormSlots = {
+  /** The default slot receives the full form instance */
   default: []
 }
