@@ -11,7 +11,4 @@ pnpm dev
 
 # Build all packages
 pnpm build
-
-# Run tests
-pnpm test
 ```
