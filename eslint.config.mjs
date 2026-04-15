@@ -3,6 +3,7 @@ import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescri
 import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
 import stylistic from '@stylistic/eslint-plugin'
+import betterTailwind from 'eslint-plugin-better-tailwindcss'
 
 export default defineConfigWithVueTs(
   {
@@ -33,6 +34,17 @@ export default defineConfigWithVueTs(
   },
 
   {
+    plugins: { 'better-tailwindcss': betterTailwind },
+    rules: { ...betterTailwind.configs['recommended-error'].rules },
+    files: ['apps/docs/**/*.{vue,ts,mts,tsx}'],
+    settings: {
+      'better-tailwindcss': {
+        entryPoint: './apps/docs/assets/css/index.css',
+      },
+    },
+  },
+
+  {
     files: ['**/**/*.js', '**/**/*.mjs', '**/**/*.vue', '**/**/*.ts'],
     plugins: { '@stylistic': stylistic },
     rules: { ...stylistic.configs.recommended.rules },
@@ -52,6 +64,14 @@ export default defineConfigWithVueTs(
         'error',
         { allowInterfaces: 'with-single-extends' },
       ],
+      'better-tailwindcss/no-unregistered-classes': 'off',
+      'better-tailwindcss/no-unknown-classes': ['warn', {
+        ignore: [
+          'stars',
+          'star-layer',
+          'star'
+        ]
+      }],
     },
   },
 )

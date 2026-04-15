@@ -31,6 +31,7 @@
     "@vitest/eslint-plugin": "^1.6.15",
     "@vue/eslint-config-typescript": "^14.7.0",
     "eslint": "^10.2.0",
+    "eslint-plugin-better-tailwindcss": "^4.4.1",
     "eslint-plugin-vue": "^10.8.0",
     "relizy": "^1.2.1",
     "turbo": "^2.9.5",
@@ -41,12 +42,12 @@
   },
   "packageManager": "pnpm@10.32.1",
   "pnpm": {
-  "peerDependencyRules": {
-    "ignoreMissing": [],
-    "allowedVersions": {
-      "vite": "8",
-      "typescript": "6"
+    "peerDependencyRules": {
+      "ignoreMissing": [],
+      "allowedVersions": {
+        "vite": "8",
+        "typescript": "6"
+      }
     }
   }
-}
 }
