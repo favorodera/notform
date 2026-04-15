@@ -23,4 +23,5 @@ logs
 .env.*
 !.env.example
 
-pnpm-lock.yaml
+# VSC
+.history

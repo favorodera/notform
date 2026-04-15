@@ -1,49 +1,50 @@
-import tailwindcss from "@tailwindcss/vite";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
+    '@nuxt/image',
+    '@nuxt/ui',
     '@nuxt/content',
-    '@nuxtjs/color-mode',
+    'nuxt-og-image',
+    'nuxt-llms',
+    '@nuxtjs/mcp-toolkit',
     'motion-v/nuxt',
-    '@vueuse/nuxt',
-    '@nuxt/icon',
-    '@nuxt/fonts',
   ],
 
-  devtools: false,
-  compatibilityDate: '2024-04-03',
-
-  imports: {
-    imports: [{
-      from: 'tailwind-variants',
-      name: 'tv',
-    }, {
-      from: 'tailwind-variants',
-      name: 'VariantProps',
-      type: true,
-    }],
+  devtools: {
+    enabled: false,
   },
 
-   fonts: {
-    defaults: {
-      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+  css: ['~/assets/css/main.css'],
+
+  content: {
+    build: {
+      markdown: {
+        toc: {
+          searchDepth: 1,
+        },
+      },
     },
   },
 
-  colorMode: {
-    storageKey: 'notform-docs-color-mode',
-    classSuffix: '',
+  experimental: {
+    asyncContext: true,
+  },
+
+  compatibilityDate: '2024-07-11',
+
+  nitro: {
+    prerender: {
+      routes: [
+        '/',
+      ],
+      crawlLinks: true,
+      autoSubfolderIndex: false,
+    },
   },
 
   icon: {
-    clientBundle: {
-      scan: true,
-      sizeLimitKb: 0,
-    },
+    provider: 'iconify',
     mode: 'svg',
-    class: 'shrink-0',
-    fetchTimeout: 2000,
-    serverBundle: 'local',
     customCollections: [
       {
         prefix: 'custom',
@@ -52,9 +53,39 @@ export default defineNuxtConfig({
     ],
   },
 
-  css: ['~/assets/css/index.css'],
+  llms: {
+    domain: 'https://docs-template.nuxt.dev/',
+    title: 'Nuxt Docs Template',
+    description: 'A template for building documentation with Nuxt UI and Nuxt Content.',
+    full: {
+      title: 'Nuxt Docs Template - Full Documentation',
+      description: 'This is the full documentation for the Nuxt Docs Template.',
+    },
+    sections: [
+      {
+        title: 'Getting Started',
+        contentCollection: 'docs',
+        contentFilters: [
+          { field: 'path', operator: 'LIKE', value: '/getting-started%' },
+        ],
+      },
+      {
+        title: 'Essentials',
+        contentCollection: 'docs',
+        contentFilters: [
+          { field: 'path', operator: 'LIKE', value: '/essentials%' },
+        ],
+      },
+    ],
+  },
 
-  vite: {
-    plugins: [tailwindcss()]
-  }
+  fonts: {
+    defaults: {
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    },
+  },
+
+  mcp: {
+    name: 'Docs template',
+  },
 })

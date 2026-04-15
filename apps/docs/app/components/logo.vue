@@ -1,6 +1,9 @@
 <template>
-  <div class="flex items-center gap-2">
-    <Icon name="custom:logo" class="w-8 h-8" />
-    <span class="text-xl">notform</span>
+  <div class="text-primary flex items-center">
+    <Icon
+      name="custom:logo"
+      class="size-5 shrink-0"
+    />
+    <span class="font-mono text-lg font-normal!">notform</span>
   </div>
 </template>

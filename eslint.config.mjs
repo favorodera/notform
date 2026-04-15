@@ -36,10 +36,10 @@ export default defineConfigWithVueTs(
   {
     plugins: { 'better-tailwindcss': betterTailwind },
     rules: { ...betterTailwind.configs['recommended-error'].rules },
-    files: ['apps/docs/**/*.{vue,ts,mts,tsx}'],
+    files: ['./apps/docs/**/*.{vue,ts,mts,tsx}'],
     settings: {
       'better-tailwindcss': {
-        entryPoint: './apps/docs/assets/css/index.css',
+        entryPoint: './apps/docs/app/assets/css/main.css',
       },
     },
   },
