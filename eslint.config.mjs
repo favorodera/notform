@@ -35,11 +35,21 @@ export default defineConfigWithVueTs(
 
   {
     plugins: { 'better-tailwindcss': betterTailwind },
-    rules: { ...betterTailwind.configs['recommended-error'].rules },
-    files: ['./apps/docs/**/*.{vue,ts,mts,tsx}'],
+    rules: { 
+      ...betterTailwind.configs['recommended-error'].rules,
+      'better-tailwindcss/no-unregistered-classes': 'off',
+      'better-tailwindcss/no-unknown-classes': ['warn', {
+        ignore: [
+          'stars',
+          'star-layer',
+          'star'
+        ]
+      }],
+    },
+    files: ['apps/docs/**/*.{vue,ts,mts,tsx}'],
     settings: {
       'better-tailwindcss': {
-        entryPoint: './apps/docs/app/assets/css/main.css',
+        entryPoint: 'apps/docs/app/assets/css/main.css',
       },
     },
   },
@@ -64,14 +74,6 @@ export default defineConfigWithVueTs(
         'error',
         { allowInterfaces: 'with-single-extends' },
       ],
-      'better-tailwindcss/no-unregistered-classes': 'off',
-      'better-tailwindcss/no-unknown-classes': ['warn', {
-        ignore: [
-          'stars',
-          'star-layer',
-          'star'
-        ]
-      }],
     },
   },
 )
