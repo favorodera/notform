@@ -3,79 +3,132 @@ const whys = [
   {
     icon: 'i-lucide-puzzle',
     title: 'Schema-agnostic',
-    description: 'Works with any [Standard Schema](https://standardschema.dev) library. Zod, Valibot, ArkType, or your own.',
+    description: 'Drop in any Standard Schema compliant validator. No adapter layer, no rewiring — swap libraries without touching your form logic.',
   },
   {
     icon: 'i-lucide-eye-off',
     title: 'Headless by design',
-    description: 'Renderless slot components — `NotField`{color="primary" class="text-xs font-mono"}, `NotArrayField`{color="primary" class="text-xs font-mono"}. You own every pixel.',
+    description: 'Zero UI opinions. Slot-based primitives hand you full render control — works with any component library or none at all.',
+  },
+  {
+    icon: 'i-lucide-layers',
+    title: 'Multiple instances',
+    description: 'Run as many independent forms as you need on the same page. Each instance is fully isolated — no global state, no ID conflicts.',
   },
   {
     icon: 'i-lucide-zap',
     title: 'Granular validation',
-    description: 'Validate the whole form or a single field. Eager, lazy, per-field trigger overrides — all built in.',
+    description: 'Validate the whole form or a single field. Override when each field validates — eager, lazy, or any event-driven trigger.',
   },
   {
     icon: 'i-lucide-list',
     title: 'Array fields built-in',
-    description: '`append`{color="primary" class="text-xs font-mono"}, `remove`{color="primary" class="text-xs font-mono"}, `swap`{color="primary" class="text-xs font-mono"}, `move`{color="primary" class="text-xs font-mono"} — with stable keys so `v-for`{color="primary" class="text-xs font-mono"} never re-mounts.',
-  },
-  {
-    icon: 'i-lucide-activity',
-    title: 'Dirty & touched tracking',
-    description: 'Know which fields were changed or interacted with. Surface errors only when the user is ready.',
+    description: 'Full array manipulation with stable item keys. Items reorder, insert, and remove without causing unnecessary re-mounts.',
   },
   {
     icon: 'i-lucide-braces',
-    title: 'TypeScript first',
-    description: 'Paths inferred from your schema. `setValue`{color="primary" class="text-xs font-mono"} and `errorsMap`{color="primary" class="text-xs font-mono"} know your field names at compile time.',
+    title: 'End-to-end type safety',
+    description: 'Field paths and their value types are inferred straight from your schema. Wrong paths and mismatched values are caught at compile time.',
   },
 ]
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+  },
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] as const },
+  },
+}
 </script>
 
 <template>
   <section
-    class="border-b border-default"
+    class="border-b border-dashed border-default relative"
     aria-labelledby="home:why-notform:title"
   >
-    <UContainer class="py-20">
-      <p class="mb-2 font-mono text-xs tracking-wider text-primary uppercase">
-        // why notform
-      </p>
 
-      <h2
-        id="home:why-notform:title"
-        class="max-w-sm text-3xl font-semibold tracking-tight text-highlighted"
+  <!-- Corner accents -->
+    <span
+      class="pointer-events-none absolute top-0 left-0 h-8 w-8 border-t border-l border-dashed border-primary/30"
+      aria-hidden
+    />
+    <span
+      class="pointer-events-none absolute right-0 bottom-0 h-8 w-8 border-r border-b border-dashed border-primary/30"
+      aria-hidden
+    />
+
+    <UContainer class="py-20 lg:py-28">
+
+      <!-- Section header -->
+      <Motion
+        as-child
+        :initial="{ opacity: 0, y: 16 }"
+        :while-in-view="{ opacity: 1, y: 0 }"
+        :viewport="{ once: true, margin: '-60px' }"
+        :transition="{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }"
       >
-        Built for how you actually write Vue.
-      </h2>
+        <div>
+          <p class="mb-2 font-mono text-xs tracking-wider text-primary uppercase">
+            // why notform
+          </p>
 
-      <p class="mt-3 max-w-sm text-sm font-light text-muted">
-        No wrappers. No adapter boilerplate. Composables and renderless
-        components that disappear into your codebase.
-      </p>
+          <h2
+            id="home:why-notform:title"
+            class="max-w-sm text-3xl font-semibold tracking-tight text-highlighted"
+          >
+            Built for how you actually write Vue.
+          </h2>
 
-      <ul
-        class="
-          mt-12 grid gap-px overflow-hidden rounded-lg border border-default
-          bg-border
-          sm:grid-cols-2
-          lg:grid-cols-3
-        "
+          <p class="mt-3 max-w-sm text-sm font-light text-muted">
+            No wrappers. No adapter boilerplate. Composables and renderless
+            components that disappear into your codebase.
+          </p>
+        </div>
+      </Motion>
+
+      <!-- Feature grid — each card is its own bordered island -->
+      <Motion
+        as="ul"
+        initial="hidden"
+        :while-in-view="'visible'"
+        :viewport="{ once: true, margin: '-40px' }"
+        :variants="containerVariants"
+        class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
-
-        <li
-          v-for="why, index in whys"
+        <Motion
+          v-for="(why, index) in whys"
           :key="index"
+          as="li"
+          :variants="cardVariants"
           class="
-            bg-default p-6 transition-colors
+            group relative rounded-lg bg-default p-6
+            transition-colors duration-200
             hover:bg-muted
           "
+          style="
+            box-shadow:
+              0 0 0 1px color-mix(in srgb, var(--ui-border) 100%, transparent),
+              0 0 0 4px color-mix(in srgb, var(--ui-border) 40%, transparent);
+            background-clip: padding-box;
+          "
         >
+          <!-- Inner dashed border ring -->
+          <span
+            class="pointer-events-none absolute inset-[4px] rounded-md border border-dashed border-default/60"
+            aria-hidden
+          />
+
           <UIcon
             :name="why.icon"
-            class="mb-4 size-5 text-primary"
+            class="mb-4 size-5 text-primary transition-transform duration-200 group-hover:scale-110"
           />
 
           <h3 class="mb-2 text-sm font-medium text-highlighted">
@@ -83,14 +136,11 @@ const whys = [
           </h3>
 
           <p class="text-sm/relaxed font-light text-muted">
-            <MDC :value="why.description" />
+            {{ why.description }}
           </p>
-  
-        </li>
+        </Motion>
+      </Motion>
 
-      </ul>
-      
     </UContainer>
-
   </section>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { links } = useAppConfig()
+const { github } = useAppConfig()
 </script>
 
 <template>
@@ -22,14 +22,14 @@ const { links } = useAppConfig()
 
       <template #right>
         <UButton
-          :to="links.github.url"
-          :icon="links.github.icon"
+          :to="github.url"
+          :icon="github.icon"
           target="_blank"
           size="sm"
           color="primary"
           variant="outline"
         >
-          {{ links.github.label }}
+          {{ github.label }}
         </UButton>
 
         <UButton

@@ -79,11 +79,13 @@ export default defineAppConfig({
       }],
     },
   },
-  links: {
-    github: {
-      url: 'https://github.com/favorodera/notform',
-      icon: 'simple-icons:github',
-      label: 'GitHub',
-    },
+  github: {
+    url: 'https://github.com/favorodera/notform',
+    icon: 'simple-icons:github',
+    label: 'GitHub',
+  },
+  author:{
+    name: 'Favour Emeka',
+    url: 'https://favorodera.vercel.app',
   },
 })
