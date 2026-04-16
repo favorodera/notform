@@ -19,7 +19,7 @@ const item = {
 
 <template>
   <section
-    class="border-default relative overflow-hidden border-b"
+    class="border-default relative overflow-hidden border-b border-dashed"
     aria-labelledby="landing:hero:title"
   >
 
