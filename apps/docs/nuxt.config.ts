@@ -1,4 +1,5 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/image',
@@ -42,6 +43,10 @@ export default defineNuxtConfig({
     },
   },
 
+  ui: {
+    content: true,
+  },
+
   icon: {
     provider: 'iconify',
     mode: 'svg',
@@ -83,6 +88,12 @@ export default defineNuxtConfig({
     defaults: {
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     },
+  },
+
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
   },
 
   mcp: {
