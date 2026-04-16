@@ -89,7 +89,7 @@ const item = {
           class="mt-5 max-w-md text-base/relaxed font-light text-muted"
         >
           Headless, composable Vue 3 forms. Bring your own schema —
-          Zod, Valibot, ArkType, or anything Standard Schema compliant validator.
+          Zod, Valibot, ArkType, or anything Standard Schema compliant.
           You own every pixel of your UI.
         </Motion>
 
