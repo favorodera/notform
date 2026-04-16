@@ -35,15 +35,15 @@ export default defineConfigWithVueTs(
 
   {
     plugins: { 'better-tailwindcss': betterTailwind },
-    rules: { 
+    rules: {
       ...betterTailwind.configs['recommended-error'].rules,
       'better-tailwindcss/no-unregistered-classes': 'off',
       'better-tailwindcss/no-unknown-classes': ['warn', {
         ignore: [
           'stars',
           'star-layer',
-          'star'
-        ]
+          'star',
+        ],
       }],
     },
     files: ['apps/docs/**/*.{vue,ts,mts,tsx}'],
