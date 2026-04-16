@@ -30,8 +30,6 @@ provide('navigation', navigation)
 
 <template>
   <UApp>
-    <NuxtLoadingIndicator />
-
     <UMain>
       <NuxtLayout>
         <NuxtPage />

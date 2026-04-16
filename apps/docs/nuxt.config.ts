@@ -88,6 +88,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': { prerender: true },
+    '/docs': { redirect: '/docs/get-started/' },
   },
 
   css: ['~/assets/css/main.css'],

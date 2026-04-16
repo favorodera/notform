@@ -33,7 +33,7 @@ const { github } = useAppConfig()
         </UButton>
 
         <UButton
-          to="/"
+          to="/docs"
           icon="i-lucide-book-open"
           size="sm"
           color="primary"

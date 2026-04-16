@@ -26,11 +26,7 @@ provide('navigation', navigation)
 
 <template>
   <UApp>
-    <AppHeader />
-
     <UError :error="error" />
-
-    <AppFooter />
 
     <ClientOnly>
       <LazyUContentSearch

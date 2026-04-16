@@ -117,7 +117,7 @@ const itemVariants = {
 
           <!-- Docs -->
           <UButton
-            to="/"
+            to="/docs"
             size="lg"
             color="primary"
             variant="subtle"

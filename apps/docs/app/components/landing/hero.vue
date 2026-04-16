@@ -104,7 +104,7 @@ const item = {
           "
         >
           <UButton
-            to="/"
+            to="/docs"
             size="lg"
             color="primary"
             variant="subtle"
