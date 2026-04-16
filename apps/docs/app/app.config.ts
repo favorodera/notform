@@ -84,7 +84,7 @@ export default defineAppConfig({
     icon: 'simple-icons:github',
     label: 'GitHub',
   },
-  author:{
+  author: {
     name: 'Favour Emeka',
     url: 'https://favorodera.vercel.app',
   },

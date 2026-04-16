@@ -40,11 +40,17 @@ const itemVariants = {
 
     <!-- Corner accents -->
     <span
-      class="pointer-events-none absolute top-0 left-0 h-8 w-8 border-t border-l border-dashed border-primary/30"
+      class="
+        pointer-events-none absolute top-0 left-0 size-8 border-t border-l
+        border-dashed border-primary/30
+      "
       aria-hidden
     />
     <span
-      class="pointer-events-none absolute right-0 bottom-0 h-8 w-8 border-r border-b border-dashed border-primary/30"
+      class="
+        pointer-events-none absolute right-0 bottom-0 size-8 border-r border-b
+        border-dashed border-primary/30
+      "
       aria-hidden
     />
 
@@ -55,22 +61,33 @@ const itemVariants = {
       :viewport="{ once: true, margin: '-60px' }"
       :variants="containerVariants"
     >
-      <UContainer class="relative py-24 text-center lg:py-32">
+      <UContainer
+        class="
+          relative py-24 text-center
+          lg:py-32
+        "
+      >
 
         <!-- Eyebrow -->
-        <Motion as-child :variants="itemVariants">
-          <p class="mb-4 font-mono text-xs tracking-wider text-primary uppercase">
+        <Motion
+          as-child
+          :variants="itemVariants"
+        >
+          <p
+            class="mb-4 font-mono text-xs tracking-wider text-primary uppercase"
+          >
             // get started
           </p>
         </Motion>
 
         <!-- Headline -->
         <Motion
-          as="h2"
           id="home:cta:title"
+          as="h2"
           :variants="itemVariants"
           class="
-            mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-highlighted
+            mx-auto max-w-2xl text-3xl font-semibold tracking-tight
+            text-highlighted
             lg:text-4xl
           "
         >
@@ -92,7 +109,10 @@ const itemVariants = {
         <Motion
           as="div"
           :variants="itemVariants"
-          class="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
+          class="
+            mt-8 flex flex-wrap items-center justify-center gap-3
+            sm:gap-4
+          "
         >
 
           <!-- Docs -->

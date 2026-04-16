@@ -51,21 +51,32 @@ const cardVariants = {
 
 <template>
   <section
-    class="border-b border-dashed border-default relative"
+    class="relative border-b border-dashed border-default"
     aria-labelledby="home:why-notform:title"
   >
 
-  <!-- Corner accents -->
+    <!-- Corner accents -->
     <span
-      class="pointer-events-none absolute top-0 left-0 h-8 w-8 border-t border-l border-dashed border-primary/30"
+      class="
+        pointer-events-none absolute top-0 left-0 size-8 border-t border-l
+        border-dashed border-primary/30
+      "
       aria-hidden
     />
     <span
-      class="pointer-events-none absolute right-0 bottom-0 h-8 w-8 border-r border-b border-dashed border-primary/30"
+      class="
+        pointer-events-none absolute right-0 bottom-0 size-8 border-r border-b
+        border-dashed border-primary/30
+      "
       aria-hidden
     />
 
-    <UContainer class="py-20 lg:py-28">
+    <UContainer
+      class="
+        py-20
+        lg:py-28
+      "
+    >
 
       <!-- Section header -->
       <Motion
@@ -76,13 +87,17 @@ const cardVariants = {
         :transition="{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }"
       >
         <div>
-          <p class="mb-2 font-mono text-xs tracking-wider text-primary uppercase">
+          <p
+            class="mb-2 font-mono text-xs tracking-wider text-primary uppercase"
+          >
             // why notform
           </p>
 
           <h2
             id="home:why-notform:title"
-            class="max-w-sm text-3xl font-semibold tracking-tight text-highlighted"
+            class="
+              max-w-sm text-3xl font-semibold tracking-tight text-highlighted
+            "
           >
             Built for how you actually write Vue.
           </h2>
@@ -101,7 +116,11 @@ const cardVariants = {
         :while-in-view="'visible'"
         :viewport="{ once: true, margin: '-40px' }"
         :variants="containerVariants"
-        class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        class="
+          mt-12 grid gap-4
+          sm:grid-cols-2
+          lg:grid-cols-3
+        "
       >
         <Motion
           v-for="(why, index) in whys"
@@ -109,8 +128,8 @@ const cardVariants = {
           as="li"
           :variants="cardVariants"
           class="
-            group relative rounded-lg bg-default p-6
-            transition-colors duration-200
+            group relative rounded-lg bg-default p-6 transition-colors
+            duration-200
             hover:bg-muted
           "
           style="
@@ -122,13 +141,19 @@ const cardVariants = {
         >
           <!-- Inner dashed border ring -->
           <span
-            class="pointer-events-none absolute inset-[4px] rounded-md border border-dashed border-default/60"
+            class="
+              pointer-events-none absolute inset-[4px] rounded-md border
+              border-dashed border-default/60
+            "
             aria-hidden
           />
 
           <UIcon
             :name="why.icon"
-            class="mb-4 size-5 text-primary transition-transform duration-200 group-hover:scale-110"
+            class="
+              mb-4 size-5 text-primary transition-transform duration-200
+              group-hover:scale-110
+            "
           />
 
           <h3 class="mb-2 text-sm font-medium text-highlighted">

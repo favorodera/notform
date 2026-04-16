@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { github,author } = useAppConfig()
+const { github, author } = useAppConfig()
 
 const navLinks = [
   { label: 'Docs', to: '/' },
@@ -35,7 +35,10 @@ const navLinks = [
               variant="link"
               color="neutral"
               size="xs"
-              class="font-light text-muted hover:text-highlighted"
+              class="
+                font-light text-muted
+                hover:text-highlighted
+              "
             >
               {{ link.label }}
             </UButton>
@@ -51,9 +54,9 @@ const navLinks = [
         </nav>
 
         <!-- Copyright -->
-          <span class="font-light text-xs text-muted">
-            MIT © {{ new Date().getFullYear() }}
-          </span>
+        <span class="text-xs font-light text-muted">
+          MIT © {{ new Date().getFullYear() }}
+        </span>
 
       </div>
     </UContainer>
