@@ -12,7 +12,7 @@ const { github } = useAppConfig()
     <UHeader
       :ui="{ center: 'flex-1' }"
       to="/"
-      class="h-14 border-dashed"
+      class="border-dashed"
       :toggle="false"
     >
 

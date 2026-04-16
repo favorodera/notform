@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import type { ContentNavigationItem } from '@nuxt/content'
-
 definePageMeta({
   layout: 'docs',
 })
 
 const route = useRoute()
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
 if (!page.value) {
@@ -15,11 +12,12 @@ if (!page.value) {
 
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }))
 
+
 useSeoMeta({
-  title: () => page.value.title,
-  ogTitle: () => page.value.title,
-  description: () => page.value.description,
-  ogDescription: () => page.value.description,
+  title: () => page.value?.title,
+  ogTitle: () => page.value?.title,
+  description: () => page.value?.description,
+  ogDescription: () => page.value?.description,
 })
 </script>
 
@@ -28,8 +26,7 @@ useSeoMeta({
     <UPageHeader
       :title="page.title"
       :description="page.description"
-    >
-    </UPageHeader>
+    />
 
     <UPageBody>
       <ContentRenderer
@@ -42,15 +39,31 @@ useSeoMeta({
       <UContentSurround :surround="surround" />
     </UPageBody>
 
-       <template
+    <template
       v-if="page.body?.toc?.links?.length"
       #right
     >
       <UContentToc
-        title="On this page"
         :links="page.body?.toc?.links"
+        :ui="{
+          title:'text-sm text-muted font-normal',
+          indicator:'ms-0'
+        }"
+        highlight
+        highlight-variant="circuit"
+        class="
+          border-y border-dashed border-default
+          lg:border-x
+        "
       >
 
+        <template #leading>
+          <Icon
+            name="lucide:text-align-start"
+            class="size-4 text-muted"
+          />
+        </template>
+    
       </UContentToc>
     </template>
 

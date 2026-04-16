@@ -36,6 +36,12 @@
 
 :root {
   --ui-container: var(--container-8xl);
+
+  --ui-header-height: 3.5rem;
+}
+
+* {
+  border-style: dashed;
 }
 
 .fade-out-in-enter-active,

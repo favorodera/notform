@@ -6,30 +6,12 @@ const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSe
   server: false,
 })
 
-useHead({
-  meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-  ],
-  link: [
-    { rel: 'icon', href: '/favicon.ico' },
-  ],
-  htmlAttrs: {
-    lang: 'en',
-  },
-})
-
-useSeoMeta({
-  titleTemplate: `%s - ${seo?.siteName}`,
-  ogSiteName: seo?.siteName,
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/docs-light.png',
-  twitterCard: 'summary_large_image',
-})
-
 provide('navigation', navigation)
 </script>
 
 <template>
   <UApp>
+
     <UMain>
       <NuxtLayout>
         <NuxtPage />
