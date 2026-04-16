@@ -69,6 +69,16 @@ export default defineNuxtConfig({
           sizes: '180x180',
         },
       ],
+
+    },
+
+    pageTransition: {
+      name: 'fade-out-in',
+      mode: 'out-in',
+    },
+    layoutTransition: {
+      name: 'fade-out-in',
+      mode: 'out-in',
     },
   },
 

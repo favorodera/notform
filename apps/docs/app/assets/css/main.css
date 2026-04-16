@@ -9,7 +9,7 @@
   --font-sans: 'Geist', sans-serif;
   --font-mono: 'Geist Mono', monospace;
 
-  --color-forest-50:  #f0faf4;
+  --color-forest-50: #f0faf4;
   --color-forest-100: #d6f5e3;
   --color-forest-200: #a8e9c4;
   --color-forest-300: #6dd6a0;
@@ -21,7 +21,7 @@
   --color-forest-900: #093d24;
   --color-forest-950: #041f12;
 
-  --color-stone-50:  #fafaf7;
+  --color-stone-50: #fafaf7;
   --color-stone-100: #f5f4ef;
   --color-stone-200: #e8e5dd;
   --color-stone-300: #d4d0c5;
@@ -38,3 +38,17 @@
   --ui-container: var(--container-8xl);
 }
 
+.fade-out-in-enter-active,
+.fade-out-in-leave-active {
+  transition: all 300ms ease;
+}
+
+.fade-out-in-enter-from,
+.fade-out-in-leave-to {
+  opacity: 0;
+}
+
+.fade-out-in-enter-to,
+.fade-out-in-leave-from {
+  opacity: 1;
+}
