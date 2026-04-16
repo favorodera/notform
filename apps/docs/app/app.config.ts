@@ -21,9 +21,6 @@ export default defineAppConfig({
       },
     },
   },
-  seo: {
-    siteName: 'Notform',
-  },
   github: {
     url: 'https://github.com/favorodera/notform',
     icon: 'simple-icons:github',
