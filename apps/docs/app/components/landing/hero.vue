@@ -19,7 +19,7 @@ const item = {
 
 <template>
   <section
-    class="border-default relative overflow-hidden border-b border-dashed"
+    class="relative overflow-hidden border-b border-dashed border-default"
     aria-labelledby="landing:hero:title"
   >
 
@@ -77,7 +77,7 @@ const item = {
             dark:text-neutral-200
           "
         >
-          <span class="border-primary/20 text-primary border-b border-dashed">Vue</span> Forms<br>
+          <span class="border-b border-dashed border-primary/20 text-primary">Vue</span> Forms<br>
           without the friction.
 
         </Motion>
@@ -86,7 +86,7 @@ const item = {
         <Motion
           as="p"
           :variants="item"
-          class="text-muted mt-5 max-w-md text-base/relaxed font-light"
+          class="mt-5 max-w-md text-base/relaxed font-light text-muted"
         >
           Headless, composable Vue 3 forms. Bring your own schema —
           Zod, Valibot, ArkType, or anything Standard Schema compliant validator.
@@ -104,7 +104,7 @@ const item = {
           "
         >
           <UButton
-            to="/docs"
+            to="/"
             size="lg"
             color="primary"
             variant="subtle"

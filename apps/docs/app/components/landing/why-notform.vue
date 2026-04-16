@@ -36,30 +36,30 @@ const whys = [
 
 <template>
   <section
-    class="border-default border-b"
+    class="border-b border-default"
     aria-labelledby="home:why-notform:title"
   >
     <UContainer class="py-20">
-      <p class="text-primary mb-2 font-mono text-xs tracking-wider uppercase">
+      <p class="mb-2 font-mono text-xs tracking-wider text-primary uppercase">
         // why notform
       </p>
 
       <h2
         id="home:why-notform:title"
-        class="text-highlighted max-w-sm text-3xl font-semibold tracking-tight"
+        class="max-w-sm text-3xl font-semibold tracking-tight text-highlighted"
       >
         Built for how you actually write Vue.
       </h2>
 
-      <p class="text-muted mt-3 max-w-sm text-sm font-light">
+      <p class="mt-3 max-w-sm text-sm font-light text-muted">
         No wrappers. No adapter boilerplate. Composables and renderless
         components that disappear into your codebase.
       </p>
 
       <ul
         class="
-          border-default bg-border mt-12 grid gap-px overflow-hidden rounded-lg
-          border
+          mt-12 grid gap-px overflow-hidden rounded-lg border border-default
+          bg-border
           sm:grid-cols-2
           lg:grid-cols-3
         "
@@ -69,21 +69,20 @@ const whys = [
           v-for="why, index in whys"
           :key="index"
           class="
-            bg-default
+            bg-default p-6 transition-colors
             hover:bg-muted
-            p-6 transition-colors
           "
         >
           <UIcon
             :name="why.icon"
-            class="text-primary mb-4 size-5"
+            class="mb-4 size-5 text-primary"
           />
 
-          <h3 class="text-highlighted mb-2 text-sm font-medium">
+          <h3 class="mb-2 text-sm font-medium text-highlighted">
             {{ why.title }}
           </h3>
 
-          <p class="text-muted text-sm/relaxed font-light">
+          <p class="text-sm/relaxed font-light text-muted">
             <MDC :value="why.description" />
           </p>
   

@@ -26,6 +26,7 @@
     "@nuxt/ui": "^4.6.1",
     "@nuxtjs/mcp-toolkit": "^0.13.4",
     "@nuxtjs/mdc": "^0.21.1",
+    "@nuxtjs/seo": "^5.1.3",
     "@tailwindcss/vite": "^4.2.2",
     "@vueuse/core": "^14.2.1",
     "better-sqlite3": "^12.9.0",

@@ -1,5 +1,5 @@
 <template>
-  <div class="text-primary flex items-center">
+  <div class="flex items-center text-primary">
     <Icon
       name="custom:logo"
       class="size-5 shrink-0"

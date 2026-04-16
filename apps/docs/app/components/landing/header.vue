@@ -33,7 +33,7 @@ const { links } = useAppConfig()
         </UButton>
 
         <UButton
-          to="/docs"
+          to="/"
           icon="i-lucide-book-open"
           size="sm"
           color="primary"

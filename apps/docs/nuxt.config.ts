@@ -5,14 +5,79 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/ui',
     '@nuxt/content',
-    'nuxt-og-image',
+    '@nuxtjs/seo',
     'nuxt-llms',
     '@nuxtjs/mcp-toolkit',
     'motion-v/nuxt',
   ],
 
+  sitemap: {
+    zeroRuntime: true,
+  },
+
+  site: {
+    url: 'https://notform-docs.vercel.app',
+    name: 'NotForm',
+    description: 'Vue forms without the friction.',
+    indexable: true,
+    defaultLocale: 'en',
+  },
+
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'en',
+      },
+
+      meta: [
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+        },
+        {
+          charset: 'utf-8',
+        },
+      ],
+
+      link: [
+        {
+          rel: 'icon',
+          href: '/favicon.ico',
+          sizes: '48x48',
+        },
+        {
+          rel: 'icon',
+          href: '/favicon-32x32.png',
+          sizes: '32x32',
+          type: 'image/png',
+        },
+        {
+          rel: 'icon',
+          href: '/favicon-16x16.png',
+          sizes: '16x16',
+          type: 'image/png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/svg+xml',
+          href: '/favicon.svg',
+          sizes: 'any',
+        },
+        {
+          rel: 'apple-touch-icon',
+          href: '/apple-touch-icon.png',
+          sizes: '180x180',
+        },
+      ],
+    },
+  },
+
   devtools: {
     enabled: false,
+  },
+
+  routeRules: {
+    '/': { prerender: true },
   },
 
   css: ['~/assets/css/main.css'],
@@ -94,9 +159,23 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    optimizeDeps: {
+      include: [
+        'zod',
+        '@vueuse/core',
+      ],
+    },
+  },
+
+  seo: {
+    redirectToCanonicalSiteUrl: true,
   },
 
   mcp: {
-    name: 'Docs template',
+    name: 'NotForm',
+  },
+
+  ogImage: {
+    enabled: false,
   },
 })

@@ -4,6 +4,9 @@ import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
 import stylistic from '@stylistic/eslint-plugin'
 import betterTailwind from 'eslint-plugin-better-tailwindcss'
+import { fileURLToPath, URL } from 'node:url'
+
+const tailwindEntryPoint = fileURLToPath(new URL('./apps/docs/app/assets/css/main.css', import.meta.url))
 
 export default defineConfigWithVueTs(
   {
@@ -49,7 +52,7 @@ export default defineConfigWithVueTs(
     files: ['apps/docs/**/*.{vue,ts,mts,tsx}'],
     settings: {
       'better-tailwindcss': {
-        entryPoint: 'apps/docs/app/assets/css/main.css',
+        entryPoint: tailwindEntryPoint,
       },
     },
   },
