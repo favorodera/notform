@@ -50,7 +50,7 @@ const form = useNotForm({
           v-if="isTouched && errors.length"
           class="text-xs text-red-500"
         >
-          {{ errors[0].message }}
+          {{ errors[0]?.message }}
         </p>
       </div>
     </NotField>
