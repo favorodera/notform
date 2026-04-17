@@ -45,18 +45,17 @@ const form = useNotForm({
         >
           Email
         </label>
-        <UInput
+        <input
           :id="path"
           v-model="form.values.email"
           type="email"
           placeholder="jane@example.com"
           v-bind="events"
           class="input"
-        />
+        >
 
         <NotMessage
           :path="path"
-          as="p"
           class="message"
         />
       </div>
@@ -73,18 +72,17 @@ const form = useNotForm({
         >
           Password
         </label>
-        <UInput
+        <input
           :id="path"
           v-model="form.values.password"
           type="password"
           placeholder="Min. 8 characters"
           v-bind="events"
           class="input"
-        />
+        >
 
         <NotMessage
           :path="path"
-          as="p"
           class="message"
         />
       </div>

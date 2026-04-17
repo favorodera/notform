@@ -58,7 +58,7 @@
   }
 
   .input {
-    @apply w-full;
+    @apply w-full rounded-md border-0 appearance-none placeholder:text-dimmed focus:outline-none px-2.5 py-1.5 text-base/5 text-highlighted bg-default ring ring-inset ring-accented transition-colors;
   }
 }
 
