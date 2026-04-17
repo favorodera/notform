@@ -20,7 +20,15 @@ export default defineAppConfig({
         left: 'text-sm text-muted',
       },
     },
+    prose: {
+      codePreview: {
+        slots: {
+          code: '[&>div>pre]:rounded-t-none [&>div]:my-0 [&>div>div]:my-0',
+        },
+      },
+    },
   },
+  siteUrl: 'https://notform-docs.vercel.app',
   github: {
     url: 'https://github.com/favorodera/notform',
     icon: 'simple-icons:github',

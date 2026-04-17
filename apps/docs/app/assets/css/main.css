@@ -40,6 +40,28 @@
   --ui-header-height: 3.5rem;
 }
 
+@layer components {
+  .form {
+    @apply w-full max-w-sm space-y-3;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-highlighted;
+  }
+
+  .field {
+    @apply space-y-1;
+  }
+
+  .message {
+    @apply text-sm text-error;
+  }
+
+  .input {
+    @apply w-full;
+  }
+}
+
 * {
   border-style: dashed;
 }

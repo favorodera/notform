@@ -127,42 +127,10 @@ const cardVariants = {
           :key="index"
           as="li"
           :variants="cardVariants"
-          class="
-            group relative rounded-lg bg-default p-6 transition-colors
-            duration-200
-            hover:bg-muted
-          "
-          style="
-            box-shadow:
-              0 0 0 1px color-mix(in srgb, var(--ui-border) 100%, transparent),
-              0 0 0 4px color-mix(in srgb, var(--ui-border) 40%, transparent);
-            background-clip: padding-box;
-          "
         >
-          <!-- Inner dashed border ring -->
-          <span
-            class="
-              pointer-events-none absolute inset-[4px] rounded-md border
-              border-dashed border-default/60
-            "
-            aria-hidden
+          <AppCard
+            v-bind="why"
           />
-
-          <UIcon
-            :name="why.icon"
-            class="
-              mb-4 size-5 text-primary transition-transform duration-200
-              group-hover:scale-110
-            "
-          />
-
-          <h3 class="mb-2 text-sm font-medium text-highlighted">
-            {{ why.title }}
-          </h3>
-
-          <p class="text-sm/relaxed font-light text-muted">
-            {{ why.description }}
-          </p>
         </Motion>
       </Motion>
 

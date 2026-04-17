@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     'nuxt-llms',
     '@nuxtjs/mcp-toolkit',
     'motion-v/nuxt',
+    'notform-nuxt',
   ],
 
   sitemap: {

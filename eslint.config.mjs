@@ -42,11 +42,7 @@ export default defineConfigWithVueTs(
       ...betterTailwind.configs['recommended-error'].rules,
       'better-tailwindcss/no-unregistered-classes': 'off',
       'better-tailwindcss/no-unknown-classes': ['warn', {
-        ignore: [
-          'stars',
-          'star-layer',
-          'star',
-        ],
+        detectComponentClasses: true,
       }],
     },
     files: ['apps/docs/**/*.{vue,ts,mts,tsx}'],

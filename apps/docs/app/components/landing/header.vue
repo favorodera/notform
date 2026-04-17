@@ -17,7 +17,7 @@ const { github } = useAppConfig()
     >
 
       <template #title>
-        <Logo />
+        <AppLogo />
       </template>
 
       <template #right>

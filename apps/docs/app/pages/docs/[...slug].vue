@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { useClipboard } from '@vueuse/core'
+
 definePageMeta({
   layout: 'docs',
 })
 
 const route = useRoute()
+const { copy, copied } = useClipboard()
+
+async function copyPage() {
+  copy(await $fetch<string>(`/raw${route.path}.md`))
+}
 
 const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
 if (!page.value) {
@@ -26,15 +33,38 @@ useSeoMeta({
     <UPageHeader
       :title="page.title"
       :description="page.description"
-    />
+      class="flex w-full flex-col-reverse"
+      :ui="{
+        title:'text-[1.75em] font-semibold',
+        headline:'mb-0 mt-2.5'
+      }"
+    >
+  
+      <template #headline>
+        <UButton
+          :label="copied ? 'Copied' : 'Copy Markdown'"
+          :icon="copied ? 'lucide:check' : 'lucide:copy'"
+          color="neutral"
+          variant="outline"
+          size="sm"
+          @click="copyPage"
+        />
 
-    <UPageBody>
+      </template>
+
+    </UPageHeader>
+
+    <UPageBody
+      class="
+        pb-6
+        md:pb-8
+        xl:pb-14
+      "
+    >
       <ContentRenderer
         v-if="page"
         :value="page"
       />
-
-      <USeparator v-if="surround?.length" />
 
       <UContentSurround :surround="surround" />
     </UPageBody>
@@ -47,7 +77,8 @@ useSeoMeta({
         :links="page.body?.toc?.links"
         :ui="{
           title:'text-sm text-muted font-normal',
-          indicator:'ms-0'
+          indicator:'ms-0',
+          container:'py-3! sm:py-3!'
         }"
         highlight
         highlight-variant="circuit"

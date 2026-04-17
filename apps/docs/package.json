@@ -38,7 +38,8 @@
     "tailwindcss": "^4.2.2",
     "ufo": "^1.6.3",
     "unist-util-visit": "^5.1.0",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "notform-nuxt": "workspace:*"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.102",
