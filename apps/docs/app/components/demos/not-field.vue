@@ -46,12 +46,6 @@ const form = useNotForm({
           v-bind="events"
           class="input"
         >
-
-        <NotMessage
-          :path="path"
-          :form
-          class="message"
-        />
       </div>
     </NotField>
 
