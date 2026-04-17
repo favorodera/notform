@@ -86,6 +86,9 @@ importers:
       nuxt-og-image:
         specifier: ^5.1.13
         version: 5.1.13(@unhead/vue@2.1.13(vue@3.5.32(typescript@6.0.2)))(magicast@0.5.2)(unstorage@1.17.5(db0@0.3.4(better-sqlite3@12.9.0))(ioredis@5.10.1))(vite@8.0.8(@types/node@25.6.0)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.3))(vue@3.5.32(typescript@6.0.2))
+      nuxt-schema-org:
+        specifier: ^6.0.4
+        version: 6.0.4(8737af1c57831e7969da17a61833f765)
       tailwindcss:
         specifier: ^4.2.2
         version: 4.2.2

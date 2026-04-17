@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
+import { defineSoftwareApp } from 'nuxt-schema-org/schema'
 
 export default defineNuxtConfig({
   modules: [
@@ -136,26 +137,40 @@ export default defineNuxtConfig({
   },
 
   llms: {
-    domain: 'https://docs-template.nuxt.dev/',
-    title: 'Nuxt Docs Template',
-    description: 'A template for building documentation with Nuxt UI and Nuxt Content.',
+    domain: 'https://notform-docs.vercel.app',
+    title: 'NotForm',
+    description: 'Vue forms without the friction.',
     full: {
-      title: 'Nuxt Docs Template - Full Documentation',
-      description: 'This is the full documentation for the Nuxt Docs Template.',
+      title: 'NotForm',
+      description: 'Vue forms without the friction.',
     },
     sections: [
       {
-        title: 'Getting Started',
+        title: 'Get Started',
         contentCollection: 'docs',
         contentFilters: [
           { field: 'path', operator: 'LIKE', value: '/getting-started%' },
         ],
       },
       {
-        title: 'Essentials',
+        title: 'Components',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/essentials%' },
+          { field: 'path', operator: 'LIKE', value: '/components%' },
+        ],
+      },
+      {
+        title: 'Composables',
+        contentCollection: 'docs',
+        contentFilters: [
+          { field: 'path', operator: 'LIKE', value: '/composables%' },
+        ],
+      },
+      {
+        title: 'Advances',
+        contentCollection: 'docs',
+        contentFilters: [
+          { field: 'path', operator: 'LIKE', value: '/advanced%' },
         ],
       },
     ],
@@ -189,5 +204,43 @@ export default defineNuxtConfig({
 
   ogImage: {
     enabled: false,
+  },
+
+  schemaOrg: {
+    identity: defineSoftwareApp({
+      'name': 'NotForm',
+      'url': 'https://notform-docs.vercel.app',
+      'description': 'Vue forms without the friction.',
+
+      '@type': 'SoftwareApplication',
+      'applicationCategory': 'DeveloperApplication',
+      'operatingSystem': 'Web',
+
+      'offers': {
+        '@type': 'Offer',
+        'price': '0',
+        'priceCurrency': 'USD',
+      },
+
+      'sameAs': [
+        'https://www.npmjs.com/package/notform',
+        'https://www.npmjs.com/package/notform-nuxt',
+        'https://github.com/favorodera/notform',
+      ],
+
+      'keywords': [
+        'Vue forms',
+        'Nuxt form validation',
+        'Vue 3 form library',
+        'TypeScript form validation',
+        'headless form components',
+      ],
+
+      'author': {
+        '@type': 'Person',
+        'name': 'Favour Emeka',
+        'url': 'https://favorodera.vercel.app',
+      },
+    }),
   },
 })

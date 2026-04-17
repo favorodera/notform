@@ -7,6 +7,7 @@ definePageMeta({
 
 const route = useRoute()
 const { copy, copied } = useClipboard()
+const { siteUrl } = useAppConfig()
 
 async function copyPage() {
   copy(await $fetch<string>(`/raw${route.path}.md`))
@@ -23,8 +24,11 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => qu
 useSeoMeta({
   title: () => page.value?.title,
   ogTitle: () => page.value?.title,
+  twitterTitle: () => page.value?.title,
+  twitterDescription: () => page.value?.description,
   description: () => page.value?.description,
   ogDescription: () => page.value?.description,
+  ogUrl: () => `${siteUrl}${route.fullPath}`,
 })
 </script>
 

@@ -29,6 +29,9 @@ export default defineAppConfig({
     },
   },
   siteUrl: 'https://notform-docs.vercel.app',
+  siteName: 'NotForm',
+  siteDescription: 'Vue Forms without the friction.',
+  siteTitle: 'NotForm - Vue form validator',
   github: {
     url: 'https://github.com/favorodera/notform',
     icon: 'simple-icons:github',
