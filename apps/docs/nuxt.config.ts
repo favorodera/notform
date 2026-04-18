@@ -3,10 +3,10 @@ import { defineSoftwareApp } from 'nuxt-schema-org/schema'
 
 export default defineNuxtConfig({
   modules: [
+    '@nuxtjs/seo',
     '@nuxt/image',
     '@nuxt/ui',
     '@nuxt/content',
-    '@nuxtjs/seo',
     'nuxt-llms',
     '@nuxtjs/mcp-toolkit',
     'motion-v/nuxt',
@@ -46,6 +46,12 @@ export default defineNuxtConfig({
           rel: 'icon',
           href: '/favicon.ico',
           sizes: '48x48',
+        },
+        {
+          rel: 'icon',
+          href: '/favicon.svg',
+          sizes: 'any',
+          type: 'image/svg+xml',
         },
         {
           rel: 'icon',
@@ -90,6 +96,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': { prerender: true },
+    '/docs/**': { prerender: true },
     '/docs': { redirect: '/docs/get-started' },
   },
 
@@ -115,6 +122,7 @@ export default defineNuxtConfig({
     prerender: {
       routes: [
         '/',
+        '/docs/**',
       ],
       crawlLinks: true,
       autoSubfolderIndex: false,
@@ -177,14 +185,16 @@ export default defineNuxtConfig({
   },
 
   fonts: {
-    defaults: {
-      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-    },
+    families: [
+      { name: 'Geist', weights: [100, 200, 300, 400, 500, 600, 700, 800, 900], global: true },
+      { name: 'Geist Mono', weights: [100, 200, 300, 400, 500, 600, 700, 800, 900], global: true },
+    ],
   },
 
   vite: {
     plugins: [
-      tailwindcss(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      tailwindcss() as any,
     ],
     optimizeDeps: {
       include: [
@@ -203,7 +213,7 @@ export default defineNuxtConfig({
   },
 
   ogImage: {
-    enabled: false,
+    zeroRuntime: true,
   },
 
   schemaOrg: {

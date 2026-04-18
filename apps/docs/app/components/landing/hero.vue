@@ -70,15 +70,24 @@ const item = {
           :variants="item"
           class="
             relative max-w-4xl overflow-hidden text-3xl/tight tracking-tight
-            text-neutral-800
             sm:text-3xl
-            md:text-3xl
             lg:text-[2.5rem]
-            dark:text-neutral-200
           "
         >
-          <span class="border-b border-dashed border-primary/20 text-primary">Vue</span> Forms<br>
-          without the friction.
+          <span
+            class="
+              inline-block border-b border-dashed border-primary/20 text-primary
+            "
+          >
+            Vue
+          </span> Forms<br>
+          <span
+            class="
+              inline-block border-b border-dashed border-primary/20 text-primary
+            "
+          >
+            without
+          </span> the friction.
 
         </Motion>
 

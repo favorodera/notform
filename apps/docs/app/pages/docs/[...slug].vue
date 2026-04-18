@@ -7,7 +7,7 @@ definePageMeta({
 
 const route = useRoute()
 const { copy, copied } = useClipboard()
-const { siteUrl } = useAppConfig()
+const { siteUrl, siteName, siteDescription } = useAppConfig()
 
 async function copyPage() {
   copy(await $fetch<string>(`/raw${route.path}.md`))
@@ -20,16 +20,25 @@ if (!page.value) {
 
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }))
 
+const seo = computed(() => {
+  return {
+    title: page.value?.title ?? siteName,
+    description: page.value?.description ?? siteDescription,
+  }
+})
+
 
 useSeoMeta({
-  title: () => page.value?.title,
-  ogTitle: () => page.value?.title,
-  twitterTitle: () => page.value?.title,
-  twitterDescription: () => page.value?.description,
-  description: () => page.value?.description,
-  ogDescription: () => page.value?.description,
+  title: () => seo.value.title,
+  ogTitle: () => seo.value.title,
+  twitterTitle: () => seo.value.title,
+  twitterDescription: () => seo.value.description,
+  description: () => seo.value.description,
+  ogDescription: () => seo.value.description,
   ogUrl: () => `${siteUrl}${route.fullPath}`,
 })
+
+defineOgImage('Docs.takumi', { ...seo.value })
 </script>
 
 <template>
