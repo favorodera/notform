@@ -47,7 +47,7 @@ const form = useNotForm({
             <input
               v-bind="events"
               :id="item.path"
-              v-model="form.values.tags[index]"
+              v-model="form.values.tags[+index]"
               placeholder="Enter tag name..."
               class="input flex-1"
               :name="item.path"
@@ -58,14 +58,14 @@ const form = useNotForm({
               variant="soft"
               size="sm"
               :disabled="index === 0"
-              @click="move(index, index - 1)"
+              @click="move(index, +index - 1)"
             />
             <UButton
               icon="i-lucide-arrow-down"
               variant="soft"
               size="sm"
               :disabled="index === items.length - 1"
-              @click="move(index, index + 1)"
+              @click="move(index, +index + 1)"
             />
 
             <UButton
