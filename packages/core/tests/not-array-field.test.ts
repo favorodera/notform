@@ -241,11 +241,11 @@ describe('NotArrayField', () => {
     test('stable keys survive a swap — item keys change position, not identity', async () => {
       const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b'] } })
 
-      const keysBefore = wrapper.findAll('.item').map(el => el.attributes('data-key'))
+      const keysBefore = wrapper.findAll('.item').map(element => element.attributes('data-key'))
 
       await wrapper.find('#swap').trigger('click')
 
-      const keysAfter = wrapper.findAll('.item').map(el => el.attributes('data-key'))
+      const keysAfter = wrapper.findAll('.item').map(element => element.attributes('data-key'))
 
       // The two keys still exist — no key was created or destroyed
       expect(keysAfter).toHaveLength(2)
@@ -431,7 +431,7 @@ describe('NotArrayField', () => {
   describe('Stable keys', () => {
     test('item keys are unique across all rendered items', () => {
       const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b', 'c'] } })
-      const keys = wrapper.findAll('.item').map(el => el.attributes('data-path'))
+      const keys = wrapper.findAll('.item').map(element => element.attributes('data-key'))
 
       expect(new Set(keys).size).toBe(keys.length)
     })
