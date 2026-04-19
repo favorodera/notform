@@ -1,6 +1,4 @@
-import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
-
-export type * from 'notform'
+import { addComponent, addImports, addTemplate, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 
 /** Nuxt module options for `notform` */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -58,6 +56,26 @@ export default defineNuxtModule<NotFormModuleOptions>({
         as: composable,
         from: composablesRuntime,
       })
+    })
+
+    // Generate virtual module
+    const template = addTemplate({
+      filename: 'notform.mjs',
+      getContents: () => 'export * from \'notform\'',
+      write: true,
+    })
+
+    // Register notform alias
+    nuxt.options.alias['#notform'] = template.dst
+
+    // Tell TypeScript about the alias
+    addTypeTemplate({
+      filename: 'types/notform.d.ts',
+      getContents: () => `
+      declare module '#notform' {
+        export type * from 'notform'
+      }
+    `,
     })
   },
 
