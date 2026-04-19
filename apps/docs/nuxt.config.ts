@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     'motion-v/nuxt',
     'notform-nuxt',
     'nuxt-llms',
+    '@vercel/analytics',
   ],
 
   compatibilityDate: '2024-07-11',
@@ -98,8 +99,6 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': { prerender: true },
-    '/docs/**': { prerender: true },
-    '/docs': { redirect: '/docs/get-started/introduction' },
   },
 
   css: ['~/assets/css/main.css'],

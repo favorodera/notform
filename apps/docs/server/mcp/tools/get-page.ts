@@ -14,7 +14,7 @@ WHEN NOT TO USE: If you don't know the exact path and need to search/explore, us
 
 WORKFLOW: This tool returns the complete page content including title, description, and full markdown. Use this when you need to provide detailed answers or code examples from specific documentation pages.`,
   inputSchema: {
-    path: z.string().describe('The page path from list-pages or provided by the user (e.g., /get-started/installation)'),
+    path: z.string().describe('The page path from list-pages or provided by the user (e.g., /get-started)'),
   },
   cache: '1h',
   handler: async ({ path }) => {

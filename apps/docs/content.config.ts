@@ -9,7 +9,10 @@ export default defineContentConfig({
 
     docs: defineCollection({
       type: 'page',
-      source: 'docs/**/*.md',
+      source: {
+        include: '**',
+        exclude: ['index.md'],
+      },
     }),
   },
 })

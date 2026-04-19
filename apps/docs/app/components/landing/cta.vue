@@ -117,7 +117,7 @@ const itemVariants = {
 
           <!-- Docs -->
           <UButton
-            to="/docs"
+            to="/get-started"
             size="lg"
             color="primary"
             variant="subtle"

@@ -2,7 +2,7 @@
 const { github, author } = useAppConfig()
 
 const navLinks = [
-  { label: 'Docs', to: '/docs' },
+  { label: 'Docs', to: '/get-started' },
   { label: 'GitHub', to: github.url, target: '_blank' },
   { label: 'Author', to: author.url, target: '_blank' },
 ]

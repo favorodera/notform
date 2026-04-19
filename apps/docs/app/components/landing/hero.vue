@@ -113,7 +113,7 @@ const item = {
           "
         >
           <UButton
-            to="/docs"
+            to="/get-started"
             size="lg"
             color="primary"
             variant="subtle"

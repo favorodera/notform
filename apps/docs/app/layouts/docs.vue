@@ -19,7 +19,7 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
           >
             <UContentNavigation
               highlight
-              :navigation="navigation?.[0]?.children ?? navigation"
+              :navigation="navigation"
               :ui="{
                 list: 'mx-0 mt-0',
                 listWithChildren: 'ms-0 border-s-0',
