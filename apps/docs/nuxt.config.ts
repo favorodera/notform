@@ -97,10 +97,6 @@ export default defineNuxtConfig({
     },
   },
 
-  routeRules: {
-    '/': { prerender: true },
-  },
-
   css: ['~/assets/css/main.css'],
 
   content: {
@@ -117,14 +113,11 @@ export default defineNuxtConfig({
     prerender: {
       routes: [
         '/',
+        '/sitemap.xml',
+        '/robots.txt',
       ],
       crawlLinks: true,
       autoSubfolderIndex: false,
-    },
-    devStorage: {
-      cache: {
-        driver: 'memory',
-      },
     },
   },
 
