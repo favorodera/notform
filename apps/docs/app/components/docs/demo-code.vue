@@ -1,32 +1,27 @@
-<script setup lang="ts">
-const props = defineProps<{
-  file: string
-}>()
-
+<script lang="ts">
 const demos = import.meta.glob('../demos/**/*', {
   query: '?raw',
   import: 'default',
   eager: true,
 })
+</script>
+
+<script setup lang="ts">
+const props = defineProps<{
+  file: string
+}>()
 
 const code = computed(() => {
-  const lookupPath = `../demos/${props.file}`
-  const fileContent = demos[lookupPath] as string
-
-  if (!fileContent) {
-    return `> **Error**: File \`${props.file}\` not found.`
-  }
-
-  const language = props.file.split('.').pop() ?? 'txt'
-  return `\`\`\`${language}\n${fileContent.trim()}\n\`\`\``
+  const fileContent = demos[`../demos/${props.file}`] as string | undefined
+  if (!fileContent) return `> **Error**: File \`${props.file}\` not found.`
+  return `\`\`\`vue\n${fileContent.trim()}\n\`\`\``
 })
 </script>
 
 <template>
   <ClientOnly>
     <MDC
-      v-if="code"
-      :value="code.trim()"
+      :value="code"
       class="[&>div]:my-0"
     />
   </ClientOnly>
