@@ -124,8 +124,8 @@ export default defineNuxtConfig({
     },
     devStorage: {
       cache: {
-        driver: 'memory'
-      }
+        driver: 'memory',
+      },
     },
   },
 

@@ -12,7 +12,7 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const { copy, copied } = useClipboard({source: await $fetch<string>(`/raw${route.path}.md`),legacy:true})
+const { copy, copied } = useClipboard({ source: await $fetch<string>(`/raw${route.path}.md`), legacy: true })
 const { siteUrl, siteName, siteDescription } = useAppConfig()
 
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }))
