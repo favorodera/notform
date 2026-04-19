@@ -149,6 +149,7 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       tailwindcss() as any,
     ],
     optimizeDeps: {
