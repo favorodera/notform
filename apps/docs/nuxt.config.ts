@@ -118,7 +118,6 @@ export default defineNuxtConfig({
     prerender: {
       routes: [
         '/',
-        '/docs/**',
       ],
       crawlLinks: true,
       autoSubfolderIndex: false,
