@@ -6,12 +6,10 @@ import stylistic from '@stylistic/eslint-plugin'
 import betterTailwind from 'eslint-plugin-better-tailwindcss'
 import { fileURLToPath, URL } from 'node:url'
 
-const tailwindEntryPoint = fileURLToPath(new URL('./apps/docs/app/assets/css/main.css', import.meta.url))
-
 export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
-    files: ['**/**/*.{vue,ts,mts,tsx}'],
+    files: ['**/**/*.js', '**/**/*.mjs', '**/**/*.vue', '**/**/*.ts'],
   },
 
   globalIgnores([
@@ -32,12 +30,18 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
 
   {
-    ...pluginVitest.configs.recommended,
     files: ['**/**/__tests__/*'],
+    ...pluginVitest.configs.recommended,
   },
 
   {
+    files: ['apps/docs/**/*.{vue,ts}'],
     plugins: { 'better-tailwindcss': betterTailwind },
+    settings: {
+      'better-tailwindcss': {
+        entryPoint: fileURLToPath(new URL('./apps/docs/app/assets/css/main.css', import.meta.url)),
+      },
+    },
     rules: {
       ...betterTailwind.configs['recommended-error'].rules,
       'better-tailwindcss/no-unregistered-classes': 'off',
@@ -45,16 +49,9 @@ export default defineConfigWithVueTs(
         detectComponentClasses: true,
       }],
     },
-    files: ['apps/docs/**/*.{vue,ts,mts,tsx}'],
-    settings: {
-      'better-tailwindcss': {
-        entryPoint: tailwindEntryPoint,
-      },
-    },
   },
 
   {
-    files: ['**/**/*.js', '**/**/*.mjs', '**/**/*.vue', '**/**/*.ts'],
     plugins: { '@stylistic': stylistic },
     rules: { ...stylistic.configs.recommended.rules },
   },
@@ -69,10 +66,7 @@ export default defineConfigWithVueTs(
       'vue/multi-word-component-names': 'off',
       'vue/block-tag-newline': ['error', { multiline: 'ignore', singleline: 'ignore' }],
       'vue/multiline-html-element-content-newline': ['error', { allowEmptyLines: true, ignores: ['pre', 'textarea'] }],
-      '@typescript-eslint/no-empty-object-type': [
-        'error',
-        { allowInterfaces: 'with-single-extends' },
-      ],
+      '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }],
     },
   },
 )

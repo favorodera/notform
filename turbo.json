@@ -26,13 +26,15 @@
     },
     "typecheck": {
       "dependsOn": [
-        "^typecheck"
+        "^typecheck",
+        "^postinstall"
       ],
       "cache": true
     },
     "lint": {
       "dependsOn": [
-        "^lint"
+        "^lint",
+        "^postinstall"
       ],
       "cache": true
     },
@@ -46,9 +48,6 @@
       "cache": false
     },
     "postinstall": {
-      "dependsOn": [
-        "^build"
-      ],
       "cache": false
     },
     "prepublishOnly": {
