@@ -1,4 +1,4 @@
-import { addComponent, addImports, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 
 export type * from 'notform'
 
@@ -58,13 +58,6 @@ export default defineNuxtModule<NotFormModuleOptions>({
         as: composable,
         from: composablesRuntime,
       })
-    })
-
-    // Inject notform types into the consuming project
-    addTypeTemplate({
-      filename: 'types/notform.d.ts',
-      getContents: () => 'export type * from \'notform\'',
-      write: true,
     })
   },
 
