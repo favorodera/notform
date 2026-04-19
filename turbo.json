@@ -27,14 +27,12 @@
     "typecheck": {
       "dependsOn": [
         "^typecheck",
-        "^postinstall"
       ],
       "cache": true
     },
     "lint": {
       "dependsOn": [
         "^lint",
-        "^postinstall"
       ],
       "cache": true
     },
@@ -48,7 +46,10 @@
       "cache": false
     },
     "postinstall": {
-      "cache": false
+      "cache": false,
+      "dependsOn": [
+        "^build"
+      ]
     },
     "prepublishOnly": {
       "dependsOn": [
