@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   },
 
   devtools: {
-    enabled: false,
+    enabled: true,
   },
 
   site: {
@@ -99,7 +99,7 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { prerender: true },
     '/docs/**': { prerender: true },
-    '/docs': { redirect: '/docs/get-started' },
+    '/docs': { redirect: '/docs/get-started/introduction' },
   },
 
   css: ['~/assets/css/main.css'],
@@ -121,6 +121,11 @@ export default defineNuxtConfig({
       ],
       crawlLinks: true,
       autoSubfolderIndex: false,
+    },
+    devStorage: {
+      cache: {
+        driver: 'memory'
+      }
     },
   },
 
@@ -220,7 +225,7 @@ export default defineNuxtConfig({
         title: 'Get Started',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/getting-started%' },
+          { field: 'path', operator: 'LIKE', value: '/get-started%' },
         ],
       },
       {
@@ -238,7 +243,7 @@ export default defineNuxtConfig({
         ],
       },
       {
-        title: 'Advances',
+        title: 'Advanced',
         contentCollection: 'docs',
         contentFilters: [
           { field: 'path', operator: 'LIKE', value: '/advanced%' },

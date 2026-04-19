@@ -6,17 +6,14 @@ definePageMeta({
 })
 
 const route = useRoute()
-const { copy, copied } = useClipboard()
-const { siteUrl, siteName, siteDescription } = useAppConfig()
-
-async function copyPage() {
-  copy(await $fetch<string>(`/raw${route.path}.md`))
-}
 
 const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
+
+const { copy, copied } = useClipboard({source: await $fetch<string>(`/raw${route.path}.md`),legacy:true})
+const { siteUrl, siteName, siteDescription } = useAppConfig()
 
 const { data: surround } = await useAsyncData(`${route.path}-surround`, () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }))
 
@@ -26,7 +23,6 @@ const seo = computed(() => {
     description: page.value?.description ?? siteDescription,
   }
 })
-
 
 useSeoMeta({
   title: () => seo.value.title,
@@ -60,7 +56,7 @@ defineOgImage('Docs.takumi', { ...seo.value })
           color="neutral"
           variant="outline"
           size="sm"
-          @click="copyPage"
+          @click="copy()"
         />
 
       </template>
