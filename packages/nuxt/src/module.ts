@@ -1,6 +1,7 @@
 import { addComponent, addImports, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 
 /** Nuxt module options for `notform` */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NotFormModuleOptions {}
 
 const components = [
