@@ -1,9 +1,5 @@
 import { addComponent, addImports, addTemplate, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
 
-/** Nuxt module options for `notform` */
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface NotFormModuleOptions {}
-
 const components = [
   'NotForm',
   'NotField',
@@ -15,7 +11,7 @@ const composables = [
   'useNotForm',
 ] as const
 
-export default defineNuxtModule<NotFormModuleOptions>({
+export default defineNuxtModule({
   meta: {
     name: 'notform-nuxt',
     configKey: 'notform',
@@ -80,12 +76,3 @@ export default defineNuxtModule<NotFormModuleOptions>({
   },
 
 })
-
-declare module '@nuxt/schema' {
-  interface NuxtConfig {
-    notform?: NotFormModuleOptions
-  }
-  interface NuxtOptions {
-    notform?: NotFormModuleOptions
-  }
-}
