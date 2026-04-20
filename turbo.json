@@ -18,7 +18,8 @@
         "dist/**",
         ".nuxt/**",
         ".output/**"
-      ]
+      ],
+      "cache": false,
     },
     "preview": {
       "persistent": true,
