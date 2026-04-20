@@ -83,7 +83,7 @@ const cardVariants = {
         as-child
         :initial="{ opacity: 0, y: 16 }"
         :while-in-view="{ opacity: 1, y: 0 }"
-        :viewport="{ once: true, margin: '-60px' }"
+        :in-view-options="{ once: true, margin: '-60px' }"
         :transition="{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }"
       >
         <div>
@@ -114,7 +114,7 @@ const cardVariants = {
         as="ul"
         initial="hidden"
         :while-in-view="'visible'"
-        :viewport="{ once: true, margin: '-40px' }"
+        :in-view-options="{ once: true, margin: '-40px' }"
         :variants="containerVariants"
         class="
           mt-12 grid gap-4

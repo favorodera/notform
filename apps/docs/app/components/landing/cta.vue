@@ -58,7 +58,7 @@ const itemVariants = {
       as="div"
       initial="hidden"
       :while-in-view="'visible'"
-      :viewport="{ once: true, margin: '-60px' }"
+      :in-view-options="{ once: true, margin: '-60px' }"
       :variants="containerVariants"
     >
       <UContainer

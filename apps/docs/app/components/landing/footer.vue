@@ -13,7 +13,7 @@ const navLinks = [
     as="footer"
     :initial="{ opacity: 0 }"
     :while-in-view="{ opacity: 1 }"
-    :viewport="{ once: true }"
+    :in-view-options="{ once: true }"
     :transition="{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }"
     class="border-t border-dashed border-default"
   >
