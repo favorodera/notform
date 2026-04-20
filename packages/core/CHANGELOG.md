@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.0.0-alpha.6...v2.0.0-alpha.7
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.6...v2.0.0-alpha.7)
+
+### Documentation
+
+- Clarify default slot content for NotForm ([b16d8b0](https://github.com/favorodera/notform/commit/b16d8b0))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-alpha.5...v2.0.0-alpha.6
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.5...v2.0.0-alpha.6)
