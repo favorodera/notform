@@ -12,13 +12,13 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "notform-nuxt": "workspace:*"
-  },
-  "devDependencies": {
+    "notform-nuxt": "workspace:*",
+    "zod": "^4.3.6",
     "nuxt": "^4.4.2",
     "vue": "^3.5.32",
-    "vue-router": "^5.0.4",
-    "vue-tsc": "^3.2.6",
-    "zod": "^4.3.6"
+    "vue-router": "^5.0.4"
+  },
+  "devDependencies": {
+    "vue-tsc": "^3.2.6"
   }
 }
