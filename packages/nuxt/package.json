@@ -38,7 +38,7 @@
     "prepack": "pnpm build",
     "dev": "nuxt prepare && nuxt-module-build build --stub",
     "build": "nuxt prepare && nuxt-module-build build",
-    "typecheck": "vue-tsc --noEmit",
+    "typecheck": "nuxt prepare && vue-tsc --noEmit",
     "lint": "eslint . --fix"
   },
   "dependencies": {

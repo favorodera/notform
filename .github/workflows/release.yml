@@ -11,7 +11,8 @@ on:
           - stable
           - prerelease
       bump:
-        description: "stable: patch | minor | major — prerelease: prerelease | prepatch | preminor | premajor"
+        description: "stable: patch | minor | major — prerelease: prerelease | prepatch
+          | preminor | premajor"
         required: true
         type: choice
         options:
@@ -79,7 +80,8 @@ jobs:
           echo "Release command: relizy release $CMD --yes --no-clean"
 
   release:
-    name: Release (${{ inputs.mode }} / ${{ inputs.bump }}${{ inputs.mode == 'prerelease' && format(' / {0}', inputs.preid) || '' }})
+    name: Release (${{ inputs.mode }} / ${{ inputs.bump }}${{ inputs.mode ==
+      'prerelease' && format(' / {0}', inputs.preid) || '' }})
     runs-on: ubuntu-latest
     needs: validate
     steps:
@@ -93,9 +95,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Debug pnpm version
-        run: pnpm --version
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -105,10 +104,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      # turbo.json: build -> dependsOn [^lint, ^typecheck, ^build]
-      # turbo resolves the full chain: lint + typecheck -> build
       - name: Build Packages
-        run: pnpm build
+        run: pnpm build --filter='./packages/*'
 
       - name: Configure Git
         run: |
@@ -116,7 +113,8 @@ jobs:
           git config --global user.email "favorodera@gmail.com"
 
       - name: Release with Relizy
-        run: pnpm relizy release ${{ needs.validate.outputs.release_cmd }} --yes --no-clean
+        run: pnpm relizy release ${{ needs.validate.outputs.release_cmd }} --yes
+          --no-clean
         env:
           RELIZY_GITHUB_TOKEN: ${{ secrets.NOTFORM_GITHUB_PAT }}
           NODE_AUTH_TOKEN: ${{ secrets.NOTFORM_NPM_TOKEN }}
