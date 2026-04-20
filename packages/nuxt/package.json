@@ -35,11 +35,11 @@
     "dist"
   ],
   "scripts": {
+    "prepack": "pnpm build",
     "dev": "nuxt prepare && nuxt-module-build build --stub",
     "build": "nuxt prepare && nuxt-module-build build",
     "typecheck": "vue-tsc --noEmit",
-    "lint": "eslint . --fix",
-    "prepublishOnly": "pnpm run build"
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "@nuxt/kit": "^4.4.2",
