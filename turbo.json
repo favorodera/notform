@@ -28,13 +28,13 @@
       "dependsOn": [
         "^typecheck",
       ],
-      "cache": true
+      "cache": false
     },
     "lint": {
       "dependsOn": [
         "^lint",
       ],
-      "cache": true
+      "cache": false
     },
     "test": {
       "dependsOn": [
