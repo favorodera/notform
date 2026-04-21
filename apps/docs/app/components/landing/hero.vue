@@ -58,7 +58,6 @@ const item = {
             variant="subtle"
             color="primary"
             class="mb-6 font-mono"
-            icon="lucide:sparkles"
           >
             Not another form library
           </UBadge>
