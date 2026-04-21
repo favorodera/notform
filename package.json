@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "author": "Favour Emeka <favorodera@gmail.com>",
-  "homepage": "https://notform-docs.vercel.app/",
+  "homepage": "https://notformdocs.vercel.app/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/favorodera/notform.git"
@@ -43,7 +43,7 @@
   "packageManager": "pnpm@10.32.1",
   "pnpm": {
     "peerDependencyRules": {
-      "ignoreMissing": [],
+      "ignoreMissing": [ ],
       "allowedVersions": {
         "vite": "8",
         "typescript": "6"

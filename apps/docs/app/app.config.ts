@@ -28,7 +28,7 @@ export default defineAppConfig({
       },
     },
   },
-  siteUrl: 'https://notform-docs.vercel.app',
+  siteUrl: 'https://notformdocs.vercel.app',
   siteName: 'NotForm',
   siteDescription: 'Vue Forms without the friction.',
   siteTitle: 'NotForm - Vue form validator',

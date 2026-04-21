@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: 'https://notform-docs.vercel.app',
+    url: 'https://notformdocs.vercel.app',
     name: 'NotForm',
     description: 'Vue forms without the friction.',
     indexable: true,
@@ -169,7 +169,7 @@ export default defineNuxtConfig({
   schemaOrg: {
     identity: defineSoftwareApp({
       'name': 'NotForm',
-      'url': 'https://notform-docs.vercel.app',
+      'url': 'https://notformdocs.vercel.app',
       'description': 'Vue forms without the friction.',
 
       '@type': 'SoftwareApplication',
@@ -205,7 +205,7 @@ export default defineNuxtConfig({
   },
 
   llms: {
-    domain: 'https://notform-docs.vercel.app',
+    domain: 'https://notformdocs.vercel.app',
     title: 'NotForm',
     description: 'Vue forms without the friction.',
     full: {

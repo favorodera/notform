@@ -131,6 +131,6 @@ We welcome feature suggestions! Please open an issue describing:
   If you have questions, feel free to:
 
   - Open a [Discussion](https://github.com/favorodera/notform/discussions)
-  - Check the [Documentation](https://notform-docs.vercel.app/)
+  - Check the [Documentation](https://notformdocs.vercel.app/)
 
   Thank you for contributing! 🎉

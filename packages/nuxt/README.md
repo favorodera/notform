@@ -12,5 +12,5 @@
 ## Documentation
 
 For detailed guides, API reference, and examples, visit:
-**[notform-docs.vercel.app](https://notform-docs.vercel.app/getting-started/nuxt-module)**
+**[notform-docs.vercel.app](https://notformdocs.vercel.app/getting-started/nuxt-module)**
 

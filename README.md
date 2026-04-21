@@ -10,7 +10,7 @@ NotForm is a powerful, yet simple form validation and state management library f
 ## Documentation
 
 Full documentation and examples can be found at:
-**[notform-docs.vercel.app](https://notform-docs.vercel.app/)**
+**[notform-docs.vercel.app](https://notformdocs.vercel.app/)**
 
 ## Features
 
