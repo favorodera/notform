@@ -23,7 +23,7 @@
 
     <!-- atmospheric glow -->
     <div
-      class="pointer-events-none absolute inset-0"
+      class="absolute inset-0"
       :style="`
         background:
           radial-gradient(ellipse 75% 55% at 50% -5%, #1a9e5e, transparent 70%),
