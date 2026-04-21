@@ -55,6 +55,11 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   /**
    * Mutable so `reset()` can replace the reference when new values are provided.
    * Always deep-cloned to prevent external mutation from affecting the baseline.
+   *
+   * These are intentionally `let` — `reset()` replaces them, and the instance
+   * exposes them via getters so consumers always read the current snapshot.
+   * The `readonly` modifier on the type prevents external assignment while still
+   * allowing the getter to return the latest value after a reset.
    */
   let initialValues = klona(config.initialValues ?? ({} as DeepPartial<TInput>))
   let initialErrors = klona(config.initialErrors ?? [])
@@ -96,6 +101,28 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
   const isSubmitting = ref(false)
   const isValidating = ref(false)
+
+  /**
+   * Counter-based validation tracking.
+   *
+   * A boolean flag flips to `false` as soon as the first concurrent
+   * validation resolves, even if others are still running.
+   * A counter fixes this: `isValidating` stays `true` until every
+   * in-flight call has settled.
+   */
+  let validatingCount = 0
+
+  /** Increments the validation counter and sets `isValidating` to true. */
+  const beginValidating = () => {
+    validatingCount++
+    isValidating.value = true
+  }
+
+  /** Decrements the validation counter and sets `isValidating` to false if the counter reaches zero. */
+  const endValidating = () => {
+    validatingCount--
+    if (validatingCount === 0) isValidating.value = false
+  }
 
   /**
    * Reactive Sets using `reactive()` for the same Pinia-compatibility reason
@@ -187,7 +214,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
 
   const validate: TInstance['validate'] = async () => {
-    isValidating.value = true
+    beginValidating()
     try {
       const result = await runSchema()
 
@@ -199,12 +226,12 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
       clearErrors()
       return { value: result.value }
     } finally {
-      isValidating.value = false
+      endValidating()
     }
   }
 
   const validateField: TInstance['validateField'] = async (path) => {
-    isValidating.value = true
+    beginValidating()
     try {
       const result = await runSchema()
       const pathSegments = parsePath(path)
@@ -232,7 +259,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
       return { value: getProperty(result.value, path) }
     } finally {
-      isValidating.value = false
+      endValidating()
     }
   }
 
@@ -301,11 +328,16 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
 
   // INSTANCE
+  //
+  // `initialValues` and `initialErrors` are exposed via getters so consumers
+  // always read the post-reset snapshot rather than the stale reference
+  // captured at construction time. The `readonly` modifier on the type
+  // prevents external assignment — setters are intentionally omitted.
 
 
   const instance: TInstance = {
-    initialValues,
-    initialErrors,
+    get initialValues() { return initialValues as TInstance['initialValues'] },
+    get initialErrors() { return initialErrors as TInstance['initialErrors'] },
 
     validateOn,
     validationMode,
