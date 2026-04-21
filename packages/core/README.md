@@ -12,5 +12,5 @@
 ## Documentation
 
 For detailed guides, API reference, and examples, visit:
-**[notform-docs.vercel.app](https://notformdocs.vercel.app/)**
+**[notformdocs.vercel.app](https://notformdocs.vercel.app/)**
 
