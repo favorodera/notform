@@ -102,7 +102,7 @@
       <div
         class="
           relative mt-24 max-w-4xl overflow-hidden text-[2.5rem]/tight
-          tracking-tight text-stone-100
+          tracking-tight text-neutral-100
         "
       >
 
@@ -126,7 +126,7 @@
       <!-- tagline -->
       <p
         style="font-family:'Geist Mono',monospace;"
-        class="text-lg text-stone-100"
+        class="text-lg text-neutral-100"
       >
         Headless · Composable · Type-safe
       </p>
