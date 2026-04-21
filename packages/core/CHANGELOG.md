@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0.0-alpha.7...v2.0.0-alpha.9
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.7...v2.0.0-alpha.9)
+
+### Fixed
+
+- Sync item keys when array changes externally ([0e214e6](https://github.com/favorodera/notform/commit/0e214e6))
+- Ensure accurate `isValidating` state and consistent initial values ([643f49f](https://github.com/favorodera/notform/commit/643f49f))
+
+### Documentation
+
+- Update documentation links ([2590ebe](https://github.com/favorodera/notform/commit/2590ebe))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-alpha.6...v2.0.0-alpha.7
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.6...v2.0.0-alpha.7)
