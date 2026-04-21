@@ -58,8 +58,9 @@ const item = {
             variant="subtle"
             color="primary"
             class="mb-6 font-mono"
+            icon="lucide:sparkles"
           >
-            No magic. Just forms.
+            Not another form library
           </UBadge>
         </Motion>
 
