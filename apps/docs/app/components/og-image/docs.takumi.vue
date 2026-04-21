@@ -127,7 +127,7 @@ defineProps<{
         </span>
 
         <span
-          class="inline-block text-lg/tight text-stone-200"
+          class="inline-block text-lg/tight text-neutral-200"
         >
           {{ description }}
         </span>
