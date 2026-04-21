@@ -4,7 +4,7 @@
   TItem = StandardSchemaV1.InferInput<TItemSchema>
 "
 >
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { getProperty, setProperty } from 'dot-prop'
 import { dequal } from 'dequal'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
@@ -208,6 +208,23 @@ onMounted(async () => {
   await nextTick()
   if (validateOn.value.onMount) validate()
 })
+
+/**
+ * Syncs `itemKeys` whenever the underlying array changes outside of this
+ * component's own mutation methods — most commonly after `form.reset()`.
+ *
+ * Without this, `itemKeys` would be stale until the next mutation:
+ * - If the reset shrinks the array, a subsequent `append` would call
+ *   `syncKeys` and regenerate keys for the surviving items, causing
+ *   Vue to remount them unnecessarily.
+ * - If the reset grows the array, items render with `fallback` keys
+ *   until the next mutation, breaking key stability guarantees.
+ *
+ * Our own mutations already manage keys explicitly before writing to
+ * the array, so when this watcher fires after them, `syncKeys` is a
+ * cheap no-op (lengths already match).
+ */
+watch(array, () => syncKeys())
 
 
 // SLOT PROPS
