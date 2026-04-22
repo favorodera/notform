@@ -1,4 +1,4 @@
-import { addComponent, addImports, addTemplate, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 
 const components = [
   'NotForm',
@@ -52,26 +52,6 @@ export default defineNuxtModule({
         as: composable,
         from: composablesRuntime,
       })
-    })
-
-    // Generate virtual module
-    const template = addTemplate({
-      filename: 'notform.mjs',
-      getContents: () => 'export * from \'notform\'',
-      write: true,
-    })
-
-    // Register notform alias
-    nuxt.options.alias['#notform'] = template.dst
-
-    // Tell TypeScript about the alias
-    addTypeTemplate({
-      filename: 'types/notform.d.ts',
-      getContents: () => `
-      declare module '#notform' {
-        export type * from 'notform'
-      }
-    `,
     })
   },
 
