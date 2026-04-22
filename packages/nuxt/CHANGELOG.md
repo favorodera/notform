@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.0.0-beta.2...v2.0.0-beta.3
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-beta.2...v2.0.0-beta.3)
+
+### Refactors
+
+- Remove virtual module and type alias for #notform ([25f8a81](https://github.com/favorodera/notform/commit/25f8a81))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-beta.1...v2.0.0-beta.2
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-beta.1...v2.0.0-beta.2)
