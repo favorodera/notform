@@ -37,9 +37,9 @@ const form = useNotForm({
       :item-schema="itemSchema"
     >
       <NotField
-       v-for="item in items"
-                  :key="item.key"
-                  v-slot="{ events, isValid, errors, path }"
+        v-for="item in items"
+        :key="item.key"
+        v-slot="{ events, isValid, errors, path }"
         :path="item.path"
       >
         <div class="field">
