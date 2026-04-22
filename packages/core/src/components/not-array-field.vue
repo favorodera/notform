@@ -118,11 +118,7 @@ const validate = async () => {
 // MUTATION
 
 
-/**
- * Re-aligns itemKeys with the current array length.
- * Called at the start of every mutation so keys stay consistent
- * after external changes (e.g. form.reset()).
- */
+/** Re-aligns itemKeys with the current array length. */
 const syncKeys = () => {
   const arrayLength = array.value.length
   if (itemKeys.value.length > arrayLength) {
@@ -140,7 +136,6 @@ const syncKeys = () => {
  * automatically via the computed above so no explicit dirty call is needed here.
  */
 const mutate = (updater: (current: TItem[]) => void) => {
-  syncKeys()
   const current = [...array.value]
   updater(current)
   setProperty(form.values, props.path, current)
@@ -210,21 +205,16 @@ onMounted(async () => {
 })
 
 /**
- * Syncs `itemKeys` whenever the underlying array changes outside of this
- * component's own mutation methods — most commonly after `form.reset()`.
+ * Syncs `itemKeys` when the array length changes outside of this component's
+ * own mutation methods — most commonly after `form.reset()`.
  *
- * Without this, `itemKeys` would be stale until the next mutation:
- * - If the reset shrinks the array, a subsequent `append` would call
- *   `syncKeys` and regenerate keys for the surviving items, causing
- *   Vue to remount them unnecessarily.
- * - If the reset grows the array, items render with `fallback` keys
- *   until the next mutation, breaking key stability guarantees.
- *
- * Our own mutations already manage keys explicitly before writing to
- * the array, so when this watcher fires after them, `syncKeys` is a
- * cheap no-op (lengths already match).
+ * Watching `length` rather than the full array avoids unnecessary syncs on
+ * `update()` and `swap()`, which mutate values but never add or remove items.
+ * When our own mutations run, they manage keys explicitly before writing to
+ * the array, so by the time this watcher fires the lengths already match and
+ * `syncKeys` is a cheap no-op.
  */
-watch(array, () => syncKeys())
+watch(() => array.value.length, syncKeys)
 
 
 // SLOT PROPS
