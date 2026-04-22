@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TSchema extends ObjectSchema">
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { getProperty } from 'dot-prop'
 import type { NotFieldProps, NotFieldSlots, NotFieldSlotProps } from '../types/not-field'
 import type { ObjectSchema } from '../types/shared'
@@ -33,6 +33,41 @@ const validateOn = computed(() => ({
 
 
 const isValidating = ref(false)
+/** Timer handle for the current pending debounced validation, if any. */
+let debounceTimer: NodeJS.Timeout | undefined
+
+
+// DEBOUNCE
+
+/**
+ * Cancels any pending debounced validation without running it.
+ * Called on blur (so blur's own immediate validation takes over) and on unmount
+ * (to prevent a timer from firing after the component is gone).
+ */
+const clearDebounce = () => {
+  if (debounceTimer !== undefined) {
+    clearTimeout(debounceTimer)
+    debounceTimer = undefined
+  }
+}
+
+/**
+ * Schedules a validation run, respecting the field's `debounce` prop.
+ *
+ * - If `debounce` is `0` or omitted, validation runs synchronously.
+ * - Otherwise, any pending timer is cancelled and a new one is started.
+ *   Only the final call within the window actually validates — useful for
+ *   async checks (availability lookups, server-side rules) where firing on
+ *   every keystroke would be wasteful.
+ */
+const scheduleValidation = () => {
+  if (!props.debounce) {
+    validate()
+    return
+  }
+  clearDebounce()
+  debounceTimer = setTimeout(validate, props.debounce)
+}
 
 
 // DERIVED
@@ -80,6 +115,7 @@ const validate = async () => {
 
 
 const onBlur = () => {
+  clearDebounce() // cancel pending — blur's validate() takes over
   form.touchField(props.path)
   if (validateOn.value.onBlur) validate()
 }
@@ -88,17 +124,17 @@ const onInput = () => {
   updateDirty()
   if (!validateOn.value.onInput) return
   // Eager mode: only revalidate if there is already an error to clear
-  if (form.validationMode.eager && errors.value.length > 0) validate()
+  if (form.validationMode.eager && !isValid.value) scheduleValidation()
 }
 
 const onChange = () => {
   updateDirty()
   if (!validateOn.value.onChange) return
-  if (form.validationMode.eager && errors.value.length > 0) validate()
+  if (form.validationMode.eager && !isValid.value) scheduleValidation()
 }
 
 const onFocus = () => {
-  if (validateOn.value.onFocus) validate()
+  if (validateOn.value.onFocus) scheduleValidation()
 }
 
 const events = computed(() => ({ onBlur, onInput, onChange, onFocus }))
@@ -111,6 +147,8 @@ onMounted(async () => {
   await nextTick()
   if (validateOn.value.onMount) validate()
 })
+
+onUnmounted(clearDebounce)
 
 
 // SLOT PROPS
