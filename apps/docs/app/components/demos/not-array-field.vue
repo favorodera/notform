@@ -37,9 +37,9 @@ const form = useNotForm({
       :item-schema="itemSchema"
     >
       <NotField
-        v-for="(item, index) in items"
-        :key="item.key"
-        v-slot="{ events }"
+       v-for="item in items"
+                  :key="item.key"
+                  v-slot="{ events, isValid, errors, path }"
         :path="item.path"
       >
         <div class="field">
@@ -47,7 +47,7 @@ const form = useNotForm({
             <input
               v-bind="events"
               :id="item.path"
-              v-model="form.values.tags[+index]"
+              v-model="form.values.tags[item.index]"
               placeholder="Enter tag name..."
               class="input flex-1"
               :name="item.path"
@@ -57,15 +57,15 @@ const form = useNotForm({
               icon="i-lucide-arrow-up"
               variant="soft"
               size="sm"
-              :disabled="index === 0"
-              @click="move(index, +index - 1)"
+              :disabled="item.index === 0"
+              @click="move(item.index, item.index - 1)"
             />
             <UButton
               icon="i-lucide-arrow-down"
               variant="soft"
               size="sm"
-              :disabled="index === items.length - 1"
-              @click="move(index, +index + 1)"
+              :disabled="item.index === items.length - 1"
+              @click="move(item.index, item.index + 1)"
             />
 
             <UButton
@@ -75,7 +75,7 @@ const form = useNotForm({
               size="sm"
               class="shrink-0"
               :disabled="items.length === 1"
-              @click="remove(index)"
+              @click="remove(item.index)"
             />
             
           </UFieldGroup>
