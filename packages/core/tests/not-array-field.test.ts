@@ -39,7 +39,7 @@ describe('NotArrayField', () => {
               :data-path="item.path"
               class="item"
             />
-            <div data-length="true">{{ slot.length }}</div>
+            <div data-length="true">{{ slot.items.length }}</div>
             <div data-valid="true">{{ slot.isValid }}</div>
             <div data-touched="true">{{ slot.isTouched }}</div>
             <div data-dirty="true">{{ slot.isDirty }}</div>
@@ -388,7 +388,7 @@ describe('NotArrayField', () => {
         setup: () => ({ form }),
         template: `
           <NotArrayField :form="form" path="tags" v-slot="slot">
-            <div data-length="true">{{ slot.length }}</div>
+            <div data-length="true">{{ slot.items.length }}</div>
             <button id="append"  @click="slot.append('solo')">append</button>
             <button id="prepend" @click="slot.prepend('first')">prepend</button>
           </NotArrayField>
