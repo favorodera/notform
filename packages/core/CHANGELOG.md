@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0.0-beta.1...v2.0.0-beta.2
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-beta.1...v2.0.0-beta.2)
+
+### Added
+
+- Add debounced validation to not-field ([e9d2c32](https://github.com/favorodera/notform/commit/e9d2c32))
+- Add debounce option for field validation ([9e00309](https://github.com/favorodera/notform/commit/9e00309))
+
+### Refactors
+
+- Optimize item key synchronization ([49d5d23](https://github.com/favorodera/notform/commit/49d5d23))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-beta.0...v2.0.0-beta.1
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-beta.0...v2.0.0-beta.1)
