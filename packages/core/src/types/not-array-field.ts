@@ -83,9 +83,6 @@ export type NotArrayFieldSlotProps<
   /** The array items with stable keys and paths for use with `v-for`. */
   items: NotArrayFieldItem[]
 
-  /** The current length of the array. */
-  length: number
-
   /** All validation issues for this array field from the last validation run. */
   errors: StandardSchemaV1.Issue[]
 
