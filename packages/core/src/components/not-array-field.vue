@@ -233,7 +233,6 @@ watch(array, () => syncKeys())
 const slotProps = computed<NotArrayFieldSlotProps<TSchema, TItem>>(() => ({
   path: props.path,
   items: items.value,
-  length: array.value.length,
   errors: errors.value,
   isValid: isValid.value,
   isTouched: isTouched.value,
