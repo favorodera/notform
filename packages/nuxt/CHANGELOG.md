@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.0.0-beta.0...v2.0.0-beta.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-beta.0...v2.0.0-beta.1)
+
+### Documentation
+
+- Update documentation link ([f79cf09](https://github.com/favorodera/notform/commit/f79cf09))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0-alpha.9...v2.0.0-beta.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.9...v2.0.0-beta.0)
