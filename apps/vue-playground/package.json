@@ -1,0 +1,31 @@
+{
+  "name": "vue-playground",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint . --fix"
+  },
+  "dependencies": {
+    "notform": "workspace:*",
+    "zod": "^4.3.6",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.31",
+    "vue-router": "5.0.4"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.4",
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vue/tsconfig": "^0.9.1",
+    "vite": "^8.0.3",
+    "vue-tsc": "^3.2.6"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

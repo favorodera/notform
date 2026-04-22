@@ -5,16 +5,66 @@
 
 @theme static {
   --container-8xl: 90rem;
-  --font-sans: 'Public Sans', sans-serif;
-  --font-mono: 'Space Mono', monospace;
+
+  --font-sans: 'Geist', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+
+  --color-forest-50: #f0faf4;
+  --color-forest-100: #d6f5e3;
+  --color-forest-200: #a8e9c4;
+  --color-forest-300: #6dd6a0;
+  --color-forest-400: #34be7a;
+  --color-forest-500: #1a9e5e;
+  --color-forest-600: #137e4a;
+  --color-forest-700: #0f6038;
+  --color-forest-800: #0c4d2e;
+  --color-forest-900: #093d24;
+  --color-forest-950: #041f12;
 }
 
 :root {
   --ui-container: var(--container-8xl);
-  --ui-radius: 0rem;
-  --ui-bg: var(--color-white);
+
+  --ui-header-height: 3.5rem;
 }
 
-.dark {
-  --ui-bg: #060606;
+@layer components {
+  .form {
+    @apply w-full max-w-sm space-y-3;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-highlighted;
+  }
+
+  .field {
+    @apply space-y-1;
+  }
+
+  .message {
+    @apply text-sm text-error;
+  }
+
+  .input {
+    @apply w-full rounded-md border-0 appearance-none placeholder:text-dimmed focus:outline-none px-2.5 py-1.5 text-base/5 text-highlighted bg-default ring ring-inset ring-accented transition-colors;
+  }
+}
+
+* {
+  border-style: dashed;
+}
+
+.fade-out-in-enter-active,
+.fade-out-in-leave-active {
+  transition: all 300ms ease;
+}
+
+.fade-out-in-enter-from,
+.fade-out-in-leave-to {
+  opacity: 0;
+}
+
+.fade-out-in-enter-to,
+.fade-out-in-leave-from {
+  opacity: 1;
 }

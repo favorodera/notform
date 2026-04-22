@@ -10,7 +10,7 @@ WHEN TO USE: Use this tool when you need to EXPLORE or SEARCH for documentation 
 - User asks general questions without specifying exact pages
 - You need to understand the overall documentation structure
 
-WHEN NOT TO USE: If you already know the specific page path (e.g., "/getting-started/installation"), use get-page directly instead.
+WHEN NOT TO USE: If you already know the specific page path (e.g., "/get-started/installation"), use get-page directly instead.
 
 WORKFLOW: This tool returns page titles, descriptions, and paths. After finding relevant pages, use get-page to retrieve the full content of specific pages that match the user's needs.
 
@@ -34,17 +34,17 @@ OUTPUT: Returns a structured list with:
         title: page.title,
         path: page.path,
         description: page.description,
-        url: `${siteUrl}${page.path}`
+        url: `${siteUrl}${page.path}`,
       }))
 
       return {
-        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       }
     } catch {
       return {
         content: [{ type: 'text', text: 'Failed to list pages' }],
-        isError: true
+        isError: true,
       }
     }
-  }
+  },
 })

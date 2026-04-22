@@ -1,50 +1,39 @@
 <script setup lang="ts">
-import { Analytics } from '@vercel/analytics/nuxt'
-
-const { seo } = useAppConfig()
+const { siteName, siteDescription, siteTitle } = useAppConfig()
 
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs'))
 const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('docs'), {
-  server: false
-})
-
-useHead({
-  meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { name: 'google-site-verification', content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM' }
-  ],
-  link: [
-    { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
-    { rel: 'icon', href: '/favicon.svg', sizes: 'any', type: 'image/svg+xml' }
-  ],
-  htmlAttrs: {
-    lang: 'en'
-  }
-})
-
-useSeoMeta({
-  titleTemplate: `%s - ${seo?.siteName}`,
-  ogSiteName: seo?.siteName,
-  twitterCard: 'summary_large_image'
+  server: false,
 })
 
 provide('navigation', navigation)
+
+useSeoMeta({
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} | ${siteName}` : siteTitle
+  },
+  ogTitle: () => siteTitle,
+  description: () => siteDescription,
+  twitterTitle: () => siteTitle,
+  twitterDescription: () => siteDescription,
+  ogDescription: () => siteDescription,
+  twitterCard: 'summary_large_image',
+  twitterCreator: '@favorodera',
+  twitterSite: '@favorodera',
+})
+
+ 
+defineOgImage('Landing.takumi')
 </script>
 
 <template>
   <UApp>
-    <NuxtLoadingIndicator />
-    <Analytics />
- 
-    <AppHeader />
 
     <UMain>
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
     </UMain>
-
-    <AppFooter />
 
     <ClientOnly>
       <LazyUContentSearch

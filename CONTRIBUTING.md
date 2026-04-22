@@ -2,86 +2,92 @@
 
 Thank you for your interest in contributing to NotForm! We appreciate your time and effort in helping to improve this project.
 
+---
+
+## Table of Contents
+
+  - [Code of Conduct](#code-of-conduct)
+  - [Getting Started](#getting-started)
+  - [Development Workflow](#development-workflow)
+  - [Testing](#testing)
+  - [Pull Request Process](#pull-request-process)
+  - [Reporting Bugs](#reporting-bugs)
+  - [Suggesting Features](#suggesting-features)
+
+---
+
 ## Code of Conduct
 
 By participating in this project, you agree to abide by the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v24 or later)
-- [pnpm](https://pnpm.io/installation) (v10 or later)
+  - [Node.js](https://nodejs.org/) (v24 or later)
+  - [pnpm](https://pnpm.io/installation) (v10 or later)
 
 ### Setup
-
-1. Fork the repository
-2. Clone your fork:
 
 ```bash
 git clone https://github.com/<your-username>/notform.git
 cd notform
-```
-
-3. Install dependencies:
-
-```bash
 pnpm install
-```
-
-4. Start development:
-
-```bash
 pnpm dev
 ```
+
+---
 
 ## Development Workflow
 
 ### Branch Naming
 
-Use descriptive branch names following this pattern:
-
-- `feat/<feature-name>` - New features
-- `fix/<issue-description>` - Bug fixes
-- `docs/<what-changed>` - Documentation changes
-- `chore/<task>` - Maintenance tasks
+| Pattern | Use |
+|---------|-----|
+| `feat/<feature-name>` | New features |
+| `fix/<issue-description>` | Bug fixes |
+| `docs/<what-changed>` | Documentation changes |
+| `chore/<task>` | Maintenance tasks |
 
 ### Commit Messages
 
-Write clear, concise commit messages. We follow [Conventional Commits](https://www.conventionalcommits.org/):
+We follow [Conventional Commits](https://www.conventionalcommits.org/). `relizy` reads these to generate changelogs automatically.
 
-- `feat:` - A new feature
-- `fix:` - A bug fix
-- `docs:` - Documentation only changes
-- `style:` - Changes that do not affect the meaning of the code
-- `refactor:` - A code change that neither fixes a bug nor adds a feature
-- `perf:` - A code change that improves performance
-- `test:` - Adding missing tests or correcting existing tests
-- `chore:` - Changes to the build process or auxiliary tools
+| Prefix | Use |
+|--------|-----|
+| `feat:` | A new feature |
+| `fix:` | A bug fix |
+| `docs:` | Documentation only |
+| `style:` | No logic change |
+| `refactor:` | Neither fix nor feature |
+| `perf:` | Performance improvement |
+| `test:` | Adding or correcting tests |
+| `chore:` | Build process or tooling |
 
 ### Code Style
 
-- Run `pnpm lint` to check for linting errors
-- Run `pnpm typecheck` to verify TypeScript types
-- Ensure all tests pass with `pnpm test`
+```bash
+pnpm lint       # check linting errors
+pnpm typecheck  # verify TypeScript types
+pnpm test       # run all tests
+```
+
+---
 
 ## Testing
 
-We use [Vitest](https://vitest.dev/) for testing.
-
-### Running Tests
+  We use [Vitest](https://vitest.dev/) coupled with [Vue Test Utils](https://test-utils.vuejs.org/) in a jsdom environment.
 
 ```bash
-# Run all tests
-pnpm test
-
-# Run tests in watch mode
-pnpm test:watch
+pnpm test         # run all tests
+pnpm test:watch   # watch mode
 ```
 
-### Writing Tests
+  When adding new features or fixing bugs, please include tests as this helps us validate upcoming features before they are fully integrated.
 
-When adding new features or fixing bugs, please include tests as this helps us validate upcoming features before they are fully integrated.
+---
 
 ## Pull Request Process
 
@@ -93,20 +99,22 @@ When adding new features or fixing bugs, please include tests as this helps us v
 ```bash
 pnpm ready
 ```
-5. Commit your changes using Conventional Commits. Our release system uses these messages to automatically generate changelogs.
-6. Push your branch and open a Pull Request
+
+5. Commit using Conventional Commits and open a Pull Request.
+6. Push your branch and open a Pull Request.
+
+---
 
 ## Reporting Bugs
 
-Before creating bug reports, please check existing issues to see if the problem has already been reported.
+  Before filing a report, check existing issues. When you do file one, include:
 
-When filing a bug report, please include:
+  - A clear, descriptive title
+  - Steps to reproduce
+  - Expected vs. actual behaviour
+  - Your environment (OS, Node.js version, pnpm version)
 
-- A clear and descriptive title
-- Steps to reproduce the behavior
-- Expected behavior
-- Actual behavior
-- Your environment (OS, Node.js version, pnpm version, etc.)
+---
 
 ## Suggesting Features
 
@@ -116,11 +124,13 @@ We welcome feature suggestions! Please open an issue describing:
 - Your proposed solution
 - Any alternatives you've considered
 
+---
+
 ## Questions?
 
-If you have questions, feel free to:
+  If you have questions, feel free to:
 
-- Open a [Discussion](https://github.com/favorodera/notform/discussions)
-- Check the [Documentation](https://notform-docs.vercel.app/)
+  - Open a [Discussion](https://github.com/favorodera/notform/discussions)
+  - Check the [Documentation](https://notformdocs.vercel.app/)
 
-Thank you for contributing! 🎉
+  Thank you for contributing! 🎉

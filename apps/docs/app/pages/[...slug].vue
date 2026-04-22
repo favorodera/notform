@@ -1,56 +1,45 @@
 <script setup lang="ts">
-import type { ContentNavigationItem } from '@nuxt/content'
-import { findPageHeadline } from '@nuxt/content/utils'
+import { useClipboard } from '@vueuse/core'
 
 definePageMeta({
-  layout: 'docs'
+  layout: 'docs',
 })
 
 const route = useRoute()
-const { toc } = useAppConfig()
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
 if (!page.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page not found',
+    message: 'Sorry, we couldn\'t find the page you\'re looking for.',
+    fatal: true,
+  })
 }
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
-  return queryCollectionItemSurroundings('docs', route.path, {
-    fields: ['description']
-  })
-})
+const { copy, copied } = useClipboard({ source: await $fetch<string>(`/raw${route.path}.md`), legacy: true })
+const { siteUrl, siteName, siteDescription } = useAppConfig()
 
-const title = page.value.seo?.title || page.value.title
-const description = page.value.seo?.description || page.value.description
+const { data: surround } = await useAsyncData(`${route.path}-surround`, () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }))
+
+const seo = computed(() => {
+  return {
+    title: page.value?.title ?? siteName,
+    description: page.value?.description ?? siteDescription,
+  }
+})
 
 useSeoMeta({
-  title,
-  ogTitle: title,
-  description,
-  twitterDescription: description,
-  twitterTitle: title,
-  ogDescription: description,
-  ogUrl: () => `https://notform-docs.vercel.app${route.fullPath}`
+  title: () => seo.value.title,
+  ogTitle: () => seo.value.title,
+  twitterTitle: () => seo.value.title,
+  twitterDescription: () => seo.value.description,
+  description: () => seo.value.description,
+  ogDescription: () => seo.value.description,
+  ogUrl: () => `${siteUrl}${route.fullPath}`,
 })
 
-const headline = computed(() => findPageHeadline(navigation?.value, page.value?.path))
-
-defineOgImageComponent('Docs', { headline: headline.value })
-
-const links = computed(() => {
-  const links = []
-  if (toc?.bottom?.edit) {
-    links.push({
-      icon: 'i-tabler-external-link',
-      label: 'Edit this page',
-      to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
-      target: '_blank'
-    })
-  }
-
-  return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
-})
+defineOgImage('Docs.takumi', { ...seo.value })
 </script>
 
 <template>
@@ -58,61 +47,70 @@ const links = computed(() => {
     <UPageHeader
       :title="page.title"
       :description="page.description"
-      :headline="headline"
+      class="flex w-full flex-col-reverse"
+      :ui="{
+        title:'text-[1.75em] font-semibold',
+        headline:'mb-0 mt-2.5'
+      }"
     >
-      <template #links>
+  
+      <template #headline>
         <UButton
-          v-for="(link, index) in page.links"
-          :key="index"
-          v-bind="link"
+          :label="copied ? 'Copied' : 'Copy Markdown'"
+          :icon="copied ? 'lucide:check' : 'lucide:copy'"
+          color="neutral"
+          variant="outline"
+          size="sm"
+          @click="copy()"
         />
 
-        <PageHeaderLinks />
       </template>
+
     </UPageHeader>
 
-    <UPageBody>
+    <UPageBody
+      class="
+        pb-6
+        md:pb-8
+        xl:pb-14
+      "
+    >
       <ContentRenderer
         v-if="page"
         :value="page"
       />
 
-      <USeparator v-if="surround?.length" />
-
       <UContentSurround :surround="surround" />
     </UPageBody>
 
     <template
-      v-if="page?.body?.toc?.links?.length"
+      v-if="page.body?.toc?.links?.length"
       #right
     >
       <UContentToc
-        :title="toc?.title"
         :links="page.body?.toc?.links"
+        :ui="{
+          title:'text-sm text-muted font-normal',
+          indicator:'ms-0',
+          container:'py-3! sm:py-3!'
+        }"
+        highlight
+        highlight-variant="circuit"
+        class="
+          border-y border-dashed border-default
+          lg:border-x
+        "
       >
-        <template
-          v-if="toc?.bottom"
-          #bottom
-        >
-          <div
-            class="
-              hidden space-y-6
-              lg:block
-            "
-            :class="{ 'mt-6!': page.body?.toc?.links?.length }"
-          >
-            <USeparator
-              v-if="page.body?.toc?.links?.length"
-              type="dashed"
-            />
 
-            <UPageLinks
-              :title="toc.bottom.title"
-              :links="links"
-            />
-          </div>
+        <template #leading>
+          <Icon
+            name="lucide:text-align-start"
+            class="size-4 text-muted"
+          />
         </template>
+    
       </UContentToc>
     </template>
+
   </UPage>
 </template>

@@ -1,0 +1,66 @@
+{
+  "name": "notform-nuxt",
+  "version": "2.0.0-beta.3",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "description": "Official notform nuxt module - Vue Forms Without the Friction",
+  "author": "Favour Emeka <favorodera@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://notformdocs.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/favorodera/notform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/favorodera/notform/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
+    }
+  },
+  "main": "./dist/module.mjs",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/types.d.mts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepack": "pnpm build",
+    "dev": "nuxt prepare && nuxt-module-build build --stub",
+    "build": "nuxt prepare && nuxt-module-build build",
+    "typecheck": "nuxt prepare && vue-tsc --noEmit",
+    "lint": "eslint . --fix"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.4.2",
+    "notform": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/schema": "^4.4.2",
+    "nuxt": "^4.4.2",
+    "vue-tsc": "^3.2.6"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@10.32.1",
+  "keywords": [
+    "notform-nuxt",
+    "nuxt",
+    "form",
+    "nuxt form",
+    "validator",
+    "nuxt form validator"
+  ]
+}
