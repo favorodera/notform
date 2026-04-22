@@ -62,6 +62,27 @@ export type NotFieldProps = {
    * ```
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
+  /**
+   * Debounce delay in milliseconds for input- and change-triggered validation.
+   *
+   * When set, validation is deferred until the user stops typing for the given
+   * duration. Only the final call within the window runs — earlier ones are
+   * cancelled. Useful for async validators (e.g. username availability checks)
+   * where firing on every keystroke would cause excessive requests.
+   *
+   * Blur- and submit-triggered validation always runs immediately, regardless
+   * of this setting, so the field never feels unresponsive when the user leaves.
+   *
+   * ```vue
+   * <!-- validate 400ms after the user stops typing -->
+   * <NotField path="username" :debounce="400" v-slot="{ events }">
+   *   <input v-model="form.values.username" v-bind="events" />
+   * </NotField>
+   * ```
+   *
+   * Omit or set to `0` to disable debouncing (default behaviour).
+   */
+  debounce?: number
 }
 
 
