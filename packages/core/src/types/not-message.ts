@@ -16,7 +16,9 @@ export type NotMessageProps = {
    * Required when using `NotMessage` outside of a `NotForm` (singleton fields).
    *
    * ```vue
-   * <NotMessage :form="form" path="email" />
+   * <template>
+   *   <NotMessage :form="form" path="email" />
+   * </template>
    * ```
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
