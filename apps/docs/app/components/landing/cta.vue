@@ -143,7 +143,7 @@ const itemVariants = {
               :style="`background-image: repeating-linear-gradient(-45deg, currentColor, currentColor 1px, transparent 1px, transparent 5px)`"
               aria-hidden
             />
-            npx nypm add notform
+            npm install notform
           </UButton>
 
         </Motion>
