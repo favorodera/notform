@@ -16,9 +16,11 @@ export type NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = StandardSc
    * Enables typed `append`, `prepend`, `insert`, and `update` methods in the slot.
    *
    * ```vue
-   * <NotArrayField path="tags" :item-schema="z.string()">
-   *   <!-- append now expects a string -->
-   * </NotArrayField>
+   * <template>
+   *   <NotArrayField path="tags" :item-schema="z.string()">
+   *     <!-- append now expects a string -->
+   *   </NotArrayField>
+   * </template>
    * ```
    */
   itemSchema?: TItemSchema
@@ -47,11 +49,13 @@ export type NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = StandardSc
  * Use `key` for `v-for` tracking and `path` to pass to a nested `NotField`.
  *
  * ```vue
- * <NotArrayField path="tags" v-slot="{ items }">
- *   <NotField v-for="item in items" :key="item.key" :path="item.path" v-slot="{ events }">
- *     <input v-model="form.values.tags[item.index]" v-bind="events" />
- *   </NotField>
- * </NotArrayField>
+ * <template>
+ *   <NotArrayField path="tags" v-slot="{ items }">
+ *     <NotField v-for="item in items" :key="item.key" :path="item.path" v-slot="{ events }">
+ *       <input v-model="form.values.tags[item.index]" v-bind="events" />
+ *     </NotField>
+ *   </NotArrayField>
+ * </template>
  * ```
  */
 export type NotArrayFieldItem = {

@@ -40,7 +40,9 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    *
    * Use with `v-model` for two-way binding:
    * ```vue
-   * <input v-model="form.values.email" />
+   * <template>
+   *   <input v-model="form.values.email" />
+   * </template>
    * ```
    */
   values: StandardSchemaV1.InferInput<TSchema>
@@ -107,7 +109,9 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    *
    * Convenient for direct template access without calling `getFieldErrors`:
    * ```vue
-   * <p>{{ form.errorsMap['address.city'] }}</p>
+   * <template>
+   *   <p>{{ form.errorsMap['address.city'] }}</p>
+   * </template>
    * ```
    */
   errorsMap: ComputedRef<Partial<Record<Paths<StandardSchemaV1.InferInput<TSchema>>, string>>>
@@ -170,7 +174,10 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    * Bind to the native form's `@submit` event:
    *
    * ```vue
-   * <form @submit="form.submit">
+   * <template>
+   *   <form @submit="form.submit">
+   *   </form>
+   * </template>
    * ```
    */
   submit: (event: Event) => Promise<void>

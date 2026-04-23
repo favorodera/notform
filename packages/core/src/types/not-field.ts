@@ -11,11 +11,13 @@ import type { NotFormInstance } from './not-form'
  * Spread onto a native input or bind individually to custom components.
  *
  * ```vue
- * <!-- spread -->
- * <input v-bind="events" />
+ * <template>
+ *   <!-- spread -->
+ *   <input v-bind="events" />
  *
- * <!-- individual -->
- * <CustomCombobox @focusout="onBlur" @pick="onChange" />
+ *   <!-- individual -->
+ *   <CustomCombobox @focusout="onBlur" @pick="onChange" />
+ * </template>
  * ```
  */
 export type NotFieldEvents = {
@@ -44,9 +46,11 @@ export type NotFieldProps = {
    * Required when using `NotField` outside of a `NotForm` (singleton fields).
    *
    * ```vue
-   * <NotField :form="form" path="email" v-slot="{ events }">
-   *   <input v-bind="events" />
-   * </NotField>
+   * <template>
+   *   <NotField :form="form" path="email" v-slot="{ events }">
+   *     <input v-bind="events" />
+   *   </NotField>
+   * </template>
    * ```
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,8 +61,10 @@ export type NotFieldProps = {
    * Merged over the form-wide `validateOn` — only the keys you specify are overridden.
    *
    * ```vue
-   * <!-- form validates on blur only, but this field also validates on every input -->
-   * <NotField :validateOn="{ onInput: true }" path="username" />
+   * <template>
+   *   <!-- form validates on blur only, but this field also validates on every input -->
+   *   <NotField :validateOn="{ onInput: true }" path="username" />
+   * </template>
    * ```
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
@@ -74,10 +80,12 @@ export type NotFieldProps = {
    * of this setting, so the field never feels unresponsive when the user leaves.
    *
    * ```vue
-   * <!-- validate 400ms after the user stops typing -->
-   * <NotField path="username" :debounce="400" v-slot="{ events }">
-   *   <input v-model="form.values.username" v-bind="events" />
-   * </NotField>
+   * <template>
+   *   <!-- validate 400ms after the user stops typing -->
+   *   <NotField path="username" :debounce="400" v-slot="{ events }">
+   *     <input v-model="form.values.username" v-bind="events" />
+   *   </NotField>
+   * </template>
    * ```
    *
    * Omit or set to `0` to disable debouncing (default behaviour).
@@ -130,7 +138,9 @@ export type NotFieldSlotProps<TSchema extends ObjectSchema> = {
    * All event handlers combined — spread directly onto native inputs.
    *
    * ```vue
-   * <input v-bind="events" />
+   * <template>
+   *   <input v-bind="events" />
+   * </template>
    * ```
    */
   events: NotFieldEvents
