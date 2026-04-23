@@ -35,7 +35,7 @@ This is a monorepo managed with `pnpm` and `turbo`.
 ### Prerequisites
 
 - [pnpm](https://pnpm.io/installation) (v10 or later)
-- Node.js (v24 or later)
+- Node.js (v22 or later)
 
 ### Setup
 
