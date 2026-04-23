@@ -49,7 +49,7 @@ export default defineNuxtConfig({
         {
           name: 'google-site-verification',
           content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM',
-        }
+        },
       ],
 
       link: [
