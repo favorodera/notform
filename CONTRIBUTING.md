@@ -26,13 +26,13 @@ By participating in this project, you agree to abide by the [Contributor Covenan
 
 ### Prerequisites
 
-  - [Node.js](https://nodejs.org/) (v24 or later)
+  - [Node.js](https://nodejs.org/) (v22 or later)
   - [pnpm](https://pnpm.io/installation) (v10 or later)
 
 ### Setup
 
 ```bash
-git clone https://github.com/<your-username>/notform.git
+git clone https://github.com/favorodera/notform.git
 cd notform
 pnpm install
 pnpm dev
