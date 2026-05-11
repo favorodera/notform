@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/notform-nuxt.svg?style=plastic)](https://npmx.dev/package/notform)
 [![NPM Unpacked Size](https://img.shields.io/npm/unpacked-size/notform-nuxt?style=plastic)](https://npmx.dev/package/notform)
 
-**Official Nuxt module for NotForm - Vue Forms Without the Friction.**
+**Official Nuxt module for NotForm**
 
 `notform-nuxt` provides seamless integration for NotForm in Nuxt applications, including auto-imports and Nuxt-specific optimizations.
 
