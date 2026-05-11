@@ -80,7 +80,7 @@
 
     <!-- logo bottom-right -->
     <div
-      class="absolute -right-[20px] -bottom-[40px] opacity-25"
+      class="absolute -right-5 -bottom-10 opacity-25"
     >
       <AppLogoFade />
     </div>
