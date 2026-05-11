@@ -14,7 +14,7 @@
   "dependencies": {
     "notform-nuxt": "workspace:*",
     "zod": "^4.3.6",
-    "nuxt": "^4.4.5",
+    "nuxt": "^4.4.2",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"
   },

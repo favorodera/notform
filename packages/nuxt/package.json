@@ -42,14 +42,14 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.4.5",
+    "@nuxt/kit": "^4.4.2",
     "notform": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/module-builder": "^1.0.2",
-    "@nuxt/schema": "^4.4.5",
-    "nuxt": "^4.4.5",
-    "vue-tsc": "^3.2.8"
+    "@nuxt/schema": "^4.4.2",
+    "nuxt": "^4.4.2",
+    "vue-tsc": "^3.2.6"
   },
   "engines": {
     "node": ">=22.0.0"

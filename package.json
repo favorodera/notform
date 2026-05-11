@@ -16,14 +16,14 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
-    "lint:root": "eslint . --fix",
+    "lint:root": "eslint . --fix --ignore-pattern 'packages/*' --ignore-pattern 'apps/*'",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "test:watch": "turbo test:watch",
     "postinstall": "turbo postinstall",
     "preview": "turbo preview",
     "prepublishOnly": "turbo prepublishOnly",
-    "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test"
+    "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm build && pnpm test"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.10.0",
@@ -43,7 +43,7 @@
   "packageManager": "pnpm@10.32.1",
   "pnpm": {
     "peerDependencyRules": {
-      "ignoreMissing": [],
+      "ignoreMissing": [ ],
       "allowedVersions": {
         "vite": "8",
         "typescript": "6"
