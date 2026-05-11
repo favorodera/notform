@@ -137,8 +137,6 @@ const onFocus = () => {
   if (validateOn.value.onFocus) scheduleValidation()
 }
 
-const events = computed(() => ({ onBlur, onInput, onChange, onFocus }))
-
 
 // LIFECYCLE
 
@@ -163,11 +161,7 @@ const slotProps = computed<NotFieldSlotProps<TSchema>>(() => ({
   isDirty: isDirty.value,
   isValidating: isValidating.value,
   validate,
-  events: events.value,
-  onBlur,
-  onInput,
-  onChange,
-  onFocus,
+  events: { onBlur, onInput, onChange, onFocus },
 }))
 </script>
 

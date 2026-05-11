@@ -28,6 +28,10 @@
   --ui-header-height: 3.5rem;
 }
 
+.dark {
+  --ui-bg: black;
+}
+
 @layer components {
   .form {
     @apply w-full max-w-sm space-y-3;

@@ -1,10 +1,11 @@
 # NotForm
 
-[![license](https://img.shields.io/github/license/favorodera/notform.svg?style=flat-square)](https://github.com/favorodera/notform/blob/main/LICENSE)
-[![github stars](https://img.shields.io/github/stars/favorodera/notform.svg?style=flat-square)](https://github.com/favorodera/notform/stargazers)
-[![npm version](https://img.shields.io/npm/v/notform.svg?style=flat-square)](https://www.npmjs.com/package/notform)
-[![npm downloads](https://img.shields.io/npm/dm/notform.svg?style=flat-square)](https://www.npmjs.com/package/notform)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/notform.svg?style=flat-square)](https://bundlephobia.com/package/notform)
+[![license](https://img.shields.io/github/license/favorodera/notform.svg?style=plastic)](https://github.com/favorodera/notform/blob/main/LICENSE)
+[![github stars](https://img.shields.io/github/stars/favorodera/notform.svg?style=plastic)](https://github.com/favorodera/notform/stargazers)
+[![documentation](https://img.shields.io/badge/-documentation-green?style=plastic)](https://notformdocs.vercel.app/)
+[![notform core](https://img.shields.io/badge/core-%234FC08D?style=plastic&logo=vuedotjs)](./packages/core)
+[![nuxt module](https://img.shields.io/badge/nuxt_module-%234FC08D?style=plastic&logo=nuxt)](./packages/nuxt)
+
 
 **Vue Forms Without the Friction.**
 
