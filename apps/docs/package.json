@@ -35,7 +35,7 @@
     "minimark": "^0.2.0",
     "motion-v": "^2.2.1",
     "notform-nuxt": "workspace:*",
-    "nuxt": "^4.4.2",
+    "nuxt": "^4.4.5",
     "nuxt-llms": "0.2.0",
     "nuxt-schema-org": "^6.0.4",
     "tailwindcss": "^4.2.2",

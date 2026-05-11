@@ -23,7 +23,7 @@
     "postinstall": "turbo postinstall",
     "preview": "turbo preview",
     "prepublishOnly": "turbo prepublishOnly",
-    "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test"
+    "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm build && pnpm test"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.10.0",
@@ -33,7 +33,7 @@
     "eslint": "^10.2.0",
     "eslint-plugin-better-tailwindcss": "^4.4.1",
     "eslint-plugin-vue": "^10.8.0",
-    "relizy": "^1.2.1",
+    "relizy": "^1.4.3",
     "turbo": "^2.9.5",
     "typescript": "^6.0.2"
   },
