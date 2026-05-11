@@ -1,5 +1,163 @@
 # Changelog
 
+## v2.0.0...v2.1.0-alpha.0
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0...v2.1.0-alpha.0)
+
+### Added
+
+- Add npm shields to README ([0dcab4f](https://github.com/favorodera/notform/commit/0dcab4f))
+- Define dark mode UI background ([e04888e](https://github.com/favorodera/notform/commit/e04888e))
+
+### Refactors
+
+- Simplify navigation prop in header component ([989f82a](https://github.com/favorodera/notform/commit/989f82a))
+- Update command to install notform ([7b941ee](https://github.com/favorodera/notform/commit/7b941ee))
+- Inline event handlers in slotProps ([3c441cc](https://github.com/favorodera/notform/commit/3c441cc))
+- Inline NotField event types ([b655632](https://github.com/favorodera/notform/commit/b655632))
+
+### Documentation
+
+- Update Node.js prerequisite to v22 ([6b13b57](https://github.com/favorodera/notform/commit/6b13b57))
+- Improve LLMs.txt documentation formatting and linking ([76368eb](https://github.com/favorodera/notform/commit/76368eb))
+- Wrap Vue template examples in <template> tags ([9a7e6f7](https://github.com/favorodera/notform/commit/9a7e6f7))
+- Wrap Vue template examples in <template> tags ([#43](https://github.com/favorodera/notform/pull/43))
+
+  ## Description
+  <!-- Describe your changes in detail -->
+  ## Related Issue
+  <!-- Link to the issue this PR addresses, if applicable -->
+  Fixes #
+  ## Type of Change
+  <!-- Mark with an 'x' all that apply -->
+  - [ ] Bug fix (non-breaking change which fixes an issue)
+  - [ ] New feature (non-breaking change which adds functionality)
+  - [ ] Breaking change (fix or feature that would cause existing
+  functionality to not work as expected)
+  - [x] Documentation update
+  - [ ] Code refactor (no functional changes)
+  - [ ] Test update
+  - [ ] Build/CI configuration
+  ## Checklist
+  <!-- Mark with an 'x' all that apply -->
+  - [x] I have read the [CONTRIBUTING](../CONTRIBUTING.md) guidelines
+  - [x] My code follows the project's code style
+  - [ ] I have added tests that prove my fix is effective or that my
+  feature works
+  - [x] I have run `pnpm ready`
+  - [x] New and existing unit tests pass locally with my changes
+  - [x] I have updated the documentation accordingly
+  ## Screenshots / Recordings
+  <!-- If applicable, add screenshots or recordings to help explain your
+  changes -->
+  ## Additional Notes
+  <!-- Add any additional notes for reviewers -->
+
+- Add 'Working with AI' pages to docs llms ([4496fc3](https://github.com/favorodera/notform/commit/4496fc3))
+- Add 'Working with AI' pages to docs llms ([#44](https://github.com/favorodera/notform/pull/44))
+
+  ## Description
+  This PR adds the AI section of the docs to the LLMS config in the docs
+  nuxt config
+  ## Related Issue
+  <!-- Link to the issue this PR addresses, if applicable -->
+  Fixes #
+  ## Type of Change
+  <!-- Mark with an 'x' all that apply -->
+  - [ ] Bug fix (non-breaking change which fixes an issue)
+  - [ ] New feature (non-breaking change which adds functionality)
+  - [ ] Breaking change (fix or feature that would cause existing
+  functionality to not work as expected)
+  - [x] Documentation update
+  - [x] Code refactor (no functional changes)
+  - [ ] Test update
+  - [ ] Build/CI configuration
+  ## Checklist
+  <!-- Mark with an 'x' all that apply -->
+  - [x] I have read the [CONTRIBUTING](../CONTRIBUTING.md) guidelines
+  - [x] My code follows the project's code style
+  - [ ] I have added tests that prove my fix is effective or that my
+  feature works
+  - [x] I have run `pnpm ready`
+  - [x] New and existing unit tests pass locally with my changes
+  - [x] I have updated the documentation accordingly
+  ## Screenshots / Recordings
+  <!-- If applicable, add screenshots or recordings to help explain your
+  changes -->
+  ## Additional Notes
+  <!-- Add any additional notes for reviewers -->
+
+- Improve clarity of LLM text file links in documentation ([4f76158](https://github.com/favorodera/notform/commit/4f76158))
+- Improve clarity of LLM text file links in documentation ([#45](https://github.com/favorodera/notform/pull/45))
+
+  ## Description
+  <!-- Describe your changes in detail -->
+  ## Related Issue
+  <!-- Link to the issue this PR addresses, if applicable -->
+  Fixes #
+  ## Type of Change
+  <!-- Mark with an 'x' all that apply -->
+  - [ ] Bug fix (non-breaking change which fixes an issue)
+  - [ ] New feature (non-breaking change which adds functionality)
+  - [ ] Breaking change (fix or feature that would cause existing
+  functionality to not work as expected)
+  - [x] Documentation update
+  - [ ] Code refactor (no functional changes)
+  - [ ] Test update
+  - [ ] Build/CI configuration
+  ## Checklist
+  <!-- Mark with an 'x' all that apply -->
+  - [x] I have read the [CONTRIBUTING](../CONTRIBUTING.md) guidelines
+  - [x] My code follows the project's code style
+  - [ ] I have added tests that prove my fix is effective or that my
+  feature works
+  - [x] I have run `pnpm ready`
+  - [x] New and existing unit tests pass locally with my changes
+  - [x] I have updated the documentation accordingly
+  ## Screenshots / Recordings
+  <!-- If applicable, add screenshots or recordings to help explain your
+  changes -->
+  ## Additional Notes
+  <!-- Add any additional notes for reviewers -->
+
+- Update contributing guide prerequisites and setup instructions ([a352e50](https://github.com/favorodera/notform/commit/a352e50))
+- Simplify event handler documentation - Consolidate event field descriptions. - Update example to use events object. ([f156cd1](https://github.com/favorodera/notform/commit/f156cd1))
+- Add navigation icon for LLMs.txt ([1ef9018](https://github.com/favorodera/notform/commit/1ef9018))
+- Add advanced guides for Pinia, Composables, and Validation ([1b58126](https://github.com/favorodera/notform/commit/1b58126))
+
+  - Add guides for Pinia and Composables.
+  - Explain form instance sharing patterns.
+  - Detail validation triggers and modes.
+  - Cover async and cross-field validation.
+  - Show handling of server-side errors.
+
+- Simplify project tagline in READMEs - Remove "Vue Forms Without the Friction." - Update core package description to include components ([88c2afc](https://github.com/favorodera/notform/commit/88c2afc))
+- Update README badges ([10642a5](https://github.com/favorodera/notform/commit/10642a5))
+
+### Chores
+
+- Add Google site verification meta tag ([e90d83c](https://github.com/favorodera/notform/commit/e90d83c))
+- Update install command in hero component ([4b5f262](https://github.com/favorodera/notform/commit/4b5f262))
+- Update dependencies and build script ([92e2ad9](https://github.com/favorodera/notform/commit/92e2ad9))
+- Remove build from ready script ([3c58c65](https://github.com/favorodera/notform/commit/3c58c65))
+- Update dependencies and build scripts ([62fffb7](https://github.com/favorodera/notform/commit/62fffb7))
+- Update dependencies and lint root config ([50ab98c](https://github.com/favorodera/notform/commit/50ab98c))
+- Update pnpm dependencies ([fbb153b](https://github.com/favorodera/notform/commit/fbb153b))
+- Configure relizy types ([4cbcaa0](https://github.com/favorodera/notform/commit/4cbcaa0))
+
+### Styling
+
+- Add trailing comma to meta tag configuration ([f1850e3](https://github.com/favorodera/notform/commit/f1850e3))
+- Remove unused pointer-events-none class ([69ed14f](https://github.com/favorodera/notform/commit/69ed14f))
+- Update Tailwind CSS class syntax ([20331c5](https://github.com/favorodera/notform/commit/20331c5))
+- Adjust OG image logo positioning ([fde3882](https://github.com/favorodera/notform/commit/fde3882))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+- Favour  Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v1.0.7...v2.0.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v1.0.7...v2.0.0)

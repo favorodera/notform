@@ -1,5 +1,24 @@
 # Changelog
 
+## v2.0.0...v2.1.0-alpha.0
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.0.0...v2.1.0-alpha.0)
+
+### Documentation
+
+- Simplify project tagline in READMEs - Remove "Vue Forms Without the Friction." - Update core package description to include components ([88c2afc](https://github.com/favorodera/notform/commit/88c2afc))
+
+### Chores
+
+- Update dependencies and build script ([92e2ad9](https://github.com/favorodera/notform/commit/92e2ad9))
+- Update dependencies and build scripts ([62fffb7](https://github.com/favorodera/notform/commit/62fffb7))
+- Update dependencies and lint root config ([50ab98c](https://github.com/favorodera/notform/commit/50ab98c))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v1.0.7...v2.0.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v1.0.7...v2.0.0)
