@@ -3,35 +3,6 @@ import type { ObjectSchema, ValidationTrigger } from './shared'
 import type { NotFormInstance } from './not-form'
 
 
-// EVENTS
-
-
-/**
- * Native DOM event handlers exposed by a field.
- * Spread onto a native input or bind individually to custom components.
- *
- * ```vue
- * <template>
- *   <!-- spread -->
- *   <input v-bind="events" />
- *
- *   <!-- individual -->
- *   <CustomCombobox @focusout="onBlur" @pick="onChange" />
- * </template>
- * ```
- */
-export type NotFieldEvents = {
-  /** Triggered when the field loses focus. */
-  onBlur: () => void
-  /** Triggered on every keystroke or value change. */
-  onInput: () => void
-  /** Triggered when the field value is committed. */
-  onChange: () => void
-  /** Triggered when the field gains focus. */
-  onFocus: () => void
-}
-
-
 // PROPS
 
 
@@ -135,24 +106,29 @@ export type NotFieldSlotProps<TSchema extends ObjectSchema> = {
   validate: () => ReturnType<NotFormInstance<TSchema>['validateField']>
 
   /**
-   * All event handlers combined — spread directly onto native inputs.
+   * Native DOM event handlers exposed by a field.
+   * Spread onto a native input or bind individually to custom components.
    *
    * ```vue
    * <template>
+   *   <!-- spread -->
    *   <input v-bind="events" />
+   *
+   *   <!-- individual -->
+   *   <CustomCombobox @focusout="events.onBlur" @pick="events.onChange" />
    * </template>
    * ```
    */
-  events: NotFieldEvents
-
-  /** Triggered when the field loses focus. */
-  onBlur: NotFieldEvents['onBlur']
-  /** Triggered on every keystroke or value change. */
-  onInput: NotFieldEvents['onInput']
-  /** Triggered when the field value is committed. */
-  onChange: NotFieldEvents['onChange']
-  /** Triggered when the field gains focus. */
-  onFocus: NotFieldEvents['onFocus']
+  events: {
+    /** Triggered when the field loses focus. */
+    onBlur: () => void
+    /** Triggered on every keystroke or value change. */
+    onInput: () => void
+    /** Triggered when the field value is committed. */
+    onChange: () => void
+    /** Triggered when the field gains focus. */
+    onFocus: () => void
+  }
 }
 
 
