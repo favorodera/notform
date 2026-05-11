@@ -1,10 +1,11 @@
 # NotForm
 
-[![license](https://img.shields.io/github/license/favorodera/notform.svg?style=flat-square)](https://github.com/favorodera/notform/blob/main/LICENSE)
-[![github stars](https://img.shields.io/github/stars/favorodera/notform.svg?style=flat-square)](https://github.com/favorodera/notform/stargazers)
-[![npm version](https://img.shields.io/npm/v/notform.svg?style=flat-square)](https://www.npmjs.com/package/notform)
-[![npm downloads](https://img.shields.io/npm/dm/notform.svg?style=flat-square)](https://www.npmjs.com/package/notform)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/notform.svg?style=flat-square)](https://bundlephobia.com/package/notform)
+[![license](https://img.shields.io/github/license/favorodera/notform.svg?style=plastic)](https://github.com/favorodera/notform/blob/main/LICENSE)
+[![github stars](https://img.shields.io/github/stars/favorodera/notform.svg?style=plastic)](https://github.com/favorodera/notform/stargazers)
+[![npm version](https://img.shields.io/npm/v/notform.svg?style=plastic)](https://npmx.dev/package/notform)
+[![npm downloads](https://img.shields.io/npm/dm/notform.svg?style=plastic)](https://npmx.dev/package/notform)
+[![NPM Unpacked Size](https://img.shields.io/npm/unpacked-size/notform?style=plastic)](https://npmx.dev/package/notform)
+
 
 **Vue Forms Without the Friction.**
 
