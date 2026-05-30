@@ -1,0 +1,28 @@
+{
+  "name": "nuxt-playground",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
+    "lint": "eslint . --fix"
+  },
+  "dependencies": {
+    "notform-nuxt": "workspace:*",
+    "zod": "^4.3.6",
+    "nuxt": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
+  },
+  "devDependencies": {
+    "vue-tsc": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=11.0.0"
+  }
+}
