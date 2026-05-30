@@ -1,58 +1,81 @@
-# NotForm
+<div align="center">
+<img src="https://notformdocs.vercel.app/favicon.svg" alt="NotForm Logo" width="80" height="80">
+<h1>NotForm</h1>
+<p><strong>Vue Forms Without the Friction</strong></p>
+<p>
+<a href="https://github.com/favorodera/notform/blob/main/LICENSE"><img src="https://img.shields.io/github/license/favorodera/notform.svg?style=plastic&label=License&color=blue" alt="License"></a>
+<a href="https://github.com/favorodera/notform/stargazers"><img src="https://img.shields.io/github/stars/favorodera/notform.svg?style=plastic&label=Stars&color=blue" alt="GitHub Stars"></a>
+<a href="https://notformdocs.vercel.app/"><img src="https://img.shields.io/badge/-Documentation-blue?style=plastic" alt="NotForm Documentation"></a>
+</p>
+<p>
+<a href="https://codewiki.google/github.com/favorodera/notform"><img src="https://img.shields.io/badge/-Ask%20Code%20Wiki-blue?style=plastic&logo=google-gemini&logoColor=white" alt="Ask Code Wiki"></a>
+<a href="https://deepwiki.com/favorodera/notform"><img src="https://img.shields.io/badge/-Ask%20Devin-blue?style=plastic&logo=windsurf&logoColor=white" alt="Ask Devin"></a>
+</p>
+<p>
+<a href="./packages/core"><img src="https://img.shields.io/badge/Core-blue?style=plastic&logo=vuedotjs&logoColor=white" alt="NotForm Core"></a>
+<a href="./packages/nuxt"><img src="https://img.shields.io/badge/Nuxt%20Module-blue?style=plastic&logo=nuxt&logoColor=white" alt="NotForm Nuxt Module"></a>
+</p>
+</div>
 
-[![license](https://img.shields.io/github/license/favorodera/notform.svg?style=plastic)](https://github.com/favorodera/notform/blob/main/LICENSE)
-[![github stars](https://img.shields.io/github/stars/favorodera/notform.svg?style=plastic)](https://github.com/favorodera/notform/stargazers)
-[![documentation](https://img.shields.io/badge/-documentation-green?style=plastic)](https://notformdocs.vercel.app/)
-[![notform core](https://img.shields.io/badge/core-%234FC08D?style=plastic&logo=vuedotjs)](./packages/core)
-[![nuxt module](https://img.shields.io/badge/nuxt_module-%234FC08D?style=plastic&logo=nuxt)](./packages/nuxt)
+<br>
 
-
-**Vue Forms Without the Friction.**
-
-NotForm is a powerful, yet simple form validation and state management library for Vue and Nuxt. It focuses on providing a seamless developer experience with a type-safe API and minimal boilerplate.
-
-## Documentation
-
-Full documentation and examples can be found at:
-**[notformdocs.vercel.app](https://notformdocs.vercel.app/)**
+NotForm is a powerful, yet simple form validation and state management library for Vue and Nuxt. It focuses on providing a seamless developer experience with a type-safe API and minimal boilerplate. Built with TypeScript from the ground up, it offers a composable API that integrates perfectly with Vue 3's Composition API.
 
 ## Features
 
-- **Type-safe:** Built with TypeScript from the ground up.
-- **Composable:** Easy to use with Vue 3 Composition API.
-- **Lightweight:** Tiny footprint with no unnecessary bloat.
-- **Flexible:** Works with any validation library (Yup, Zod, etc.) via Standard Schema.
-- **Nuxt Support:** Official Nuxt module for a first-class Nuxt experience.
+- **Type-safe** — Built with TypeScript from the ground up for end-to-end type safety.
+- **Composable** — Easy to use with Vue 3 Composition API for flexible form management.
+- **Lightweight** — Tiny footprint with no unnecessary bloat, keeping your bundles small.
+- **Flexible** — Works with any validation library (Yup, Zod, etc.) via Standard Schema integration.
+- **Nuxt-ready** — Drop in the [`notform-nuxt`](./packages/nuxt) module for auto-registration and zero config.
+- **Minimal boilerplate** — Get started quickly with simple, intuitive APIs.
 
-## Project Structure
+## Monorepo Structure
 
-This is a monorepo managed with `pnpm` and `turbo`.
+This monorepo is managed with [pnpm](https://pnpm.io/) workspaces and [Turborepo](https://turbo.build/repo).
 
-- [`packages/core`](./packages/core): The core Vue library.
-- [`packages/nuxt`](./packages/nuxt): The official Nuxt module.
-- [`apps/docs`](./apps/docs): Documentation site built with Nuxt Content.
-- [`apps/vue-playground`](./apps/vue-playground): Vue playground app for testing on the go.
-- [`apps/nuxt-playground`](./apps/nuxt-playground): Nuxt playground app for testing on the go.
+| Path | Package | Description |
+|------|---------|-------------|
+| [`packages/core`](./packages/core) | `notform` | Core Vue library for form validation and state management |
+| [`packages/nuxt`](./packages/nuxt) | `notform-nuxt` | Official Nuxt module with auto-registration |
+| [`apps/docs`](./apps/docs) | `docs` | Documentation site built with Nuxt Content |
+| [`playgrounds/vue`](./playgrounds/vue) | `vue-playground` | Vue development sandbox |
+| [`playgrounds/nuxt`](./playgrounds/nuxt) | `nuxt-playground` | Nuxt development sandbox |
 
 ## Development
 
 ### Prerequisites
 
-- [pnpm](https://pnpm.io/installation) (v10 or later)
-- Node.js (v22 or later)
+- [Node.js](https://nodejs.org/) v22 or later
+- [pnpm](https://pnpm.io/installation) v11 or later
 
-### Setup
+### Getting Started
 
 ```bash
-# Install dependencies
+# Install all dependencies
 pnpm install
 
-# Start development in watch mode
+# Start all packages in watch mode
 pnpm dev
 
-# Build all packages
+# Build everything
 pnpm build
 
-# Run tests
-pnpm test
+# Lint, typecheck, build, and test in one go
+pnpm ready
 ```
+
+### Useful Commands
+
+| Command | What it does |
+|---------|-------------|
+| `pnpm dev` | Starts all packages in watch/dev mode via Turborepo |
+| `pnpm build` | Production build of all packages |
+| `pnpm lint` | Lint all packages with ESLint |
+| `pnpm typecheck` | Type-check all packages with `vue-tsc` / `tsc` |
+| `pnpm test` | Run all test suites with Vitest |
+| `pnpm ready` | Full pipeline: install → lint → typecheck → build → test |
+
+## License
+
+[MIT](./LICENSE) &copy; [Favour Emeka](https://github.com/favorodera)
