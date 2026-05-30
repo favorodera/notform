@@ -258,4 +258,8 @@ export default defineNuxtConfig({
   mcp: {
     name: 'NotForm',
   },
+
+  devServer: {
+    port: 3000,
+  },
 })
