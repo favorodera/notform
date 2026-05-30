@@ -38,7 +38,6 @@ That's it — all NotForm composables and components are now auto-imported in yo
 1. **Auto-imports composables** — `useNotForm`, `NotForm`, `NotField`, `NotMessage`, `NotArrayField` are available everywhere without manual imports.
 2. **Auto-imports components** — All NotForm components are globally available in your templates.
 3. **Type-safe** — Full TypeScript support with auto-completion for all NotForm APIs.
-4. **Nuxt-optimized** — Pre-bundles dependencies for faster dev startup and better HMR.
 
 ## Usage
 

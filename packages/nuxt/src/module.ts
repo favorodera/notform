@@ -1,4 +1,4 @@
-import { addComponent, addImports, createResolver, defineNuxtModule, extendViteConfig } from '@nuxt/kit'
+import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 
 const components = [
   'NotForm',
@@ -45,17 +45,6 @@ export default defineNuxtModule({
         as: composable,
         from: composablesRuntime,
       })
-    })
-
-    // Pre-bundle required Vite dependencies for faster dev startup and better HMR
-    extendViteConfig((config) => {
-      config.optimizeDeps ||= {}
-      config.optimizeDeps.include ||= []
-    
-      config.optimizeDeps.include.push(
-        'dequal',
-        'dot-prop',
-      )
     })
   },
 
