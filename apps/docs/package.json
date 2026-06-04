@@ -41,6 +41,7 @@
     "tailwindcss": "^4.2.2",
     "ufo": "^1.6.3",
     "unist-util-visit": "^5.1.0",
+    "nuxt-og-image":"^6.5.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
