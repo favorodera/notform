@@ -21,20 +21,13 @@ export default defineNuxtModule({
   },
 
   // Module factory
-  setup(_options, nuxt) {
+  setup() {
     // Create a resolver
     const { resolve } = createResolver(import.meta.url)
 
     // Create a resolver for the runtime files
     const componentsRuntime = resolve('./runtime/components')
     const composablesRuntime = resolve('./runtime/composables')
-
-    // Exclude notform package from optimizeDeps
-    nuxt.options.vite.optimizeDeps = nuxt.options.vite.optimizeDeps ||= {}
-    nuxt.options.vite.optimizeDeps.exclude = nuxt.options.vite.optimizeDeps.exclude ||= []
-    if (!nuxt.options.vite.optimizeDeps.exclude.includes('notform')) {
-      nuxt.options.vite.optimizeDeps.exclude.push('notform')
-    }
 
     // Add components
     components.forEach((name) => {

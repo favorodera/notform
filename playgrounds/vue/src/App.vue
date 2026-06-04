@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { nextTick, ref } from 'vue'
 import { z } from 'zod'
+import { NotForm, NotField, NotArrayField, NotMessage, useNotForm } from 'notform'
 
 const tagSchema = z.string().min(1, 'Tag cannot be empty')
 
@@ -138,7 +140,6 @@ const handleReset = async () => {
       </button>
     </footer>
   </NotForm>
-    
 </template>
 
 <style>
@@ -151,4 +152,3 @@ const handleReset = async () => {
   padding: 2rem;
 }
 </style>
-

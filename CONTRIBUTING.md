@@ -4,18 +4,6 @@ Thank you for your interest in contributing to NotForm! We appreciate your time 
 
 ---
 
-## Table of Contents
-
-  - [Code of Conduct](#code-of-conduct)
-  - [Getting Started](#getting-started)
-  - [Development Workflow](#development-workflow)
-  - [Testing](#testing)
-  - [Pull Request Process](#pull-request-process)
-  - [Reporting Bugs](#reporting-bugs)
-  - [Suggesting Features](#suggesting-features)
-
----
-
 ## Code of Conduct
 
 By participating in this project, you agree to abide by the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
@@ -26,8 +14,8 @@ By participating in this project, you agree to abide by the [Contributor Covenan
 
 ### Prerequisites
 
-  - [Node.js](https://nodejs.org/) (v22 or later)
-  - [pnpm](https://pnpm.io/installation) (v10 or later)
+  - [Node.js](https://nodejs.org/) (v20 or later)
+  - [pnpm](https://pnpm.io/installation) (v11 or later)
 
 ### Setup
 

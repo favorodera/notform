@@ -8,4 +8,7 @@ export default defineNuxtConfig({
       include: ['zod'],
     },
   },
+  devServer: {
+    port: 3001,
+  },
 })

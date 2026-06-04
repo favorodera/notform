@@ -48,13 +48,16 @@
   "devDependencies": {
     "@nuxt/module-builder": "^1.0.2",
     "@nuxt/schema": "^4.4.2",
-    "nuxt": "^4.4.2",
-    "vue-tsc": "^3.2.6"
+    "nuxt": "catalog:",
+    "vue-tsc": "catalog:"
+  },
+  "peerDependencies": {
+    "nuxt": "^4.0.0"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=22.0.0",
+    "pnpm": ">=11.0.0"
   },
-  "packageManager": "pnpm@10.32.1",
   "keywords": [
     "notform-nuxt",
     "nuxt",
