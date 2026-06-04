@@ -1,5 +1,99 @@
 # Changelog
 
+## v2.1.0...v2.1.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.0...v2.1.1)
+
+### Added
+
+- **docs:** Set dev server port to 3000 ([84a680e](https://github.com/favorodera/notform/commit/84a680e))
+
+  - configure port 3000 in nuxt config
+
+- **playground:** Add nuxt and vue playgrounds ([a4b05aa](https://github.com/favorodera/notform/commit/a4b05aa))
+
+  - initialize nuxt playground with basic form setup
+  - initialize vue playground with core form usage
+  - add configuration for both playground environments
+
+- **docs:** Add nuxt-og-image and update dependencies ([a60a883](https://github.com/favorodera/notform/commit/a60a883))
+
+  - Install nuxt-og-image for social preview generation
+  - Update magicast to 0.5.3
+  - Sync lockfile with updated dependencies
+
+
+### Refactors
+
+- **nuxt:** Update vite optimization strategy ([a7a37d4](https://github.com/favorodera/notform/commit/a7a37d4))
+
+  - Remove manual exclude of notform package
+  - Add dequal and dot-prop to vite optimizeDeps
+  - Use extendViteConfig for better compatibility
+
+- **nuxt:** Remove vite dependency pre-bundling ([7a06674](https://github.com/favorodera/notform/commit/7a06674))
+
+  - remove optimizeDeps configuration for dependencies
+  - update documentation to reflect changes
+
+
+### Documentation
+
+- **contributing:** Update node and pnpm versions ([95d1c51](https://github.com/favorodera/notform/commit/95d1c51))
+
+  - remove outdated table of contents
+  - update node requirement to v20
+  - update pnpm requirement to v11
+
+- **readme:** Overhaul documentation and structure ([d31feea](https://github.com/favorodera/notform/commit/d31feea))
+
+  - Update README layout and branding
+  - Clarify monorepo structure and packages
+  - Improve developer setup instructions
+  - Add useful command reference table
+  - Standardize badge styling and links
+
+- **core:** Overhaul package README documentation ([5726396](https://github.com/favorodera/notform/commit/5726396))
+
+  - Add detailed usage guide and code examples
+  - List supported validation libraries
+  - Include installation instructions
+  - Improve project overview and feature list
+
+- **nuxt:** Update README with installation and usage ([9e56bfd](https://github.com/favorodera/notform/commit/9e56bfd))
+
+### Chores
+
+- **workspace:** Update pnpm configuration and catalog ([b3f8500](https://github.com/favorodera/notform/commit/b3f8500))
+
+  - Add playgrounds directory to packages
+  - Define peer dependency rules for vite and ts
+  - Migrate built dependencies to allowBuilds
+  - Add project dependencies to catalog
+
+- **docs:** Update dependencies and engine config ([d32d2a4](https://github.com/favorodera/notform/commit/d32d2a4))
+
+  - sync vue-tsc to workspace catalog
+  - enforce pnpm version constraint
+
+- **apps:** Remove legacy playground applications ([bf2c7bc](https://github.com/favorodera/notform/commit/bf2c7bc))
+
+  - Remove nuxt-playground application
+  - Remove vue-playground application
+
+- **core:** Sync dependencies with catalog ([2384d59](https://github.com/favorodera/notform/commit/2384d59))
+
+  - update core devDependencies to catalog
+  - update pnpm engine version requirement
+
+- **docs:** Update nuxt dependency to catalog ([8b7f0ec](https://github.com/favorodera/notform/commit/8b7f0ec))
+- **docs:** Upgrade nuxt to 4.4.6 and update catalog ([c2e6747](https://github.com/favorodera/notform/commit/c2e6747))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0...v2.1.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0...v2.1.0)

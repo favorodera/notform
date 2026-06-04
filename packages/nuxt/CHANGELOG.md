@@ -1,5 +1,32 @@
 # Changelog
 
+## v2.1.0...v2.1.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.0...v2.1.1)
+
+### Refactors
+
+- **nuxt:** Update vite optimization strategy ([a7a37d4](https://github.com/favorodera/notform/commit/a7a37d4))
+
+  - Remove manual exclude of notform package
+  - Add dequal and dot-prop to vite optimizeDeps
+  - Use extendViteConfig for better compatibility
+
+- **nuxt:** Remove vite dependency pre-bundling ([7a06674](https://github.com/favorodera/notform/commit/7a06674))
+
+  - remove optimizeDeps configuration for dependencies
+  - update documentation to reflect changes
+
+
+### Documentation
+
+- **nuxt:** Update README with installation and usage ([9e56bfd](https://github.com/favorodera/notform/commit/9e56bfd))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0...v2.1.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0...v2.1.0)

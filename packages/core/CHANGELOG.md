@@ -1,5 +1,31 @@
 # Changelog
 
+## v2.1.0...v2.1.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.0...v2.1.1)
+
+### Documentation
+
+- **core:** Overhaul package README documentation ([5726396](https://github.com/favorodera/notform/commit/5726396))
+
+  - Add detailed usage guide and code examples
+  - List supported validation libraries
+  - Include installation instructions
+  - Improve project overview and feature list
+
+
+### Chores
+
+- **core:** Sync dependencies with catalog ([2384d59](https://github.com/favorodera/notform/commit/2384d59))
+
+  - update core devDependencies to catalog
+  - update pnpm engine version requirement
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.0.0...v2.1.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.0.0...v2.1.0)
