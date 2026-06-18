@@ -11,7 +11,8 @@ export default eventHandler(async (event) => {
 
   const path = withLeadingSlash(slug.replace('.md', ''))
 
-  const page = await queryCollection(event, 'docs' as keyof Collections)
+  // eslint-disable-next-line ts/no-explicit-any
+  const page = await queryCollection(event as any, 'docs' as keyof Collections)
     .path(path)
     .first()
 

@@ -16,7 +16,8 @@ WHEN NOT TO USE: If you don't know the exact path and need to search/explore, us
 WORKFLOW: This tool returns the complete page content including title, description, and full markdown. Use this when you need to provide detailed answers or code examples from specific documentation pages.`,
   handler: async ({ path }) => {
     const event = useEvent()
-    const url = getRequestURL(event)
+    // eslint-disable-next-line ts/no-explicit-any
+    const url = getRequestURL(event as any)
     const siteUrl = import.meta.dev ? `${url.protocol}//${url.hostname}:${url.port}` : url.origin
 
     try {

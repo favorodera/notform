@@ -22,7 +22,8 @@ OUTPUT: Returns a structured list with:
 - url: Full URL for reference`,
   handler: async () => {
     const event = useEvent()
-    const url = getRequestURL(event)
+    // eslint-disable-next-line ts/no-explicit-any
+    const url = getRequestURL(event as any)
     const siteUrl = import.meta.dev ? `${url.protocol}//${url.hostname}:${url.port}` : url.origin
 
     try {
