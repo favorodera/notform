@@ -9,25 +9,20 @@ import type { UseNotFormConfig } from '../types/use-not-form'
 import { isIssuePathEqual, normalizeSegment } from '../utils/form-utils'
 
 /**
- * Creates a NotFormInstance with reactive state for form values, errors, touched fields, and dirty fields.
- * @template TSchema The validation schema type derived from `ObjectSchema`.
- * @param config Configuration object for the form instance.
- * @returns An instance of NotFormInstance.
+ * Creates a reactive NotFormInstance for managing form state and validation.
+ * @template TSchema The standard schema type.
+ * @param config Configuration object.
+ * @returns A reactive NotFormInstance.
  */
 export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): NotFormInstance<TSchema> {
+  // Types & Aliases
+
   type TInput = StandardSchemaV1.InferInput<TSchema>
   type TIssue = StandardSchemaV1.Issue
   type TInstance = NotFormInstance<TSchema>
 
-  /**
-   * Mutable so `reset()` can replace the reference when new values are provided.
-   * Always deep-cloned to prevent external mutation from affecting the baseline.
-   *
-   * These are intentionally `let` — `reset()` replaces them, and the instance
-   * exposes them via getters so consumers always read the current snapshot.
-   * The `readonly` modifier on the type prevents external assignment while still
-   * allowing the getter to return the latest value after a reset.
-   */
+  //  Baseline & Reactive State
+
   let initialValues = klona(config.initialValues ?? ({} as DeepPartial<TInput>))
   let initialErrors = klona(config.initialErrors ?? [])
 
@@ -44,47 +39,22 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     lazy: config.validationMode?.lazy ?? false,
   }
 
-  /**
-   * Deeply reactive object — access directly as `form.values.email`.
-   * Using `reactive()` instead of `ref()` keeps behaviour consistent
-   * across components, composables, and Pinia stores (which auto-unwrap refs).
-   */
   const values = reactive(klona(initialValues)) as TInput
-
-  /**
-   * Reactive array mutated in-place to preserve reactivity.
-   * Using `reactive()` instead of `ref()` prevents Pinia from unwrapping
-   * the array and losing its reactive proxy.
-   */
   const errors = reactive<Array<TIssue>>([...initialErrors])
+
+  const touchedFields = reactive(new Set<Paths<TInput>>())
+  const dirtyFields = reactive(new Set<Paths<TInput>>())
 
   const isSubmitting = ref(false)
   const isValidating = ref(false)
 
   /**
-   * Counter-based validation tracking.
-   *
-   * A boolean flag flips to `false` as soon as the first concurrent
-   * validation resolves, even if others are still running.
-   * A counter fixes this: `isValidating` stays `true` until every
-   * in-flight call has settled.
+   * Tracks concurrent validations to keep `isValidating` true until all finish.
+   * @internal
    */
   let validatingCount = 0
 
-  /** Increments the validation counter and sets `isValidating` to true. */
-  const beginValidating = () => {
-    validatingCount++
-    isValidating.value = true
-  }
-
-  /** Decrements the validation counter and sets `isValidating` to false if the counter reaches zero. */
-  const endValidating = () => {
-    validatingCount--
-    if (validatingCount === 0) isValidating.value = false
-  }
-
-  const touchedFields = reactive(new Set<Paths<TInput>>())
-  const dirtyFields = reactive(new Set<Paths<TInput>>())
+  // Computed Properties
 
   const isValid = computed(() => errors.length === 0)
   const isDirty = computed(() => dirtyFields.size > 0)
@@ -96,38 +66,119 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     for (const issue of errors) {
       if (issue.path) {
         const path = issue.path.map(element => normalizeSegment(element)).join('.') as Paths<TInput>
-
-        if (path && !result[path]) {
-          result[path] = issue.message
-        }
+        if (path && !result[path]) result[path] = issue.message
       }
     }
-
     return result
   })
 
-  const touchField: TInstance['touchField'] = (path) => {
-    touchedFields.add(path)
+  // Internal Helpers & Setters
+
+  /**
+   * Increments validation counter and activates `isValidating`.
+   * @internal
+   */
+  function beginValidating() {
+    validatingCount++
+    isValidating.value = true
   }
 
-  const touchAllFields = () => {
-    for (const path of deepKeys(values)) touchedFields.add(path)
+  /**
+   * Decrements validation counter and deactivates `isValidating` when zero.
+   * @internal
+   */
+  function endValidating() {
+    validatingCount--
+    if (validatingCount === 0) {
+      isValidating.value = false
+    }
   }
 
-  const dirtyField: TInstance['dirtyField'] = (path) => {
-    dirtyFields.add(path)
+  /**
+   * Resolves and executes the standard schema validation.
+   * @internal
+   * @returns The validation result containing either `value` or `issues`.
+   */
+  function runSchema() {
+    const schema = toValue(config.schema)
+    return schema['~standard'].validate(values)
   }
 
-  const unDirtyField = (path: Paths<TInput>) => {
+  /**
+   * Iterates through deeply nested keys to mark all as touched.
+   * @internal
+   */
+  function touchAllFields() {
+    for (const path of deepKeys(values)) {
+      touchedFields.add(path)
+    }
+  }
+
+  /**
+   * Removes a specific field path from the dirty tracking set.
+   * @internal
+   * @param path The field path to mark as clean.
+   */
+  function unDirtyField(path: Paths<TInput>) {
     dirtyFields.delete(path)
   }
 
-  const setError: TInstance['setError'] = (newIssue) => {
+  /**
+   * Iterates through deeply nested keys to mark all as dirty.
+   * @internal
+   */
+  function dirtyAllFields() {
+    for (const path of deepKeys(values)) {
+      dirtyFields.add(path)
+    }
+  }
+
+  /**
+   * Marks a specific field path as touched.
+   * @param path The field path to mark as touched.
+   */
+  function touchField(path: Paths<TInput>) {
+    touchedFields.add(path)
+  }
+
+  /**
+   * Marks a specific field path as dirty.
+   * @param path The field path to mark as dirty.
+   */
+  function dirtyField(path: Paths<TInput>) {
+    dirtyFields.add(path)
+  }
+
+  /**
+   * Sets a value at the specified path and updates dirty tracking based on comparison with initial values.
+   * @param path The field path to set the value at.
+   * @param value The value to set.
+   */
+  function setValue(path: Paths<TInput>, value: any) {
+    setProperty(values, path, value)
+
+    const isClean = dequal(value, getProperty(initialValues, path))
+
+    if (isClean) {
+      unDirtyField(path)
+    } else {
+      dirtyField(path)
+    }
+  }
+
+  /**
+   * Sets or updates an error issue in the errors array, replacing any existing issue for the same path.
+   * @param newIssue The issue to set.
+   */
+  function setError(newIssue: TIssue) {
     const newPath = newIssue.path?.map(element => normalizeSegment(element)).join('.')
 
-    const existingIndex = errors.findIndex(error => error.path
-      ?.map(element => normalizeSegment(element))
-      .join('.') === newPath)
+    const existingIndex = errors.findIndex((error) => {
+      return error
+        .path
+        ?.map(element => normalizeSegment(element))
+        .join('.') === newPath
+    })
 
     if (existingIndex === -1) {
       errors.push(newIssue)
@@ -136,37 +187,36 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     }
   }
 
-  const setErrors: TInstance['setErrors'] = (newIssues) => {
+  /**
+   * Sets multiple error issues in the errors array, replacing any existing issues.
+   * @param newIssues The array of issues to set.
+   */
+  function setErrors(newIssues: Array<TIssue>) {
     errors.splice(0, errors.length, ...newIssues)
   }
 
-  const setValue: TInstance['setValue'] = (path, value) => {
-    setProperty(values, path, value)
-
-    const isClean = dequal(value, getProperty(initialValues, path))
-    if (isClean) unDirtyField(path)
-    else dirtyField(path)
-  }
-
-  const clearErrors: TInstance['clearErrors'] = () => {
+  /** Clears all error issues from the errors array. */
+  function clearErrors() {
     errors.splice(0)
   }
 
-  const getFieldErrors: TInstance['getFieldErrors'] = (path) => {
+  /**
+   * Retrieves all error issues associated with a specific field path.
+   * @param path The field path to retrieve errors for.
+   * @returns An array of error issues associated with the field path.
+   */
+  function getFieldErrors(path: Paths<TInput>): Array<TIssue> {
     const pathSegments = parsePath(path)
     return errors.filter(error => isIssuePathEqual(error.path, pathSegments))
   }
 
-  const runSchema = () => {
-    const schema = toValue(config.schema)
-    return schema['~standard'].validate(values)
-  }
+  // Core Form Actions
 
-  const dirtyAllFields = () => {
-    for (const path of deepKeys(values)) dirtyFields.add(path)
-  }
-
-  const validate: TInstance['validate'] = async () => {
+  /**
+   * Validates the entire form against the schema, updating errors and returning the result.
+   * @returns An object containing either `value` or `issues` based on validation outcome.
+   */
+  async function validate() {
     beginValidating()
     try {
       const result = await runSchema()
@@ -183,25 +233,27 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     }
   }
 
-  const validateField: TInstance['validateField'] = async (path) => {
+  /**
+   * Validates a specific field against the schema, updating errors and returning the result.
+   * @param path The field path to validate.
+   * @returns An object containing either `value` or `issues` based on validation outcome.
+   */
+  async function validateField(path: Paths<TInput>) {
     beginValidating()
     try {
       const result = await runSchema()
       const pathSegments = parsePath(path)
 
-      // Remove stale errors for this field in-place, back-to-front to preserve indices
+      // Remove stale errors in-place, back-to-front to preserve indices
       const staleIndices: Array<number> = []
       for (const [
         index,
         error,
       ] of errors.entries()) {
-        if (isIssuePathEqual(error.path, pathSegments)) {
-          staleIndices.push(index)
-        }
+        if (isIssuePathEqual(error.path, pathSegments)) staleIndices.push(index)
       }
-
-      for (let index = staleIndices.length - 1; index >= 0; index--) {
-        errors.splice(staleIndices[index], 1)
+      for (let i = staleIndices.length - 1; i >= 0; i--) {
+        errors.splice(staleIndices[i], 1)
       }
 
       if (result?.issues) {
@@ -210,17 +262,20 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
           errors.push(...fieldIssues)
           return { issues: fieldIssues }
         }
-        // Form has issues but not for this field — return the field's current value
         return { value: getProperty(values, path) }
       }
 
-      return { value: getProperty(result.value, path) }
+      return { value: getProperty(result.value as Record<string, any>, path) }
     } finally {
       endValidating()
     }
   }
 
-  const submit: TInstance['submit'] = async (event) => {
+  /**
+   * Submits the form, validating it and executing the submit handler if provided.
+   * @param event The submit event.
+   */
+  async function submit(event: Event): Promise<void> {
     isSubmitting.value = true
 
     try {
@@ -229,43 +284,41 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
       const result = await validate()
 
+      // Validation failed — block native submission
       if (result?.issues) {
-        // Validation failed — block native submission and stay on page
         event.preventDefault()
         return
       }
 
+      // Execute custom handler if provided, otherwise allow native submission
       if (config.onSubmit) {
-        // Developer provided a JS handler — prevent native redirect and run it
         event.preventDefault()
         await config.onSubmit(result.value)
       }
-      // No onSubmit provided — allow native form submission via the action attribute
     } catch {
-      // Unexpected error during validation or submission — stay on page
       event.preventDefault()
     } finally {
       isSubmitting.value = false
     }
   }
 
-  const reset: TInstance['reset'] = (newValues, newErrors) => {
+  /**
+   * Resets the form to its initial state.
+   * @param newValues The new values to reset the form with.
+   * @param newErrors The new errors to reset the form with.
+   */
+  function reset(newValues?: DeepPartial<TInput>, newErrors?: Array<TIssue>) {
     if (newValues) initialValues = klona(newValues)
     if (newErrors) initialErrors = klona(newErrors)
 
     const freshValues = klona(initialValues)
-    const current = values
 
     // Remove top-level keys no longer present in the baseline
-    for (const key of Object.keys(current)) {
-      if (!hasProperty(freshValues, key)) {
-        deleteProperty(values, key)
-      }
+    for (const key of Object.keys(values)) {
+      if (!hasProperty(freshValues, key)) deleteProperty(values, key)
     }
 
-    // Restore baseline — top-level assignment lets Vue's reactive() re-wrap
-    // nested structures and avoids sparse-array holes that arise from
-    // leaf-by-leaf array element deletion
+    // Restore baseline cleanly to trigger Vue's nested reactivity
     for (const key of Object.keys(freshValues)) {
       setProperty(values, key, getProperty(freshValues, key))
     }
@@ -275,10 +328,8 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     dirtyFields.clear()
   }
 
-  // `initialValues` and `initialErrors` are exposed via getters so consumers
-  // always read the post-reset snapshot rather than the stale reference
-  // captured at construction time. The `readonly` modifier on the type
-  // prevents external assignment — setters are intentionally omitted.
+  // Instance Assembly & Return
+
   const instance: TInstance = {
     get initialErrors() {
       return initialErrors as TInstance['initialErrors']
