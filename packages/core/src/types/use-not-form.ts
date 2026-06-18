@@ -4,7 +4,7 @@ import type { DeepPartial, ObjectSchema, ValidationMode, ValidationTrigger } fro
 
 /**
  * Configuration options for initializing a new form instance.
- * @template TSchema The validation schema type.
+ * @template TSchema The form schema.
  */
 export interface UseNotFormConfig<TSchema extends ObjectSchema> {
   /** The validation schema used to parse and validate form data */

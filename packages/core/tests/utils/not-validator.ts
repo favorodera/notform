@@ -1,4 +1,3 @@
-/* eslint-disable ts/no-explicit-any */
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 
 /**

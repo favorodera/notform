@@ -10,7 +10,7 @@ const schema = z.object({
 
 const form = useNotForm({
   onSubmit: async () => {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 600)
     })
 

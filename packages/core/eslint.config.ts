@@ -12,9 +12,9 @@ export default factory({
     },
   },
   tailwind: false,
-  typescript:{
-    overrides:{
-      'ts/no-explicit-any':'off'
-    }
-  }
+  typescript: {
+    overrides: {
+      'ts/no-explicit-any': 'off',
+    },
+  },
 })

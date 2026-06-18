@@ -7,4 +7,17 @@ export default withNuxt(factory({
       entryPoint: 'app/assets/css/main.css',
     },
   },
-}))
+})
+  .overrides({
+    'favorodera/markdown/code-in-md/disables': {
+      rules: {
+        'unused-imports/no-unused-vars': 'off',
+        'vue/no-unused-vars': 'off',
+      },
+    },
+    'favorodera/markdown/rules': {
+      rules: {
+        'unused-imports/no-unused-vars': 'off',
+      },
+    },
+  }))

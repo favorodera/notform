@@ -7,7 +7,7 @@ const form = useNotForm({
   initialValues: { email: '' },
   onSubmit: async (values) => {
     // Simulate a server 409 — email taken
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 600)
     })
 

@@ -7,7 +7,7 @@ export const NOT_FORM_INSTANCE_KEY: InjectionKey<NotFormInstance<any>> = Symbol(
 
 /**
  * Provides the NotForm instance to the component tree.
- * @template TSchema The validation schema type.
+ * @template TSchema The validation object schema.
  * @param instance The NotForm instance to provide.
  */
 export function provideNotFormInstance<TSchema extends ObjectSchema>(instance: NotFormInstance<TSchema>) {
@@ -16,7 +16,7 @@ export function provideNotFormInstance<TSchema extends ObjectSchema>(instance: N
 
 /**
  * Retrieves the NotForm instance from the component tree.
- * @template TSchema The validation schema type.
+ * @template TSchema The form schema.
  * @param explicitInstance Optional explicit instance to use.
  * @returns The NotForm instance.
  */

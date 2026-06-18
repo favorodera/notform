@@ -7,8 +7,9 @@ definePageMeta({
 
 const route = useRoute()
 
-const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
-  
+const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path)
+  .first())
+
 if (!page.value) {
   throw createError({
     fatal: true,
@@ -45,72 +46,72 @@ defineOgImage('Docs.takumi', { ...seo.value })
 
 <template>
   <div>
-  <UPage v-if="page">
-    <UPageHeader
-      :title="page.title"
-      :description="page.description"
-      class="flex inline-full flex-col-reverse"
-      :ui="{
-        title:'text-[1.75em] font-semibold',
-        headline:'mb-0 mt-2.5'
-      }"
-    >
-      <template #headline>
-        <UButton
-          :label="copied ? 'Copied' : 'Copy Markdown'"
-          :icon="copied ? 'lucide:check' : 'lucide:copy'"
-          color="neutral"
-          variant="outline"
-          size="sm"
-          @click="copy()"
-        />
-      </template>
-    </UPageHeader>
-
-    <UPageBody
-      class="
-        pbe-6
-
-        md:pbe-8
-
-        xl:pbe-14
-      "
-    >
-      <ContentRenderer
-        v-if="page"
-        :value="page"
-      />
-
-      <UContentSurround :surround="surround" />
-    </UPageBody>
-
-    <template
-      v-if="page?.body?.toc?.links?.length"
-      #right
-    >
-      <UContentToc
-        :links="page?.body?.toc?.links"
+    <UPage v-if="page">
+      <UPageHeader
+        :title="page.title"
+        :description="page.description"
+        class="flex inline-full flex-col-reverse"
         :ui="{
-          title:'text-sm text-muted font-normal',
-          indicator:'ms-0',
-          container:'py-3! sm:py-3!'
+          title:'text-[1.75em] font-semibold',
+          headline:'mb-0 mt-2.5'
         }"
-        highlight
-        highlight-variant="circuit"
-        class="
-          border-y border-dashed border-default
-
-          lg:border-x
-        "
       >
-        <template #leading>
-          <Icon
-            name="lucide:text-align-start"
-            class="block-4 inline-4 text-muted"
+        <template #headline>
+          <UButton
+            :label="copied ? 'Copied' : 'Copy Markdown'"
+            :icon="copied ? 'lucide:check' : 'lucide:copy'"
+            color="neutral"
+            variant="outline"
+            size="sm"
+            @click="copy()"
           />
         </template>
-      </UContentToc>
-    </template>
-  </UPage>
+      </UPageHeader>
+
+      <UPageBody
+        class="
+          pbe-6
+
+          md:pbe-8
+
+          xl:pbe-14
+        "
+      >
+        <ContentRenderer
+          v-if="page"
+          :value="page"
+        />
+
+        <UContentSurround :surround="surround" />
+      </UPageBody>
+
+      <template
+        v-if="page?.body?.toc?.links?.length"
+        #right
+      >
+        <UContentToc
+          :links="page?.body?.toc?.links"
+          :ui="{
+            title:'text-sm text-muted font-normal',
+            indicator:'ms-0',
+            container:'py-3! sm:py-3!'
+          }"
+          highlight
+          highlight-variant="circuit"
+          class="
+            border-y border-dashed border-default
+
+            lg:border-x
+          "
+        >
+          <template #leading>
+            <Icon
+              name="lucide:text-align-start"
+              class="block-4 inline-4 text-muted"
+            />
+          </template>
+        </UContentToc>
+      </template>
+    </UPage>
   </div>
 </template>

@@ -31,8 +31,6 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   let initialValues = klona(config.initialValues ?? ({} as DeepPartial<TInput>))
   let initialErrors = klona(config.initialErrors ?? [])
 
-  // OPTIONS
-
   const validateOn: TInstance['validateOn'] = {
     onBlur: config.validateOn?.onBlur ?? true,
     onChange: config.validateOn?.onChange ?? true,
@@ -159,10 +157,6 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     return errors.filter(error => isIssuePathEqual(error.path, pathSegments))
   }
 
-  /**
-   * Runs the schema against the current values and returns the raw result.
-   * @returns The result of running the schema.
-   */
   const runSchema = () => {
     const schema = toValue(config.schema)
     return schema['~standard'].validate(values)

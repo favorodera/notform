@@ -9,7 +9,6 @@ describe('notArrayField', () => {
     tags: notValidator.array(notValidator.string(1), 1, 5),
   })
 
-  // eslint-disable-next-line ts/no-explicit-any
   const baseConfig: UseNotFormConfig<any> = {
     initialValues: { tags: [] },
     schema,
@@ -17,7 +16,7 @@ describe('notArrayField', () => {
   }
 
   const mountForm = (
-    // eslint-disable-next-line ts/no-explicit-any
+
     formConfig?: Partial<UseNotFormConfig<any>>,
     // Extra slot content injected after the array field slot — lets individual
     // tests add buttons that call array methods without duplicating the wrapper.

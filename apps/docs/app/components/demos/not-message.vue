@@ -6,7 +6,7 @@ const toast = useToast()
 const form = useNotForm({
   initialValues: { email: '', name: '' },
   onSubmit: async () => {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 600)
     })
 

@@ -10,7 +10,6 @@ describe('notField', () => {
     name: notValidator.string(2, 50),
   })
 
-  // eslint-disable-next-line ts/no-explicit-any
   const baseConfig: UseNotFormConfig<any> = {
     initialValues: { email: '', name: '' },
     schema,
@@ -18,7 +17,7 @@ describe('notField', () => {
   }
 
   const mountForm = (
-    // eslint-disable-next-line ts/no-explicit-any
+
     formConfig?: Partial<UseNotFormConfig<any>>,
     fieldProps?: Partial<NotFieldProps>,
   ) => {

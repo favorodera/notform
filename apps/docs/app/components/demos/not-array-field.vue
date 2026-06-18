@@ -10,7 +10,7 @@ const form = useNotForm({
     'typescript',
   ] },
   onSubmit: async () => {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 600)
     })
 
