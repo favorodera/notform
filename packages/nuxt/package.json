@@ -50,8 +50,8 @@
     "lint": "nuxt prepare && eslint . --fix"
   },
   "peerDependencies": {
-    "nuxt": "catalog:peer",
-    "notform": "catalog:peer"
+    "notform": "catalog:peer",
+    "nuxt": "catalog:peer"
   },
   "dependencies": {
     "@nuxt/kit": "catalog:vendor",

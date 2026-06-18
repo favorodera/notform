@@ -21,9 +21,9 @@ allowBuilds:
   vue-demi: true
 catalogs:
   peer:
+    notform: ^2.1.0
     nuxt: ^4.0.0 
     vue: ^3.0.0
-    notform: ^2.1.0
   tools:
     '@favorodera/eslint-config': ^0.1.1
     '@nuxt/eslint': ^1.16.0

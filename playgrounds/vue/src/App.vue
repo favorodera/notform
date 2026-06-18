@@ -33,10 +33,10 @@ const handleReset = async () => {
     @submit="form.submit"
     @reset="handleReset"
   >
-      <label for="name">
-        Full Name
+    <label for="name">
+      Full Name
 
-        <NotField
+      <NotField
         v-slot="{ events }"
         path="name"
       >
@@ -52,12 +52,12 @@ const handleReset = async () => {
           path="name"
         />
       </NotField>
-      </label>
+    </label>
 
-      <label for="email">
-        Email Address
+    <label for="email">
+      Email Address
 
-        <NotField
+      <NotField
         v-slot="{ events }"
         path="email"
       >
@@ -73,10 +73,10 @@ const handleReset = async () => {
           path="email"
         />
       </NotField>
-      </label>
+    </label>
 
-      <label>
-        Interest Tags
+    <label>
+      Interest Tags
 
       <NotArrayField
         v-slot="{ items, append, remove }"
@@ -127,19 +127,19 @@ const handleReset = async () => {
           path="tags"
         />
       </NotArrayField>
-      </label>
+    </label>
 
-      <button
-        type="submit"
-        :disabled="!form.isDirty"
-      >
-        Submit Form
-      </button>
+    <button
+      type="submit"
+      :disabled="!form.isDirty"
+    >
+      Submit Form
+    </button>
 
-      <button
-        type="reset"
-      >
-        Clear All
-      </button>
+    <button
+      type="reset"
+    >
+      Clear All
+    </button>
   </NotForm>
 </template>
