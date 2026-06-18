@@ -2,7 +2,10 @@ import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { NotFormInstance } from './not-form'
 import type { ObjectSchema, ValidationTrigger } from './shared'
 
-/** Props for the `NotArrayField` component. */
+/**
+ * Props for the `NotArrayField` component.
+ * @template TItemSchema The schema for a single array item.
+ */
 export interface NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = StandardSchemaV1> {
   /** Dot-separated path to the array within the form values. */
   path: string
