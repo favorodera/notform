@@ -1,26 +1,25 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, test, expect } from 'vitest'
-import { NotForm, NotField, NotMessage, useNotForm } from '../src'
+import { describe, expect, it } from 'vitest'
+import { NotField, NotForm, NotMessage, useNotForm } from '../src'
 import { notValidator } from './utils/not-validator'
 
-describe('NotMessage', () => {
+describe('notMessage', () => {
   const schema = notValidator.object({
-    name: notValidator.string(2, 50),
     email: notValidator.string(5, 100),
+    name: notValidator.string(2, 50),
   })
 
   const baseConfig = {
+    initialValues: { email: '', name: '' },
     schema,
-    initialValues: { name: '', email: '' },
   }
 
-
-  describe('Error message display', () => {
-    test('renders nothing when field has no error', () => {
+  describe('error message display', () => {
+    it('renders nothing when field has no error', () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotField, NotMessage },
+        components: { NotField, NotForm, NotMessage },
         setup: () => ({ form }),
         template: `
           <NotForm :form="form" @submit="form.submit">
@@ -35,11 +34,11 @@ describe('NotMessage', () => {
       expect(wrapper.find('span').exists()).toBe(false)
     })
 
-    test('renders the error message after blur on an invalid field', async () => {
+    it('renders the error message after blur on an invalid field', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotField, NotMessage },
+        components: { NotField, NotForm, NotMessage },
         setup: () => ({ form }),
         template: `
           <NotForm :form="form" @submit="form.submit">
@@ -58,11 +57,11 @@ describe('NotMessage', () => {
       expect(wrapper.find('span').text()).toBe('Must be at least 2 characters')
     })
 
-    test('clears the message after the field becomes valid', async () => {
+    it('clears the message after the field becomes valid', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotField, NotMessage },
+        components: { NotField, NotForm, NotMessage },
         setup: () => ({ form }),
         template: `
           <NotForm :form="form" @submit="form.submit">
@@ -76,18 +75,20 @@ describe('NotMessage', () => {
 
       await wrapper.find('#name').trigger('blur')
       await flushPromises()
+
       expect(wrapper.find('span').exists()).toBe(true)
 
       await wrapper.find('#name').setValue('Jane')
       await flushPromises()
+
       expect(wrapper.find('span').exists()).toBe(false)
     })
 
-    test('shows errors independently across multiple fields', async () => {
+    it('shows errors independently across multiple fields', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotField, NotMessage },
+        components: { NotField, NotForm, NotMessage },
         setup: () => ({ form }),
         template: `
           <NotForm :form="form" @submit="form.submit">
@@ -107,17 +108,16 @@ describe('NotMessage', () => {
       await wrapper.find('#email').trigger('blur')
       await flushPromises()
 
-      expect(wrapper.findAll('span').length).toBe(2)
+      expect(wrapper.findAll('span')).toHaveLength(2)
     })
   })
 
-
   describe('"as" prop', () => {
-    test('renders as span by default', async () => {
+    it('renders as span by default', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotField, NotMessage },
+        components: { NotField, NotForm, NotMessage },
         setup: () => ({ form }),
         template: `
           <NotForm :form="form" @submit="form.submit">
@@ -136,11 +136,11 @@ describe('NotMessage', () => {
       expect(wrapper.find('p').exists()).toBe(false)
     })
 
-    test('renders as the element specified by the "as" prop', async () => {
+    it('renders as the element specified by the "as" prop', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotField, NotMessage },
+        components: { NotField, NotForm, NotMessage },
         setup: () => ({ form }),
         template: `
           <NotForm :form="form" @submit="form.submit">
@@ -160,13 +160,12 @@ describe('NotMessage', () => {
     })
   })
 
-
-  describe('Default slot', () => {
-    test('exposes message via the default slot for custom rendering', async () => {
+  describe('default slot', () => {
+    it('exposes message via the default slot for custom rendering', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotField, NotMessage },
+        components: { NotField, NotForm, NotMessage },
         setup: () => ({ form }),
         template: `
           <NotForm :form="form" @submit="form.submit">
@@ -187,9 +186,8 @@ describe('NotMessage', () => {
     })
   })
 
-
-  describe('Singleton', () => {
-    test('works without a NotForm ancestor when :form is passed directly', async () => {
+  describe('singleton', () => {
+    it('works without a NotForm ancestor when :form is passed directly', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
@@ -212,12 +210,12 @@ describe('NotMessage', () => {
       expect(wrapper.find('span').text()).toBe('Must be at least 2 characters')
     })
 
-    test(':form prop takes priority over NotForm ancestor', async () => {
+    it(':form prop takes priority over NotForm ancestor', async () => {
       const primaryForm = useNotForm({ ...baseConfig })
       const secondaryForm = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotField, NotMessage },
+        components: { NotField, NotForm, NotMessage },
         setup: () => ({ primaryForm, secondaryForm }),
         template: `
           <NotForm :form="primaryForm" @submit="primaryForm.submit">

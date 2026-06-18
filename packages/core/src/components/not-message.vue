@@ -3,32 +3,25 @@ import { computed, useAttrs } from 'vue'
 import type { NotMessageProps, NotMessageSlotProps, NotMessageSlots } from '../types/not-message'
 import { useNotFormInstance } from '../utils/instance-utils'
 
-defineSlots<NotMessageSlots>()
-defineOptions({ inheritAttrs: false })
+defineOptions({
+  inheritAttrs: false,
+})
 
-const attributes = useAttrs()
+defineSlots<NotMessageSlots>()
+
 const props = withDefaults(defineProps<NotMessageProps>(), {
   as: 'span',
 })
 
+const attributes = useAttrs()
 
-// INSTANCE
-
-
-// Explicit :form prop takes priority over whatever NotForm ancestor provided
 const form = useNotFormInstance(props.form)
 
-
-// DERIVED
 const message = computed(() => form.errorsMap.value[props.path])
 
-
-// SLOT PROPS
-
-
 const slotProps = computed<NotMessageSlotProps>(() => ({
-  message: message.value,
   attributes,
+  message: message.value,
 }))
 </script>
 

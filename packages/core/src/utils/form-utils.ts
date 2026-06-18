@@ -5,7 +5,7 @@ import type { StandardSchemaV1 } from '@standard-schema/spec'
  * @param segment The path segment to normalize.
  * @returns The normalized key.
  */
-export function normalizeSegment(segment: StandardSchemaV1.PathSegment | PropertyKey) {
+export function normalizeSegment(segment: PropertyKey | StandardSchemaV1.PathSegment) {
   if (typeof segment === 'object' && segment !== null && 'key' in segment) {
     return segment.key
   }
@@ -18,7 +18,7 @@ export function normalizeSegment(segment: StandardSchemaV1.PathSegment | Propert
  * @param targetPath The normalized path to compare against.
  * @returns True if the paths are equivalent.
  */
-export function isIssuePathEqual(issuePath: StandardSchemaV1.Issue['path'], targetPath: (string | number)[]) {
+export function isIssuePathEqual(issuePath: StandardSchemaV1.Issue['path'], targetPath: Array<number | string>) {
   if (!issuePath) return false
   if (issuePath.length !== targetPath.length) return false
 

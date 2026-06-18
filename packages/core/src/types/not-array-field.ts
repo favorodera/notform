@@ -1,13 +1,11 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { ObjectSchema, ValidationTrigger } from './shared'
 import type { NotFormInstance } from './not-form'
-
+import type { ObjectSchema, ValidationTrigger } from './shared'
 
 // PROPS
 
-
 /** Props for the `NotArrayField` component. */
-export type NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = StandardSchemaV1> = {
+export interface NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = StandardSchemaV1> {
   /** Dot-separated path to the array within the form values. */
   path: string
 
@@ -30,19 +28,17 @@ export type NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = StandardSc
    * Takes priority over the instance provided by a `NotForm` ancestor.
    * Required when using `NotArrayField` outside of a `NotForm`.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any
   form?: NotFormInstance<any>
 
   /**
    * Per-field validation trigger overrides applied to the array as a whole.
    * Merged over the form-wide `validateOn` — only the keys you specify are overridden.
    */
-  validateOn?: Partial<Record<Extract<ValidationTrigger, 'onMount' | 'onChange'>, boolean>>
+  validateOn?: Partial<Record<Extract<ValidationTrigger, 'onChange' | 'onMount'>, boolean>>
 }
 
-
 // ITEM
-
 
 /**
  * Represents a single item in the array field.
@@ -58,37 +54,37 @@ export type NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = StandardSc
  * </template>
  * ```
  */
-export type NotArrayFieldItem = {
+export interface NotArrayFieldItem {
   /** Stable key for `v-for` — does not change when items are reordered. */
   key: string
+
   /** Current index of this item in the array. */
   index: number
+
   /** Full dot-separated path to this item — pass directly to `NotField`. */
   path: string
 }
 
-
 // SLOT PROPS
-
 
 /**
  * Everything available inside the `NotArrayField` default slot.
  * @template TSchema The form schema type.
  * @template TItem The inferred type of a single array item.
  */
-export type NotArrayFieldSlotProps<
+export interface NotArrayFieldSlotProps<
   TSchema extends ObjectSchema,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any
   TItem = any,
-> = {
+> {
   /** The dot-separated path to this array field. */
   path: string
 
   /** The array items with stable keys and paths for use with `v-for`. */
-  items: NotArrayFieldItem[]
+  items: Array<NotArrayFieldItem>
 
   /** All validation issues for this array field from the last validation run. */
-  errors: StandardSchemaV1.Issue[]
+  errors: Array<StandardSchemaV1.Issue>
 
   /** Whether this array field currently has no validation errors. */
   isValid: boolean
@@ -161,20 +157,18 @@ export type NotArrayFieldSlotProps<
   move: (from: number, to: number) => void
 }
 
-
 // SLOTS
-
 
 /**
  * Slots for the `NotArrayField` component.
  * @template TSchema The form schema type.
  * @template TItem The inferred type of a single array item.
  */
-export type NotArrayFieldSlots<
+export interface NotArrayFieldSlots<
   TSchema extends ObjectSchema,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any
   TItem = any,
-> = {
+> {
   /** The default slot receives the full array state and manipulation methods. */
   default: (props: NotArrayFieldSlotProps<TSchema, TItem>) => []
 }

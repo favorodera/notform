@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable ts/no-explicit-any */
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 
 /**
@@ -14,20 +14,16 @@ import type { StandardSchemaV1 } from '@standard-schema/spec'
  * ```
  */
 export const notValidator = {
-
-
   // PRIMITIVES
-
 
   /**
    * Validates a string value with optional length constraints.
    * @param min Minimum character length (inclusive).
    * @param max Maximum character length (inclusive).
+   * @returns A schema object that validates a string value.
    */
   string: (min?: number, max?: number): StandardSchemaV1<string> => ({
     '~standard': {
-      version: 1,
-      vendor: 'not-validator',
       types: {
         input: '' as string,
         output: '' as string,
@@ -44,6 +40,8 @@ export const notValidator = {
         }
         return { value }
       },
+      vendor: 'not-validator',
+      version: 1,
     },
   }),
 
@@ -51,17 +49,16 @@ export const notValidator = {
    * Validates a numeric value with optional range constraints.
    * @param min Minimum value (inclusive).
    * @param max Maximum value (inclusive).
+   * @returns A schema object that validates a numeric value.
    */
   number: (min?: number, max?: number): StandardSchemaV1<number> => ({
     '~standard': {
-      version: 1,
-      vendor: 'not-validator',
       types: {
         input: 0 as number,
         output: 0 as number,
       },
       validate(value) {
-        if (typeof value !== 'number' || isNaN(value)) {
+        if (typeof value !== 'number' || Number.isNaN(value)) {
           return { issues: [{ message: 'Must be a number' }] }
         }
         if (min !== undefined && value < min) {
@@ -72,16 +69,17 @@ export const notValidator = {
         }
         return { value }
       },
+      vendor: 'not-validator',
+      version: 1,
     },
   }),
 
   /**
    * Validates a boolean value.
+   * @returns A schema object that validates a boolean value.
    */
   boolean: (): StandardSchemaV1<boolean> => ({
     '~standard': {
-      version: 1,
-      vendor: 'not-validator',
       types: {
         input: false as boolean,
         output: false as boolean,
@@ -91,21 +89,20 @@ export const notValidator = {
           ? { value }
           : { issues: [{ message: 'Must be a boolean' }] }
       },
+      vendor: 'not-validator',
+      version: 1,
     },
   }),
 
-
   // LITERAL & ENUM
-
 
   /**
    * Validates that a value is exactly equal to the provided literal.
    * @param literal The exact value to match against.
+   * @returns A schema object that validates a literal value.
    */
   literal: <TLiteral>(literal: TLiteral): StandardSchemaV1<TLiteral> => ({
     '~standard': {
-      version: 1,
-      vendor: 'not-validator',
       types: {
         input: literal as TLiteral,
         output: literal as TLiteral,
@@ -115,17 +112,18 @@ export const notValidator = {
           ? { value: value as TLiteral }
           : { issues: [{ message: `Must be exactly ${literal}` }] }
       },
+      vendor: 'not-validator',
+      version: 1,
     },
   }),
 
   /**
    * Validates that a value is one of the provided allowed values.
    * @param allowedValues The list of accepted values.
+   * @returns A schema object that validates an enum value.
    */
-  enum: <TEnum>(allowedValues: TEnum[]): StandardSchemaV1<TEnum> => ({
+  enum: <TEnum>(allowedValues: Array<TEnum>): StandardSchemaV1<TEnum> => ({
     '~standard': {
-      version: 1,
-      vendor: 'not-validator',
       types: {
         input: allowedValues[0] as TEnum,
         output: allowedValues[0] as TEnum,
@@ -135,22 +133,21 @@ export const notValidator = {
           ? { value: value as TEnum }
           : { issues: [{ message: `Must be one of: ${allowedValues.join(', ')}` }] }
       },
+      vendor: 'not-validator',
+      version: 1,
     },
   }),
 
-
   // COMPOSITE
-
 
   /**
    * Validates that a value matches at least one of the provided schemas.
    * Tries each schema in order and passes on the first match.
    * @param schemas The list of candidate schemas to try.
+   * @returns A schema object that validates a union value.
    */
-  union: <TUnion>(schemas: StandardSchemaV1<TUnion>[]): StandardSchemaV1<TUnion> => ({
+  union: <TUnion>(schemas: Array<StandardSchemaV1<TUnion>>): StandardSchemaV1<TUnion> => ({
     '~standard': {
-      version: 1,
-      vendor: 'not-validator',
       types: {
         input: undefined as unknown as TUnion,
         output: undefined as unknown as TUnion,
@@ -162,6 +159,8 @@ export const notValidator = {
         }
         return { issues: [{ message: 'Value did not match any of the expected types' }] }
       },
+      vendor: 'not-validator',
+      version: 1,
     },
   }),
 
@@ -169,6 +168,7 @@ export const notValidator = {
    * Validates a plain object against a shape of field schemas.
    * Each field's issues are reported with the field key prepended to their path.
    * @param shape A record mapping field names to their schemas.
+   * @returns A schema object that validates an object value.
    */
   object: <TShape extends Record<string, StandardSchemaV1>>(shape: TShape): StandardSchemaV1<
     { [Key in keyof TShape]: StandardSchemaV1.InferInput<TShape[Key]> },
@@ -176,8 +176,6 @@ export const notValidator = {
   > & { shape: TShape } => ({
     shape,
     '~standard': {
-      version: 1,
-      vendor: 'not-validator',
       types: {
         input: {} as { [Key in keyof TShape]: StandardSchemaV1.InferInput<TShape[Key]> },
         output: {} as { [Key in keyof TShape]: StandardSchemaV1.InferOutput<TShape[Key]> },
@@ -187,7 +185,7 @@ export const notValidator = {
           return { issues: [{ message: 'Must be an object' }] }
         }
 
-        const issues: StandardSchemaV1.Issue[] = []
+        const issues: Array<StandardSchemaV1.Issue> = []
         const output: Record<string, unknown> = {}
         const data = value as Record<string, unknown>
 
@@ -197,7 +195,10 @@ export const notValidator = {
           if ('issues' in result && result.issues) {
             issues.push(...result.issues.map(issue => ({
               ...issue,
-              path: [key, ...(issue.path ?? [])],
+              path: [
+                key,
+                ...(issue.path ?? []),
+              ],
             })))
           } else if ('value' in result) {
             output[key] = result.value
@@ -206,6 +207,8 @@ export const notValidator = {
 
         return issues.length > 0 ? { issues } : { value: output as any }
       },
+      vendor: 'not-validator',
+      version: 1,
     },
   }),
 
@@ -215,22 +218,21 @@ export const notValidator = {
    * @param itemSchema The schema every array item is validated against.
    * @param min Minimum number of items (inclusive).
    * @param max Maximum number of items (inclusive).
+   * @returns A schema object that validates an array value.
    */
   array: <TItem extends StandardSchemaV1>(
     itemSchema: TItem,
     min?: number,
     max?: number,
   ): StandardSchemaV1<
-    StandardSchemaV1.InferInput<TItem>[],
-    StandardSchemaV1.InferOutput<TItem>[]
+    Array<StandardSchemaV1.InferInput<TItem>>,
+    Array<StandardSchemaV1.InferOutput<TItem>>
   > & { itemSchema: TItem } => ({
     itemSchema,
     '~standard': {
-      version: 1,
-      vendor: 'not-validator',
       types: {
-        input: [] as StandardSchemaV1.InferInput<TItem>[],
-        output: [] as StandardSchemaV1.InferOutput<TItem>[],
+        input: [] as Array<StandardSchemaV1.InferInput<TItem>>,
+        output: [] as Array<StandardSchemaV1.InferOutput<TItem>>,
       },
       async validate(value) {
         if (!Array.isArray(value)) {
@@ -243,16 +245,22 @@ export const notValidator = {
           return { issues: [{ message: `Must have at most ${max} item${max === 1 ? '' : 's'}` }] }
         }
 
-        const issues: StandardSchemaV1.Issue[] = []
-        const output: any[] = []
+        const issues: Array<StandardSchemaV1.Issue> = []
+        const output: Array<any> = []
 
-        for (let index = 0; index < value.length; index++) {
-          const result = await itemSchema['~standard'].validate(value[index])
+        for (const [
+          index,
+          element,
+        ] of value.entries()) {
+          const result = await itemSchema['~standard'].validate(element)
 
           if ('issues' in result && result.issues) {
             issues.push(...result.issues.map(issue => ({
               ...issue,
-              path: [index, ...(issue.path ?? [])],
+              path: [
+                index,
+                ...(issue.path ?? []),
+              ],
             })))
           } else if ('value' in result) {
             output.push(result.value)
@@ -261,6 +269,8 @@ export const notValidator = {
 
         return issues.length > 0 ? { issues } : { value: output as any }
       },
+      vendor: 'not-validator',
+      version: 1,
     },
   }),
 }

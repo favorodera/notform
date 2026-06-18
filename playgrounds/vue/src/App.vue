@@ -1,29 +1,29 @@
 <script setup lang="ts">
+import { NotArrayField, NotField, NotForm, NotMessage, useNotForm } from 'notform'
 import { nextTick, ref } from 'vue'
 import { z } from 'zod'
-import { NotForm, NotField, NotArrayField, NotMessage, useNotForm } from 'notform'
 
 const tagSchema = z.string().min(1, 'Tag cannot be empty')
 
 const schema = z.object({
+  email: z.email('Invalid email'),
   name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email'),
   tags: z.array(tagSchema).min(1, 'At least one tag is required'),
 })
 
-const submissionResult = ref<unknown>(null)
+const submissionResult = ref<unknown>()
 
 const form = useNotForm({
-  schema,
   onSubmit: (values) => {
     submissionResult.value = values
   },
+  schema,
 })
 
 const handleReset = async () => {
   form.reset()
   await nextTick()
-  submissionResult.value = null
+  submissionResult.value = undefined
 }
 </script>
 
@@ -37,6 +37,7 @@ const handleReset = async () => {
     <!-- Name Field -->
     <div>
       <label for="name">Full Name</label>
+
       <NotField
         v-slot="{ events }"
         path="name"
@@ -48,6 +49,7 @@ const handleReset = async () => {
           type="text"
           placeholder="e.g. John Doe"
         >
+
         <NotMessage
           path="name"
         />
@@ -57,6 +59,7 @@ const handleReset = async () => {
     <!-- Email Field -->
     <div>
       <label for="email">Email Address</label>
+
       <NotField
         v-slot="{ events }"
         path="email"
@@ -68,6 +71,7 @@ const handleReset = async () => {
           type="email"
           placeholder="e.g. john@example.com"
         >
+
         <NotMessage
           path="email"
         />
@@ -77,6 +81,7 @@ const handleReset = async () => {
     <!-- Tags Array Field -->
     <div>
       <label>Interest Tags</label>
+
       <NotArrayField
         v-slot="{ items, append, remove }"
         path="tags"
@@ -98,6 +103,7 @@ const handleReset = async () => {
                   type="text"
                   placeholder="Tag name"
                 >
+
                 <button
                   type="button"
                   title="Remove Tag"
@@ -106,6 +112,7 @@ const handleReset = async () => {
                   &times;
                 </button>
               </div>
+
               <NotMessage
                 :path="item.path"
               />
@@ -119,6 +126,7 @@ const handleReset = async () => {
         >
           + Add New Tag
         </button>
+
         <NotMessage
           path="tags"
         />
@@ -133,6 +141,7 @@ const handleReset = async () => {
       >
         Submit Form
       </button>
+
       <button
         type="reset"
       >

@@ -7,17 +7,15 @@ const components = [
   'NotMessage',
 ] as const
 
-const composables = [
-  'useNotForm',
-] as const
+const composables = ['useNotForm'] as const
 
 export default defineNuxtModule({
   meta: {
-    name: 'notform-nuxt',
-    configKey: 'notform',
     compatibility: {
       nuxt: '>=4.0.0',
     },
+    configKey: 'notform',
+    name: 'notform-nuxt',
   },
 
   // Module factory
@@ -30,22 +28,22 @@ export default defineNuxtModule({
     const composablesRuntime = resolve('./runtime/composables')
 
     // Add components
-    components.forEach((name) => {
+    for (const name of components) {
       addComponent({
-        name,
         export: name,
         filePath: componentsRuntime,
+        name,
       })
-    })
+    }
 
     // Add composables
-    composables.forEach((composable) => {
+    for (const composable of composables) {
       addImports({
-        name: composable,
         as: composable,
         from: composablesRuntime,
+        name: composable,
       })
-    })
+    }
   },
 
 })

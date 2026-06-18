@@ -12,16 +12,16 @@ useHead({
 })
 
 useSeoMeta({
-  title: 'Page not found',
   description: 'We are sorry but this page could not be found.',
+  title: 'Page not found',
 })
 
-const { github, author } = useAppConfig()
+const { author, github } = useAppConfig()
 
 const navLinks = [
   { label: 'Docs', to: '/get-started' },
-  { label: 'GitHub', to: github.url, target: '_blank' },
-  { label: 'Author', to: author.url, target: '_blank' },
+  { label: 'GitHub', target: '_blank', to: github.url },
+  { label: 'Author', target: '_blank', to: author.url },
 ]
 
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs'))
@@ -40,7 +40,6 @@ provide('navigation', navigation)
       class="border-dashed"
       :toggle="false"
     >
-
       <template #title>
         <AppLogo />
       </template>
@@ -66,9 +65,7 @@ provide('navigation', navigation)
         >
           Docs
         </UButton>
-
       </template>
-
     </UHeader>
 
     <UError
@@ -79,7 +76,6 @@ provide('navigation', navigation)
         links: 'mt-3'
       }"
     >
-  
       <template #links>
         <UButton
           size="sm"
@@ -104,15 +100,13 @@ provide('navigation', navigation)
           Go back
         </UButton>
       </template>
-  
     </UError>
 
     <footer
-      class="border-t border-dashed border-default"
+      class="border-bs border-dashed border-default"
     >
       <UContainer>
         <div class="flex flex-wrap items-center justify-between gap-4 py-5">
-
           <!-- Nav links -->
           <nav
             class="flex items-center gap-1"
@@ -130,6 +124,7 @@ provide('navigation', navigation)
                 size="xs"
                 class="
                   font-light text-muted
+
                   hover:text-highlighted
                 "
               >
@@ -150,7 +145,6 @@ provide('navigation', navigation)
           <span class="text-xs font-light text-muted">
             MIT © {{ new Date().getFullYear() }}
           </span>
-
         </div>
       </UContainer>
     </footer>

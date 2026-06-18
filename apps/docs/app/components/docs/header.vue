@@ -15,14 +15,12 @@ const { github } = useAppConfig()
     to="/"
     class="border-dashed"
   >
-
     <template #title>
       <AppLogo />
     </template>
 
     <template #right>
       <UContentSearchButton />
-
       <UColorModeButton />
 
       <UButton
@@ -37,7 +35,6 @@ const { github } = useAppConfig()
         variant="outline"
         :label="github.label"
       />
-
     </template>
 
     <template #body>
@@ -55,6 +52,5 @@ const { github } = useAppConfig()
         }"
       />
     </template>
-
   </UHeader>
 </template>

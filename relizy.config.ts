@@ -1,33 +1,33 @@
 import { defineConfig } from 'relizy'
 
 export default defineConfig({
-  projectName: 'notform-monorepo',
-  monorepo: {
-    versionMode: 'unified',
-    packages: ['packages/*'],
-  },
   excludeAuthors: [
     'dependabot[bot]',
     'renovate[bot]',
     'github-actions[bot]',
   ],
-  publish: {
-    packageManager: 'pnpm',
-    registry: 'https://registry.npmjs.org',
-    access: 'public',
+  monorepo: {
     packages: ['packages/*'],
+    versionMode: 'unified',
+  },
+  projectName: 'notform-monorepo',
+  publish: {
+    access: 'public',
     buildCmd: 'pnpm build',
+    packageManager: 'pnpm',
+    packages: ['packages/*'],
+    registry: 'https://registry.npmjs.org',
   },
   types: {
-    feat: { title: 'Added', semver: 'minor' },
-    fix: { title: 'Fixed', semver: 'patch' },
-    perf: { title: 'Performance', semver: 'patch' },
-    docs: { title: 'Documentation', semver: 'patch' },
-    style: { title: 'Styling', semver: 'patch' },
-    refactor: { title: 'Refactors', semver: 'patch' },
-    test: { title: 'Tests', semver: 'patch' },
-    build: { title: 'Builds', semver: 'patch' },
-    ci: { title: 'Continuous Integrations', semver: 'patch' },
-    chore: { title: 'Chores', semver: 'patch' },
+    build: { semver: 'patch', title: 'Builds' },
+    chore: { semver: 'patch', title: 'Chores' },
+    ci: { semver: 'patch', title: 'Continuous Integrations' },
+    docs: { semver: 'patch', title: 'Documentation' },
+    feat: { semver: 'minor', title: 'Added' },
+    fix: { semver: 'patch', title: 'Fixed' },
+    perf: { semver: 'patch', title: 'Performance' },
+    refactor: { semver: 'patch', title: 'Refactors' },
+    style: { semver: 'patch', title: 'Styling' },
+    test: { semver: 'patch', title: 'Tests' },
   },
 })

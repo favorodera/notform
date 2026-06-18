@@ -1,19 +1,18 @@
 <script setup lang="ts">
-const { github, author } = useAppConfig()
+const { author, github } = useAppConfig()
 
 const navLinks = [
-  { label: 'GitHub', to: github.url, target: '_blank' },
-  { label: 'Author', to: author.url, target: '_blank' },
+  { label: 'GitHub', target: '_blank', to: github.url },
+  { label: 'Author', target: '_blank', to: author.url },
 ]
 </script>
 
 <template>
   <footer
-    class="border-t border-dashed border-default"
+    class="border-bs border-dashed border-default"
   >
     <UContainer>
       <div class="flex flex-wrap items-center justify-between gap-4 py-5">
-
         <!-- Nav links -->
         <nav
           class="flex items-center gap-1"
@@ -31,6 +30,7 @@ const navLinks = [
               size="xs"
               class="
                 font-light text-muted
+
                 hover:text-highlighted
               "
             >
@@ -51,7 +51,6 @@ const navLinks = [
         <span class="text-xs font-light text-muted">
           MIT © {{ new Date().getFullYear() }}
         </span>
-
       </div>
     </UContainer>
   </footer>

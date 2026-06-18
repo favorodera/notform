@@ -1,1 +1,1 @@
-export { NotForm, NotField, NotArrayField, NotMessage } from 'notform'
+export { NotArrayField, NotField, NotForm, NotMessage } from 'notform'

@@ -4,15 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Release mode"
+        description: Release mode
         required: true
         type: choice
         options:
           - stable
           - prerelease
       bump:
-        description: "stable: patch | minor | major — prerelease: prerelease | prepatch
-          | preminor | premajor"
+        description: 'stable: patch | minor | major — prerelease: prerelease | prepatch
+          | preminor | premajor'
         required: true
         type: choice
         options:
@@ -24,7 +24,7 @@ on:
           - preminor
           - premajor
       preid:
-        description: "Pre-release identifier e.g. alpha, beta, rc (prerelease mode only)"
+        description: 'Pre-release identifier e.g. alpha, beta, rc (prerelease mode only)'
         required: false
         type: string
         default: alpha

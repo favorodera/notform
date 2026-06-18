@@ -1,18 +1,18 @@
-import { defineContentConfig, defineCollection } from '@nuxt/content'
+import { defineCollection, defineContentConfig } from '@nuxt/content'
 
 export default defineContentConfig({
   collections: {
     landing: defineCollection({
-      type: 'page',
       source: 'index.md',
+      type: 'page',
     }),
 
     docs: defineCollection({
-      type: 'page',
       source: {
-        include: '**',
         exclude: ['index.md'],
+        include: '**',
       },
+      type: 'page',
     }),
   },
 })

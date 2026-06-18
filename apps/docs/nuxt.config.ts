@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     'notform-nuxt',
     'nuxt-llms',
     '@vercel/analytics',
+    '@nuxt/eslint',
   ],
 
   compatibilityDate: '2024-07-11',
@@ -20,16 +21,22 @@ export default defineNuxtConfig({
     asyncContext: true,
   },
 
+  eslint: {
+    config: {
+      standalone: false,
+    },
+  },
+
   devtools: {
     enabled: false,
   },
 
   site: {
-    url: 'https://notformdocs.vercel.app',
-    name: 'NotForm',
+    defaultLocale: 'en',
     description: 'Vue forms without the friction.',
     indexable: true,
-    defaultLocale: 'en',
+    name: 'NotForm',
+    url: 'https://notformdocs.vercel.app',
   },
 
   app: {
@@ -40,64 +47,64 @@ export default defineNuxtConfig({
 
       meta: [
         {
-          name: 'viewport',
           content: 'width=device-width, initial-scale=1',
+          name: 'viewport',
         },
         {
-          charset: 'utf-8',
+          charset: 'utf8',
         },
         {
-          name: 'google-site-verification',
           content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM',
+          name: 'google-site-verification',
         },
       ],
 
       link: [
         {
-          rel: 'icon',
           href: '/favicon.ico',
+          rel: 'icon',
           sizes: '48x48',
         },
         {
-          rel: 'icon',
           href: '/favicon.svg',
+          rel: 'icon',
           sizes: 'any',
           type: 'image/svg+xml',
         },
         {
-          rel: 'icon',
           href: '/favicon-32x32.png',
+          rel: 'icon',
           sizes: '32x32',
           type: 'image/png',
         },
         {
-          rel: 'icon',
           href: '/favicon-16x16.png',
+          rel: 'icon',
           sizes: '16x16',
           type: 'image/png',
         },
         {
-          rel: 'icon',
-          type: 'image/svg+xml',
           href: '/favicon.svg',
+          rel: 'icon',
           sizes: 'any',
+          type: 'image/svg+xml',
         },
         {
-          rel: 'apple-touch-icon',
           href: '/apple-touch-icon.png',
+          rel: 'apple-touch-icon',
           sizes: '180x180',
         },
       ],
     },
 
     pageTransition: {
-      name: 'fade-out-in',
       mode: 'out-in',
+      name: 'fade-out-in',
     },
 
     layoutTransition: {
-      name: 'fade-out-in',
       mode: 'out-in',
+      name: 'fade-out-in',
     },
   },
 
@@ -115,13 +122,13 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
+      autoSubfolderIndex: false,
+      crawlLinks: true,
       routes: [
         '/',
         '/sitemap.xml',
         '/robots.txt',
       ],
-      crawlLinks: true,
-      autoSubfolderIndex: false,
     },
   },
 
@@ -130,34 +137,54 @@ export default defineNuxtConfig({
   },
 
   icon: {
-    provider: 'iconify',
-    mode: 'svg',
     customCollections: [
       {
-        prefix: 'custom',
         dir: './app/assets/icons',
+        prefix: 'custom',
       },
     ],
+    mode: 'svg',
+    provider: 'iconify',
   },
 
   fonts: {
     families: [
-      { name: 'Geist', weights: [100, 200, 300, 400, 500, 600, 700, 800, 900], global: true },
-      { name: 'Geist Mono', weights: [100, 200, 300, 400, 500, 600, 700, 800, 900], global: true },
+      { global: true, name: 'Geist', weights: [
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+      ] },
+      { global: true, name: 'Geist Mono', weights: [
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+      ] },
     ],
   },
 
   vite: {
-    plugins: [
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tailwindcss() as any,
-    ],
     optimizeDeps: {
       include: [
         'zod',
         '@vueuse/core',
       ],
     },
+    plugins: [
+      // eslint-disable-next-line ts/no-explicit-any
+      tailwindcss() as any,
+    ],
   },
 
   sitemap: {
@@ -172,9 +199,9 @@ export default defineNuxtConfig({
 
   schemaOrg: {
     identity: defineSoftwareApp({
+      'description': 'Vue forms without the friction.',
       'name': 'NotForm',
       'url': 'https://notformdocs.vercel.app',
-      'description': 'Vue forms without the friction.',
 
       '@type': 'SoftwareApplication',
       'applicationCategory': 'DeveloperApplication',
@@ -209,50 +236,40 @@ export default defineNuxtConfig({
   },
 
   llms: {
-    domain: 'https://notformdocs.vercel.app',
-    title: 'NotForm',
     description: 'Vue forms without the friction.',
+    domain: 'https://notformdocs.vercel.app',
     full: {
-      title: 'NotForm',
       description: 'Vue forms without the friction.',
+      title: 'NotForm',
     },
     sections: [
       {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/get-started%' }],
         title: 'Get Started',
-        contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/get-started%' },
-        ],
       },
       {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/components%' }],
         title: 'Components',
-        contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/components%' },
-        ],
       },
       {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/composables%' }],
         title: 'Composables',
-        contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/composables%' },
-        ],
       },
       {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/advanced%' }],
         title: 'Advanced',
-        contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/advanced%' },
-        ],
       },
       {
-        title: 'Working with AI',
         contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/ai%' },
-        ],
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/ai%' }],
+        title: 'Working with AI',
       },
     ],
+    title: 'NotForm',
   },
 
   mcp: {

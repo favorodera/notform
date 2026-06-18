@@ -9,22 +9,22 @@ const schema = z.object({
 })
 
 const form = useNotForm({
-  schema,
   onSubmit: async () => {
-    await new Promise(resolve => setTimeout(resolve, 600))
+    await new Promise(resolve => {
+      setTimeout(resolve, 600)
+    })
 
     toast.add({
-      title: 'Form submitted successfully',
       color: 'success',
+      title: 'Form submitted successfully',
     })
 
     setTimeout(() => {
       form.reset()
     }, 2000)
-
   },
+  schema,
 })
-
 </script>
 
 <template>
@@ -33,7 +33,6 @@ const form = useNotForm({
     class="form"
     @submit="form.submit"
   >
-
     <NotField
       v-slot="{ events,path }"
       path="email"
@@ -45,6 +44,7 @@ const form = useNotForm({
         >
           Email
         </label>
+
         <input
           :id="path"
           v-model="form.values.email"
@@ -72,6 +72,7 @@ const form = useNotForm({
         >
           Password
         </label>
+
         <input
           :id="path"
           v-model="form.values.password"

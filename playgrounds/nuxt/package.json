@@ -2,27 +2,30 @@
   "name": "nuxt-playground",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=11.0.0"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "nuxt typecheck",
-    "lint": "eslint . --fix"
+    "typecheck": "nuxt prepare && nuxt typecheck",
+    "lint": "nuxt prepare && eslint . --fix"
   },
   "dependencies": {
     "notform-nuxt": "workspace:*",
-    "zod": "^4.3.6",
-    "nuxt": "catalog:",
-    "vue": "catalog:",
-    "vue-router": "catalog:"
+    "nuxt": "catalog:vendor",
+    "pinia": "catalog:vendor",
+    "vue": "catalog:vendor",
+    "vue-router": "catalog:vendor",
+    "zod": "catalog:vendor"
   },
   "devDependencies": {
-    "vue-tsc": "catalog:"
-  },
-  "engines": {
-    "node": ">=22.0.0",
-    "pnpm": ">=11.0.0"
+    "@favorodera/eslint-config": "catalog:tools",
+    "@nuxt/eslint": "catalog:tools",
+    "vue-tsc": "catalog:tools"
   }
 }

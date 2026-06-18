@@ -1,7 +1,7 @@
-import type { DeepPartial, ObjectSchema, Paths } from './shared'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { Get } from 'type-fest'
-import type { Ref, ComputedRef, Raw } from 'vue'
+import type { ComputedRef, Raw, Ref } from 'vue'
+import type { DeepPartial, ObjectSchema, Paths } from './shared'
 import type { UseNotFormConfig } from './use-not-form'
 
 /**
@@ -10,9 +10,7 @@ import type { UseNotFormConfig } from './use-not-form'
  */
 export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
 
-
   // CONFIG
-
 
   /** The values the form was initialised or last reset with. */
   readonly initialValues: UseNotFormConfig<TSchema>['initialValues']
@@ -26,9 +24,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
   /** The resolved validation mode for this form. */
   readonly validationMode: Required<NonNullable<UseNotFormConfig<TSchema>['validationMode']>>
 
-
   // VALUES
-
 
   /**
    * Deeply reactive object of field values.
@@ -62,9 +58,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
     value: Get<StandardSchemaV1.InferInput<TSchema>, TPath, { strict: false }>,
   ) => void
 
-
   // TOUCH
-
 
   /**
    * The set of field paths the user has interacted with.
@@ -81,9 +75,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    */
   touchField: (path: Paths<StandardSchemaV1.InferInput<TSchema>>) => void
 
-
   // DIRTY
-
 
   /** The set of field paths whose current value differs from the initial value. */
   dirtyFields: Set<Paths<StandardSchemaV1.InferInput<TSchema>>>
@@ -97,12 +89,10 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    */
   dirtyField: (path: Paths<StandardSchemaV1.InferInput<TSchema>>) => void
 
-
   // ERRORS
 
-
   /** The raw validation issues produced by the last validation run. */
-  errors: StandardSchemaV1.Issue[]
+  errors: Array<StandardSchemaV1.Issue>
 
   /**
    * A flat map of field path to its first error message.
@@ -123,7 +113,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
   setError: (error: StandardSchemaV1.Issue) => void
 
   /** Replaces all current errors with the provided issues. */
-  setErrors: (errors: StandardSchemaV1.Issue[]) => void
+  setErrors: (errors: Array<StandardSchemaV1.Issue>) => void
 
   /** Removes all active validation errors. */
   clearErrors: () => void
@@ -135,11 +125,9 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    * form.getFieldErrors('address.city')
    * ```
    */
-  getFieldErrors: (path: Paths<StandardSchemaV1.InferInput<TSchema>>) => StandardSchemaV1.Issue[]
-
+  getFieldErrors: (path: Paths<StandardSchemaV1.InferInput<TSchema>>) => Array<StandardSchemaV1.Issue>
 
   // VALIDATION
-
 
   /** Whether a validation run is currently in progress. */
   isValidating: Ref<boolean>
@@ -159,9 +147,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
   /** Whether the form currently has no validation errors. */
   isValid: ComputedRef<boolean>
 
-
   // SUBMISSION
-
 
   /** Whether the form is currently running its submit handler. */
   isSubmitting: Ref<boolean>
@@ -175,16 +161,14 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    *
    * ```vue
    * <template>
-   *   <form @submit="form.submit">
+   *   <form v-on:submit="form.submit">
    *   </form>
    * </template>
    * ```
    */
   submit: (event: Event) => Promise<void>
 
-
   // RESET
-
 
   /**
    * Resets the form to its initial state, or to new values and errors if provided.
@@ -202,25 +186,22 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    */
   reset: (
     values?: DeepPartial<StandardSchemaV1.InferInput<TSchema>>,
-    errors?: StandardSchemaV1.Issue[],
+    errors?: Array<StandardSchemaV1.Issue>,
   ) => void
-
 
 }>
 
-
 // COMPONENT TYPES
 
-
 /** Props for the `NotForm` component. */
-export type NotFormProps = {
+export interface NotFormProps {
   /** The form instance to provide to all descendant `NotField` components. */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any
   form: NotFormInstance<any>
 }
 
 /** Slots for the `NotForm` component. */
-export type NotFormSlots = {
+export interface NotFormSlots {
   /** The default slot receives the full form instance */
   default: []
 }

@@ -2,9 +2,9 @@
 import { resolveComponent } from 'vue'
 
 defineProps<{
+  description?: string
   icon: string
   title: string
-  description?: string
   to?: string
 }>()
 
@@ -16,8 +16,9 @@ const NuxtLink = resolveComponent('NuxtLink')
     :is="to ? NuxtLink : 'div'"
     :to="to"
     class="
-      group relative h-full rounded-lg bg-default p-6 transition-colors
+      group relative block-full rounded-lg bg-default p-6 transition-colors
       duration-200
+
       hover:bg-muted
     "
     aria-describedby="app:card:title"
@@ -40,14 +41,15 @@ const NuxtLink = resolveComponent('NuxtLink')
     <UIcon
       :name="icon"
       class="
-        mb-4 size-5 text-primary transition-transform duration-200
+        mbe-4 block-5 inline-5 text-primary transition-transform duration-200
+
         group-hover:scale-110
       "
     />
 
     <p
       id="app:card:title"
-      class="mb-2 text-sm font-medium text-highlighted"
+      class="mbe-2 text-sm font-medium text-highlighted"
     >
       {{ title }}
     </p>

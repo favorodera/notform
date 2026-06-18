@@ -1,8 +1,8 @@
 <script lang="ts">
 const demos = import.meta.glob('../demos/**/*', {
-  query: '?raw',
-  import: 'default',
   eager: true,
+  import: 'default',
+  query: '?raw',
 })
 </script>
 

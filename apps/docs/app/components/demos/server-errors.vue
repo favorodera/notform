@@ -4,30 +4,32 @@ import { z } from 'zod'
 const toast = useToast()
 
 const form = useNotForm({
-  schema: z.object({
-    email: z.email('Enter a valid email'),
-  }),
   initialValues: { email: '' },
   onSubmit: async (values) => {
     // Simulate a server 409 — email taken
-    await new Promise(resolve => setTimeout(resolve, 700))
+    await new Promise(resolve => {
+      setTimeout(resolve, 600)
+    })
 
     if (values.email === 'taken@example.com') {
       form.setError({
-        path: [{ key: 'email' }],
         message: 'This email is already registered',
+        path: [{ key: 'email' }],
       })
 
       return
     }
 
     toast.add({
-      title: 'Success',
-      description: 'Account created successfully',
       color: 'success',
+      description: 'Account created successfully',
+      title: 'Success',
     })
     form.reset()
   },
+  schema: z.object({
+    email: z.email('Enter a valid email'),
+  }),
 })
 </script>
 
@@ -48,6 +50,7 @@ const form = useNotForm({
         >
           Email
         </label>
+
         <input
           v-bind="events"
           :id="path"
@@ -56,6 +59,7 @@ const form = useNotForm({
           placeholder="Try taken@example.com"
           class="input"
         >
+
         <NotMessage
           :path="path"
           class="message"
@@ -72,6 +76,5 @@ const form = useNotForm({
     >
       Create account
     </UButton>
-
   </NotForm>
 </template>

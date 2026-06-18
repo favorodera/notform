@@ -15,7 +15,6 @@ const { github } = useAppConfig()
       class="border-dashed"
       :toggle="false"
     >
-
       <template #title>
         <AppLogo />
       </template>
@@ -41,9 +40,7 @@ const { github } = useAppConfig()
         >
           Docs
         </UButton>
-
       </template>
-
     </UHeader>
   </Motion>
 </template>

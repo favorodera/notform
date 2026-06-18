@@ -4,17 +4,17 @@
   TItem = StandardSchemaV1.InferInput<TItemSchema>
 "
 >
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { getProperty, setProperty } from 'dot-prop'
-import { dequal } from 'dequal'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { ObjectSchema } from '../types/shared'
+import { dequal } from 'dequal'
+import { getProperty, setProperty } from 'dot-prop'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import type {
-  NotArrayFieldProps,
-  NotArrayFieldSlots,
-  NotArrayFieldSlotProps,
   NotArrayFieldItem,
+  NotArrayFieldProps,
+  NotArrayFieldSlotProps,
+  NotArrayFieldSlots,
 } from '../types/not-array-field'
+import type { ObjectSchema } from '../types/shared'
 import { useNotFormInstance } from '../utils/instance-utils'
 
 defineOptions({ inheritAttrs: false })
@@ -22,25 +22,19 @@ defineSlots<NotArrayFieldSlots<TSchema, TItem>>()
 
 const props = defineProps<NotArrayFieldProps<TItemSchema>>()
 
-
 // INSTANCE
-
 
 const form = useNotFormInstance(props.form)
 
-
 // OPTIONS
-
 
 // Only onMount and onChange are meaningful for an array wrapper — no onBlur/onFocus/onInput
 const validateOn = computed(() => ({
-  onMount: props.validateOn?.onMount ?? form.validateOn.onMount,
   onChange: props.validateOn?.onChange ?? form.validateOn.onChange,
+  onMount: props.validateOn?.onMount ?? form.validateOn.onMount,
 }))
 
-
 // STATE
-
 
 const isValidating = ref(false)
 
@@ -48,37 +42,31 @@ const isValidating = ref(false)
  * Stable keys per item — survive reorders, removals, and inserts.
  * Seeded from the length of the initial array so existing items have keys from the start.
  */
-const itemKeys = ref(
-  (
-    () => {
-      const initial = getProperty(form.values, props.path)
-      const length = Array.isArray(initial) ? initial.length : 0
+const itemKeys = ref((
+  () => {
+    const initial = getProperty(form.values, props.path)
+    const length = Array.isArray(initial) ? initial.length : 0
 
-      return Array.from({ length }, (_, index) => `${props.path}-${index}-${Date.now()}`)
-    }
-  )(),
-)
+    return Array.from({ length }, (_, index) => `${props.path}-${index}-${Date.now()}`)
+  }
+)())
 
 let keyCounter = itemKeys.value.length
 
 const generateKey = () => `${props.path}-${keyCounter++}-${Date.now()}`
 
-
 // DERIVED
-
 
 const array = computed<TItem[]>(() => {
   const value = getProperty(form.values, props.path)
   return Array.isArray(value) ? value : []
 })
 
-const items = computed<NotArrayFieldItem[]>(() =>
-  array.value.map((_, index) => ({
-    key: itemKeys.value[index] ?? `${props.path}-fallback-${index}`,
-    index,
-    path: `${props.path}.${index}`,
-  })),
-)
+const items = computed<NotArrayFieldItem[]>(() => array.value.map((_, index) => ({
+  index,
+  key: itemKeys.value[index] ?? `${props.path}-fallback-${index}`,
+  path: `${props.path}.${index}`,
+})))
 
 const errors = computed(() => form.getFieldErrors(props.path))
 const isValid = computed(() => errors.value.length === 0)
@@ -87,23 +75,17 @@ const isValid = computed(() => errors.value.length === 0)
  * Derived from the form's touchedFields set.
  * True if the array path itself or any of its item paths have been touched.
  */
-const isTouched = computed(() =>
-  form.touchedFields.has(props.path)
-  || [...form.touchedFields].some(path => path.startsWith(`${props.path}.`)),
-)
+const isTouched = computed(() => form.touchedFields.has(props.path)
+  || [...form.touchedFields].some(path => path.startsWith(`${props.path}.`)))
 
 /**
  * Derived from the form's dirtyFields set.
  * True if the array path itself or any of its item paths are dirty.
  */
-const isDirty = computed(() =>
-  form.dirtyFields.has(props.path)
-  || [...form.dirtyFields].some(path => path.startsWith(`${props.path}.`)),
-)
-
+const isDirty = computed(() => form.dirtyFields.has(props.path)
+  || [...form.dirtyFields].some(path => path.startsWith(`${props.path}.`)))
 
 // VALIDATION
-
 
 const validate = async () => {
   isValidating.value = true
@@ -114,9 +96,7 @@ const validate = async () => {
   }
 }
 
-
 // MUTATION
-
 
 /** Re-aligns itemKeys with the current array length. */
 const syncKeys = () => {
@@ -134,6 +114,7 @@ const syncKeys = () => {
  * Applies an update to a copy of the current array, writes it back to the form values,
  * and marks the array path as touched. Dirty state is derived from the form's Sets
  * automatically via the computed above so no explicit dirty call is needed here.
+ * @param updater Callback to update the array
  */
 const mutate = (updater: (current: TItem[]) => void) => {
   const current = [...array.value]
@@ -148,9 +129,7 @@ const mutate = (updater: (current: TItem[]) => void) => {
   if (validateOn.value.onChange) validate()
 }
 
-
 // ARRAY METHODS
-
 
 const append = (value: TItem) => {
   itemKeys.value.push(generateKey())
@@ -181,9 +160,21 @@ const update = (index: number, value: TItem) => {
 
 const swap = (indexA: number, indexB: number) => {
   mutate((current) => {
-    ;[current[indexA], current[indexB]] = [current[indexB], current[indexA]]
-  })
-  ;[itemKeys.value[indexA], itemKeys.value[indexB]] = [itemKeys.value[indexB], itemKeys.value[indexA]]
+    [
+      current[indexA],
+      current[indexB],
+    ] = [
+      current[indexB],
+      current[indexA],
+    ]
+  });
+  [
+    itemKeys.value[indexA],
+    itemKeys.value[indexB],
+  ] = [
+    itemKeys.value[indexB],
+    itemKeys.value[indexA],
+  ]
 }
 
 const move = (from: number, to: number) => {
@@ -195,9 +186,7 @@ const move = (from: number, to: number) => {
   itemKeys.value.splice(to, 0, key)
 }
 
-
 // LIFECYCLE
-
 
 onMounted(async () => {
   await nextTick()
@@ -216,26 +205,24 @@ onMounted(async () => {
  */
 watch(() => array.value.length, syncKeys)
 
-
 // SLOT PROPS
 
-
 const slotProps = computed<NotArrayFieldSlotProps<TSchema, TItem>>(() => ({
-  path: props.path,
-  items: items.value,
-  errors: errors.value,
-  isValid: isValid.value,
-  isTouched: isTouched.value,
-  isDirty: isDirty.value,
-  isValidating: isValidating.value,
-  validate,
   append,
+  errors: errors.value,
+  insert,
+  isDirty: isDirty.value,
+  isTouched: isTouched.value,
+  isValid: isValid.value,
+  isValidating: isValidating.value,
+  items: items.value,
+  move,
+  path: props.path,
   prepend,
   remove,
-  insert,
-  update,
   swap,
-  move,
+  update,
+  validate,
 }))
 </script>
 

@@ -1,26 +1,20 @@
 <script setup lang="ts" generic="TSchema extends ObjectSchema">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { dequal } from 'dequal'
 import { getProperty } from 'dot-prop'
-import type { NotFieldProps, NotFieldSlots, NotFieldSlotProps } from '../types/not-field'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import type { NotFieldProps, NotFieldSlotProps, NotFieldSlots } from '../types/not-field'
 import type { ObjectSchema } from '../types/shared'
 import { useNotFormInstance } from '../utils/instance-utils'
-import { dequal } from 'dequal'
 
-defineOptions({ inheritAttrs: false })
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineSlots<NotFieldSlots<TSchema>>()
 
 const props = defineProps<NotFieldProps>()
 
-
-// INSTANCE
-
-
-// Explicit :form prop takes priority over whatever NotForm ancestor provided
 const form = useNotFormInstance(props.form)
-
-
-// OPTIONS
-
 
 // Per-field validateOn is merged over the form-wide config — only specified keys are overridden
 const validateOn = computed(() => ({
@@ -28,14 +22,10 @@ const validateOn = computed(() => ({
   ...props.validateOn,
 }))
 
-
-// STATE
-
-
 const isValidating = ref(false)
-/** Timer handle for the current pending debounced validation, if any. */
-let debounceTimer: NodeJS.Timeout | undefined
 
+/** Timer handle for the current pending debounced validation, if any. */
+let debounceTimer: ReturnType<typeof setTimeout> | undefined
 
 // DEBOUNCE
 
@@ -51,37 +41,11 @@ const clearDebounce = () => {
   }
 }
 
-/**
- * Schedules a validation run, respecting the field's `debounce` prop.
- *
- * - If `debounce` is `0` or omitted, validation runs synchronously.
- * - Otherwise, any pending timer is cancelled and a new one is started.
- *   Only the final call within the window actually validates — useful for
- *   async checks (availability lookups, server-side rules) where firing on
- *   every keystroke would be wasteful.
- */
-const scheduleValidation = () => {
-  if (!props.debounce) {
-    validate()
-    return
-  }
-  clearDebounce()
-  debounceTimer = setTimeout(validate, props.debounce)
-}
-
-
-// DERIVED
-
-
 const value = computed(() => getProperty(form.values, props.path))
 const errors = computed(() => form.getFieldErrors(props.path))
 const isValid = computed(() => errors.value.length === 0)
 const isTouched = computed(() => form.touchedFields.has(props.path))
 const isDirty = computed(() => form.dirtyFields.has(props.path))
-
-
-// DIRTY TRACKING
-
 
 /**
  * Syncs dirty state on input or change.
@@ -97,10 +61,6 @@ const updateDirty = () => {
   else form.dirtyField(props.path)
 }
 
-
-// VALIDATION
-
-
 const validate = async () => {
   isValidating.value = true
   try {
@@ -110,12 +70,28 @@ const validate = async () => {
   }
 }
 
-
-// EVENT HANDLERS
-
+/**
+ * Schedules a validation run, respecting the field's `debounce` prop.
+ *
+ * - If `debounce` is `0` or omitted, validation runs synchronously.
+ * - Otherwise, any pending timer is cancelled and a new one is started.
+ * Only the final call within the window actually validates — useful for
+ * async checks (availability lookups, server-side rules) where firing on
+ * every keystroke would be wasteful.
+ */
+const scheduleValidation = () => {
+  if (!props.debounce) {
+    validate()
+    return
+  }
+  clearDebounce()
+  debounceTimer = setTimeout(validate, props.debounce)
+}
 
 const onBlur = () => {
-  clearDebounce() // cancel pending — blur's validate() takes over
+  // cancel pending — blur's validate() takes over
+  clearDebounce()
+
   form.touchField(props.path)
   if (validateOn.value.onBlur) validate()
 }
@@ -137,10 +113,6 @@ const onFocus = () => {
   if (validateOn.value.onFocus) scheduleValidation()
 }
 
-
-// LIFECYCLE
-
-
 onMounted(async () => {
   await nextTick()
   if (validateOn.value.onMount) validate()
@@ -148,20 +120,16 @@ onMounted(async () => {
 
 onUnmounted(clearDebounce)
 
-
-// SLOT PROPS
-
-
 const slotProps = computed<NotFieldSlotProps<TSchema>>(() => ({
-  path: props.path,
-  value: value.value,
   errors: errors.value,
-  isValid: isValid.value,
-  isTouched: isTouched.value,
+  events: { onBlur, onChange, onFocus, onInput },
   isDirty: isDirty.value,
+  isTouched: isTouched.value,
+  isValid: isValid.value,
   isValidating: isValidating.value,
+  path: props.path,
   validate,
-  events: { onBlur, onInput, onChange, onFocus },
+  value: value.value,
 }))
 </script>
 

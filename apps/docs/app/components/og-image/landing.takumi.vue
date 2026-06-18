@@ -11,7 +11,6 @@
       font-family:'Geist',sans-serif;
     "
   >
-
     <!-- grid -->
     <div
       style="
@@ -24,12 +23,12 @@
     <!-- atmospheric glow -->
     <div
       class="absolute inset-0"
-      :style="`
+      style="
         background:
           radial-gradient(ellipse 75% 55% at 50% -5%, #1a9e5e, transparent 70%),
           radial-gradient(ellipse 50% 35% at 80% 110%, #137e4a, transparent 65%);
         opacity: 0.13;
-      `"
+      "
     />
 
     <!-- corner accents -->
@@ -44,6 +43,7 @@
         border-left:1px solid rgba(52,190,122,0.4);
       "
     />
+
     <div
       style="
         position:absolute;
@@ -55,6 +55,7 @@
         border-right:1px solid rgba(52,190,122,0.4);
       "
     />
+
     <div
       style="
         position:absolute;
@@ -66,6 +67,7 @@
         border-left:1px solid rgba(52,190,122,0.4);
       "
     />
+
     <div
       style="
         position:absolute;
@@ -80,7 +82,7 @@
 
     <!-- logo bottom-right -->
     <div
-      class="absolute -right-5 -bottom-10 opacity-25"
+      class="absolute -inset-e-5 -inset-be-10 opacity-25"
     >
       <AppLogoFade />
     </div>
@@ -97,15 +99,13 @@
         max-width:660px;
       "
     >
-
       <!-- headline -->
       <div
         class="
-          relative mt-24 max-w-4xl overflow-hidden text-[2.5rem]/tight
+          relative mbs-24 max-inline-4xl overflow-hidden text-[2.5rem]/tight
           tracking-tight text-neutral-100
         "
       >
-
         <div class="flex items-center gap-2">
           <span
             class="inline-block text-forest-500"
@@ -130,8 +130,6 @@
       >
         Headless · Composable · Type-safe
       </p>
-
     </div>
-
   </div>
 </template>

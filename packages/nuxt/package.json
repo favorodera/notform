@@ -1,11 +1,11 @@
 {
   "name": "notform-nuxt",
+  "type": "module",
   "version": "2.1.1",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
-  "type": "module",
   "description": "Official notform nuxt module - Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
@@ -17,6 +17,14 @@
   "bugs": {
     "url": "https://github.com/favorodera/notform/issues"
   },
+  "keywords": [
+    "notform-nuxt",
+    "nuxt",
+    "form",
+    "nuxt form",
+    "validator",
+    "nuxt form validator"
+  ],
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
@@ -26,44 +34,33 @@
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
-      ".": [
-        "./dist/types.d.mts"
-      ]
+      ".": ["./dist/types.d.mts"]
     }
   },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "prepack": "pnpm build",
-    "dev": "nuxt prepare && nuxt-module-build build --stub",
-    "build": "nuxt prepare && nuxt-module-build build",
-    "typecheck": "nuxt prepare && vue-tsc --noEmit",
-    "lint": "eslint . --fix"
-  },
-  "dependencies": {
-    "@nuxt/kit": "^4.4.2",
-    "notform": "workspace:*"
-  },
-  "devDependencies": {
-    "@nuxt/module-builder": "^1.0.2",
-    "@nuxt/schema": "^4.4.2",
-    "nuxt": "catalog:",
-    "vue-tsc": "catalog:"
-  },
-  "peerDependencies": {
-    "nuxt": "^4.0.0"
-  },
+  "files": ["dist"],
   "engines": {
     "node": ">=22.0.0",
     "pnpm": ">=11.0.0"
   },
-  "keywords": [
-    "notform-nuxt",
-    "nuxt",
-    "form",
-    "nuxt form",
-    "validator",
-    "nuxt form validator"
-  ]
+  "scripts": {
+    "prepack": "pnpm build",
+    "dev": "nuxt prepare && nuxt-module-build build --stub",
+    "build": "nuxt prepare && nuxt-module-build build",
+    "typecheck": "nuxt prepare && nuxt typecheck",
+    "lint": "nuxt prepare && eslint . --fix"
+  },
+  "peerDependencies": {
+    "nuxt": "catalog:peer"
+  },
+  "dependencies": {
+    "@nuxt/kit": "catalog:vendor",
+    "notform": "workspace:*"
+  },
+  "devDependencies": {
+    "@favorodera/eslint-config": "catalog:tools",
+    "@nuxt/module-builder": "catalog:tools",
+    "@nuxt/schema": "catalog:tools",
+    "nuxt": "catalog:vendor",
+    "vue-tsc": "catalog:tools"
+  }
 }

@@ -1,13 +1,11 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { ObjectSchema, ValidationTrigger } from './shared'
 import type { NotFormInstance } from './not-form'
-
+import type { ObjectSchema, ValidationTrigger } from './shared'
 
 // PROPS
 
-
 /** Props for the `NotField` component. */
-export type NotFieldProps = {
+export interface NotFieldProps {
   /** Dot-separated path to this field within the form values. */
   path: string
 
@@ -24,7 +22,7 @@ export type NotFieldProps = {
    * </template>
    * ```
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any
   form?: NotFormInstance<any>
 
   /**
@@ -39,6 +37,7 @@ export type NotFieldProps = {
    * ```
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
+
   /**
    * Debounce delay in milliseconds for input- and change-triggered validation.
    *
@@ -64,15 +63,13 @@ export type NotFieldProps = {
   debounce?: number
 }
 
-
 // SLOT PROPS
-
 
 /**
  * Everything available inside the `NotField` default slot.
  * @template TSchema The validation schema type derived from `ObjectSchema`.
  */
-export type NotFieldSlotProps<TSchema extends ObjectSchema> = {
+export interface NotFieldSlotProps<TSchema extends ObjectSchema> {
   /** The dot-separated path to this field. */
   path: string
 
@@ -81,11 +78,11 @@ export type NotFieldSlotProps<TSchema extends ObjectSchema> = {
    * Do not mutate directly or use with `v-model`.
    * For two-way binding use `v-model="form.values.fieldName"` instead.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any
   value: any
 
   /** All validation issues for this field from the last validation run. */
-  errors: StandardSchemaV1.Issue[]
+  errors: Array<StandardSchemaV1.Issue>
 
   /** Whether this field currently has no validation errors. */
   isValid: boolean
@@ -115,31 +112,32 @@ export type NotFieldSlotProps<TSchema extends ObjectSchema> = {
    *   <input v-bind="events" />
    *
    *   <!-- individual -->
-   *   <CustomCombobox @focusout="events.onBlur" @pick="events.onChange" />
+   *   <CustomCombobox v-on:focusout="events.onBlur" v-on:pick="events.onChange" />
    * </template>
    * ```
    */
   events: {
     /** Triggered when the field loses focus. */
     onBlur: () => void
+
     /** Triggered on every keystroke or value change. */
     onInput: () => void
+
     /** Triggered when the field value is committed. */
     onChange: () => void
+
     /** Triggered when the field gains focus. */
     onFocus: () => void
   }
 }
 
-
 // SLOTS
-
 
 /**
  * Slots for the `NotField` component.
  * @template TSchema The validation schema type derived from `ObjectSchema`.
  */
-export type NotFieldSlots<TSchema extends ObjectSchema> = {
+export interface NotFieldSlots<TSchema extends ObjectSchema> {
   /** The default slot receives the full field state and event handlers. */
   default: (props: NotFieldSlotProps<TSchema>) => []
 }
