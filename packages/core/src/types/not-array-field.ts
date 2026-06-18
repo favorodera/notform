@@ -13,7 +13,7 @@ export interface NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = Stand
   /**
    * Schema for a single array item — used purely for type inference.
    * Enables typed `append`, `prepend`, `insert`, and `update` methods in the slot.
-   *
+   * @example
    * ```vue
    * <template>
    *   <NotArrayField path="tags" :item-schema="z.string()">
@@ -42,7 +42,7 @@ export interface NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = Stand
 /**
  * Represents a single item in the array field.
  * Use `key` for `v-for` tracking and `path` to pass to a nested `NotField`.
- *
+ * @example
  * ```vue
  * <template>
  *   <NotArrayField path="tags" v-slot="{ items }">

@@ -23,7 +23,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
 
   /**
    * Deeply reactive object of field values.
-   *
+   * @example
    * - Access directly — no `.value` needed:
    * ```ts
    * form.values.email
@@ -43,7 +43,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    *
    * Useful for deeply nested paths or custom inputs that do not use `v-model`.
    * Does **not** trigger validation — the field's event handlers are responsible for that.
-   *
+   * @example
    * ```ts
    * form.setValue('address.city', 'Lagos')
    * ```
@@ -83,7 +83,8 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
   /**
    * A flat map of field path to its first error message.
    *
-   * Convenient for direct template access without calling `getFieldErrors`:
+   * Convenient for direct template access without calling `getFieldErrors`
+   * @example
    * ```vue
    * <template>
    *   <p>{{ form.errorsMap['address.city'] }}</p>
@@ -106,7 +107,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
 
   /**
    * Returns all validation issues for a specific field path.
-   *
+   * @example
    * ```ts
    * form.getFieldErrors('address.city')
    * ```
@@ -140,7 +141,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    * Marks all fields as touched and dirty before validating so all errors surface.
    * If validation fails, submission is aborted.
    * Bind to the native form's `@submit` event:
-   *
+   * @example
    * ```vue
    * <template>
    *   <form v-on:submit="form.submit">
@@ -155,7 +156,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    *
    * Clears all touched and dirty tracking. If `values` or `errors` are passed,
    * they replace the stored baseline so subsequent resets return to the new state.
-   *
+   * @example
    * ```ts
    * // Reset to original initial values
    * form.reset()

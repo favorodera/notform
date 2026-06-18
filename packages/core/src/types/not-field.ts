@@ -11,7 +11,7 @@ export interface NotFieldProps {
    * Explicit form instance override.
    * Takes priority over the instance provided by a `NotForm` ancestor.
    * Required when using `NotField` outside of a `NotForm` (singleton fields).
-   *
+   * @example
    * ```vue
    * <template>
    *   <NotField :form="form" path="email" v-slot="{ events }">
@@ -25,7 +25,7 @@ export interface NotFieldProps {
   /**
    * Per-field validation trigger overrides.
    * Merged over the form-wide `validateOn` — only the keys you specify are overridden.
-   *
+   * @example
    * ```vue
    * <template>
    *   <!-- form validates on blur only, but this field also validates on every input -->
@@ -45,7 +45,7 @@ export interface NotFieldProps {
    *
    * Blur- and submit-triggered validation always runs immediately, regardless
    * of this setting, so the field never feels unresponsive when the user leaves.
-   *
+   * @example
    * ```vue
    * <template>
    *   <!-- validate 400ms after the user stops typing -->
@@ -101,7 +101,7 @@ export interface NotFieldSlots<TSchema extends ObjectSchema> {
     /**
      * Native DOM event handlers exposed by a field.
      * Spread onto a native input or bind individually to custom components.
-     *
+     * @example
      * ```vue
      * <template>
      *   <!-- spread -->

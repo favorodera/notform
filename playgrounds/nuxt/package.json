@@ -16,7 +16,7 @@
     "lint": "nuxt prepare && eslint . --fix"
   },
   "dependencies": {
-    "notform-nuxt": "workspace:*",
+    "notform": "workspace:*",
     "nuxt": "catalog:vendor",
     "pinia": "catalog:vendor",
     "vue": "catalog:vendor",
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:tools",
     "@nuxt/eslint": "catalog:tools",
+    "notform-nuxt": "workspace:*",
     "vue-tsc": "catalog:tools"
   }
 }

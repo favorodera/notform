@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest'
 import { NotField, NotForm, NotMessage, useNotForm } from '../src'
 import { notValidator } from './utils/not-validator'
 
-describe('notMessage', () => {
   const schema = notValidator.object({
     email: notValidator.string(5, 100),
     name: notValidator.string(2, 50),
@@ -112,7 +111,7 @@ describe('notMessage', () => {
     })
   })
 
-  describe('"as" prop', () => {
+  describe('rendering', () => {
     it('renders as span by default', async () => {
       const form = useNotForm({ ...baseConfig })
 
@@ -136,7 +135,7 @@ describe('notMessage', () => {
       expect(wrapper.find('p').exists()).toBe(false)
     })
 
-    it('renders as the element specified by the "as" prop', async () => {
+    it('renders as the specified child element', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
@@ -146,7 +145,9 @@ describe('notMessage', () => {
           <NotForm :form="form" @submit="form.submit">
             <NotField path="name" v-slot="{ events, path }">
               <input :id="path" v-model="form.values.name" v-bind="events" />
-              <NotMessage :path as="p" />
+              <NotMessage :path v-slot="{ message }">
+                <p> {{ message }} </p>
+              </NotMessage>
             </NotField>
           </NotForm>
         `,
@@ -234,4 +235,3 @@ describe('notMessage', () => {
       expect(primaryForm.touchedFields.has('name')).toBe(false)
     })
   })
-})

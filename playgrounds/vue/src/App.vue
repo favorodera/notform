@@ -30,15 +30,13 @@ const handleReset = async () => {
 <template>
   <NotForm
     :form="form"
-    class="playground"
     @submit="form.submit"
     @reset="handleReset"
   >
-    <!-- Name Field -->
-    <div>
-      <label for="name">Full Name</label>
+      <label for="name">
+        Full Name
 
-      <NotField
+        <NotField
         v-slot="{ events }"
         path="name"
       >
@@ -54,13 +52,12 @@ const handleReset = async () => {
           path="name"
         />
       </NotField>
-    </div>
+      </label>
 
-    <!-- Email Field -->
-    <div>
-      <label for="email">Email Address</label>
+      <label for="email">
+        Email Address
 
-      <NotField
+        <NotField
         v-slot="{ events }"
         path="email"
       >
@@ -76,11 +73,10 @@ const handleReset = async () => {
           path="email"
         />
       </NotField>
-    </div>
+      </label>
 
-    <!-- Tags Array Field -->
-    <div>
-      <label>Interest Tags</label>
+      <label>
+        Interest Tags
 
       <NotArrayField
         v-slot="{ items, append, remove }"
@@ -131,10 +127,8 @@ const handleReset = async () => {
           path="tags"
         />
       </NotArrayField>
-    </div>
+      </label>
 
-    <!-- Form Actions -->
-    <footer>
       <button
         type="submit"
         :disabled="!form.isDirty"
@@ -147,17 +141,5 @@ const handleReset = async () => {
       >
         Clear All
       </button>
-    </footer>
   </NotForm>
 </template>
-
-<style>
-.playground {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
-}
-</style>
