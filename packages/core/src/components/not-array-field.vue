@@ -223,7 +223,6 @@ onMounted(async () => {
 
 // Syncs keys when array length changes outside component's own methods (e.g. form.reset).
 watch(() => array.value.length, syncKeys)
-
 </script>
 
 <template>

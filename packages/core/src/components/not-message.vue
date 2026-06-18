@@ -15,7 +15,7 @@ const message = computed(() => form.errorsMap.value[props.path])
 <template>
   <slot :message>
     <span v-if="message">
-      {{message}}
+      {{ message }}
     </span>
   </slot>
 </template>
