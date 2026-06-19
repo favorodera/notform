@@ -120,17 +120,17 @@ export default defineNuxtConfig({
     },
   },
 
-  nitro: {
-    prerender: {
-      autoSubfolderIndex: false,
-      crawlLinks: true,
-      routes: [
-        '/',
-        '/sitemap.xml',
-        '/robots.txt',
-      ],
-    },
-  },
+  // nitro: {
+  //   prerender: {
+  //     autoSubfolderIndex: false,
+  //     crawlLinks: true,
+  //     routes: [
+  //       '/',
+  //       '/sitemap.xml',
+  //       '/robots.txt',
+  //     ],
+  //   },
+  // },
 
   ui: {
     content: true,
@@ -181,19 +181,16 @@ export default defineNuxtConfig({
         '@vueuse/core',
       ],
     },
-    plugins: [
-      // eslint-disable-next-line ts/no-explicit-any
-      tailwindcss() as any,
-    ],
+    plugins: [tailwindcss()],
   },
 
-  sitemap: {
-    zeroRuntime: true,
-  },
+  // sitemap: {
+  //   zeroRuntime: true,
+  // },
 
-  ogImage: {
-    zeroRuntime: true,
-  },
+  // ogImage: {
+  //   zeroRuntime: true,
+  // },
 
   // seo: { redirectToCanonicalSiteUrl: true },
 
