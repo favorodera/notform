@@ -1,7 +1,14 @@
+import type { Component } from 'vue'
 import type { NotFormInstance } from './not-form'
 
 /** Props for the `NotMessage` component. */
 export interface NotMessageProps {
+  /**
+   * HTML Tag or component to render as
+   * @default span
+   */
+  as?: Component | string
+
   /** The name/path of the field whose error message should be displayed */
   path: string
 

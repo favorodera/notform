@@ -135,7 +135,7 @@ describe('rendering', () => {
     expect(wrapper.find('p').exists()).toBe(false)
   })
 
-  it('renders as the specified child element', async () => {
+  it('renders as the specified element', async () => {
     const form = useNotForm({ ...baseConfig })
 
     const wrapper = mount({
@@ -145,9 +145,7 @@ describe('rendering', () => {
           <NotForm :form="form" @submit="form.submit">
             <NotField path="name" v-slot="{ events, path }">
               <input :id="path" v-model="form.values.name" v-bind="events" />
-              <NotMessage :path v-slot="{ message }">
-                <p> {{ message }} </p>
-              </NotMessage>
+              <NotMessage :path v-slot="{ message }" as="p" />
             </NotField>
           </NotForm>
         `,
@@ -172,7 +170,7 @@ describe('default slot', () => {
           <NotForm :form="form" @submit="form.submit">
             <NotField path="name" v-slot="{ events, path }">
               <input :id="path" v-model="form.values.name" v-bind="events" />
-              <NotMessage :path v-slot="{ message }">
+              <NotMessage :path v-slot="{ message }" as="div">
                 <p id="custom">{{ message }}</p>
               </NotMessage>
             </NotField>

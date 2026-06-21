@@ -13,8 +13,6 @@ import { useNotFormInstance } from '../utils/instance-utils'
 
 // Setup & Baseline
 
-defineOptions({ inheritAttrs: false })
-
 defineSlots<NotArrayFieldSlots<TSchema, TItem>>()
 
 const props = defineProps<NotArrayFieldProps<TItemSchema>>()
@@ -25,15 +23,15 @@ const form = useNotFormInstance(props.form)
 
 const isValidating = ref(false)
 
+/** Counter to ensure absolute uniqueness for generated keys. */
+let keyCounter = 0
+
 /** Stable keys per item that survive reorders, removals, and inserts. */
 const itemKeys = ref<string[]>((() => {
   const initial = getProperty(form.values, props.path)
   const length = Array.isArray(initial) ? initial.length : 0
-  return Array.from({ length }, (_, index) => `${props.path}-${index}-${Date.now()}`)
+  return Array.from({ length }, () => `${props.path}-${keyCounter++}`)
 })())
-
-/** Counter to ensure absolute uniqueness for generated keys. */
-let keyCounter = itemKeys.value.length
 
 // Computed Properties
 
@@ -72,11 +70,11 @@ const isDirty = computed(() => {
 // Internal Helpers & Mutations
 
 /**
- * Generates a unique key string using the field path, counter, and timestamp.
+ * Generates a unique key string using the field path and counter.
  * @returns A unique key string
  */
 function generateKey() {
-  return `${props.path}-${keyCounter++}-${Date.now()}`
+  return `${props.path}-${keyCounter++}`
 }
 
 /** Re-aligns itemKeys with current array length (used mostly after external resets) */
@@ -154,8 +152,8 @@ function prepend(value: TItem): void {
  * @param index The index of the item to remove
  */
 function remove(index: number): void {
-  mutate(current => current.splice(index, 1))
   itemKeys.value.splice(index, 1)
+  mutate(current => current.splice(index, 1))
 }
 
 /**
@@ -186,15 +184,15 @@ function update(index: number, value: TItem): void {
  * @param indexB The second index
  */
 function swap(indexA: number, indexB: number): void {
+   const tempKey = itemKeys.value[indexA]
+  itemKeys.value[indexA] = itemKeys.value[indexB]
+  itemKeys.value[indexB] = tempKey
+
   mutate((current) => {
     const temp = current[indexA]
     current[indexA] = current[indexB]
     current[indexB] = temp
   })
-
-  const tempKey = itemKeys.value[indexA]
-  itemKeys.value[indexA] = itemKeys.value[indexB]
-  itemKeys.value[indexB] = tempKey
 }
 
 /**
@@ -203,13 +201,13 @@ function swap(indexA: number, indexB: number): void {
  * @param to The destination index
  */
 function move(from: number, to: number): void {
+  const [key] = itemKeys.value.splice(from, 1)
+  itemKeys.value.splice(to, 0, key)
+
   mutate((current) => {
     const [item] = current.splice(from, 1)
     current.splice(to, 0, item)
   })
-
-  const [key] = itemKeys.value.splice(from, 1)
-  itemKeys.value.splice(to, 0, key)
 }
 
 // Lifecycle & Watchers
