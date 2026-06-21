@@ -18,6 +18,7 @@ const { data: page } = await useAsyncData(
 )
 
 const { copied, copy } = useClipboard({ legacy: true, source: await $fetch<string>(`/raw${route.path}.md`) })
+  
 const { siteDescription, siteName, siteUrl } = useAppConfig()
 
 const { data: surround } = await useAsyncData(
