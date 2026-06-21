@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
   ],
 
-  compatibilityDate: '2024-07-11',
+  compatibilityDate: '2026-06-21',
 
   experimental: {
     asyncContext: true,
@@ -120,17 +120,17 @@ export default defineNuxtConfig({
     },
   },
 
-  // nitro: {
-  //   prerender: {
-  //     autoSubfolderIndex: false,
-  //     crawlLinks: true,
-  //     routes: [
-  //       '/',
-  //       '/sitemap.xml',
-  //       '/robots.txt',
-  //     ],
-  //   },
-  // },
+  nitro: {
+    prerender: {
+      autoSubfolderIndex: false,
+      crawlLinks: true,
+      routes: [
+        '/',
+        '/sitemap.xml',
+        '/robots.txt',
+      ],
+    },
+  },
 
   ui: {
     content: true,
@@ -184,13 +184,13 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
 
-  // sitemap: {
-  //   zeroRuntime: true,
-  // },
+  sitemap: {
+    zeroRuntime: true,
+  },
 
-  // ogImage: {
-  //   zeroRuntime: true,
-  // },
+  ogImage: {
+    zeroRuntime: true,
+  },
 
   // seo: { redirectToCanonicalSiteUrl: true },
 

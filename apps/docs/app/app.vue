@@ -1,10 +1,23 @@
 <script setup lang="ts">
 const { siteDescription, siteName, siteTitle } = useAppConfig()
 
-const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs'))
-const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('docs'), {
-  server: false,
-})
+const { data: navigation } = await useAsyncData(
+  'navigation',
+  () => queryCollectionNavigation('docs'),
+  {
+    lazy: true,
+    server: false,
+  },
+)
+
+const { data: files } = useAsyncData(
+  'search',
+  () => queryCollectionSearchSections('docs'),
+  {
+    lazy: true,
+    server: false,
+  },
+)
 
 provide('navigation', navigation)
 

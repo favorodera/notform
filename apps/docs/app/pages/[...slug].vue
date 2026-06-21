@@ -7,22 +7,27 @@ definePageMeta({
 
 const route = useRoute()
 
-const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path)
-  .first())
-
-if (!page.value) {
-  throw createError({
-    fatal: true,
-    message: 'Sorry, we couldn\'t find the page you\'re looking for.',
-    statusCode: 404,
-    statusMessage: 'Page not found',
-  })
-}
+const { data: page } = await useAsyncData(
+  route.path,
+  () => queryCollection('docs').path(route.path)
+    .first(),
+  {
+    lazy: true,
+    server: false,
+  },
+)
 
 const { copied, copy } = useClipboard({ legacy: true, source: await $fetch<string>(`/raw${route.path}.md`) })
 const { siteDescription, siteName, siteUrl } = useAppConfig()
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }))
+const { data: surround } = await useAsyncData(
+  `${route.path}-surround`,
+  () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }),
+  {
+    lazy: true,
+    server: false,
+  },
+)
 
 const seo = computed(() => {
   return {
