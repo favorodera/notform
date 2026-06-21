@@ -6,6 +6,10 @@ shellEmulator: true
 
 trustPolicy: no-downgrade
 
+trustPolicyExclude:
+  - semver@6.3.1
+  - nanoid@3.3.14
+
 packages:
   - 'apps/*'
   - 'playgrounds/*'
