@@ -9,6 +9,7 @@
   "description": "Official notform nuxt module - Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
+  "funding": "https://github.com/sponsors/favorodera",
   "homepage": "https://notformdocs.vercel.app/",
   "repository": {
     "type": "git",
