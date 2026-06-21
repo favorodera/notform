@@ -1,11 +1,12 @@
 {
   "name": "notform",
-  "version": "2.1.1",
   "type": "module",
+  "version": "2.1.1",
   "private": false,
   "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
+  "funding": "https://github.com/sponsors/favorodera",
   "homepage": "https://notformdocs.vercel.app/",
   "repository": {
     "type": "git",
@@ -14,17 +15,27 @@
   "bugs": {
     "url": "https://github.com/favorodera/notform/issues"
   },
+  "keywords": [
+    "notform",
+    "vue",
+    "form",
+    "vue form",
+    "validator",
+    "vue form validator"
+  ],
+  "sideEffects": false,
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "sideEffects": false,
+  "files": ["dist"],
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=11.0.0"
   },
   "scripts": {
     "build": "tsdown",
@@ -36,37 +47,26 @@
     "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
-    "vue": "^3.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "catalog:",
-    "@vitejs/plugin-vue": "catalog:",
-    "@vitest/ui": "^4.1.4",
-    "@vue/test-utils": "^2.4.6",
-    "happy-dom": "^20.8.9",
-    "tsdown": "^0.21.7",
-    "type-fest": "^5.5.0",
-    "vite": "catalog:",
-    "vitest": "^4.1.2",
-    "vue": "catalog:",
-    "vue-tsc": "catalog:"
+    "vue": "catalog:peer"
   },
   "dependencies": {
-    "@standard-schema/spec": "^1.1.0",
-    "dequal": "^2.0.3",
-    "dot-prop": "^10.1.0",
-    "klona": "^2.0.6"
+    "@standard-schema/spec": "catalog:vendor",
+    "dequal": "catalog:vendor",
+    "dot-prop": "catalog:vendor",
+    "klona": "catalog:vendor"
   },
-  "keywords": [
-    "notform",
-    "vue",
-    "form",
-    "vue form",
-    "validator",
-    "vue form validator"
-  ],
-  "engines": {
-    "node": ">=22.0.0",
-    "pnpm": ">=11.0.0"
+  "devDependencies": {
+    "@favorodera/eslint-config": "catalog:tools",
+    "@types/node": "catalog:tools",
+    "@vitejs/plugin-vue": "catalog:tools",
+    "@vitest/ui": "catalog:tools",
+    "@vue/test-utils": "catalog:tools",
+    "happy-dom": "catalog:tools",
+    "tsdown": "catalog:tools",
+    "type-fest": "catalog:tools",
+    "vite": "catalog:tools",
+    "vitest": "catalog:tools",
+    "vue": "catalog:vendor",
+    "vue-tsc": "catalog:tools"
   }
 }

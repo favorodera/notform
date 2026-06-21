@@ -25,9 +25,7 @@ Add `notform-nuxt` to the `modules` section of your `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  modules: [
-    'notform-nuxt'
-  ]
+  modules: ['notform-nuxt'],
 })
 ```
 
@@ -48,29 +46,44 @@ After installing the module, you can use NotForm directly in your components:
 import { z } from 'zod'
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
+  name: z.string().min(1, 'Name is required'),
 })
 
 const form = useNotForm({
-  schema,
   onSubmit: (values) => {
     console.log('Form submitted:', values)
   },
+  schema,
 })
 </script>
 
 <template>
-  <NotForm :form="form" @submit="form.submit">
+  <NotForm
+    :form="form"
+    @submit="form.submit"
+  >
     <NotField path="name">
-      <input v-model="form.values.name" type="text" />
+      <input
+        v-model="form.values.name"
+        type="text"
+      >
+
       <NotMessage path="name" />
     </NotField>
+
     <NotField path="email">
-      <input v-model="form.values.email" type="email" />
+      <input
+        v-model="form.values.email"
+        type="email"
+      >
+
       <NotMessage path="email" />
     </NotField>
-    <button type="submit">Submit</button>
+
+    <button type="submit">
+      Submit
+    </button>
   </NotForm>
 </template>
 ```

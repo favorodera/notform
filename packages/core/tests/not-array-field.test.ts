@@ -1,23 +1,22 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, test, expect } from 'vitest'
-import { NotForm, NotArrayField, useNotForm } from '../src'
-import type { UseNotFormConfig } from '../src'
+import { describe, expect, it } from 'vitest'
+import { NotArrayField, NotForm, useNotForm, type UseNotFormConfig } from '../src'
+
 import { notValidator } from './utils/not-validator'
 
-describe('NotArrayField', () => {
+describe('notArrayField', () => {
   const schema = notValidator.object({
     tags: notValidator.array(notValidator.string(1), 1, 5),
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const baseConfig: UseNotFormConfig<any> = {
-    schema,
     initialValues: { tags: [] },
+    schema,
     validateOn: { onBlur: false, onChange: false, onInput: false },
   }
 
   const mountForm = (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     formConfig?: Partial<UseNotFormConfig<any>>,
     // Extra slot content injected after the array field slot — lets individual
     // tests add buttons that call array methods without duplicating the wrapper.
@@ -26,7 +25,7 @@ describe('NotArrayField', () => {
     const form = useNotForm({ ...baseConfig, ...formConfig })
 
     const wrapper = mount({
-      components: { NotForm, NotArrayField },
+      components: { NotArrayField, NotForm },
       setup: () => ({ form }),
       template: `
         <NotForm :form="form">
@@ -61,34 +60,40 @@ describe('NotArrayField', () => {
 
     return { form, wrapper }
   }
-  
 
-  describe('Initial slot props', () => {
+  describe('initial slot props', () => {
     const { wrapper } = mountForm()
 
-    test('length is 0 when the array starts empty', () => {
+    it('length is 0 when the array starts empty', () => {
       expect(wrapper.find('[data-length]').text()).toBe('0')
     })
 
-    test('isValid is true when there are no errors', () => {
+    it('isValid is true when there are no errors', () => {
       expect(wrapper.find('[data-valid]').text()).toBe('true')
     })
 
-    test('isTouched is false before any mutation', () => {
+    it('isTouched is false before any mutation', () => {
       expect(wrapper.find('[data-touched]').text()).toBe('false')
     })
 
-    test('isDirty is false before any mutation', () => {
+    it('isDirty is false before any mutation', () => {
       expect(wrapper.find('[data-dirty]').text()).toBe('false')
     })
 
-    test('length reflects pre-populated initial values', () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b'] } })
+    it('length reflects pre-populated initial values', () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+      ] } })
+
       expect(wrapper.find('[data-length]').text()).toBe('2')
     })
 
-    test('items has correct index and path for each element', () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['x', 'y'] } })
+    it('items has correct index and path for each element', () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'x',
+        'y',
+      ] } })
       const items = wrapper.findAll('.item')
 
       expect(items[0].attributes('data-index')).toBe('0')
@@ -98,27 +103,29 @@ describe('NotArrayField', () => {
       expect(items[1].attributes('data-path')).toBe('tags.1')
     })
   })
-  
 
   describe('append', () => {
-    test('adds an item to the end of the array', async () => {
+    it('adds an item to the end of the array', async () => {
       const { form, wrapper } = mountForm()
 
       await wrapper.find('#append').trigger('click')
 
-      expect(form.values.tags).toEqual(['tag-a'])
+      expect(form.values.tags).toStrictEqual(['tag-a'])
       expect(wrapper.find('[data-length]').text()).toBe('1')
     })
 
-    test('keeps existing items in order', async () => {
+    it('keeps existing items in order', async () => {
       const { form, wrapper } = mountForm({ initialValues: { tags: ['first'] } })
 
       await wrapper.find('#append').trigger('click')
 
-      expect(form.values.tags).toEqual(['first', 'tag-a'])
+      expect(form.values.tags).toStrictEqual([
+        'first',
+        'tag-a',
+      ])
     })
 
-    test('marks the array as touched and dirty', async () => {
+    it('marks the array as touched and dirty', async () => {
       const { wrapper } = mountForm()
 
       await wrapper.find('#append').trigger('click')
@@ -127,21 +134,20 @@ describe('NotArrayField', () => {
       expect(wrapper.find('[data-dirty]').text()).toBe('true')
     })
 
-    test('appending multiple times increments length correctly', async () => {
+    it('appending multiple times increments length correctly', async () => {
       const { form, wrapper } = mountForm()
 
       await wrapper.find('#append').trigger('click')
       await wrapper.find('#append').trigger('click')
       await wrapper.find('#append').trigger('click')
 
-      expect(form.values.tags.length).toBe(3)
+      expect(form.values.tags).toHaveLength(3)
       expect(wrapper.find('[data-length]').text()).toBe('3')
     })
   })
-  
 
   describe('prepend', () => {
-    test('adds an item at the start of the array', async () => {
+    it('adds an item at the start of the array', async () => {
       const { form, wrapper } = mountForm({ initialValues: { tags: ['existing'] } })
 
       await wrapper.find('#prepend').trigger('click')
@@ -150,7 +156,7 @@ describe('NotArrayField', () => {
       expect(form.values.tags[1]).toBe('existing')
     })
 
-    test('marks the array as touched and dirty', async () => {
+    it('marks the array as touched and dirty', async () => {
       const { wrapper } = mountForm()
 
       await wrapper.find('#prepend').trigger('click')
@@ -159,59 +165,83 @@ describe('NotArrayField', () => {
       expect(wrapper.find('[data-dirty]').text()).toBe('true')
     })
   })
-  
 
   describe('remove', () => {
-    test('removes the item at the given index', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: ['a', 'b', 'c'] } })
+    it('removes the item at the given index', async () => {
+      const { form, wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+        'c',
+      ] } })
 
       await wrapper.find('#remove0').trigger('click')
 
-      expect(form.values.tags).toEqual(['b', 'c'])
+      expect(form.values.tags).toStrictEqual([
+        'b',
+        'c',
+      ])
     })
 
-    test('decrements length after removal', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b'] } })
+    it('decrements length after removal', async () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+      ] } })
 
       await wrapper.find('#remove0').trigger('click')
 
       expect(wrapper.find('[data-length]').text()).toBe('1')
     })
 
-    test('removes items and updates paths — subsequent item shifts to index 0', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b'] } })
+    it('removes items and updates paths — subsequent item shifts to index 0', async () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+      ] } })
 
       await wrapper.find('#remove0').trigger('click')
 
       const items = wrapper.findAll('.item')
-      expect(items.length).toBe(1)
+
+      expect(items).toHaveLength(1)
       expect(items[0].attributes('data-path')).toBe('tags.0')
     })
   })
-  
 
   describe('insert', () => {
-    test('inserts an item at the specified index', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: ['a', 'b'] } })
+    it('inserts an item at the specified index', async () => {
+      const { form, wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+      ] } })
 
       await wrapper.find('#insert1').trigger('click')
 
-      expect(form.values.tags).toEqual(['a', 'inserted', 'b'])
+      expect(form.values.tags).toStrictEqual([
+        'a',
+        'inserted',
+        'b',
+      ])
     })
 
-    test('increments length after insertion', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b'] } })
+    it('increments length after insertion', async () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+      ] } })
 
       await wrapper.find('#insert1').trigger('click')
 
       expect(wrapper.find('[data-length]').text()).toBe('3')
     })
   })
-  
 
   describe('update', () => {
-    test('replaces the value at the given index', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: ['old', 'b'] } })
+    it('replaces the value at the given index', async () => {
+      const { form, wrapper } = mountForm({ initialValues: { tags: [
+        'old',
+        'b',
+      ] } })
 
       await wrapper.find('#update0').trigger('click')
 
@@ -219,27 +249,38 @@ describe('NotArrayField', () => {
       expect(form.values.tags[1]).toBe('b')
     })
 
-    test('does not change the array length', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b'] } })
+    it('does not change the array length', async () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+      ] } })
 
       await wrapper.find('#update0').trigger('click')
 
       expect(wrapper.find('[data-length]').text()).toBe('2')
     })
   })
-  
 
   describe('swap', () => {
-    test('swaps the values at two indices', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: ['first', 'second'] } })
+    it('swaps the values at two indices', async () => {
+      const { form, wrapper } = mountForm({ initialValues: { tags: [
+        'first',
+        'second',
+      ] } })
 
       await wrapper.find('#swap').trigger('click')
 
-      expect(form.values.tags).toEqual(['second', 'first'])
+      expect(form.values.tags).toStrictEqual([
+        'second',
+        'first',
+      ])
     })
 
-    test('stable keys survive a swap — item keys change position, not identity', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b'] } })
+    it('stable keys survive a swap — item keys change position, not identity', async () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+      ] } })
 
       const keysBefore = wrapper.findAll('.item').map(element => element.attributes('data-key'))
 
@@ -256,29 +297,39 @@ describe('NotArrayField', () => {
       expect(keysAfter[1]).toBe(keysBefore[0])
     })
   })
-  
 
   describe('move', () => {
-    test('moves item from index 0 to index 2', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: ['a', 'b', 'c'] } })
+    it('moves item from index 0 to index 2', async () => {
+      const { form, wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+        'c',
+      ] } })
 
       await wrapper.find('#move').trigger('click')
 
-      expect(form.values.tags).toEqual(['b', 'c', 'a'])
+      expect(form.values.tags).toStrictEqual([
+        'b',
+        'c',
+        'a',
+      ])
     })
 
-    test('length is unchanged after a move', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b', 'c'] } })
+    it('length is unchanged after a move', async () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+        'c',
+      ] } })
 
       await wrapper.find('#move').trigger('click')
 
       expect(wrapper.find('[data-length]').text()).toBe('3')
     })
   })
-  
 
   describe('validate', () => {
-    test('calling validate() surfaces errors on the array field', async () => {
+    it('calling validate() surfaces errors on the array field', async () => {
       const { wrapper } = mountForm()
 
       await wrapper.find('#validate').trigger('click')
@@ -287,21 +338,22 @@ describe('NotArrayField', () => {
       expect(wrapper.find('[data-errors]').text()).not.toBe('0')
     })
 
-    test('isValidating is true while validation is running', async () => {
+    it('isValidating is true while validation is running', async () => {
       const { form } = mountForm()
 
       const promise = form.validateField('tags')
+
       // We check the form-level flag — the component flag mirrors it
       expect(form.isValidating.value).toBe(true)
 
       await promise
+
       expect(form.isValidating.value).toBe(false)
     })
   })
-  
 
   describe('validateOn.onChange', () => {
-    test('triggers validation after append when onChange is enabled', async () => {
+    it('triggers validation after append when onChange is enabled', async () => {
       const { form, wrapper } = mountForm({ validateOn: { onChange: true } })
 
       await wrapper.find('#append').trigger('click')
@@ -311,7 +363,7 @@ describe('NotArrayField', () => {
       expect(form.isValidating.value).toBe(false)
     })
 
-    test('does not trigger validation after append when onChange is disabled', async () => {
+    it('does not trigger validation after append when onChange is disabled', async () => {
       const validateOnChangeFalse = {
         onBlur: false,
         onChange: false,
@@ -324,13 +376,12 @@ describe('NotArrayField', () => {
       await flushPromises()
 
       // No auto-validation ran, so errors remain empty
-      expect(form.errors.length).toBe(0)
+      expect(form.errors).toHaveLength(0)
     })
   })
-  
 
   describe('validateOn.onMount', () => {
-    test('validates immediately on mount when onMount is enabled', async () => {
+    it('validates immediately on mount when onMount is enabled', async () => {
       const { form } = mountForm({ validateOn: { onMount: true } })
 
       await flushPromises()
@@ -338,17 +389,16 @@ describe('NotArrayField', () => {
       expect(form.errors.length).toBeGreaterThan(0)
     })
 
-    test('does not validate on mount by default', async () => {
+    it('does not validate on mount by default', async () => {
       const { form } = mountForm()
       await flushPromises()
 
-      expect(form.errors.length).toBe(0)
+      expect(form.errors).toHaveLength(0)
     })
   })
-  
 
   describe('isTouched and isDirty', () => {
-    test('isTouched becomes true when a child field path is touched on the form', async () => {
+    it('isTouched becomes true when a child field path is touched on the form', async () => {
       const { form, wrapper } = mountForm({ initialValues: { tags: ['a'] } })
 
       form.touchField('tags.0')
@@ -357,7 +407,7 @@ describe('NotArrayField', () => {
       expect(wrapper.find('[data-touched]').text()).toBe('true')
     })
 
-    test('isDirty becomes true when a child field path is dirty on the form', async () => {
+    it('isDirty becomes true when a child field path is dirty on the form', async () => {
       const { wrapper } = mountForm({ initialValues: { tags: ['a'] } })
 
       await wrapper.find('#append').trigger('click')
@@ -365,10 +415,11 @@ describe('NotArrayField', () => {
       expect(wrapper.find('[data-dirty]').text()).toBe('true')
     })
 
-    test('isDirty reverts to false after reset restores initial values', async () => {
+    it('isDirty reverts to false after reset restores initial values', async () => {
       const { form, wrapper } = mountForm()
 
       await wrapper.find('#append').trigger('click')
+
       expect(wrapper.find('[data-dirty]').text()).toBe('true')
 
       form.reset()
@@ -377,10 +428,9 @@ describe('NotArrayField', () => {
       expect(wrapper.find('[data-dirty]').text()).toBe('false')
     })
   })
-  
 
-  describe('Singleton', () => {
-    test('works without a NotForm ancestor when :form is passed directly', async () => {
+  describe('singleton', () => {
+    it('works without a NotForm ancestor when :form is passed directly', async () => {
       const form = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
@@ -396,20 +446,22 @@ describe('NotArrayField', () => {
       })
 
       await wrapper.find('#append').trigger('click')
-      expect(form.values.tags).toEqual(['solo'])
+
+      expect(form.values.tags).toStrictEqual(['solo'])
       expect(wrapper.find('[data-length]').text()).toBe('1')
 
       await wrapper.find('#prepend').trigger('click')
+
       expect(form.values.tags[0]).toBe('first')
       expect(wrapper.find('[data-length]').text()).toBe('2')
     })
 
-    test(':form prop takes priority over a NotForm ancestor', async () => {
+    it(':form prop takes priority over a NotForm ancestor', async () => {
       const primaryForm = useNotForm({ ...baseConfig })
       const secondaryForm = useNotForm({ ...baseConfig })
 
       const wrapper = mount({
-        components: { NotForm, NotArrayField },
+        components: { NotArrayField, NotForm },
         setup: () => ({ primaryForm, secondaryForm }),
         template: `
           <NotForm :form="primaryForm">
@@ -422,21 +474,24 @@ describe('NotArrayField', () => {
 
       await wrapper.find('#append').trigger('click')
 
-      expect(secondaryForm.values.tags).toEqual(['item'])
-      expect(primaryForm.values.tags).toEqual([])
+      expect(secondaryForm.values.tags).toStrictEqual(['item'])
+      expect(primaryForm.values.tags).toStrictEqual([])
     })
   })
-  
 
-  describe('Stable keys', () => {
-    test('item keys are unique across all rendered items', () => {
-      const { wrapper } = mountForm({ initialValues: { tags: ['a', 'b', 'c'] } })
+  describe('stable keys', () => {
+    it('item keys are unique across all rendered items', () => {
+      const { wrapper } = mountForm({ initialValues: { tags: [
+        'a',
+        'b',
+        'c',
+      ] } })
       const keys = wrapper.findAll('.item').map(element => element.attributes('data-key'))
 
       expect(new Set(keys).size).toBe(keys.length)
     })
 
-    test('key of an existing item does not change after an unrelated append', async () => {
+    it('key of an existing item does not change after an unrelated append', async () => {
       const { wrapper } = mountForm({ initialValues: { tags: ['a'] } })
 
       // Capture the rendered path of the first existing item

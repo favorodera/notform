@@ -1,4 +1,4 @@
-import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addComponent, addImports, defineNuxtModule } from '@nuxt/kit'
 
 const components = [
   'NotForm',
@@ -7,44 +7,28 @@ const components = [
   'NotMessage',
 ] as const
 
-const composables = [
-  'useNotForm',
-] as const
-
 export default defineNuxtModule({
   meta: {
-    name: 'notform-nuxt',
-    configKey: 'notform',
     compatibility: {
       nuxt: '>=4.0.0',
     },
+    configKey: 'notform',
+    name: 'notform-nuxt',
   },
 
-  // Module factory
   setup() {
-    // Create a resolver
-    const { resolve } = createResolver(import.meta.url)
-
-    // Create a resolver for the runtime files
-    const componentsRuntime = resolve('./runtime/components')
-    const composablesRuntime = resolve('./runtime/composables')
-
-    // Add components
-    components.forEach((name) => {
+    for (const name of components) {
       addComponent({
-        name,
         export: name,
-        filePath: componentsRuntime,
+        filePath: 'notform',
+        name,
       })
-    })
+    }
 
-    // Add composables
-    composables.forEach((composable) => {
-      addImports({
-        name: composable,
-        as: composable,
-        from: composablesRuntime,
-      })
+    addImports({
+      as: 'useNotForm',
+      from: 'notform',
+      name: 'useNotForm',
     })
   },
 

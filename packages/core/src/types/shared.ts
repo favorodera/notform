@@ -16,25 +16,22 @@ export type ValidationMode = 'eager' | 'lazy'
  * - onMount: Trigger validation when the field is mounted.
  * - onFocus: Trigger validation when the field gains focus.
  */
-export type ValidationTrigger = 'onBlur' | 'onChange' | 'onInput' | 'onMount' | 'onFocus'
+export type ValidationTrigger = 'onBlur' | 'onChange' | 'onFocus' | 'onInput' | 'onMount'
 
 /**
  * Constructs a type where all properties of the input type are optional recursively.
  * @template TData The base data structure to transform.
  */
 export type DeepPartial<TData> = PartialDeep<TData, {
-  recurseIntoArrays: true
   allowUndefinedInNonTupleArrays: true
+  recurseIntoArrays: true
 }>
 
 /**
  * Constructs a type representing all possible dot-separated paths within an object.
  * @template TReference The object type for which to generate paths.
  */
-export type Paths<TReference> = Extract<
-  TypeFestPaths<TReference, { maxRecursionDepth: 10 }>,
-  string
-> | (string & {})
+export type Paths<TReference> = Extract<TypeFestPaths<TReference, { maxRecursionDepth: 10 }>, string> | (string & {})
 
 /**
  * Represents a validation schema for object-based data structures.

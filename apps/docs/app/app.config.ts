@@ -1,23 +1,36 @@
 export default defineAppConfig({
+  author: {
+    name: 'Favour Emeka',
+    url: 'https://favorodera.vercel.app',
+  },
+  github: {
+    icon: 'simple-icons:github',
+    label: 'GitHub',
+    url: 'https://github.com/favorodera/notform',
+  },
+  siteDescription: 'Vue Forms without the friction.',
+  siteName: 'NotForm',
+  siteTitle: 'NotForm - Vue form validator',
+  siteUrl: 'https://notformdocs.vercel.app',
   ui: {
-    colors: {
-      primary: 'forest',
-      neutral: 'neutral',
-      secondary: 'neutral',
-      success: 'forest',
-      error: 'red',
-      warning: 'amber',
-      info: 'sky',
-    },
     button: {
       slots: {
         base: 'cursor-pointer active:scale-98',
       },
     },
+    colors: {
+      error: 'red',
+      info: 'sky',
+      neutral: 'neutral',
+      primary: 'forest',
+      secondary: 'neutral',
+      success: 'forest',
+      warning: 'amber',
+    },
     footer: {
       slots: {
-        root: 'border-t border-default',
         left: 'text-sm text-muted',
+        root: 'border-t border-default',
       },
     },
     prose: {
@@ -27,18 +40,5 @@ export default defineAppConfig({
         },
       },
     },
-  },
-  siteUrl: 'https://notformdocs.vercel.app',
-  siteName: 'NotForm',
-  siteDescription: 'Vue Forms without the friction.',
-  siteTitle: 'NotForm - Vue form validator',
-  github: {
-    url: 'https://github.com/favorodera/notform',
-    icon: 'simple-icons:github',
-    label: 'GitHub',
-  },
-  author: {
-    name: 'Favour Emeka',
-    url: 'https://favorodera.vercel.app',
   },
 })

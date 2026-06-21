@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-  title: string
   description: string
+  title: string
 }>()
 </script>
 
@@ -18,7 +18,6 @@ defineProps<{
       font-family:'Geist',sans-serif;
     "
   >
-
     <!-- grid -->
     <div
       style="
@@ -31,12 +30,12 @@ defineProps<{
     <!-- atmospheric glow -->
     <div
       class="absolute inset-0"
-      :style="`
+      style="
         background:
           radial-gradient(ellipse 75% 55% at 50% -5%, #1a9e5e, transparent 70%),
           radial-gradient(ellipse 50% 35% at 80% 110%, #137e4a, transparent 65%);
         opacity: 0.13;
-      `"
+      "
     />
 
     <!-- corner accents -->
@@ -51,6 +50,7 @@ defineProps<{
         border-left:1px solid rgba(52,190,122,0.4);
       "
     />
+
     <div
       style="
         position:absolute;
@@ -62,6 +62,7 @@ defineProps<{
         border-right:1px solid rgba(52,190,122,0.4);
       "
     />
+
     <div
       style="
         position:absolute;
@@ -73,6 +74,7 @@ defineProps<{
         border-left:1px solid rgba(52,190,122,0.4);
       "
     />
+
     <div
       style="
         position:absolute;
@@ -87,7 +89,7 @@ defineProps<{
 
     <!-- logo bottom-right -->
     <div
-      class="absolute -right-5 -bottom-10 opacity-25"
+      class="absolute -inset-e-5 -inset-be-10 opacity-25"
     >
       <AppLogoFade />
     </div>
@@ -104,12 +106,11 @@ defineProps<{
       "
       class="gap-12"
     >
-
       <p
         style="font-family:'Geist Mono',monospace;"
         class="
-          relative mt-4 max-w-4xl overflow-hidden text-lg/tight tracking-tight
-          text-forest-500
+          relative mbs-4 max-inline-4xl overflow-hidden text-lg/tight
+          tracking-tight text-forest-500
         "
       >
         DOCS
@@ -117,7 +118,8 @@ defineProps<{
 
       <div
         class="
-          relative flex max-w-4xl flex-col gap-4 overflow-hidden tracking-tight
+          relative flex max-inline-4xl flex-col gap-4 overflow-hidden
+          tracking-tight
         "
       >
         <span
@@ -132,9 +134,6 @@ defineProps<{
           {{ description }}
         </span>
       </div>
-
     </div>
-
   </div>
 </template>
-

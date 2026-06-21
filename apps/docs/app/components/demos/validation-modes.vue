@@ -6,27 +6,26 @@ const schema = z.object({
 })
 
 const eagerForm = useNotForm({
-  schema,
   initialValues: { value: '' },
+  schema,
   validationMode: { eager: true },
 })
 
 const lazyForm = useNotForm({
-  schema,
   initialValues: { value: '' },
+  schema,
   validationMode: { eager: false, lazy: true },
 })
 </script>
 
 <template>
-  <div class="grid w-full grid-cols-2 gap-4">
+  <div class="grid inline-full grid-cols-2 gap-4">
     <!-- Eager -->
     <NotField
       v-slot="{ events, isValid, path }"
       path="value"
       :form="eagerForm"
     >
-
       <div class="field">
         <p class="label">
           Eager
@@ -52,7 +51,6 @@ const lazyForm = useNotForm({
       </div>
     </NotField>
 
-
     <!-- Lazy -->
     <NotField
       v-slot="{ events, isValid, path }"
@@ -63,7 +61,7 @@ const lazyForm = useNotForm({
         <p class="label">
           Lazy
         </p>
-      
+
         <input
           v-bind="events"
           :id="path"
@@ -75,6 +73,7 @@ const lazyForm = useNotForm({
           }"
           :name="path"
         >
+
         <NotMessage
           :form="lazyForm"
           :path="path"
@@ -82,6 +81,5 @@ const lazyForm = useNotForm({
         />
       </div>
     </NotField>
-
   </div>
 </template>

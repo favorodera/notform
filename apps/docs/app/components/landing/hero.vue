@@ -1,37 +1,41 @@
 <script setup lang="ts">
-import { Motion } from 'motion-v'
 import { useClipboard } from '@vueuse/core'
+import { Motion } from 'motion-v'
 
-const { copy, copied } = useClipboard({ legacy: true, source: 'npx nypm add notform' })
+const { copied, copy } = useClipboard({ legacy: true, source: 'npx nypm add notform' })
 
 const container = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
+    transition: { delayChildren: 0.2, staggerChildren: 0.12 },
   },
 }
 
 const item = {
   hidden: { opacity: 0, y: 14 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const } },
+  visible: { opacity: 1, transition: { duration: 0.3, ease: [
+    0.25,
+    0.1,
+    0.25,
+    1,
+  ] as const }, y: 0 },
 }
 </script>
 
 <template>
   <section
-    class="relative overflow-hidden border-b border-dashed border-default"
+    class="relative overflow-hidden border-be border-dashed border-default"
     aria-labelledby="landing:hero:title"
   >
-
     <!-- atmospheric glow -->
     <div
       class="pointer-events-none absolute inset-0"
-      :style="`
+      style="
         background:
           radial-gradient(ellipse 75% 55% at 50% -5%, var(--ui-primary), transparent 70%),
           radial-gradient(ellipse 50% 35% at 80% 110%, var(--ui-primary), transparent 65%);
         opacity: 0.13;
-      `"
+      "
       aria-hidden
     />
 
@@ -41,14 +45,13 @@ const item = {
       animate="visible"
       :variants="container"
     >
-
       <UContainer
         class="
           relative grid grid-cols-1 justify-items-center py-28 text-center
+
           lg:py-36
         "
       >
-
         <!-- badge -->
         <Motion
           as="div"
@@ -57,7 +60,7 @@ const item = {
           <UBadge
             variant="subtle"
             color="primary"
-            class="mb-6 font-mono"
+            class="mbe-6 font-mono"
           >
             Not another form library
           </UBadge>
@@ -69,33 +72,40 @@ const item = {
           as="h1"
           :variants="item"
           class="
-            relative max-w-4xl overflow-hidden text-3xl/tight tracking-tight
+            relative max-inline-4xl overflow-hidden text-3xl/tight
+            tracking-tight
+
             sm:text-3xl
+
             lg:text-[2.5rem]
           "
         >
           <span
             class="
-              inline-block border-b border-dashed border-primary/20 text-primary
+              inline-block border-be border-dashed border-primary/20
+              text-primary
             "
           >
             Vue
-          </span> Forms<br>
+          </span>
+
+          Forms<br>
+
           <span
             class="
-              inline-block border-b border-dashed border-primary/20 text-primary
+              inline-block border-be border-dashed border-primary/20
+              text-primary
             "
           >
             without
           </span> the friction.
-
         </Motion>
 
         <!-- description -->
         <Motion
           as="p"
           :variants="item"
-          class="mt-5 max-w-md text-base/relaxed font-light text-muted"
+          class="mbs-5 max-inline-md text-base/relaxed font-light text-muted"
         >
           Headless, composable Vue 3 forms. Bring your own schema —
           Zod, Valibot, ArkType, or anything Standard Schema compliant.
@@ -107,9 +117,11 @@ const item = {
           as="div"
           :variants="item"
           class="
-            mt-6 flex flex-wrap items-center justify-center gap-3
-            sm:mt-8 sm:gap-4
-            lg:mt-12
+            mbs-6 flex flex-wrap items-center justify-center gap-3
+
+            sm:mbs-8 sm:gap-4
+
+            lg:mbs-12
           "
         >
           <UButton
@@ -133,15 +145,15 @@ const item = {
             <span
               class="
                 pointer-events-none absolute inset-0 opacity-[0.07]
+
                 dark:opacity-[0.13]
               "
-              :style="`background-image: repeating-linear-gradient(-45deg, currentColor, currentColor 1px, transparent 1px, transparent 5px)`"
+              style="background-image: repeating-linear-gradient(-45deg, currentColor, currentColor 1px, transparent 1px, transparent 5px)"
               aria-hidden
             />
             npm install notform
           </UButton>
         </Motion>
-
       </UContainer>
     </Motion>
   </section>

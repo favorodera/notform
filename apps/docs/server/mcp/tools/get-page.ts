@@ -1,7 +1,8 @@
-import { z } from 'zod'
 import { queryCollection } from '@nuxt/content/server'
+import { z } from 'zod'
 
 export default defineMcpTool({
+  cache: '1h',
   description: `Retrieves the full content and details of a specific documentation page.
 
 WHEN TO USE: Use this tool when you know the EXACT path to a documentation page. Common use cases:
@@ -13,13 +14,10 @@ WHEN TO USE: Use this tool when you know the EXACT path to a documentation page.
 WHEN NOT TO USE: If you don't know the exact path and need to search/explore, use list-pages first.
 
 WORKFLOW: This tool returns the complete page content including title, description, and full markdown. Use this when you need to provide detailed answers or code examples from specific documentation pages.`,
-  inputSchema: {
-    path: z.string().describe('The page path from list-pages or provided by the user (e.g., /get-started)'),
-  },
-  cache: '1h',
   handler: async ({ path }) => {
     const event = useEvent()
-    const url = getRequestURL(event)
+    // eslint-disable-next-line ts/no-explicit-any
+    const url = getRequestURL(event as any)
     const siteUrl = import.meta.dev ? `${url.protocol}//${url.hostname}:${url.port}` : url.origin
 
     try {
@@ -30,7 +28,7 @@ WORKFLOW: This tool returns the complete page content including title, descripti
 
       if (!page) {
         return {
-          content: [{ type: 'text', text: 'Page not found' }],
+          content: [{ text: 'Page not found', type: 'text' }],
           isError: true,
         }
       }
@@ -40,21 +38,24 @@ WORKFLOW: This tool returns the complete page content including title, descripti
       })
 
       const result = {
-        title: page.title,
-        path: page.path,
-        description: page.description,
         content,
+        description: page.description,
+        path: page.path,
+        title: page.title,
         url: `${siteUrl}${page.path}`,
       }
 
       return {
-        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        content: [{ text: JSON.stringify(result, undefined, 2), type: 'text' }],
       }
     } catch {
       return {
-        content: [{ type: 'text', text: 'Failed to get page' }],
+        content: [{ text: 'Failed to get page', type: 'text' }],
         isError: true,
       }
     }
+  },
+  inputSchema: {
+    path: z.string().describe('The page path from list-pages or provided by the user (e.g., /get-started)'),
   },
 })

@@ -1,5 +1,4 @@
 <template>
-
   <svg
     width="420"
     height="420"
@@ -32,6 +31,7 @@
       stroke-opacity="0.75"
       stroke-width="1"
     />
+
     <rect
       x="12"
       y="67"
@@ -66,6 +66,7 @@
       stroke="#a8e9c4"
       stroke-width="1"
     />
+
     <rect
       x="26"
       y="167"

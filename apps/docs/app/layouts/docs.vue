@@ -14,6 +14,7 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
           <UPageAside
             class="
               border-x border-dashed border-default
+
               lg:px-0!
             "
           >
@@ -35,7 +36,6 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
         <slot />
       </UPage>
-
     </UContainer>
 
     <DocsFooter />

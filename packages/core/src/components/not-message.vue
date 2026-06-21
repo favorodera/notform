@@ -1,45 +1,32 @@
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
-import type { NotMessageProps, NotMessageSlotProps, NotMessageSlots } from '../types/not-message'
+import { computed } from 'vue'
+import type { NotMessageProps, NotMessageSlots } from '../types/not-message'
 import { useNotFormInstance } from '../utils/instance-utils'
 
-defineSlots<NotMessageSlots>()
-defineOptions({ inheritAttrs: false })
+defineOptions({
+  inheritAttrs: false,
+})
 
-const attributes = useAttrs()
+defineSlots<NotMessageSlots>()
+
 const props = withDefaults(defineProps<NotMessageProps>(), {
   as: 'span',
 })
 
-
-// INSTANCE
-
-
-// Explicit :form prop takes priority over whatever NotForm ancestor provided
 const form = useNotFormInstance(props.form)
 
-
-// DERIVED
 const message = computed(() => form.errorsMap.value[props.path])
-
-
-// SLOT PROPS
-
-
-const slotProps = computed<NotMessageSlotProps>(() => ({
-  message: message.value,
-  attributes,
-}))
 </script>
 
+<!-- eslint-disable vue/no-root-v-if -->
 <template>
-  <slot v-bind="slotProps">
-    <component
-      :is="props.as"
-      v-bind="attributes"
-      v-if="message"
-    >
+  <component
+    :is="as"
+    v-if="message"
+    v-bind="$attrs"
+  >
+    <slot :message>
       {{ message }}
-    </component>
-  </slot>
+    </slot>
+  </component>
 </template>

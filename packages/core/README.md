@@ -33,33 +33,48 @@ Each form consists of:
 
 ```vue
 <script setup lang="ts">
+import { NotField, NotForm, NotMessage, useNotForm } from 'notform'
 import { z } from 'zod'
-import { useNotForm, NotForm, NotField, NotMessage } from 'notform'
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
+  name: z.string().min(1, 'Name is required'),
 })
 
 const form = useNotForm({
-  schema,
   onSubmit: (values) => {
     console.log('Form submitted:', values)
   },
+  schema,
 })
 </script>
 
 <template>
-  <NotForm :form="form" @submit="form.submit">
+  <NotForm
+    :form="form"
+    @submit="form.submit"
+  >
     <NotField path="name">
-      <input v-model="form.values.name" type="text" />
+      <input
+        v-model="form.values.name"
+        type="text"
+      >
+
       <NotMessage path="name" />
     </NotField>
+
     <NotField path="email">
-      <input v-model="form.values.email" type="email" />
+      <input
+        v-model="form.values.email"
+        type="email"
+      >
+
       <NotMessage path="email" />
     </NotField>
-    <button type="submit">Submit</button>
+
+    <button type="submit">
+      Submit
+    </button>
   </NotForm>
 </template>
 ```

@@ -4,37 +4,36 @@ import { z } from 'zod'
 const tagSchema = z.string().min(1, 'Tag cannot be empty')
 
 const schema = z.object({
+  email: z.email('Invalid email'),
   name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email'),
   tags: z.array(tagSchema).min(1, 'At least one tag is required'),
 })
 
-const submissionResult = ref<unknown>(null)
+const submissionResult = ref<unknown>()
 
 const form = useNotForm({
-  schema,
   onSubmit: (values) => {
     submissionResult.value = values
   },
+  schema,
 })
 
 const handleReset = async () => {
   form.reset()
   await nextTick()
-  submissionResult.value = null
+  submissionResult.value = undefined
 }
 </script>
 
 <template>
   <NotForm
     :form="form"
-    class="playground"
     @submit="form.submit"
     @reset="handleReset"
   >
-    <!-- Name Field -->
-    <div>
-      <label for="name">Full Name</label>
+    <label for="name">
+      Full Name
+
       <NotField
         v-slot="{ events }"
         path="name"
@@ -46,15 +45,16 @@ const handleReset = async () => {
           type="text"
           placeholder="e.g. John Doe"
         >
+
         <NotMessage
           path="name"
         />
       </NotField>
-    </div>
+    </label>
 
-    <!-- Email Field -->
-    <div>
-      <label for="email">Email Address</label>
+    <label for="email">
+      Email Address
+
       <NotField
         v-slot="{ events }"
         path="email"
@@ -66,15 +66,16 @@ const handleReset = async () => {
           type="email"
           placeholder="e.g. john@example.com"
         >
+
         <NotMessage
           path="email"
         />
       </NotField>
-    </div>
+    </label>
 
-    <!-- Tags Array Field -->
-    <div>
-      <label>Interest Tags</label>
+    <label>
+      Interest Tags
+
       <NotArrayField
         v-slot="{ items, append, remove }"
         path="tags"
@@ -96,6 +97,7 @@ const handleReset = async () => {
                   type="text"
                   placeholder="Tag name"
                 >
+
                 <button
                   type="button"
                   title="Remove Tag"
@@ -104,6 +106,7 @@ const handleReset = async () => {
                   &times;
                 </button>
               </div>
+
               <NotMessage
                 :path="item.path"
               />
@@ -117,37 +120,24 @@ const handleReset = async () => {
         >
           + Add New Tag
         </button>
+
         <NotMessage
           path="tags"
         />
       </NotArrayField>
-    </div>
+    </label>
 
-    <!-- Form Actions -->
-    <footer>
-      <button
-        type="submit"
-        :disabled="!form.isDirty"
-      >
-        Submit Form
-      </button>
-      <button
-        type="reset"
-      >
-        Clear All
-      </button>
-    </footer>
+    <button
+      type="submit"
+      :disabled="!form.isDirty"
+    >
+      Submit Form
+    </button>
+
+    <button
+      type="reset"
+    >
+      Clear All
+    </button>
   </NotForm>
-    
 </template>
-
-<style>
-.playground {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
-}
-</style>

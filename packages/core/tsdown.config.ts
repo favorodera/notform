@@ -1,10 +1,6 @@
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  platform: 'neutral',
-  exports: true,
-  fromVite: true,
-  dts: { vue: true },
   deps: {
     neverBundle: [
       'type-fest',
@@ -16,4 +12,8 @@ export default defineConfig({
       '@standard-schema/spec',
     ],
   },
+  dts: { vue: true },
+  exports: true,
+  fromVite: true,
+  platform: 'neutral',
 })
