@@ -1,5 +1,81 @@
 # Changelog
 
+## v2.1.1...v2.1.2
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.1...v2.1.2)
+
+### Added
+
+- **core:** Enhance NotMessage and fix array key logic ([3739cc9](https://github.com/favorodera/notform/commit/3739cc9))
+
+  - Add 'as' prop to NotMessage for custom tag rendering
+  - Remove timestamps from array field keys
+  - Fix array mutation order to prevent sync issues
+  - Update validation trigger logic in NotField
+
+
+### Refactors
+
+- **core:** Cleanup code and types ([158bb3e](https://github.com/favorodera/notform/commit/158bb3e))
+
+  - remove unused runtime files from nuxt package
+  - clean up code comments and type definitions
+  - standardize formatting and indentation
+  - remove redundant eslint-disable comments
+
+- **use-not-form:** Improve documentation and clean up code structure ([87b09ec](https://github.com/favorodera/notform/commit/87b09ec))
+- **core:** Simplify component slots and attributes ([e9dc2df](https://github.com/favorodera/notform/commit/e9dc2df))
+
+  - Remove unused useAttrs and inheritAttrs: false
+  - Refactor NotField to use shorthand slot props
+  - Simplify NotMessage rendering and remove as prop
+  - Standardize internal component code style
+
+- **core:** Cleanup NotArrayField component ([e297200](https://github.com/favorodera/notform/commit/e297200))
+
+  - Refactor template to use scoped slot shorthand
+  - Improve code readability and organization
+  - Update variable naming and structure
+  - Clean up unused type definitions
+
+- **nuxt:** Migrate to direct dependency on notform ([6aad8d8](https://github.com/favorodera/notform/commit/6aad8d8))
+
+  - Remove runtime wrapper files for components and composables
+  - Update module to import directly from notform
+  - Update dependencies to include notform as peer
+  - Clean up playground and docs configurations
+
+
+### Chores
+
+- **lint:** Migrate to shared eslint configuration ([1c8c5df](https://github.com/favorodera/notform/commit/1c8c5df))
+
+  - Replace local configs with unified factory setup
+  - Update dependencies for consistent linting
+  - Add missing eslint configuration files
+  - Remove redundant legacy config files
+
+
+### Styling
+
+- **core:** Fix formatting in components ([40a3775](https://github.com/favorodera/notform/commit/40a3775))
+
+  - remove extra newline in not-array-field
+  - add spacing to interpolation in not-message
+
+- **repo:** Fix indentation and formatting across codebase ([4c7f460](https://github.com/favorodera/notform/commit/4c7f460))
+
+  - Fix indentation in tests and playgrounds
+  - Reorder peer dependencies in nuxt package
+  - Reorder dependencies in pnpm workspace catalog
+
+- **ui:** Fix indentation and whitespace issues ([ce42a24](https://github.com/favorodera/notform/commit/ce42a24))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.1.0...v2.1.1
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.1.0...v2.1.1)

@@ -1,5 +1,49 @@
 # Changelog
 
+## v2.1.1...v2.1.2
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.1...v2.1.2)
+
+### Refactors
+
+- **core:** Cleanup code and types ([158bb3e](https://github.com/favorodera/notform/commit/158bb3e))
+
+  - remove unused runtime files from nuxt package
+  - clean up code comments and type definitions
+  - standardize formatting and indentation
+  - remove redundant eslint-disable comments
+
+- **nuxt:** Migrate to direct dependency on notform ([6aad8d8](https://github.com/favorodera/notform/commit/6aad8d8))
+
+  - Remove runtime wrapper files for components and composables
+  - Update module to import directly from notform
+  - Update dependencies to include notform as peer
+  - Clean up playground and docs configurations
+
+
+### Chores
+
+- **lint:** Migrate to shared eslint configuration ([1c8c5df](https://github.com/favorodera/notform/commit/1c8c5df))
+
+  - Replace local configs with unified factory setup
+  - Update dependencies for consistent linting
+  - Add missing eslint configuration files
+  - Remove redundant legacy config files
+
+
+### Styling
+
+- **repo:** Fix indentation and formatting across codebase ([4c7f460](https://github.com/favorodera/notform/commit/4c7f460))
+
+  - Fix indentation in tests and playgrounds
+  - Reorder peer dependencies in nuxt package
+  - Reorder dependencies in pnpm workspace catalog
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.1.0...v2.1.1
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.1.0...v2.1.1)
