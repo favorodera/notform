@@ -1,22 +1,28 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: npm
     directories:
-      - "/"
-      - "/packages/core"
-      - "/packages/nuxt"
+      - /
+      - /packages/core
+      - /packages/nuxt
     schedule:
-      interval: "weekly"
+      interval: weekly
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+      - dependency-name: '*'
+        update-types: ['version-update:semver-patch']
     cooldown:
       semver-minor-days: 7
       semver-major-days: 7
+    commit-message:
+      prefix: "chore"
+      include: "scope"  
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
+      interval: weekly
     cooldown:
       default-days: 7
+    commit-message:
+      prefix: "chore"
+      include: "scope"  
