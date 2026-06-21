@@ -17,7 +17,19 @@ const { data: page } = await useAsyncData(
   },
 )
 
-const { copied, copy } = useClipboard({ legacy: true, source: await $fetch<string>(`/raw${route.path}.md`) })
+const { data: markdownContent } = await useAsyncData(
+  `${route.path}-markdown`,
+  () => $fetch<string>(`/raw${route.path}.md`),
+  {
+    lazy: true,
+    server: false,
+  },
+)
+
+const { copied, copy } = useClipboard({
+  legacy: true,
+  source: computed(() => markdownContent.value ?? ''),
+})
   
 const { siteDescription, siteName, siteUrl } = useAppConfig()
 
