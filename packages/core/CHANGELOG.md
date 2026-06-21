@@ -1,5 +1,21 @@
 # Changelog
 
+## v2.1.2...v2.1.3
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.2...v2.1.3)
+
+### Fixed
+
+- **core:** Correct eager validation trigger logic ([075322c](https://github.com/favorodera/notform/commit/075322c))
+
+  - Fix validation check to rely on eager mode
+  - Ensure revalidation only occurs when in eager mode
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.1.1...v2.1.2
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.1.1...v2.1.2)

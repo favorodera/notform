@@ -1,6 +1,6 @@
 {
   "name": "notform-monorepo",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "private": true,
   "packageManager": "pnpm@11.2.2",
   "author": "Favour Emeka <favorodera@gmail.com>",
