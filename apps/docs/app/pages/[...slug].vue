@@ -30,7 +30,7 @@ const { copied, copy } = useClipboard({
   legacy: true,
   source: computed(() => markdownContent.value ?? ''),
 })
-  
+
 const { siteDescription, siteName, siteUrl } = useAppConfig()
 
 const { data: surround } = await useAsyncData(

@@ -184,7 +184,7 @@ function update(index: number, value: TItem): void {
  * @param indexB The second index
  */
 function swap(indexA: number, indexB: number): void {
-   const tempKey = itemKeys.value[indexA]
+  const tempKey = itemKeys.value[indexA]
   itemKeys.value[indexA] = itemKeys.value[indexB]
   itemKeys.value[indexB] = tempKey
 
