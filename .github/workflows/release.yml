@@ -86,7 +86,7 @@ jobs:
     needs: validate
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.3
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
