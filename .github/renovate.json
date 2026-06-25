@@ -1,3 +1,3 @@
 {
-  "extends": ["github>favorodera/renovate"]
+  "extends": ["github>favorodera/renovate-config"]
 }
