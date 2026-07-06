@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "notform": "workspace:*",
-    "pinia": "catalog:vendor",
     "vue": "catalog:vendor",
     "vue-router": "catalog:vendor",
     "zod": "catalog:vendor"

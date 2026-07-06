@@ -1,20 +1,10 @@
 import { factory } from '@favorodera/eslint-config'
 
 export default factory({
-  jsdoc: {
-    overrides: {
-      'jsdoc/lines-before-block': [
-        'error',
-        {
-          ignoreSingleLines: false,
-        },
-      ],
-    },
-  },
   tailwind: false,
-  typescript: {
-    overrides: {
+})
+  .override('favorodera/typescript/rules', {
+    rules: {
       'ts/no-explicit-any': 'off',
     },
-  },
-})
+  })

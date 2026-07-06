@@ -8,17 +8,16 @@
   },
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt prepare && nuxt typecheck",
-    "lint": "nuxt prepare && eslint . --fix"
+    "lint": "nuxt prepare && eslint . --fix",
+    "dev": "nuxt dev"
   },
   "dependencies": {
     "notform": "workspace:*",
     "nuxt": "catalog:vendor",
-    "pinia": "catalog:vendor",
     "vue": "catalog:vendor",
     "vue-router": "catalog:vendor",
     "zod": "catalog:vendor"

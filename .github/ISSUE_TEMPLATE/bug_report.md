@@ -37,13 +37,13 @@ What actually happened instead.
 
 ## Environment
 
-- **OS:** [e.g., Windows 11, macOS 14]
-- **Node.js version:** [e.g., 24.0.0]
-- **pnpm version:** [e.g., 10.0.0]
-- **NotForm version:** [e.g., 1.0.0]
-- **Vue version:** [e.g., 3.5.0]
-- **Nuxt version (if applicable):** [e.g., 4.0.0]
-- **Browser (if applicable):** [e.g., Chrome 120]
+- **OS:** (e.g., Windows 11, macOS 14)
+- **Node.js version:** (e.g., 24.0.0)
+- **pnpm version:** (e.g., 10.0.0)
+- **NotForm version:** (e.g., 1.0.0)
+- **Vue version:** (e.g., 3.5.0)
+- **Nuxt version (if applicable):** (e.g., 4.0.0)
+- **Browser (if applicable):** (e.g., Chrome 120)
 
 ## Additional Context
 

@@ -3,7 +3,7 @@
 <p><strong>Vue Forms Without the Friction</strong></p>
 <p>
 <a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/v/notform.svg?style=plastic&label=NPM%20Version&color=blue" alt="NPM Version"></a>
-<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/dw/notform.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
+<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/dt/notform.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
 <a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/unpacked-size/notform?style=plastic&label=NPM%20Unpacked%20Size&color=blue" alt="NPM Unpacked Size"></a>
 </p>
 </div>
@@ -42,8 +42,8 @@ const schema = z.object({
 })
 
 const form = useNotForm({
-  onSubmit: (values) => {
-    console.log('Form submitted:', values)
+  onSubmit(values) {
+    console.log('Form:', values)
   },
   schema,
 })
@@ -51,29 +51,50 @@ const form = useNotForm({
 
 <template>
   <NotForm
-    :form="form"
+    :form
     @submit="form.submit"
+    @reset="form.reset()"
   >
-    <NotField path="name">
-      <input
-        v-model="form.values.name"
-        type="text"
-      >
+    <NotField
+      v-slot="{events,path}"
+      path="name"
+    >
+      <label :for="path">
+        Name
+        <input
+          v-bind="events"
+          :id="path"
+          v-model="form.values.name"
+          type="text"
+        >
+      </label>
 
-      <NotMessage path="name" />
+      <NotMessage :path="path" />
     </NotField>
 
-    <NotField path="email">
-      <input
-        v-model="form.values.email"
-        type="email"
-      >
+    <NotField
+      v-slot="{events,path}"
+      path="email"
+    >
+      <label :for="path">
+        Email
+        <input
+          v-bind="events"
+          :id="path"
+          v-model="form.values.email"
+          type="email"
+        >
+      </label>
 
-      <NotMessage path="email" />
+      <NotMessage :path="path" />
     </NotField>
 
     <button type="submit">
       Submit
+    </button>
+
+    <button type="reset">
+      Reset Form
     </button>
   </NotForm>
 </template>
