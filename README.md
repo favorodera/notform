@@ -74,7 +74,7 @@ pnpm ready
 | `pnpm lint` | Lint all packages with ESLint |
 | `pnpm typecheck` | Type-check all packages with `vue-tsc` / `tsc` |
 | `pnpm test` | Run all test suites with Vitest |
-| `pnpm ready` | Full pipeline: install → lint → typecheck → build → test |
+| `pnpm ready` | Full pipeline: install → lint → typecheck → test → build |
 
 ## License
 

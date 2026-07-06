@@ -46,7 +46,7 @@ After installing the module, you can use NotForm directly in your components:
 import { z } from 'zod'
 
 const schema = z.object({
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
   name: z.string().min(1, 'Name is required'),
 })
 
