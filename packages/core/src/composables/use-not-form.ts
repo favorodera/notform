@@ -34,10 +34,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     onMount: config.validateOn?.onMount ?? false,
   }
 
-  const validationMode: TInstance['validationMode'] = {
-    eager: config.validationMode?.eager ?? true,
-    lazy: config.validationMode?.lazy ?? false,
-  }
+  const validationMode: TInstance['validationMode'] = config.validationMode || 'eager'
 
   const values = reactive(klona(initialValues)) as TInput
   const errors = reactive<Array<TIssue>>([...initialErrors])

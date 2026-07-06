@@ -101,7 +101,7 @@ function onInput() {
   }
 
   // Eager mode: only revalidate if there is already an error to clear
-  if (form.validationMode.eager && !isValid.value) {
+  if (form.validationMode === 'eager' && !isValid.value) {
     scheduleValidation()
   }
 }
@@ -115,7 +115,7 @@ function onChange() {
   }
 
   // Eager mode: only revalidate if there is already an error to clear
-  if (form.validationMode.eager && !isValid.value) {
+  if (form.validationMode === 'eager' && !isValid.value) {
     scheduleValidation()
   }
 }
