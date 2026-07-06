@@ -19,10 +19,11 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint . --fix",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt prepare && nuxt typecheck",
+    "lint": "nuxt prepare && eslint . --fix"
   },
   "dependencies": {
     "@iconify-json/lucide": "catalog:vendor",
@@ -49,12 +50,16 @@
     "tailwindcss": "catalog:vendor",
     "ufo": "catalog:vendor",
     "unist-util-visit": "catalog:vendor",
+    "vue": "catalog:vendor",
+    "vue-router": "catalog:vendor",
     "zod": "catalog:vendor"
   },
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:tools",
     "@nuxt/eslint": "catalog:tools",
+    "@types/node": "catalog:tools",
     "notform-nuxt": "workspace:*",
+    "typescript": "catalog:tools",
     "vue-tsc": "catalog:tools"
   }
 }

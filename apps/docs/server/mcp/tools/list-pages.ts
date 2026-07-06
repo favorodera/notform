@@ -22,7 +22,6 @@ OUTPUT: Returns a structured list with:
 - url: Full URL for reference`,
   handler: async () => {
     const event = useEvent()
-    // eslint-disable-next-line ts/no-explicit-any
     const url = getRequestURL(event as any)
     const siteUrl = import.meta.dev ? `${url.protocol}//${url.hostname}:${url.port}` : url.origin
 
@@ -39,11 +38,21 @@ OUTPUT: Returns a structured list with:
       }))
 
       return {
-        content: [{ text: JSON.stringify(result, undefined, 2), type: 'text' }],
+        content: [
+          {
+            text: JSON.stringify(result, undefined, 2),
+            type: 'text',
+          },
+        ],
       }
     } catch {
       return {
-        content: [{ text: 'Failed to list pages', type: 'text' }],
+        content: [
+          {
+            text: 'Failed to list pages',
+            type: 'text',
+          },
+        ],
         isError: true,
       }
     }

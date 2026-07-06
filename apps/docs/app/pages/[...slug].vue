@@ -9,22 +9,19 @@ const route = useRoute()
 
 const { data: page } = await useAsyncData(
   route.path,
-  () => queryCollection('docs').path(route.path)
+  () => queryCollection('docs')
+    .path(route.path)
     .first(),
-  {
-    lazy: true,
-    server: false,
-  },
 )
+if (!page.value) {
+  throw createError({
+    fatal: true,
+    statusCode: 404,
+    statusMessage: 'Page not found',
+  })
+}
 
-const { data: markdownContent } = await useAsyncData(
-  `${route.path}-markdown`,
-  () => $fetch<string>(`/raw${route.path}.md`),
-  {
-    lazy: true,
-    server: false,
-  },
-)
+const { data: markdownContent } = await useAsyncData(`${route.path}-markdown`, () => $fetch<string>(`/raw${route.path}.md`))
 
 const { copied, copy } = useClipboard({
   legacy: true,
@@ -33,14 +30,11 @@ const { copied, copy } = useClipboard({
 
 const { siteDescription, siteName, siteUrl } = useAppConfig()
 
-const { data: surround } = await useAsyncData(
-  `${route.path}-surround`,
-  () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }),
-  {
-    lazy: true,
-    server: false,
-  },
-)
+const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', route.path, {
+    fields: ['description'],
+  })
+})
 
 const seo = computed(() => {
   return {

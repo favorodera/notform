@@ -4,8 +4,11 @@ import withNuxt from './.nuxt/eslint.config.mjs'
 export default withNuxt(factory({
   markdown: false,
   tailwind: {
-    settings: {
-      entryPoint: 'app/assets/css/main.css',
-    },
+    entryPoint: 'app/assets/css/main.css',
   },
-}))
+})
+  .override('favorodera/typescript/rules', {
+    rules: {
+      'ts/no-explicit-any': 'off',
+    },
+  }))

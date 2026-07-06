@@ -16,7 +16,6 @@ WHEN NOT TO USE: If you don't know the exact path and need to search/explore, us
 WORKFLOW: This tool returns the complete page content including title, description, and full markdown. Use this when you need to provide detailed answers or code examples from specific documentation pages.`,
   handler: async ({ path }) => {
     const event = useEvent()
-    // eslint-disable-next-line ts/no-explicit-any
     const url = getRequestURL(event as any)
     const siteUrl = import.meta.dev ? `${url.protocol}//${url.hostname}:${url.port}` : url.origin
 
@@ -28,7 +27,12 @@ WORKFLOW: This tool returns the complete page content including title, descripti
 
       if (!page) {
         return {
-          content: [{ text: 'Page not found', type: 'text' }],
+          content: [
+            {
+              text: 'Page not found',
+              type: 'text',
+            },
+          ],
           isError: true,
         }
       }
@@ -46,16 +50,28 @@ WORKFLOW: This tool returns the complete page content including title, descripti
       }
 
       return {
-        content: [{ text: JSON.stringify(result, undefined, 2), type: 'text' }],
+        content: [
+          {
+            text: JSON.stringify(result, undefined, 2),
+            type: 'text',
+          },
+        ],
       }
     } catch {
       return {
-        content: [{ text: 'Failed to get page', type: 'text' }],
+        content: [
+          {
+            text: 'Failed to get page',
+            type: 'text',
+          },
+        ],
         isError: true,
       }
     }
   },
   inputSchema: {
-    path: z.string().describe('The page path from list-pages or provided by the user (e.g., /get-started)'),
+    path: z
+      .string()
+      .describe('The page path from list-pages or provided by the user (e.g., /get-started)'),
   },
 })

@@ -24,23 +24,9 @@ const navLinks = [
   { label: 'Author', target: '_blank', to: author.url },
 ]
 
-const { data: navigation } = await useAsyncData(
-  'navigation',
-  () => queryCollectionNavigation('docs'),
-  {
-    lazy: true,
-    server: false,
-  },
-)
+const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs'))
 
-const { data: files } = useAsyncData(
-  'search',
-  () => queryCollectionSearchSections('docs'),
-  {
-    lazy: true,
-    server: false,
-  },
-)
+const { data: files } = useAsyncData('search', () => queryCollectionSearchSections('docs'))
 
 provide('navigation', navigation)
 </script>
