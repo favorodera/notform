@@ -138,6 +138,7 @@ export default defineNuxtConfig({
   },
 
   icon: {
+    componentName: 'NIcon',
     customCollections: [
       {
         dir: './app/assets/icons',
@@ -146,7 +147,6 @@ export default defineNuxtConfig({
     ],
     mode: 'svg',
     provider: 'iconify',
-    componentName:"NIcon"
   },
 
   fonts: {
