@@ -4,9 +4,7 @@
 
 ## Related Issue
 
-<!-- Link to the issue this PR addresses, if applicable -->
-
-Fixes #
+<!-- Link to the issue this PR addresses, if applicable. e.g. Fixes #123, Closes #123, Relates to #123 -->
 
 ## Type of Change
 
