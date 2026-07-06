@@ -249,8 +249,8 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
       ] of errors.entries()) {
         if (isIssuePathEqual(error.path, pathSegments)) staleIndices.push(index)
       }
-      for (let i = staleIndices.length - 1; i >= 0; i--) {
-        errors.splice(staleIndices[i], 1)
+      for (let index = staleIndices.length - 1; index >= 0; index--) {
+        errors.splice(staleIndices[index], 1)
       }
 
       if (result?.issues) {
