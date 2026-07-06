@@ -89,7 +89,7 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_PAT }}
+          token: ${{ secrets.PAT }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6.0.8
@@ -114,5 +114,5 @@ jobs:
       - name: Release with Relizy
         run: pnpm relizy release ${{ needs.validate.outputs.release_cmd }} --yes --no-clean
         env:
-          RELIZY_GITHUB_TOKEN: ${{ secrets.GITHUB_PAT }}
+          RELIZY_GITHUB_TOKEN: ${{ secrets.PAT }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -21,7 +21,7 @@ const code = computed(() => {
   }
 
   // Wrap in markdown code block for highlighting
-  return `\`\`\`vue [${props.file}.vue]\n${content.trim()}\n\`\`\``
+  return `\`\`\`vue \n${content.trim()}\n\`\`\``
 })
 </script>
 

@@ -19,29 +19,31 @@ const lazyForm = useNotForm({
 </script>
 
 <template>
-  <div class="grid inline-full grid-cols-2 gap-4">
-    <!-- Eager -->
+  <div class="form">
     <NotField
       v-slot="{ events, isValid, path }"
       path="value"
       :form="eagerForm"
     >
       <div class="field">
-        <p class="label">
-          Eager
-        </p>
-
-        <input
-          v-bind="events"
-          :id="path"
-          v-model="eagerForm.values.value"
-          placeholder="Type then blur…"
-          class="input"
-          :class="{
-            'ring-success':isValid
-          }"
-          :name="path"
+        <label
+          class="label"
+          :for="path"
         >
+          Eager
+
+          <input
+            v-bind="events"
+            :id="path"
+            v-model="eagerForm.values.value"
+            placeholder="Type then blur…"
+            class="input"
+            :class="{
+              'ring-success':isValid
+            }"
+            :name="path"
+          >
+        </label>
 
         <NotMessage
           :form="eagerForm"
@@ -51,28 +53,30 @@ const lazyForm = useNotForm({
       </div>
     </NotField>
 
-    <!-- Lazy -->
     <NotField
       v-slot="{ events, isValid, path }"
       path="value"
       :form="lazyForm"
     >
       <div class="field">
-        <p class="label">
-          Lazy
-        </p>
-
-        <input
-          v-bind="events"
-          :id="path"
-          v-model="lazyForm.values.value"
-          placeholder="Type then blur…"
-          class="input"
-          :class="{
-            'ring-success':isValid
-          }"
-          :name="path"
+        <label
+          class="label"
+          :for="path"
         >
+          Lazy
+
+          <input
+            v-bind="events"
+            :id="path"
+            v-model="lazyForm.values.value"
+            placeholder="Type then blur…"
+            class="input"
+            :class="{
+              'ring-success':isValid
+            }"
+            :name="path"
+          >
+        </label>
 
         <NotMessage
           :form="lazyForm"

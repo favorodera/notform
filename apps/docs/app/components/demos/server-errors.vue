@@ -22,10 +22,9 @@ const form = useNotForm({
 
     toast.add({
       color: 'success',
-      description: 'Account created successfully',
-      title: 'Success',
+      description: `Email:${values.email}`,
+      title: 'Account created successfully',
     })
-    form.reset()
   },
   schema: z.object({
     email: z.email('Enter a valid email'),
@@ -37,6 +36,7 @@ const form = useNotForm({
   <NotForm
     :form="form"
     class="form"
+    @reset="form.reset()"
     @submit="form.submit"
   >
     <NotField
@@ -49,16 +49,16 @@ const form = useNotForm({
           :for="path"
         >
           Email
-        </label>
 
-        <input
-          v-bind="events"
-          :id="path"
-          v-model="form.values.email"
-          type="email"
-          placeholder="Try taken@example.com"
-          class="input"
-        >
+          <input
+            v-bind="events"
+            :id="path"
+            v-model="form.values.email"
+            type="email"
+            placeholder="Try taken@example.com"
+            class="input"
+          >
+        </label>
 
         <NotMessage
           :path="path"
@@ -67,14 +67,24 @@ const form = useNotForm({
       </div>
     </NotField>
 
-    <Button
-      type="submit"
-      :loading="form.isSubmitting.value"
-      block
-      color="primary"
-      variant="subtle"
-    >
-      Create account
-    </Button>
+    <div class="field grid-cols-2">
+      <Button
+        type="reset"
+        :disabled="form.isSubmitting.value"
+        color="neutral"
+        variant="subtle"
+        block
+      >
+        Reset
+      </Button>
+
+      <Button
+        type="submit"
+        :loading="form.isSubmitting.value"
+        block
+      >
+        Submit
+      </Button>
+    </div>
   </NotForm>
 </template>
