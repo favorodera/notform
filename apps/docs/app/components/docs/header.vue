@@ -7,7 +7,7 @@ const { github } = useAppConfig()
 </script>
 
 <template>
-  <UHeader
+  <Header
     :ui="{
       center: 'flex-1' ,
       body:'px-0!'
@@ -20,10 +20,10 @@ const { github } = useAppConfig()
     </template>
 
     <template #right>
-      <UContentSearchButton />
-      <UColorModeButton />
+      <ContentSearchButton />
+      <ColorModeButton />
 
-      <UButton
+      <Button
         :to="github.url"
         :icon="github.icon"
         :ui="{
@@ -38,7 +38,7 @@ const { github } = useAppConfig()
     </template>
 
     <template #body>
-      <UContentNavigation
+      <ContentNavigation
         highlight
         :navigation="navigation"
         :ui="{
@@ -52,5 +52,5 @@ const { github } = useAppConfig()
         }"
       />
     </template>
-  </UHeader>
+  </Header>
 </template>

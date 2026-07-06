@@ -17,7 +17,7 @@ const navLinks = [
     :transition="{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }"
     class="border-bs border-dashed border-default"
   >
-    <UContainer>
+    <Container>
       <div class="flex flex-wrap items-center justify-between gap-4 py-5">
         <!-- Nav links -->
         <nav
@@ -28,7 +28,7 @@ const navLinks = [
             v-for="(link, index) in navLinks"
             :key="link.label"
           >
-            <UButton
+            <Button
               :to="link.to"
               :target="link.target"
               variant="link"
@@ -41,7 +41,7 @@ const navLinks = [
               "
             >
               {{ link.label }}
-            </UButton>
+            </Button>
 
             <span
               v-if="index < navLinks.length - 1"
@@ -58,6 +58,6 @@ const navLinks = [
           MIT © {{ new Date().getFullYear() }}
         </span>
       </div>
-    </UContainer>
+    </Container>
   </Motion>
 </template>

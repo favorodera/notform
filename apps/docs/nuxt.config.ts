@@ -134,6 +134,7 @@ export default defineNuxtConfig({
 
   ui: {
     content: true,
+    prefix: '',
   },
 
   icon: {
@@ -145,6 +146,7 @@ export default defineNuxtConfig({
     ],
     mode: 'svg',
     provider: 'iconify',
+    componentName:"NIcon"
   },
 
   fonts: {

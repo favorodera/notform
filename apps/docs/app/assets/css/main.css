@@ -32,27 +32,27 @@
   --ui-bg: black;
 }
 
-@layer components {
-  .form {
-    @apply w-full max-w-sm space-y-3;
-  }
 
-  .label {
-    @apply block text-sm font-medium text-highlighted;
-  }
-
-  .field {
-    @apply space-y-1;
-  }
-
-  .message {
-    @apply text-sm text-error;
-  }
-
-  .input {
-    @apply w-full rounded-md border-0 appearance-none placeholder:text-dimmed focus:outline-none px-2.5 py-1.5 text-base/5 text-highlighted bg-default ring ring-inset ring-accented transition-colors;
-  }
+@utility form {
+  @apply grid gap-4 max-w-md w-full
 }
+
+@utility label {
+  @apply flex flex-col gap-2 font-medium text-highlighted w-full text-sm
+}
+
+@utility field {
+  @apply grid gap-2 w-full
+}
+
+@utility input {
+  @apply w-full rounded-lg focus-visible:ring-2 focus-visible:ring-primary text-sm placeholder:text-muted outline-none bg-transparent border-default border px-2.5 h-8
+}
+
+@utility message {
+  @apply text-sm text-error font-normal text-sm inline-full min-inline-0 first-letter:uppercase
+}
+
 
 * {
   border-style: dashed;

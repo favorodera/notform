@@ -3,26 +3,24 @@ import { z } from 'zod'
 
 const toast = useToast()
 
+const schema = z.object({
+  email: z.email('Enter a valid email'),
+  password: z.string('Invalid input').min(8, 'At least 8 characters'),
+})
+
 const form = useNotForm({
-  initialValues: { email: '', name: '' },
-  onSubmit: async () => {
+  async onSubmit(data) {
     await new Promise((resolve) => {
-      setTimeout(resolve, 600)
+      setTimeout(resolve, 500)
     })
 
     toast.add({
       color: 'success',
+      description: h('pre', JSON.stringify(data, undefined, 2)),
       title: 'Form submitted successfully',
     })
-
-    setTimeout(() => {
-      form.reset()
-    }, 2000)
   },
-  schema: z.object({
-    email: z.string().email('Enter a valid email address'),
-    name: z.string().min(2, 'Must be at least 2 characters'),
-  }),
+  schema,
 })
 </script>
 
@@ -31,52 +29,25 @@ const form = useNotForm({
     :form="form"
     class="form"
     @submit="form.submit"
+    @reset="form.reset()"
   >
     <NotField
-      v-slot="{ events, path }"
-      path="name"
-    >
-      <div class="field">
-        <label
-          class="label"
-          :for="path"
-        >
-          Name
-        </label>
-
-        <input
-          v-bind="events"
-          :id="path"
-          v-model="form.values.name"
-          placeholder="Jane"
-          class="input"
-        >
-
-        <NotMessage
-          :path="path"
-          class="message"
-        />
-      </div>
-    </NotField>
-
-    <NotField
-      v-slot="{ events, path }"
+      v-slot="{ events,path }"
       path="email"
     >
-      <div class="field">
-        <label
-          class="label"
-          :for="path"
-        >
-          Email
-        </label>
+      <label
+        class="label"
+        :for="path"
+      >
+        Email
 
         <input
-          v-bind="events"
           :id="path"
           v-model="form.values.email"
           type="email"
           placeholder="jane@example.com"
+          v-bind="events"
+          autocomplete="email"
           class="input"
         >
 
@@ -84,20 +55,54 @@ const form = useNotForm({
           :path="path"
           class="message"
         />
-      </div>
+      </label>
     </NotField>
 
-    <UButton
-      type="submit"
-      block
-      color="primary"
-      variant="subtle"
+    <NotField
+      v-slot="{ events,path }"
+      path="password"
     >
-      Submit
-    </UButton>
+      <label
+        class="label"
+        :for="path"
+      >
+        Password
 
-    <p class="text-sm text-muted">
-      Blur a field or submit to see error messages appear.
-    </p>
+        <input
+          :id="path"
+          v-model="form.values.password"
+          type="password"
+          placeholder="Min. 8 characters"
+          v-bind="events"
+          autocomplete="current-password"
+          class="input"
+        >
+
+        <NotMessage
+          :path="path"
+          class="message"
+        />
+      </label>
+    </NotField>
+
+    <div class="field grid-cols-2">
+      <Button
+        type="reset"
+        :disabled="form.isSubmitting.value"
+        color="neutral"
+        variant="subtle"
+        block
+      >
+        Reset
+      </Button>
+
+      <Button
+        type="submit"
+        :loading="form.isSubmitting.value"
+        block
+      >
+        Submit
+      </Button>
+    </div>
   </NotForm>
 </template>

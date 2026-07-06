@@ -58,8 +58,8 @@ defineOgImage('Docs.takumi', { ...seo.value })
 
 <template>
   <div>
-    <UPage v-if="page">
-      <UPageHeader
+    <Page v-if="page">
+      <PageHeader
         :title="page.title"
         :description="page.description"
         class="flex inline-full flex-col-reverse"
@@ -69,7 +69,7 @@ defineOgImage('Docs.takumi', { ...seo.value })
         }"
       >
         <template #headline>
-          <UButton
+          <Button
             :label="copied ? 'Copied' : 'Copy Markdown'"
             :icon="copied ? 'lucide:check' : 'lucide:copy'"
             color="neutral"
@@ -78,9 +78,9 @@ defineOgImage('Docs.takumi', { ...seo.value })
             @click="copy()"
           />
         </template>
-      </UPageHeader>
+      </PageHeader>
 
-      <UPageBody
+      <PageBody
         class="
           pbe-6
 
@@ -94,14 +94,14 @@ defineOgImage('Docs.takumi', { ...seo.value })
           :value="page"
         />
 
-        <UContentSurround :surround="surround" />
-      </UPageBody>
+        <ContentSurround :surround="surround" />
+      </PageBody>
 
       <template
         v-if="page?.body?.toc?.links?.length"
         #right
       >
-        <UContentToc
+        <ContentToc
           :links="page?.body?.toc?.links"
           :ui="{
             title:'text-sm text-muted font-normal',
@@ -122,8 +122,8 @@ defineOgImage('Docs.takumi', { ...seo.value })
               class="block-4 inline-4 text-muted"
             />
           </template>
-        </UContentToc>
+        </ContentToc>
       </template>
-    </UPage>
+    </Page>
   </div>
 </template>

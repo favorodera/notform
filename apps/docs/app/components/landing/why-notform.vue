@@ -35,20 +35,29 @@ const whys = [
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { delayChildren: 0.1, staggerChildren: 0.08 },
+    transition: {
+      delayChildren: 0.1,
+      staggerChildren: 0.08,
+    },
   },
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
   visible: {
     opacity: 1,
-    transition: { duration: 0.35, ease: [
-      0.25,
-      0.1,
-      0.25,
-      1,
-    ] as const },
+    transition: {
+      duration: 0.35,
+      ease: [
+        0.25,
+        0.1,
+        0.25,
+        1,
+      ] as const,
+    },
     y: 0,
   },
 }
@@ -76,7 +85,7 @@ const cardVariants = {
       aria-hidden
     />
 
-    <UContainer
+    <Container
       class="
         py-20
 
@@ -143,6 +152,6 @@ const cardVariants = {
           />
         </Motion>
       </Motion>
-    </UContainer>
+    </Container>
   </section>
 </template>

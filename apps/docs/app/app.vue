@@ -25,18 +25,24 @@ defineOgImage('Landing.takumi')
 </script>
 
 <template>
-  <UApp>
-    <UMain>
+  <App
+    :toaster="{
+      progress:false,
+      position:'top-center',
+      duration:4000
+    }"
+  >
+    <Main>
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
-    </UMain>
+    </Main>
 
     <ClientOnly>
-      <LazyUContentSearch
+      <LazyContentSearch
         :files="files"
         :navigation="navigation"
       />
     </ClientOnly>
-  </UApp>
+  </App>
 </template>

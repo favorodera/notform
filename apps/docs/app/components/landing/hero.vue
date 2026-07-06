@@ -7,18 +7,31 @@ const { copied, copy } = useClipboard({ legacy: true, source: 'npx nypm add notf
 const container = {
   hidden: {},
   visible: {
-    transition: { delayChildren: 0.2, staggerChildren: 0.12 },
+    transition: {
+      delayChildren: 0.2,
+      staggerChildren: 0.12,
+    },
   },
 }
 
 const item = {
-  hidden: { opacity: 0, y: 14 },
-  visible: { opacity: 1, transition: { duration: 0.3, ease: [
-    0.25,
-    0.1,
-    0.25,
-    1,
-  ] as const }, y: 0 },
+  hidden: {
+    opacity: 0,
+    y: 14,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      ease: [
+        0.25,
+        0.1,
+        0.25,
+        1,
+      ] as const,
+    },
+    y: 0,
+  },
 }
 </script>
 
@@ -45,7 +58,7 @@ const item = {
       animate="visible"
       :variants="container"
     >
-      <UContainer
+      <Container
         class="
           relative grid grid-cols-1 justify-items-center py-28 text-center
 
@@ -57,13 +70,13 @@ const item = {
           as="div"
           :variants="item"
         >
-          <UBadge
+          <Badge
             variant="subtle"
             color="primary"
             class="mbe-6 font-mono"
           >
             Not another form library
-          </UBadge>
+          </Badge>
         </Motion>
 
         <!-- title -->
@@ -124,16 +137,16 @@ const item = {
             lg:mbs-12
           "
         >
-          <UButton
+          <Button
             to="/get-started"
             size="lg"
             color="primary"
             variant="subtle"
           >
             Read Docs
-          </UButton>
+          </Button>
 
-          <UButton
+          <Button
             size="lg"
             :ui="{ trailingIcon: 'size-3' }"
             color="neutral"
@@ -152,9 +165,9 @@ const item = {
               aria-hidden
             />
             npm install notform
-          </UButton>
+          </Button>
         </Motion>
-      </UContainer>
+      </Container>
     </Motion>
   </section>
 </template>

@@ -67,7 +67,7 @@ const form = useNotForm({
       </div>
     </NotField>
 
-    <UButton
+    <Button
       type="submit"
       :loading="form.isSubmitting.value"
       block
@@ -75,6 +75,6 @@ const form = useNotForm({
       variant="subtle"
     >
       Create account
-    </UButton>
+    </Button>
   </NotForm>
 </template>

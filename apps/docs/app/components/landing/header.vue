@@ -7,9 +7,13 @@ const { github } = useAppConfig()
     as-child
     :initial="{ opacity: 0, y: -14 }"
     :animate="{ opacity: 1, y: 0 }"
-    :transition="{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1], delay: 0.05 }"
+    :transition="{
+      duration: 0.25,
+      ease: [0.25, 0.1, 0.25, 1],
+      delay: 0.05
+    }"
   >
-    <UHeader
+    <Header
       :ui="{ center: 'flex-1' }"
       to="/"
       class="border-dashed"
@@ -20,7 +24,7 @@ const { github } = useAppConfig()
       </template>
 
       <template #right>
-        <UButton
+        <Button
           :to="github.url"
           :icon="github.icon"
           target="_blank"
@@ -29,9 +33,9 @@ const { github } = useAppConfig()
           variant="outline"
         >
           {{ github.label }}
-        </UButton>
+        </Button>
 
-        <UButton
+        <Button
           to="/get-started"
           icon="i-lucide-book-open"
           size="sm"
@@ -39,8 +43,8 @@ const { github } = useAppConfig()
           variant="subtle"
         >
           Docs
-        </UButton>
+        </Button>
       </template>
-    </UHeader>
+    </Header>
   </Motion>
 </template>

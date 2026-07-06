@@ -32,8 +32,8 @@ provide('navigation', navigation)
 </script>
 
 <template>
-  <UApp>
-    <UHeader
+  <App>
+    <Header
       :ui="{ center: 'flex-1' }"
       to="/"
       class="border-dashed"
@@ -44,7 +44,7 @@ provide('navigation', navigation)
       </template>
 
       <template #right>
-        <UButton
+        <Button
           :to="github.url"
           :icon="github.icon"
           target="_blank"
@@ -53,9 +53,9 @@ provide('navigation', navigation)
           variant="outline"
         >
           {{ github.label }}
-        </UButton>
+        </Button>
 
-        <UButton
+        <Button
           to="/get-started"
           icon="i-lucide-book-open"
           size="sm"
@@ -63,11 +63,11 @@ provide('navigation', navigation)
           variant="subtle"
         >
           Docs
-        </UButton>
+        </Button>
       </template>
-    </UHeader>
+    </Header>
 
-    <UError
+    <Error
       :error="error"
       :ui="{
         statusMessage: 'text-xl sm:text-2xl',
@@ -76,7 +76,7 @@ provide('navigation', navigation)
       }"
     >
       <template #links>
-        <UButton
+        <Button
           size="sm"
           color="primary"
           variant="soft"
@@ -84,9 +84,9 @@ provide('navigation', navigation)
           @click="clearError({ redirect: '/' })"
         >
           Back to home
-        </UButton>
+        </Button>
 
-        <UButton
+        <Button
           size="sm"
           color="neutral"
           variant="soft"
@@ -97,14 +97,14 @@ provide('navigation', navigation)
           }"
         >
           Go back
-        </UButton>
+        </Button>
       </template>
-    </UError>
+    </Error>
 
     <footer
       class="border-bs border-dashed border-default"
     >
-      <UContainer>
+      <Container>
         <div class="flex flex-wrap items-center justify-between gap-4 py-5">
           <!-- Nav links -->
           <nav
@@ -115,7 +115,7 @@ provide('navigation', navigation)
               v-for="(link, index) in navLinks"
               :key="link.label"
             >
-              <UButton
+              <Button
                 :to="link.to"
                 :target="link.target"
                 variant="link"
@@ -128,7 +128,7 @@ provide('navigation', navigation)
                 "
               >
                 {{ link.label }}
-              </UButton>
+              </Button>
 
               <span
                 v-if="index < navLinks.length - 1"
@@ -145,14 +145,14 @@ provide('navigation', navigation)
             MIT © {{ new Date().getFullYear() }}
           </span>
         </div>
-      </UContainer>
+      </Container>
     </footer>
 
     <ClientOnly>
-      <LazyUContentSearch
+      <LazyContentSearch
         :files="files"
         :navigation="navigation"
       />
     </ClientOnly>
-  </UApp>
+  </App>
 </template>

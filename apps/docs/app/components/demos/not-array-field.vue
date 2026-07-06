@@ -47,7 +47,7 @@ const form = useNotForm({
         :path="item.path"
       >
         <div class="field">
-          <UFieldGroup class="inline-full">
+          <FieldGroup class="inline-full">
             <input
               v-bind="events"
               :id="item.path"
@@ -57,7 +57,7 @@ const form = useNotForm({
               :name="item.path"
             >
 
-            <UButton
+            <Button
               icon="i-lucide-arrow-up"
               variant="soft"
               size="sm"
@@ -65,7 +65,7 @@ const form = useNotForm({
               @click="move(item.index, item.index - 1)"
             />
 
-            <UButton
+            <Button
               icon="i-lucide-arrow-down"
               variant="soft"
               size="sm"
@@ -73,7 +73,7 @@ const form = useNotForm({
               @click="move(item.index, item.index + 1)"
             />
 
-            <UButton
+            <Button
               icon="i-lucide-trash-2"
               color="error"
               variant="soft"
@@ -82,7 +82,7 @@ const form = useNotForm({
               :disabled="items.length === 1"
               @click="remove(item.index)"
             />
-          </UFieldGroup>
+          </FieldGroup>
 
           <NotMessage
             :path="item.path"
@@ -96,7 +96,7 @@ const form = useNotForm({
         class="message"
       />
 
-      <UButton
+      <Button
         icon="i-lucide-plus"
         color="neutral"
         variant="outline"
@@ -106,16 +106,16 @@ const form = useNotForm({
         @click="append('')"
       >
         Add tag
-      </UButton>
+      </Button>
     </NotArrayField>
 
-    <UButton
+    <Button
       type="submit"
       block
       color="primary"
       :loading="form.isSubmitting.value"
     >
       Save all tags
-    </UButton>
+    </Button>
   </NotForm>
 </template>
