@@ -63,7 +63,7 @@ const form = useNotForm({
     </NotField>
 
     <NotArrayField
-      v-slot="{ items, append, remove }"
+      v-slot="{ items, append, remove,move }"
       path="tags"
       :item-schema="tagSchema"
     >
@@ -82,6 +82,24 @@ const form = useNotForm({
               type="text"
               placeholder="Tag name"
             >
+
+            <button
+              type="button"
+              title="Move Up"
+              :disabled="item.index === 0"
+              @click="move(index, index - 1)"
+            >
+              &UpArrow;
+            </button>
+
+            <button
+              type="button"
+              title="Move Down"
+              :disabled="item.index === items.length - 1"
+              @click="move(index, index + 1)"
+            >
+              &DownArrow;
+            </button>
 
             <button
               type="button"

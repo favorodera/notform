@@ -8,19 +8,19 @@
   },
   "scripts": {
     "build": "nuxt build",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt prepare && nuxt typecheck",
-    "lint": "nuxt prepare && eslint . --fix",
-    "dev": "nuxt dev"
+    "lint": "nuxt prepare && eslint . --fix"
   },
   "dependencies": {
+    "notform-nuxt": "workspace:*",
     "nuxt": "catalog:vendor",
     "vue": "catalog:vendor",
     "vue-router": "catalog:vendor",
-    "zod": "catalog:vendor",
-    "notform-nuxt": "workspace:*"
+    "zod": "catalog:vendor"
   },
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:tools",
