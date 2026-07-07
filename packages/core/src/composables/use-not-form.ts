@@ -6,7 +6,7 @@ import { computed, markRaw, reactive, ref, toValue } from 'vue'
 import type { NotFormInstance } from '../types/not-form'
 import type { DeepPartial, ObjectSchema, Paths } from '../types/shared'
 import type { UseNotFormConfig } from '../types/use-not-form'
-import { isIssuePathEqual, normalizeSegment } from '../utils/form-utils'
+import { isIssuePathEqual, normalizeSegment } from '../utils/form'
 
 /**
  * Creates a reactive NotFormInstance for managing form state and validation.
@@ -34,10 +34,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     onMount: config.validateOn?.onMount ?? false,
   }
 
-  const validationMode: TInstance['validationMode'] = {
-    eager: config.validationMode?.eager ?? true,
-    lazy: config.validationMode?.lazy ?? false,
-  }
+  const validationMode: TInstance['validationMode'] = config.validationMode || 'eager'
 
   const values = reactive(klona(initialValues)) as TInput
   const errors = reactive<Array<TIssue>>([...initialErrors])
@@ -252,8 +249,8 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
       ] of errors.entries()) {
         if (isIssuePathEqual(error.path, pathSegments)) staleIndices.push(index)
       }
-      for (let i = staleIndices.length - 1; i >= 0; i--) {
-        errors.splice(staleIndices[i], 1)
+      for (let index = staleIndices.length - 1; index >= 0; index--) {
+        errors.splice(staleIndices[index], 1)
       }
 
       if (result?.issues) {

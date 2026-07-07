@@ -8,17 +8,17 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
   <div>
     <DocsHeader />
 
-    <UContainer>
-      <UPage>
+    <Container>
+      <Page>
         <template #left>
-          <UPageAside
+          <PageAside
             class="
               border-x border-dashed border-default
 
               lg:px-0!
             "
           >
-            <UContentNavigation
+            <ContentNavigation
               highlight
               :navigation="navigation"
               :ui="{
@@ -31,12 +31,12 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
                 linkLeadingIcon: 'size-5'
               }"
             />
-          </UPageAside>
+          </PageAside>
         </template>
 
         <slot />
-      </UPage>
-    </UContainer>
+      </Page>
+    </Container>
 
     <DocsFooter />
   </div>

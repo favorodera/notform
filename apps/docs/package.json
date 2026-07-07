@@ -19,10 +19,11 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint . --fix",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt prepare && nuxt typecheck",
+    "lint": "nuxt prepare && eslint . --fix"
   },
   "dependencies": {
     "@iconify-json/lucide": "catalog:vendor",
@@ -41,7 +42,7 @@
     "better-sqlite3": "catalog:vendor",
     "minimark": "catalog:vendor",
     "motion-v": "catalog:vendor",
-    "notform": "workspace:*",
+    "notform-nuxt": "workspace:*",
     "nuxt": "catalog:vendor",
     "nuxt-llms": "catalog:vendor",
     "nuxt-og-image": "catalog:vendor",
@@ -49,12 +50,15 @@
     "tailwindcss": "catalog:vendor",
     "ufo": "catalog:vendor",
     "unist-util-visit": "catalog:vendor",
+    "vue": "catalog:vendor",
+    "vue-router": "catalog:vendor",
     "zod": "catalog:vendor"
   },
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:tools",
     "@nuxt/eslint": "catalog:tools",
-    "notform-nuxt": "workspace:*",
+    "@types/node": "catalog:tools",
+    "typescript": "catalog:tools",
     "vue-tsc": "catalog:tools"
   }
 }

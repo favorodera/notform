@@ -3,7 +3,7 @@
 <p><strong>NotForm, seamlessly integrated with Nuxt.</strong></p>
 <p>
 <a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/v/notform-nuxt.svg?style=plastic&label=NPM%20Version&color=blue" alt="NPM Version"></a>
-<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/dw/notform-nuxt.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
+<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/dt/notform-nuxt.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
 <a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/unpacked-size/notform-nuxt?style=plastic&label=NPM%20Unpacked%20Size&color=blue" alt="NPM Unpacked Size"></a>
 </p>
 </div>
@@ -15,8 +15,7 @@
 ## Installation
 
 ```bash
-pnpm add notform
-pnpm add -D notform-nuxt
+pnpm add notform-nuxt
 ```
 
 ## Setup
@@ -46,13 +45,13 @@ After installing the module, you can use NotForm directly in your components:
 import { z } from 'zod'
 
 const schema = z.object({
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
   name: z.string().min(1, 'Name is required'),
 })
 
 const form = useNotForm({
-  onSubmit: (values) => {
-    console.log('Form submitted:', values)
+  onSubmit(values) {
+    console.log('Form:', values)
   },
   schema,
 })
@@ -60,29 +59,50 @@ const form = useNotForm({
 
 <template>
   <NotForm
-    :form="form"
+    :form
     @submit="form.submit"
+    @reset="form.reset()"
   >
-    <NotField path="name">
-      <input
-        v-model="form.values.name"
-        type="text"
-      >
+    <NotField
+      v-slot="{events,path}"
+      path="name"
+    >
+      <label :for="path">
+        Name
+        <input
+          v-bind="events"
+          :id="path"
+          v-model="form.values.name"
+          type="text"
+        >
+      </label>
 
-      <NotMessage path="name" />
+      <NotMessage :path="path" />
     </NotField>
 
-    <NotField path="email">
-      <input
-        v-model="form.values.email"
-        type="email"
-      >
+    <NotField
+      v-slot="{events,path}"
+      path="email"
+    >
+      <label :for="path">
+        Email
+        <input
+          v-bind="events"
+          :id="path"
+          v-model="form.values.email"
+          type="email"
+        >
+      </label>
 
-      <NotMessage path="email" />
+      <NotMessage :path="path" />
     </NotField>
 
     <button type="submit">
       Submit
+    </button>
+
+    <button type="reset">
+      Reset Form
     </button>
   </NotForm>
 </template>
@@ -93,7 +113,6 @@ No imports needed — everything is auto-imported by the module.
 ## Prerequisites
 
 - [Nuxt](https://nuxt.com/) v4 or later
-- [NotForm](../core) core package
 
 ## Documentation
 

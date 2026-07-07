@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { NotMessageProps, NotMessageSlots } from '../types/not-message'
-import { useNotFormInstance } from '../utils/instance-utils'
+import { useNotFormInstance } from '../utils/instance'
 
 defineOptions({
   inheritAttrs: false,

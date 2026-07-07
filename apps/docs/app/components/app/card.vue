@@ -38,7 +38,7 @@ const NuxtLink = resolveComponent('NuxtLink')
       aria-hidden
     />
 
-    <UIcon
+    <Icon
       :name="icon"
       class="
         mbe-4 block-5 inline-5 text-primary transition-transform duration-200

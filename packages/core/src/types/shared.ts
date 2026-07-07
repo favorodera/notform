@@ -44,3 +44,22 @@ export type ObjectSchema = StandardSchemaV1 & {
     }
   }
 }
+
+/**
+ * Represents a segment of a validation path.
+ * It can be either a string (for object properties) or a number (for array indices).
+ */
+export type Segment = PropertyKey | StandardSchemaV1.PathSegment
+
+/**
+ * Maps the index an array item occupied before a mutation to the index it
+ * occupies after that mutation, or to `undefined` when the mutation removed the
+ * item entirely.
+ *
+ * Each array mutation in `NotArrayField` (`prepend`, `remove`, `insert`,
+ * `swap`, `move`) builds one of these to describe exactly how it reshuffles
+ * indices, then passes it to `remapArrayFieldState`.
+ * @param previousIndex The index the item occupied before the mutation.
+ * @returns The index the item occupies after the mutation, or `undefined` if the item was removed.
+ */
+export type ArrayItemIndexMap = (previousIndex: number) => number | undefined

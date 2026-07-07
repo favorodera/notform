@@ -9,19 +9,16 @@ const schema = z.object({
 })
 
 const form = useNotForm({
-  onSubmit: async () => {
+  async onSubmit(data) {
     await new Promise((resolve) => {
-      setTimeout(resolve, 600)
+      setTimeout(resolve, 500)
     })
 
     toast.add({
       color: 'success',
+      description: h('pre', JSON.stringify(data, undefined, 2)),
       title: 'Form submitted successfully',
     })
-
-    setTimeout(() => {
-      form.reset()
-    }, 2000)
   },
   schema,
 })
@@ -32,18 +29,17 @@ const form = useNotForm({
     :form="form"
     class="form"
     @submit="form.submit"
+    @reset="form.reset()"
   >
     <NotField
       v-slot="{ events,path }"
       path="email"
     >
-      <div class="field">
-        <label
-          class="label"
-          :for="path"
-        >
-          Email
-        </label>
+      <label
+        class="label"
+        :for="path"
+      >
+        Email
 
         <input
           :id="path"
@@ -51,6 +47,7 @@ const form = useNotForm({
           type="email"
           placeholder="jane@example.com"
           v-bind="events"
+          autocomplete="email"
           class="input"
         >
 
@@ -58,20 +55,18 @@ const form = useNotForm({
           :path="path"
           class="message"
         />
-      </div>
+      </label>
     </NotField>
 
     <NotField
       v-slot="{ events,path }"
       path="password"
     >
-      <div class="field">
-        <label
-          class="label"
-          :for="path"
-        >
-          Password
-        </label>
+      <label
+        class="label"
+        :for="path"
+      >
+        Password
 
         <input
           :id="path"
@@ -79,6 +74,7 @@ const form = useNotForm({
           type="password"
           placeholder="Min. 8 characters"
           v-bind="events"
+          autocomplete="current-password"
           class="input"
         >
 
@@ -86,15 +82,27 @@ const form = useNotForm({
           :path="path"
           class="message"
         />
-      </div>
+      </label>
     </NotField>
 
-    <UButton
-      type="submit"
-      :loading="form.isSubmitting.value"
-      block
-    >
-      Sign in
-    </UButton>
+    <div class="field grid-cols-2">
+      <Button
+        type="reset"
+        :disabled="form.isSubmitting.value"
+        color="neutral"
+        variant="subtle"
+        block
+      >
+        Reset
+      </Button>
+
+      <Button
+        type="submit"
+        :loading="form.isSubmitting.value"
+        block
+      >
+        Submit
+      </Button>
+    </div>
   </NotForm>
 </template>

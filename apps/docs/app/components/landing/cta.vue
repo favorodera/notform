@@ -6,7 +6,10 @@ const { copied, copy } = useClipboard({ legacy: true, source: 'npx nypm add notf
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { delayChildren: 0.05, staggerChildren: 0.1 },
+    transition: {
+      delayChildren: 0.05,
+      staggerChildren: 0.1,
+    },
   },
 }
 
@@ -14,12 +17,15 @@ const itemVariants = {
   hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.35, ease: [
-      0.25,
-      0.1,
-      0.25,
-      1,
-    ] as const },
+    transition: {
+      duration: 0.35,
+      ease: [
+        0.25,
+        0.1,
+        0.25,
+        1,
+      ] as const,
+    },
     y: 0,
   },
 }
@@ -66,7 +72,7 @@ const itemVariants = {
       :in-view-options="{ once: true, margin: '-60px' }"
       :variants="containerVariants"
     >
-      <UContainer
+      <Container
         class="
           relative py-24 text-center
 
@@ -124,17 +130,17 @@ const itemVariants = {
           "
         >
           <!-- Docs -->
-          <UButton
+          <Button
             to="/get-started"
             size="lg"
             color="primary"
             variant="subtle"
           >
             Read docs
-          </UButton>
+          </Button>
 
           <!-- Install command -->
-          <UButton
+          <Button
             size="lg"
             :ui="{ trailingIcon: 'size-3' }"
             color="neutral"
@@ -153,9 +159,9 @@ const itemVariants = {
               aria-hidden
             />
             npm install notform
-          </UButton>
+          </Button>
         </Motion>
-      </UContainer>
+      </Container>
     </Motion>
   </section>
 </template>

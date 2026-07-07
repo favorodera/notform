@@ -4,7 +4,7 @@ import { getProperty } from 'dot-prop'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import type { NotFieldProps, NotFieldSlots } from '../types/not-field'
 import type { ObjectSchema } from '../types/shared'
-import { useNotFormInstance } from '../utils/instance-utils'
+import { useNotFormInstance } from '../utils/instance'
 
 // Setup & Baseline
 
@@ -101,7 +101,7 @@ function onInput() {
   }
 
   // Eager mode: only revalidate if there is already an error to clear
-  if (form.validationMode.eager && !isValid.value) {
+  if (form.validationMode === 'eager' && !isValid.value) {
     scheduleValidation()
   }
 }
@@ -115,7 +115,7 @@ function onChange() {
   }
 
   // Eager mode: only revalidate if there is already an error to clear
-  if (form.validationMode.eager && !isValid.value) {
+  if (form.validationMode === 'eager' && !isValid.value) {
     scheduleValidation()
   }
 }

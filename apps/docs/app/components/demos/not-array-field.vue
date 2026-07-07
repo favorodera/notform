@@ -5,23 +5,22 @@ const toast = useToast()
 const itemSchema = z.string().min(1, 'Tag cannot be empty')
 
 const form = useNotForm({
-  initialValues: { tags: [
-    'vue',
-    'typescript',
-  ] },
-  onSubmit: async () => {
+  initialValues: {
+    tags: [
+      'vue',
+      'typescript',
+    ],
+  },
+  async onSubmit(data) {
     await new Promise((resolve) => {
-      setTimeout(resolve, 600)
+      setTimeout(resolve, 500)
     })
 
     toast.add({
       color: 'success',
+      description: h('pre', JSON.stringify(data, undefined, 2)),
       title: 'Form submitted successfully',
     })
-
-    setTimeout(() => {
-      form.reset()
-    }, 2000)
   },
   schema: z.object({
     tags: z.array(itemSchema).min(2, 'Add at least two tags'),
@@ -34,6 +33,7 @@ const form = useNotForm({
     :form="form"
     class="form"
     @submit="form.submit"
+    @reset="form.reset()"
   >
     <NotArrayField
       v-slot="{ items, append, remove, move, path }"
@@ -46,49 +46,53 @@ const form = useNotForm({
         v-slot="{ events }"
         :path="item.path"
       >
-        <div class="field">
-          <UFieldGroup class="inline-full">
+        <label
+          :for="item.path"
+          class="label"
+        >
+          <div class="flex gap-2 field">
             <input
               v-bind="events"
               :id="item.path"
               v-model="form.values.tags[item.index]"
               placeholder="Enter tag name..."
               class="input flex-1"
-              :name="item.path"
+              autocomplete="off"
             >
 
-            <UButton
-              icon="i-lucide-arrow-up"
-              variant="soft"
-              size="sm"
+            <Button
+              icon="i-lucide-chevron-up"
+              variant="subtle"
+              color="neutral"
+              class="rounded-full"
               :disabled="item.index === 0"
               @click="move(item.index, item.index - 1)"
             />
 
-            <UButton
-              icon="i-lucide-arrow-down"
-              variant="soft"
-              size="sm"
+            <Button
+              icon="i-lucide-chevron-down"
+              variant="subtle"
+              color="neutral"
+              class="rounded-full"
               :disabled="item.index === items.length - 1"
               @click="move(item.index, item.index + 1)"
             />
 
-            <UButton
+            <Button
               icon="i-lucide-trash-2"
               color="error"
-              variant="soft"
-              size="sm"
-              class="shrink-0"
+              variant="subtle"
+              class="rounded-full"
               :disabled="items.length === 1"
               @click="remove(item.index)"
             />
-          </UFieldGroup>
+          </div>
 
           <NotMessage
             :path="item.path"
             class="message block"
           />
-        </div>
+        </label>
       </NotField>
 
       <NotMessage
@@ -96,26 +100,35 @@ const form = useNotForm({
         class="message"
       />
 
-      <UButton
+      <Button
         icon="i-lucide-plus"
         color="neutral"
         variant="outline"
-        size="sm"
-        block
-        class="mbs-2"
+        class="inline-fit"
         @click="append('')"
       >
         Add tag
-      </UButton>
+      </Button>
     </NotArrayField>
 
-    <UButton
-      type="submit"
-      block
-      color="primary"
-      :loading="form.isSubmitting.value"
-    >
-      Save all tags
-    </UButton>
+    <div class="field grid-cols-2">
+      <Button
+        type="reset"
+        :disabled="form.isSubmitting.value"
+        color="neutral"
+        variant="subtle"
+        block
+      >
+        Reset
+      </Button>
+
+      <Button
+        type="submit"
+        :loading="form.isSubmitting.value"
+        block
+      >
+        Submit
+      </Button>
+    </div>
   </NotForm>
 </template>

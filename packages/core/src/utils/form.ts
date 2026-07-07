@@ -1,15 +1,29 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
+import type { Segment } from '../types/shared'
 
 /**
  * Normalizes a validation path segment into a standard property key.
  * @param segment The path segment to normalize.
  * @returns The normalized key.
  */
-export function normalizeSegment(segment: PropertyKey | StandardSchemaV1.PathSegment) {
+export function normalizeSegment(segment: Segment) {
   if (typeof segment === 'object' && segment !== null && 'key' in segment) {
     return segment.key
   }
   return segment
+}
+
+/**
+ * Compares two individual path segments for equality
+ * @param firstSegment The first segment to compare.
+ * @param secondSegment The second segment to compare.
+ * @returns True if the two segments refer to the same object key or array index.
+ */
+export function arePathSegmentsEqual(firstSegment: Segment, secondSegment: Segment) {
+  if (typeof firstSegment === 'number' || typeof secondSegment === 'number') {
+    return Number(firstSegment) === Number(secondSegment)
+  }
+  return firstSegment === secondSegment
 }
 
 /**
@@ -22,14 +36,10 @@ export function isIssuePathEqual(issuePath: StandardSchemaV1.Issue['path'], targ
   if (!issuePath) return false
   if (issuePath.length !== targetPath.length) return false
 
-  return issuePath.every((segment, index) => {
+  return issuePath.every((segment, segmentIndex) => {
     const normalizedSegment = normalizeSegment(segment)
-    const targetSegment = targetPath[index]
+    const targetSegment = targetPath[segmentIndex]
 
-    if (typeof normalizedSegment === 'number' || typeof targetSegment === 'number') {
-      return Number(normalizedSegment) === Number(targetSegment)
-    }
-
-    return normalizedSegment === targetSegment
+    return arePathSegmentsEqual(normalizedSegment, targetSegment)
   })
 }

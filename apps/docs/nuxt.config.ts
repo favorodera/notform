@@ -134,9 +134,11 @@ export default defineNuxtConfig({
 
   ui: {
     content: true,
+    prefix: '',
   },
 
   icon: {
+    componentName: 'NIcon',
     customCollections: [
       {
         dir: './app/assets/icons',

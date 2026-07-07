@@ -9,7 +9,8 @@ import type {
   NotArrayFieldSlots,
 } from '../types/not-array-field'
 import type { ObjectSchema } from '../types/shared'
-import { useNotFormInstance } from '../utils/instance-utils'
+import { remapArrayFieldState } from '../utils/array-field'
+import { useNotFormInstance } from '../utils/instance'
 
 // Setup & Baseline
 
@@ -35,7 +36,6 @@ const itemKeys = ref<string[]>((() => {
 
 // Computed Properties
 
-// Only onMount and onChange are meaningful for an array wrapper
 const validateOn = computed(() => ({
   onChange: props.validateOn?.onChange ?? form.validateOn.onChange,
   onMount: props.validateOn?.onMount ?? form.validateOn.onMount,
@@ -144,6 +144,7 @@ function append(value: TItem): void {
  */
 function prepend(value: TItem): void {
   itemKeys.value.unshift(generateKey())
+  remapArrayFieldState(form, props.path, previousIndex => previousIndex + 1)
   mutate(current => current.unshift(value))
 }
 
@@ -153,6 +154,12 @@ function prepend(value: TItem): void {
  */
 function remove(index: number): void {
   itemKeys.value.splice(index, 1)
+
+  remapArrayFieldState(form, props.path, (previousIndex) => {
+    if (previousIndex === index) return
+    return previousIndex > index ? previousIndex - 1 : previousIndex
+  })
+
   mutate(current => current.splice(index, 1))
 }
 
@@ -163,6 +170,12 @@ function remove(index: number): void {
  */
 function insert(index: number, value: TItem): void {
   itemKeys.value.splice(index, 0, generateKey())
+
+  remapArrayFieldState(form, props.path, (previousIndex) => {
+    if (previousIndex >= index) return previousIndex + 1
+    return previousIndex
+  })
+
   mutate(current => current.splice(index, 0, value))
 }
 
@@ -184,14 +197,20 @@ function update(index: number, value: TItem): void {
  * @param indexB The second index
  */
 function swap(indexA: number, indexB: number): void {
-  const tempKey = itemKeys.value[indexA]
+  const temporaryKey = itemKeys.value[indexA]
   itemKeys.value[indexA] = itemKeys.value[indexB]
-  itemKeys.value[indexB] = tempKey
+  itemKeys.value[indexB] = temporaryKey
+
+  remapArrayFieldState(form, props.path, (previousIndex) => {
+    if (previousIndex === indexA) return indexB
+    if (previousIndex === indexB) return indexA
+    return previousIndex
+  })
 
   mutate((current) => {
-    const temp = current[indexA]
+    const temporaryValue = current[indexA]
     current[indexA] = current[indexB]
-    current[indexB] = temp
+    current[indexB] = temporaryValue
   })
 }
 
@@ -201,12 +220,30 @@ function swap(indexA: number, indexB: number): void {
  * @param to The destination index
  */
 function move(from: number, to: number): void {
-  const [key] = itemKeys.value.splice(from, 1)
-  itemKeys.value.splice(to, 0, key)
+  const [movedItemKey] = itemKeys.value.splice(from, 1)
+  itemKeys.value.splice(to, 0, movedItemKey)
+
+  remapArrayFieldState(form, props.path, (previousIndex) => {
+    if (previousIndex === from) return to
+
+    if (from < to) {
+      if (previousIndex > from && previousIndex <= to) {
+        return previousIndex - 1
+      }
+
+      return previousIndex
+    }
+
+    if (previousIndex >= to && previousIndex < from) {
+      return previousIndex + 1
+    }
+
+    return previousIndex
+  })
 
   mutate((current) => {
-    const [item] = current.splice(from, 1)
-    current.splice(to, 0, item)
+    const [movedItem] = current.splice(from, 1)
+    current.splice(to, 0, movedItem)
   })
 }
 

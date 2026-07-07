@@ -6,6 +6,5 @@ export default defineConfig({
   plugins: [vue()],
   test: {
     environment: 'happy-dom',
-    testTimeout: 0,
   },
 })

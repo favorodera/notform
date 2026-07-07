@@ -117,12 +117,26 @@ describe('notArrayField', () => {
     it('keeps existing items in order', async () => {
       const { form, wrapper } = mountForm({ initialValues: { tags: ['first'] } })
 
+      form.touchField('tags.0')
+      form.dirtyField('tags.0')
+      form.setError({
+        message: 'bad tag',
+        path: [
+          'tags',
+          0,
+        ],
+      })
+
       await wrapper.find('#append').trigger('click')
 
       expect(form.values.tags).toStrictEqual([
         'first',
         'tag-a',
       ])
+
+      expect(form.touchedFields.has('tags.0')).toBe(true)
+      expect(form.dirtyFields.has('tags.0')).toBe(true)
+      expect(form.getFieldErrors('tags.0')).toHaveLength(1)
     })
 
     it('marks the array as touched and dirty', async () => {
@@ -148,12 +162,31 @@ describe('notArrayField', () => {
 
   describe('prepend', () => {
     it('adds an item at the start of the array', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: ['existing'] } })
+      const { form, wrapper } = mountForm({
+        initialValues: {
+          tags: ['existing'],
+        },
+      })
+
+      form.touchField('tags.0')
+      form.dirtyField('tags.0')
+      form.setError({ message: 'bad tag',
+        path: [
+          'tags',
+          0,
+        ] })
 
       await wrapper.find('#prepend').trigger('click')
 
       expect(form.values.tags[0]).toBe('tag-z')
       expect(form.values.tags[1]).toBe('existing')
+
+      // The existing item shifted from index 0 to index 1 — its state follows
+      expect(form.touchedFields.has('tags.1')).toBe(true)
+      expect(form.dirtyFields.has('tags.1')).toBe(true)
+      expect(form.getFieldErrors('tags.1')).toHaveLength(1)
+      // eslint-disable-next-line test/max-expects
+      expect(form.touchedFields.has('tags.0')).toBe(false)
     })
 
     it('marks the array as touched and dirty', async () => {
@@ -168,11 +201,25 @@ describe('notArrayField', () => {
 
   describe('remove', () => {
     it('removes the item at the given index', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-        'c',
-      ] } })
+      const { form, wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+            'c',
+          ],
+        },
+      })
+
+      form.touchField('tags.1')
+      form.dirtyField('tags.1')
+      form.setError({
+        message: 'bad tag',
+        path: [
+          'tags',
+          1,
+        ],
+      })
 
       await wrapper.find('#remove0').trigger('click')
 
@@ -180,13 +227,23 @@ describe('notArrayField', () => {
         'b',
         'c',
       ])
+
+      // 'b' shifted from index 1 to index 0 — its state follows
+      expect(form.touchedFields.has('tags.0')).toBe(true)
+      expect(form.dirtyFields.has('tags.0')).toBe(true)
+      expect(form.getFieldErrors('tags.0')).toHaveLength(1)
+      expect(form.touchedFields.has('tags.1')).toBe(false)
     })
 
     it('decrements length after removal', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-      ] } })
+      const { wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+          ],
+        },
+      })
 
       await wrapper.find('#remove0').trigger('click')
 
@@ -194,10 +251,14 @@ describe('notArrayField', () => {
     })
 
     it('removes items and updates paths — subsequent item shifts to index 0', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-      ] } })
+      const { wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+          ],
+        },
+      })
 
       await wrapper.find('#remove0').trigger('click')
 
@@ -210,10 +271,25 @@ describe('notArrayField', () => {
 
   describe('insert', () => {
     it('inserts an item at the specified index', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-      ] } })
+      const { form, wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+          ],
+        },
+      })
+
+      form.touchField('tags.0')
+      form.touchField('tags.1')
+      form.dirtyField('tags.1')
+      form.setError({
+        message: 'bad tag',
+        path: [
+          'tags',
+          1,
+        ],
+      })
 
       await wrapper.find('#insert1').trigger('click')
 
@@ -222,13 +298,27 @@ describe('notArrayField', () => {
         'inserted',
         'b',
       ])
+
+      // 'a' sits before the insertion index — state stays at index 0
+      expect(form.touchedFields.has('tags.0')).toBe(true)
+
+      // 'b' sits at the insertion index — state shifts forward to index 2
+      expect(form.touchedFields.has('tags.2')).toBe(true)
+      expect(form.dirtyFields.has('tags.2')).toBe(true)
+      expect(form.getFieldErrors('tags.2')).toHaveLength(1)
+      // eslint-disable-next-line test/max-expects
+      expect(form.touchedFields.has('tags.1')).toBe(false)
     })
 
     it('increments length after insertion', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-      ] } })
+      const { wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+          ],
+        },
+      })
 
       await wrapper.find('#insert1').trigger('click')
 
@@ -238,22 +328,45 @@ describe('notArrayField', () => {
 
   describe('update', () => {
     it('replaces the value at the given index', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: [
-        'old',
-        'b',
-      ] } })
+      const { form, wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'old',
+            'b',
+          ],
+        },
+      })
+
+      form.touchField('tags.0')
+      form.dirtyField('tags.0')
+      form.setError({
+        message: 'bad tag',
+        path: [
+          'tags',
+          0,
+        ],
+      })
 
       await wrapper.find('#update0').trigger('click')
 
       expect(form.values.tags[0]).toBe('updated')
       expect(form.values.tags[1]).toBe('b')
+
+      // Same slot, new value — state doesn't move
+      expect(form.touchedFields.has('tags.0')).toBe(true)
+      expect(form.dirtyFields.has('tags.0')).toBe(true)
+      expect(form.getFieldErrors('tags.0')).toHaveLength(1)
     })
 
     it('does not change the array length', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-      ] } })
+      const { wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+          ],
+        },
+      })
 
       await wrapper.find('#update0').trigger('click')
 
@@ -263,10 +376,24 @@ describe('notArrayField', () => {
 
   describe('swap', () => {
     it('swaps the values at two indices', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: [
-        'first',
-        'second',
-      ] } })
+      const { form, wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'first',
+            'second',
+          ],
+        },
+      })
+
+      form.touchField('tags.0')
+      form.dirtyField('tags.0')
+      form.setError({
+        message: 'bad tag',
+        path: [
+          'tags',
+          0,
+        ],
+      })
 
       await wrapper.find('#swap').trigger('click')
 
@@ -274,13 +401,23 @@ describe('notArrayField', () => {
         'second',
         'first',
       ])
+
+      // State on index 0 followed its value to index 1
+      expect(form.touchedFields.has('tags.1')).toBe(true)
+      expect(form.dirtyFields.has('tags.1')).toBe(true)
+      expect(form.getFieldErrors('tags.1')).toHaveLength(1)
+      expect(form.touchedFields.has('tags.0')).toBe(false)
     })
 
     it('stable keys survive a swap — item keys change position, not identity', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-      ] } })
+      const { wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+          ],
+        },
+      })
 
       const keysBefore = wrapper.findAll('.item').map(element => element.attributes('data-key'))
 
@@ -300,11 +437,25 @@ describe('notArrayField', () => {
 
   describe('move', () => {
     it('moves item from index 0 to index 2', async () => {
-      const { form, wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-        'c',
-      ] } })
+      const { form, wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+            'c',
+          ],
+        },
+      })
+
+      form.touchField('tags.1')
+      form.dirtyField('tags.1')
+      form.setError({
+        message: 'bad tag',
+        path: [
+          'tags',
+          1,
+        ],
+      })
 
       await wrapper.find('#move').trigger('click')
 
@@ -313,14 +464,61 @@ describe('notArrayField', () => {
         'c',
         'a',
       ])
+
+      // 'b' sat between source and destination — it shifts back to index 0
+      expect(form.touchedFields.has('tags.0')).toBe(true)
+      expect(form.dirtyFields.has('tags.0')).toBe(true)
+      expect(form.getFieldErrors('tags.0')).toHaveLength(1)
+      expect(form.touchedFields.has('tags.1')).toBe(false)
+    })
+
+    it('moves state into index 0 without mistaking it for a removed item', async () => {
+      const { form, wrapper } = mountForm(
+        {
+          initialValues: {
+            tags: [
+              'a',
+              'b',
+              'c',
+            ],
+          },
+        },
+        '<button id="movefront" type="button" @click="slot.move(2, 0)">move to front</button>',
+      )
+
+      form.touchField('tags.2')
+      form.dirtyField('tags.2')
+      form.setError({
+        message: 'bad tag',
+        path: [
+          'tags',
+          2,
+        ],
+      })
+
+      await wrapper.find('#movefront').trigger('click')
+
+      expect(form.values.tags).toStrictEqual([
+        'c',
+        'a',
+        'b',
+      ])
+
+      expect(form.touchedFields.has('tags.0')).toBe(true)
+      expect(form.dirtyFields.has('tags.0')).toBe(true)
+      expect(form.getFieldErrors('tags.0')).toHaveLength(1)
     })
 
     it('length is unchanged after a move', async () => {
-      const { wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-        'c',
-      ] } })
+      const { wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+            'c',
+          ],
+        },
+      })
 
       await wrapper.find('#move').trigger('click')
 
@@ -481,11 +679,15 @@ describe('notArrayField', () => {
 
   describe('stable keys', () => {
     it('item keys are unique across all rendered items', () => {
-      const { wrapper } = mountForm({ initialValues: { tags: [
-        'a',
-        'b',
-        'c',
-      ] } })
+      const { wrapper } = mountForm({
+        initialValues: {
+          tags: [
+            'a',
+            'b',
+            'c',
+          ],
+        },
+      })
       const keys = wrapper.findAll('.item').map(element => element.attributes('data-key'))
 
       expect(new Set(keys).size).toBe(keys.length)

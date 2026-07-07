@@ -67,7 +67,7 @@ export interface NotFieldProps {
 export interface NotFieldSlots<TSchema extends ObjectSchema> {
   /** The default slot receives the full field state and event handlers. */
   default?: (props: {
-  /** The dot-separated path to this field. */
+    /** The dot-separated path to this field. */
     path: string
 
     /**
@@ -113,7 +113,7 @@ export interface NotFieldSlots<TSchema extends ObjectSchema> {
      * ```
      */
     events: {
-    /** Triggered when the field loses focus. */
+      /** Triggered when the field loses focus. */
       onBlur: () => void
 
       /** Triggered on every keystroke or value change. */

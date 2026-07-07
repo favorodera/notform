@@ -1,23 +1,9 @@
 <script setup lang="ts">
 const { siteDescription, siteName, siteTitle } = useAppConfig()
 
-const { data: navigation } = await useAsyncData(
-  'navigation',
-  () => queryCollectionNavigation('docs'),
-  {
-    lazy: true,
-    server: false,
-  },
-)
+const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs'))
 
-const { data: files } = useAsyncData(
-  'search',
-  () => queryCollectionSearchSections('docs'),
-  {
-    lazy: true,
-    server: false,
-  },
-)
+const { data: files } = useAsyncData('search', () => queryCollectionSearchSections('docs'))
 
 provide('navigation', navigation)
 
@@ -39,18 +25,24 @@ defineOgImage('Landing.takumi')
 </script>
 
 <template>
-  <UApp>
-    <UMain>
+  <App
+    :toaster="{
+      progress:false,
+      position:'top-center',
+      duration:4000
+    }"
+  >
+    <Main>
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
-    </UMain>
+    </Main>
 
     <ClientOnly>
-      <LazyUContentSearch
+      <LazyContentSearch
         :files="files"
         :navigation="navigation"
       />
     </ClientOnly>
-  </UApp>
+  </App>
 </template>

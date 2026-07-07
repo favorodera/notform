@@ -94,7 +94,13 @@ describe('notField', () => {
     })
 
     it('does not revalidate on input when onInput is disabled', async () => {
-      const { form, wrapper } = mountForm({ validateOn: { onBlur: true, onChange: false, onInput: false } })
+      const { form, wrapper } = mountForm({
+        validateOn: {
+          onBlur: true,
+          onChange: false,
+          onInput: false,
+        },
+      })
 
       await wrapper.get('#name').trigger('blur')
       await flushPromises()
@@ -112,7 +118,12 @@ describe('notField', () => {
 
   describe('onChange', () => {
     it('revalidates on change in eager mode when errors exist', async () => {
-      const { form, wrapper } = mountForm({ validateOn: { onBlur: true, onChange: true } })
+      const { form, wrapper } = mountForm({
+        validateOn: {
+          onBlur: true,
+          onChange: true,
+        },
+      })
 
       await wrapper.get('#name').trigger('blur')
       await flushPromises()
@@ -126,7 +137,13 @@ describe('notField', () => {
     })
 
     it('does not revalidate on change when onChange is disabled', async () => {
-      const { form, wrapper } = mountForm({ validateOn: { onBlur: true, onChange: false, onInput: false } })
+      const { form, wrapper } = mountForm({
+        validateOn: {
+          onBlur: true,
+          onChange: false,
+          onInput: false,
+        },
+      })
 
       await wrapper.get('#name').trigger('blur')
       await flushPromises()

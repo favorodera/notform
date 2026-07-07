@@ -9,22 +9,19 @@ const route = useRoute()
 
 const { data: page } = await useAsyncData(
   route.path,
-  () => queryCollection('docs').path(route.path)
+  () => queryCollection('docs')
+    .path(route.path)
     .first(),
-  {
-    lazy: true,
-    server: false,
-  },
 )
+if (!page.value) {
+  throw createError({
+    fatal: true,
+    statusCode: 404,
+    statusMessage: 'Page not found',
+  })
+}
 
-const { data: markdownContent } = await useAsyncData(
-  `${route.path}-markdown`,
-  () => $fetch<string>(`/raw${route.path}.md`),
-  {
-    lazy: true,
-    server: false,
-  },
-)
+const { data: markdownContent } = await useAsyncData(`${route.path}-markdown`, () => $fetch<string>(`/raw${route.path}.md`))
 
 const { copied, copy } = useClipboard({
   legacy: true,
@@ -33,14 +30,11 @@ const { copied, copy } = useClipboard({
 
 const { siteDescription, siteName, siteUrl } = useAppConfig()
 
-const { data: surround } = await useAsyncData(
-  `${route.path}-surround`,
-  () => queryCollectionItemSurroundings('docs', route.path, { fields: ['description'] }),
-  {
-    lazy: true,
-    server: false,
-  },
-)
+const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', route.path, {
+    fields: ['description'],
+  })
+})
 
 const seo = computed(() => {
   return {
@@ -64,8 +58,8 @@ defineOgImage('Docs.takumi', { ...seo.value })
 
 <template>
   <div>
-    <UPage v-if="page">
-      <UPageHeader
+    <Page v-if="page">
+      <PageHeader
         :title="page.title"
         :description="page.description"
         class="flex inline-full flex-col-reverse"
@@ -75,7 +69,7 @@ defineOgImage('Docs.takumi', { ...seo.value })
         }"
       >
         <template #headline>
-          <UButton
+          <Button
             :label="copied ? 'Copied' : 'Copy Markdown'"
             :icon="copied ? 'lucide:check' : 'lucide:copy'"
             color="neutral"
@@ -84,9 +78,9 @@ defineOgImage('Docs.takumi', { ...seo.value })
             @click="copy()"
           />
         </template>
-      </UPageHeader>
+      </PageHeader>
 
-      <UPageBody
+      <PageBody
         class="
           pbe-6
 
@@ -100,14 +94,14 @@ defineOgImage('Docs.takumi', { ...seo.value })
           :value="page"
         />
 
-        <UContentSurround :surround="surround" />
-      </UPageBody>
+        <ContentSurround :surround="surround" />
+      </PageBody>
 
       <template
         v-if="page?.body?.toc?.links?.length"
         #right
       >
-        <UContentToc
+        <ContentToc
           :links="page?.body?.toc?.links"
           :ui="{
             title:'text-sm text-muted font-normal',
@@ -128,8 +122,8 @@ defineOgImage('Docs.takumi', { ...seo.value })
               class="block-4 inline-4 text-muted"
             />
           </template>
-        </UContentToc>
+        </ContentToc>
       </template>
-    </UPage>
+    </Page>
   </div>
 </template>

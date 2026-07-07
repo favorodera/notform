@@ -24,9 +24,9 @@ export interface UseNotFormConfig<TSchema extends ObjectSchema> {
 
   /**
    * The validation mode of the form.
-   * @default { eager: true }
+   * @default 'eager'
    */
-  validationMode?: Partial<Record<ValidationMode, boolean>>
+  validationMode?: ValidationMode
 
   /**
    * Callback triggered when form validation passes and the form is submitted.

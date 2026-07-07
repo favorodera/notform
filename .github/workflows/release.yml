@@ -11,8 +11,7 @@ on:
           - stable
           - prerelease
       bump:
-        description: 'stable: patch | minor | major — prerelease: prerelease | prepatch
-          | preminor | premajor'
+        description: 'stable: patch | minor | major — prerelease: prerelease | prepatch | preminor | premajor'
         required: true
         type: choice
         options:
@@ -86,17 +85,17 @@ jobs:
     needs: validate
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.3
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
-          token: ${{ secrets.NOTFORM_GITHUB_PAT }}
+          token: ${{ secrets.PAT }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6.0.8
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: pnpm
@@ -113,8 +112,7 @@ jobs:
           git config --global user.email "favorodera@gmail.com"
 
       - name: Release with Relizy
-        run: pnpm relizy release ${{ needs.validate.outputs.release_cmd }} --yes
-          --no-clean
+        run: pnpm relizy release ${{ needs.validate.outputs.release_cmd }} --yes --no-clean
         env:
-          RELIZY_GITHUB_TOKEN: ${{ secrets.NOTFORM_GITHUB_PAT }}
-          NODE_AUTH_TOKEN: ${{ secrets.NOTFORM_NPM_TOKEN }}
+          RELIZY_GITHUB_TOKEN: ${{ secrets.PAT }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

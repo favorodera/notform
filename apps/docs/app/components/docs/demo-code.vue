@@ -1,5 +1,5 @@
 <script lang="ts">
-const demos = import.meta.glob('../demos/**/*', {
+const sources = import.meta.glob('../demos/**/*', {
   eager: true,
   import: 'default',
   query: '?raw',
@@ -8,13 +8,20 @@ const demos = import.meta.glob('../demos/**/*', {
 
 <script setup lang="ts">
 const props = defineProps<{
+  /** The file name  without extension */
   file: string
 }>()
 
 const code = computed(() => {
-  const fileContent = demos[`../demos/${props.file}`] as string | undefined
-  if (!fileContent) return `> **Error**: File \`${props.file}\` not found.`
-  return `\`\`\`vue\n${fileContent.trim()}\n\`\`\``
+  // Find the file content in the glob map
+  const content = sources[`../demos/${props.file}.vue`] as string
+
+  if (!content) {
+    return `> **Error**: File \`${props.file}\` not found.`
+  }
+
+  // Wrap in markdown code block for highlighting
+  return `\`\`\`vue \n${content.trim()}\n\`\`\``
 })
 </script>
 
