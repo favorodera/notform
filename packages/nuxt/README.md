@@ -15,8 +15,7 @@
 ## Installation
 
 ```bash
-pnpm add notform
-pnpm add -D notform-nuxt
+pnpm add notform-nuxt
 ```
 
 ## Setup
@@ -114,7 +113,6 @@ No imports needed — everything is auto-imported by the module.
 ## Prerequisites
 
 - [Nuxt](https://nuxt.com/) v4 or later
-- [NotForm](../core) core package
 
 ## Documentation
 

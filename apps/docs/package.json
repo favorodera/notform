@@ -42,7 +42,7 @@
     "better-sqlite3": "catalog:vendor",
     "minimark": "catalog:vendor",
     "motion-v": "catalog:vendor",
-    "notform": "workspace:*",
+    "notform-nuxt": "workspace:*",
     "nuxt": "catalog:vendor",
     "nuxt-llms": "catalog:vendor",
     "nuxt-og-image": "catalog:vendor",
@@ -58,7 +58,6 @@
     "@favorodera/eslint-config": "catalog:tools",
     "@nuxt/eslint": "catalog:tools",
     "@types/node": "catalog:tools",
-    "notform-nuxt": "workspace:*",
     "typescript": "catalog:tools",
     "vue-tsc": "catalog:tools"
   }

@@ -1,4 +1,4 @@
-import { addComponent, addImports, defineNuxtModule } from '@nuxt/kit'
+import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 
 const components = [
   'NotForm',
@@ -16,18 +16,22 @@ export default defineNuxtModule({
     name: 'notform-nuxt',
   },
 
-  setup() {
+  async setup() {
+    const { resolvePath } = createResolver(import.meta.url)
+
+    const notformPath = await resolvePath('notform')
+
     for (const name of components) {
       addComponent({
         export: name,
-        filePath: 'notform',
+        filePath: notformPath,
         name,
       })
     }
 
     addImports({
       as: 'useNotForm',
-      from: 'notform',
+      from: notformPath,
       name: 'useNotForm',
     })
   },

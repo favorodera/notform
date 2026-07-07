@@ -16,16 +16,15 @@
     "dev": "nuxt dev"
   },
   "dependencies": {
-    "notform": "workspace:*",
     "nuxt": "catalog:vendor",
     "vue": "catalog:vendor",
     "vue-router": "catalog:vendor",
-    "zod": "catalog:vendor"
+    "zod": "catalog:vendor",
+    "notform-nuxt": "workspace:*"
   },
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:tools",
     "@nuxt/eslint": "catalog:tools",
-    "notform-nuxt": "workspace:*",
     "vue-tsc": "catalog:tools"
   }
 }
