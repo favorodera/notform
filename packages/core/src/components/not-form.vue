@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { NotFormProps, NotFormSlots } from '../types/not-form'
-import { provideNotFormInstance } from '../utils/instance-utils'
+import { provideNotFormInstance } from '../utils/instance'
 
 defineSlots<NotFormSlots>()
 

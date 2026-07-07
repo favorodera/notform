@@ -6,7 +6,7 @@ import { computed, markRaw, reactive, ref, toValue } from 'vue'
 import type { NotFormInstance } from '../types/not-form'
 import type { DeepPartial, ObjectSchema, Paths } from '../types/shared'
 import type { UseNotFormConfig } from '../types/use-not-form'
-import { isIssuePathEqual, normalizeSegment } from '../utils/form-utils'
+import { isIssuePathEqual, normalizeSegment } from '../utils/form'
 
 /**
  * Creates a reactive NotFormInstance for managing form state and validation.
