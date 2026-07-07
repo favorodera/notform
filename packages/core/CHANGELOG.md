@@ -1,5 +1,55 @@
 # Changelog
 
+## v2.1.3...v2.2.0
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.3...v2.2.0)
+
+### Added
+
+- **core:** Maintain field state during array mutations ([ea6a00c](https://github.com/favorodera/notform/commit/ea6a00c))
+
+  - Track errors, touched, and dirty state by item
+  - Remap indices when array items move or are removed
+  - Add remapArrayFieldState utility for mutations
+  - Update tests to verify state persistence
+
+
+### Refactors
+
+- **core:** Simplify validationMode configuration ([0ab49c7](https://github.com/favorodera/notform/commit/0ab49c7))
+
+  - Change validationMode from object to string union
+  - Update internal logic to check mode directly
+  - Synchronize documentation and demo components
+
+- **core:** Improve readability of error removal loop ([5352c60](https://github.com/favorodera/notform/commit/5352c60))
+
+  - rename loop variable for better clarity
+
+
+### Documentation
+
+- **readme:** Update pipeline order and fix zod examples ([ef1170a](https://github.com/favorodera/notform/commit/ef1170a))
+
+### Chores
+
+- **repo:** Update dependencies and project structure ([7d1298a](https://github.com/favorodera/notform/commit/7d1298a))
+
+  - Upgrade dependencies and CI workflows
+  - Improve form component UX and accessibility
+  - Standardize issue templates and documentation
+  - Refactor playground styles and configurations
+
+
+### Styling
+
+- **core:** Fix indentation in NotFieldSlots documentation ([944cd61](https://github.com/favorodera/notform/commit/944cd61))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.1.2...v2.1.3
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.1.2...v2.1.3)

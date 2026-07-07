@@ -1,5 +1,37 @@
 # Changelog
 
+## v2.1.3...v2.2.0
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.3...v2.2.0)
+
+### Refactors
+
+- **nuxt:** Consolidate package dependencies ([fca865d](https://github.com/favorodera/notform/commit/fca865d))
+
+  - Move notform-nuxt to dependencies
+  - Remove direct dependency on core package
+  - Update module to resolve paths dynamically
+  - Clean up documentation and workspace references
+
+
+### Documentation
+
+- **readme:** Update pipeline order and fix zod examples ([ef1170a](https://github.com/favorodera/notform/commit/ef1170a))
+
+### Chores
+
+- **repo:** Update dependencies and project structure ([7d1298a](https://github.com/favorodera/notform/commit/7d1298a))
+
+  - Upgrade dependencies and CI workflows
+  - Improve form component UX and accessibility
+  - Standardize issue templates and documentation
+  - Refactor playground styles and configurations
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.1.2...v2.1.3
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.1.2...v2.1.3)

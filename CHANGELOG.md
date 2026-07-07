@@ -1,5 +1,112 @@
 # Changelog
 
+## v2.1.3...v2.2.0
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.1.3...v2.2.0)
+
+### Added
+
+- **core:** Maintain field state during array mutations ([ea6a00c](https://github.com/favorodera/notform/commit/ea6a00c))
+
+  - Track errors, touched, and dirty state by item
+  - Remap indices when array items move or are removed
+  - Add remapArrayFieldState utility for mutations
+  - Update tests to verify state persistence
+
+- **playground:** Add item move support to array fields ([2a48fdc](https://github.com/favorodera/notform/commit/2a48fdc))
+
+  - Implement move buttons for array field items
+  - Enable move function in NotArrayField slots
+  - Update playground dependencies and scripts
+
+
+### Refactors
+
+- **docs:** Improve code style and project structure ([7e83376](https://github.com/favorodera/notform/commit/7e83376))
+
+  - Add documentation README
+  - Refactor async data fetching for consistency
+  - Add explicit 404 error handling for missing pages
+  - Update linting rules and package scripts
+  - Standardize code formatting across server and app
+
+- **docs:** Remove UI component prefixes ([6d55e42](https://github.com/favorodera/notform/commit/6d55e42))
+
+  - Remove U-prefix from components for cleaner syntax
+  - Update CSS utilities to align with component names
+  - Refactor demo code loading to support .vue extensions
+  - Standardize form demo structures and reset logic
+
+- **core:** Simplify validationMode configuration ([0ab49c7](https://github.com/favorodera/notform/commit/0ab49c7))
+
+  - Change validationMode from object to string union
+  - Update internal logic to check mode directly
+  - Synchronize documentation and demo components
+
+- **core:** Improve readability of error removal loop ([5352c60](https://github.com/favorodera/notform/commit/5352c60))
+
+  - rename loop variable for better clarity
+
+- **nuxt:** Consolidate package dependencies ([fca865d](https://github.com/favorodera/notform/commit/fca865d))
+
+  - Move notform-nuxt to dependencies
+  - Remove direct dependency on core package
+  - Update module to resolve paths dynamically
+  - Clean up documentation and workspace references
+
+
+### Documentation
+
+- **template:** Update PR template instructions ([867177e](https://github.com/favorodera/notform/commit/867177e))
+
+  - Clarify issue linking syntax in PR template
+
+- **readme:** Update pipeline order and fix zod examples ([ef1170a](https://github.com/favorodera/notform/commit/ef1170a))
+- **template:** Remove emojis from issue template names ([6d9e01f](https://github.com/favorodera/notform/commit/6d9e01f))
+
+### Chores
+
+- **renovate:** Update configuration preset path ([26f6319](https://github.com/favorodera/notform/commit/26f6319))
+- **repo:** Update dependencies and project structure ([7d1298a](https://github.com/favorodera/notform/commit/7d1298a))
+
+  - Upgrade dependencies and CI workflows
+  - Improve form component UX and accessibility
+  - Standardize issue templates and documentation
+  - Refactor playground styles and configurations
+
+- **issue-templates:** Migrate templates to YAML ([e4ef3ef](https://github.com/favorodera/notform/commit/e4ef3ef))
+
+  - Replace markdown templates with YAML forms
+  - Improve input validation for issue reports
+  - Standardize issue submission process
+
+- **docs:** Fix nuxt config formatting and newline ([d8f3512](https://github.com/favorodera/notform/commit/d8f3512))
+
+  - Standardize icon component name configuration
+  - Add missing newline to demo-code component file
+
+- **docs:** Improve documentation and refactor demos ([7f3cecc](https://github.com/favorodera/notform/commit/7f3cecc))
+
+  - Standardize documentation layout and formatting
+  - Refactor demo components to use consistent patterns
+  - Update CI release workflow to use correct secrets
+  - Improve overall clarity and readability of docs
+
+- **ci:** Update pkg-pr-new publish configuration ([e280ca2](https://github.com/favorodera/notform/commit/e280ca2))
+
+  - Enable multi-package manager support for previews
+  - Ensure compatibility across different environments
+
+
+### Styling
+
+- **core:** Fix indentation in NotFieldSlots documentation ([944cd61](https://github.com/favorodera/notform/commit/944cd61))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.1.2...v2.1.3
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.1.2...v2.1.3)
