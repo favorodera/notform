@@ -35,14 +35,10 @@
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
-      ".": [
-        "./dist/types.d.mts"
-      ]
+      ".": ["./dist/types.d.mts"]
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "engines": {
     "node": ">=22.0.0",
     "pnpm": ">=11.0.0"
@@ -55,7 +51,7 @@
     "lint": "nuxt prepare && eslint . --fix"
   },
   "peerDependencies": {
-    "notform": "catalog:peer",
+    "notform": "workspace:*",
     "nuxt": "catalog:peer"
   },
   "dependencies": {
@@ -66,7 +62,7 @@
     "@favorodera/eslint-config": "catalog:tools",
     "@nuxt/module-builder": "catalog:tools",
     "@nuxt/schema": "catalog:tools",
-    "nuxt": "catalog:vendor",
+    "nuxt": "catalog:peer",
     "vue-tsc": "catalog:tools"
   }
 }
