@@ -29,9 +29,7 @@
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "publishConfig": {
     "access": "public"
   },
@@ -68,7 +66,7 @@
     "type-fest": "catalog:tools",
     "vite": "catalog:tools",
     "vitest": "catalog:tools",
-    "vue": "catalog:vendor",
+    "vue": "catalog:peer",
     "vue-tsc": "catalog:tools"
   }
 }
