@@ -49,7 +49,7 @@ catalogs:
     tsdown: ^0.22.14
     turbo: ^2.10.8
     type-fest: ^5.7.0
-    typescript: ^6.0.3
+    typescript: ^7.0.0
     vite: ^8.2.0
     vitest: ^4.1.10
     vue-tsc: ^3.3.9
