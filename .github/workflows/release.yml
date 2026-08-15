@@ -3,18 +3,12 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      mode:
-        description: Release mode
-        required: true
-        type: choice
-        options:
-          - stable
-          - prerelease
       bump:
-        description: 'stable: patch | minor | major — prerelease: prerelease | prepatch | preminor | premajor'
+        description: Version bump to apply
         required: true
         type: choice
         options:
+          - Select a version bump
           - patch
           - minor
           - major
@@ -22,8 +16,9 @@ on:
           - prepatch
           - preminor
           - premajor
-      preid:
-        description: 'Pre-release identifier e.g. alpha, beta, rc (prerelease mode only)'
+
+      prerelease_id:
+        description: 'Prerelease identifier, such as alpha or beta'
         required: false
         type: string
         default: alpha
@@ -36,51 +31,63 @@ permissions:
   contents: write
   pull-requests: write
   id-token: write
+  packages: write
 
 jobs:
   validate:
     name: Validate Inputs
     runs-on: ubuntu-latest
     outputs:
-      release_cmd: ${{ steps.build_cmd.outputs.cmd }}
+      release_arguments: ${{ steps.build_release_arguments.outputs.arguments }}
     steps:
-      - name: Validate input combination
+      - name: Validate Inputs
+        id: validate_inputs
         run: |
-          MODE="${{ inputs.mode }}"
           BUMP="${{ inputs.bump }}"
+          PRERELEASE_ID="${{ inputs.prerelease_id }}"
 
-          STABLE_BUMPS="patch minor major"
-          PRERELEASE_BUMPS="prerelease prepatch preminor premajor"
-
-          if [[ "$MODE" == "stable" ]] && [[ ! " $STABLE_BUMPS " =~ " $BUMP " ]]; then
-            echo "::error::Stable mode requires bump to be one of: $STABLE_BUMPS. Got: '$BUMP'"
-            exit 1
+          # Stable releases use a standard semantic version bump.
+          if [[ "$BUMP" =~ ^(patch|minor|major)$ ]]; then
+            echo "Valid stable release bump: $BUMP"
+            exit 0
           fi
 
-          if [[ "$MODE" == "prerelease" ]] && [[ ! " $PRERELEASE_BUMPS " =~ " $BUMP " ]]; then
-            echo "::error::Prerelease mode requires bump to be one of: $PRERELEASE_BUMPS. Got: '$BUMP'"
-            exit 1
+          # Prerelease releases require both a prerelease bump
+          # and an identifier such as alpha, beta, or rc.
+          if [[ "$BUMP" =~ ^(prerelease|prepatch|preminor|premajor)$ ]]; then
+            if [[ -z "$PRERELEASE_ID" ]]; then
+              echo "::error::A prerelease identifier is required for prerelease releases."
+              exit 1
+            fi
+
+            echo "Valid prerelease bump: $BUMP"
+            echo "Prerelease identifier: $PRERELEASE_ID"
+            exit 0
           fi
 
-      - name: Build release command
-        id: build_cmd
-        run: |
-          MODE="${{ inputs.mode }}"
-          BUMP="${{ inputs.bump }}"
-          PREID="${{ inputs.preid }}"
+          echo "::error::Invalid release bump type: $BUMP"
+          exit 1
 
-          if [[ "$MODE" == "stable" ]]; then
-            CMD="--$BUMP"
+      - name: Build Release Arguments
+        id: build_release_arguments
+        run: |
+          BUMP="${{ inputs.bump }}"
+          PRERELEASE_ID="${{ inputs.prerelease_id }}"
+
+          # Stable releases only need the version bump.
+          if [[ "$BUMP" =~ ^(patch|minor|major)$ ]]; then
+            RELEASE_ARGUMENTS="--$BUMP"
           else
-            CMD="--$BUMP --preid $PREID --tag $PREID"
+            # Prerelease releases also specify the prerelease identifier
+            # and publish under the matching npm distribution tag.
+            RELEASE_ARGUMENTS="--$BUMP --preid $PRERELEASE_ID --tag $PRERELEASE_ID"
           fi
 
-          echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
-          echo "Release command: relizy release $CMD --yes --no-clean"
+          echo "arguments=$RELEASE_ARGUMENTS" >> "$GITHUB_OUTPUT"
+          echo "Release arguments: $RELEASE_ARGUMENTS"
 
   release:
-    name: Release (${{ inputs.mode }} / ${{ inputs.bump }}${{ inputs.mode ==
-      'prerelease' && format(' / {0}', inputs.preid) || '' }})
+    name: Release (${{ inputs.bump }})
     runs-on: ubuntu-latest
     needs: validate
     steps:
@@ -112,7 +119,7 @@ jobs:
           git config --global user.email "favorodera@gmail.com"
 
       - name: Release with Relizy
-        run: pnpm relizy release ${{ needs.validate.outputs.release_cmd }} --yes --no-clean
+        run: pnpm relizy release ${{ needs.validate.outputs.release_arguments }} --yes --no-clean
         env:
           RELIZY_GITHUB_TOKEN: ${{ secrets.PAT }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

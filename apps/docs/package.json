@@ -45,11 +45,9 @@
     "notform-nuxt": "workspace:*",
     "nuxt": "catalog:vendor",
     "nuxt-llms": "catalog:vendor",
-    "nuxt-og-image": "catalog:vendor",
     "nuxt-schema-org": "catalog:vendor",
     "tailwindcss": "catalog:vendor",
     "ufo": "catalog:vendor",
-    "unist-util-visit": "catalog:vendor",
     "vue": "catalog:vendor",
     "vue-router": "catalog:vendor",
     "zod": "catalog:vendor"
