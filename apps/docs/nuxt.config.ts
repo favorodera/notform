@@ -206,6 +206,14 @@ export default defineNuxtConfig({
       'applicationCategory': 'DeveloperApplication',
       'operatingSystem': 'Web',
 
+      'aggregateRating': {
+        '@type': 'AggregateRating',
+        'bestRating': '5',
+        'ratingValue': '4.9',
+        'reviewCount': '13',
+        'worstRating': '1',
+      },
+
       'offers': {
         '@type': 'Offer',
         'price': '0',

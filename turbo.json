@@ -17,15 +17,15 @@
       "outputs": []
     },
     "test": {
-      "dependsOn": ["^build"],
       "outputs": []
     },
     "dev": {
+      "dependsOn": ["^build"],
       "persistent": true,
-      "cache": false,
-      "dependsOn": ["^build"]
+      "cache": false
     },
     "preview": {
+      "dependsOn": ["build"],
       "persistent": true,
       "cache": false
     },
@@ -34,11 +34,11 @@
       "cache": false
     },
     "postinstall": {
+      "outputs": [".nuxt/**"],
       "dependsOn": ["^build"],
-      "outputs": [".nuxt/**"]
     },
     "prepublishOnly": {
-      "dependsOn": ["build"]
+      "outputs": []
     }
   }
 }
