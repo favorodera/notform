@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.2.1...v2.2.2
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.2.1...v2.2.2)
+
+### Chores
+
+- **ci:** Streamline release workflow and dependencies ([a253181](https://github.com/favorodera/notform/commit/a253181))
+
+  - Simplify release workflow inputs and validation
+  - Update catalog dependencies and lockfile
+  - Clean up redundant package gitignore files
+  - Adjust turbo task pipeline dependencies
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.0...v2.2.1
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.0...v2.2.1)

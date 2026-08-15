@@ -1,7 +1,7 @@
 {
   "name": "notform",
   "type": "module",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "private": false,
   "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
@@ -29,7 +29,9 @@
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },
