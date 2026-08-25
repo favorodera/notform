@@ -50,7 +50,7 @@ const form = useNotForm({
           :for="item.path"
           class="label"
         >
-          <div class="flex gap-2 field">
+          <div class="field flex gap-2">
             <input
               v-bind="events"
               :id="item.path"
@@ -90,7 +90,7 @@ const form = useNotForm({
 
           <NotMessage
             :path="item.path"
-            class="message block"
+            class="block message"
           />
         </label>
       </NotField>

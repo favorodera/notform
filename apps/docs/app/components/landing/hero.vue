@@ -85,8 +85,8 @@ const item = {
           as="h1"
           :variants="item"
           class="
-            relative max-inline-4xl overflow-hidden text-3xl/tight
-            tracking-tight
+            relative overflow-hidden text-3xl/tight tracking-tight
+            max-inline-4xl
 
             sm:text-3xl
 
@@ -118,7 +118,7 @@ const item = {
         <Motion
           as="p"
           :variants="item"
-          class="mbs-5 max-inline-md text-base/relaxed font-light text-muted"
+          class="mbs-5 text-base/relaxed font-light text-muted max-inline-md"
         >
           Headless, composable Vue 3 forms. Bring your own schema —
           Zod, Valibot, ArkType, or anything Standard Schema compliant.

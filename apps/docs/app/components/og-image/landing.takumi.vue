@@ -102,8 +102,8 @@
       <!-- headline -->
       <div
         class="
-          relative mbs-24 max-inline-4xl overflow-hidden text-[2.5rem]/tight
-          tracking-tight text-neutral-100
+          relative mbs-24 overflow-hidden text-[2.5rem]/tight tracking-tight
+          text-neutral-100 max-inline-4xl
         "
       >
         <div class="flex items-center gap-2">

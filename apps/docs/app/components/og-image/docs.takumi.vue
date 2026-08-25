@@ -109,8 +109,8 @@ defineProps<{
       <p
         style="font-family:'Geist Mono',monospace;"
         class="
-          relative mbs-4 max-inline-4xl overflow-hidden text-lg/tight
-          tracking-tight text-forest-500
+          relative mbs-4 overflow-hidden text-lg/tight tracking-tight
+          text-forest-500 max-inline-4xl
         "
       >
         DOCS
@@ -118,8 +118,8 @@ defineProps<{
 
       <div
         class="
-          relative flex max-inline-4xl flex-col gap-4 overflow-hidden
-          tracking-tight
+          relative flex flex-col gap-4 overflow-hidden tracking-tight
+          max-inline-4xl
         "
       >
         <span

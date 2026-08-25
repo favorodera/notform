@@ -16,8 +16,8 @@ const NuxtLink = resolveComponent('NuxtLink')
     :is="to ? NuxtLink : 'div'"
     :to="to"
     class="
-      group relative block-full rounded-lg bg-default p-6 transition-colors
-      duration-200
+      group relative rounded-lg bg-default p-6 transition-colors duration-200
+      block-full
 
       hover:bg-muted
     "
@@ -41,7 +41,7 @@ const NuxtLink = resolveComponent('NuxtLink')
     <Icon
       :name="icon"
       class="
-        mbe-4 block-5 inline-5 text-primary transition-transform duration-200
+        mbe-4 text-primary transition-transform duration-200 block-5 inline-5
 
         group-hover:scale-110
       "

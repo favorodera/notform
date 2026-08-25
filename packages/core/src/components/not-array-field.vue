@@ -25,13 +25,13 @@ const form = useNotFormInstance(props.form)
 const isValidating = ref(false)
 
 /** Counter to ensure absolute uniqueness for generated keys. */
-let keyCounter = 0
+const keyCounter = ref(0)
 
 /** Stable keys per item that survive reorders, removals, and inserts. */
 const itemKeys = ref<string[]>((() => {
   const initial = getProperty(form.values, props.path)
   const length = Array.isArray(initial) ? initial.length : 0
-  return Array.from({ length }, () => `${props.path}-${keyCounter++}`)
+  return Array.from({ length }, () => `${props.path}-${keyCounter.value++}`)
 })())
 
 // Computed Properties
@@ -74,7 +74,7 @@ const isDirty = computed(() => {
  * @returns A unique key string
  */
 function generateKey() {
-  return `${props.path}-${keyCounter++}`
+  return `${props.path}-${keyCounter.value++}`
 }
 
 /** Re-aligns itemKeys with current array length (used mostly after external resets) */
@@ -135,7 +135,9 @@ async function validate() {
  */
 function append(value: TItem): void {
   itemKeys.value.push(generateKey())
-  mutate(current => current.push(value))
+  mutate((current) => {
+    current.push(value)
+  })
 }
 
 /**
@@ -145,7 +147,9 @@ function append(value: TItem): void {
 function prepend(value: TItem): void {
   itemKeys.value.unshift(generateKey())
   remapArrayFieldState(form, props.path, previousIndex => previousIndex + 1)
-  mutate(current => current.unshift(value))
+  mutate((current) => {
+    current.unshift(value)
+  })
 }
 
 /**

@@ -51,16 +51,16 @@ const itemVariants = {
     <!-- Corner accents -->
     <span
       class="
-        pointer-events-none absolute inset-bs-0 inset-s-0 block-8 inline-8
-        border-bs border-s border-dashed border-primary/30
+        pointer-events-none absolute inset-s-0 inset-bs-0 border-s border-bs
+        border-dashed border-primary/30 block-8 inline-8
       "
       aria-hidden
     />
 
     <span
       class="
-        pointer-events-none absolute inset-e-0 inset-be-0 block-8 inline-8
-        border-e border-be border-dashed border-primary/30
+        pointer-events-none absolute inset-e-0 inset-be-0 border-e border-be
+        border-dashed border-primary/30 block-8 inline-8
       "
       aria-hidden
     />
@@ -99,8 +99,8 @@ const itemVariants = {
           as="h2"
           :variants="itemVariants"
           class="
-            mx-auto max-inline-2xl text-3xl font-semibold tracking-tight
-            text-highlighted
+            mx-auto text-3xl font-semibold tracking-tight text-highlighted
+            max-inline-2xl
 
             lg:text-4xl
           "
@@ -113,7 +113,7 @@ const itemVariants = {
         <Motion
           as="p"
           :variants="itemVariants"
-          class="mx-auto mbs-4 max-inline-md text-sm font-light text-muted"
+          class="mx-auto mbs-4 text-sm font-light text-muted max-inline-md"
         >
           Read the docs to get up and running in minutes,
           or install the package and start building right now.

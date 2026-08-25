@@ -62,7 +62,7 @@ defineOgImage('Docs.takumi', { ...seo.value })
       <PageHeader
         :title="page.title"
         :description="page.description"
-        class="flex inline-full flex-col-reverse"
+        class="flex flex-col-reverse inline-full"
         :ui="{
           title:'text-[1.75em] font-semibold',
           headline:'mb-0 mt-2.5'
@@ -119,7 +119,7 @@ defineOgImage('Docs.takumi', { ...seo.value })
           <template #leading>
             <Icon
               name="lucide:text-align-start"
-              class="block-4 inline-4 text-muted"
+              class="text-muted block-4 inline-4"
             />
           </template>
         </ContentToc>

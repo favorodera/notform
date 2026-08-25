@@ -149,7 +149,7 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    * </template>
    * ```
    */
-  submit: (event: Event) => Promise<void>
+  submit: (event: SubmitEvent) => Promise<void>
 
   /**
    * Resets the form to its initial state, or to new values and errors if provided.

@@ -71,16 +71,16 @@ const cardVariants = {
     <!-- Corner accents -->
     <span
       class="
-        pointer-events-none absolute inset-bs-0 inset-s-0 block-8 inline-8
-        border-bs border-s border-dashed border-primary/30
+        pointer-events-none absolute inset-s-0 inset-bs-0 border-s border-bs
+        border-dashed border-primary/30 block-8 inline-8
       "
       aria-hidden
     />
 
     <span
       class="
-        pointer-events-none absolute inset-e-0 inset-be-0 block-8 inline-8
-        border-e border-be border-dashed border-primary/30
+        pointer-events-none absolute inset-e-0 inset-be-0 border-e border-be
+        border-dashed border-primary/30 block-8 inline-8
       "
       aria-hidden
     />
@@ -112,14 +112,14 @@ const cardVariants = {
           <h2
             id="home:why-notform:title"
             class="
-              max-inline-sm text-3xl font-semibold tracking-tight
-              text-highlighted
+              text-3xl font-semibold tracking-tight text-highlighted
+              max-inline-sm
             "
           >
             Built for how you actually write Vue.
           </h2>
 
-          <p class="mbs-3 max-inline-sm text-sm font-light text-muted">
+          <p class="mbs-3 text-sm font-light text-muted max-inline-sm">
             No wrappers. No adapter boilerplate. Composables and renderless
             components that disappear into your codebase.
           </p>
