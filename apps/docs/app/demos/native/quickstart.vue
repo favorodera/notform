@@ -51,11 +51,7 @@ const form = useNotForm({
 
         <NotMessage
           :path="path"
-          class="
-            mbs-2 text-sm text-red-600
-
-            dark:text-red-400
-          "
+          data-demo-message
         />
       </div>
     </NotField>
