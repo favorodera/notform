@@ -6,14 +6,11 @@ definePageMeta({
 })
 
 const route = useRoute()
+const appConfig = useAppConfig()
 
-const { data: page } = await useAsyncData(
-  route.path,
-  () => queryCollection('docs')
-    .path(route.path)
-    .first(),
-)
-if (!page.value) {
+const page = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
+
+if (!page.data.value) {
   throw createError({
     fatal: true,
     statusCode: 404,
@@ -21,16 +18,15 @@ if (!page.value) {
   })
 }
 
-const { data: markdownContent } = await useAsyncData(`${route.path}-markdown`, () => $fetch<string>(`/raw${route.path}.md`))
+const pageMarkdown = await useAsyncData(`${route.path}-markdown`, () => $fetch<string>(`/raw${route.path}.md`))
 
-const { copied, copy } = useClipboard({
+const clipboard = useClipboard({
   legacy: true,
-  source: computed(() => markdownContent.value ?? ''),
+  source: computed(() => pageMarkdown.data.value ?? ''),
 })
 
-const { siteDescription, siteName, siteUrl } = useAppConfig()
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
+const pageSurround = await useAsyncData(`${route.path}-surround`, () => {
   return queryCollectionItemSurroundings('docs', route.path, {
     fields: ['description'],
   })
@@ -38,8 +34,8 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
 
 const seo = computed(() => {
   return {
-    description: page.value?.description ?? siteDescription,
-    title: page.value?.title ?? siteName,
+    description: page.data.value?.description ?? appConfig.siteDescription,
+    title: page.data.value?.title ?? appConfig.siteName,
   }
 })
 
@@ -47,7 +43,7 @@ useSeoMeta({
   description: () => seo.value.description,
   ogDescription: () => seo.value.description,
   ogTitle: () => seo.value.title,
-  ogUrl: () => `${siteUrl}${route.fullPath}`,
+  ogUrl: () => `${appConfig.siteUrl}${route.fullPath}`,
   title: () => seo.value.title,
   twitterDescription: () => seo.value.description,
   twitterTitle: () => seo.value.title,
@@ -58,19 +54,19 @@ defineOgImage('OgImage.takumi', { ...seo.value })
 
 <template>
   <div>
-    <Page v-if="page">
+    <Page v-if="page.data.value">
       <PageHeader
-        :title="page.title"
-        :description="page.description"
+        :title="page.data.value.title"
+        :description="page.data.value.description"
       >
         <template #links>
           <Button
-            :label="copied ? 'Copied' : 'Copy Markdown'"
-            :icon="copied ? 'lucide:check' : 'lucide:copy'"
+            :label="clipboard.copied.value ? 'Copied' : 'Copy Markdown'"
+            :icon="clipboard.copied.value ? 'lucide:check' : 'lucide:copy'"
             color="neutral"
             variant="outline"
             size="sm"
-            @click="copy()"
+            @click="clipboard.copy()"
           />
         </template>
       </PageHeader>
@@ -82,7 +78,7 @@ defineOgImage('OgImage.takumi', { ...seo.value })
         />
 
         <ContentSurround
-          :surround="surround"
+          :surround="pageSurround.data.value"
           :ui="{
             link:'p-4'
           }"
@@ -90,11 +86,11 @@ defineOgImage('OgImage.takumi', { ...seo.value })
       </PageBody>
 
       <template
-        v-if="page?.body?.toc?.links?.length"
+        v-if="page.data.value?.body?.toc?.links?.length"
         #right
       >
         <ContentToc
-          :links="page?.body?.toc?.links"
+          :links="page.data.value?.body?.toc?.links"
           :ui="{
             title:'text-sm text-muted font-normal',
           }"
