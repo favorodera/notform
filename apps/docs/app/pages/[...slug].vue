@@ -8,7 +8,8 @@ definePageMeta({
 const route = useRoute()
 const appConfig = useAppConfig()
 
-const page = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
+const page = await useAsyncData(route.path, () => queryCollection('docs').path(route.path)
+  .first())
 
 if (!page.data.value) {
   throw createError({
@@ -24,7 +25,6 @@ const clipboard = useClipboard({
   legacy: true,
   source: computed(() => pageMarkdown.data.value ?? ''),
 })
-
 
 const pageSurround = await useAsyncData(`${route.path}-surround`, () => {
   return queryCollectionItemSurroundings('docs', route.path, {
@@ -49,7 +49,7 @@ useSeoMeta({
   twitterTitle: () => seo.value.title,
 })
 
-defineOgImage('OgImage.takumi', { ...seo.value })
+defineOgImage('Image.takumi', { ...seo.value })
 </script>
 
 <template>

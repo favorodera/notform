@@ -12,7 +12,7 @@ const props = defineProps<{
     }"
     class="
       relative flex flex-col items-center justify-center gap-2 border
-      border-default bg-black p-10 block-full inline-full text-center
+      border-default bg-black p-10 text-center block-full inline-full
     "
   >
     <Icon
@@ -24,7 +24,7 @@ const props = defineProps<{
       {{ props.title }}
     </div>
 
-    <div class="text-3xl text-muted tracking-wide">
+    <div class="text-3xl tracking-wide text-muted">
       {{ props.description }}
     </div>
   </div>
