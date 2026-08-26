@@ -6,7 +6,7 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 <template>
   <div>
-    <DocsHeader />
+    <AppHeader />
 
     <Container>
       <Page>

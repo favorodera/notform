@@ -4,7 +4,7 @@ seo:
   description: Vue forms without the friction.
 ---
 
-::landing-header
+::app-header
 ::
 
 ::landing-hero

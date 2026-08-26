@@ -2,13 +2,15 @@
 import type { ContentNavigationItem } from '@nuxt/content'
 
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
+const githubStars = inject<Ref<number>>('githubStars')
 
-const { github } = useAppConfig()
+const appConfig = useAppConfig()
 </script>
 
 <template>
   <Header
     to="/"
+    :ui="{ center: 'flex-1' }"
   >
     <template #title>
       <AppLogo />
@@ -19,16 +21,16 @@ const { github } = useAppConfig()
       <ColorModeButton />
 
       <Button
-        :to="github.url"
-        :icon="github.icon"
+        :to="appConfig.github.url"
+        :icon="appConfig.github.icon"
         :ui="{
           label:'max-sm:hidden',
         }"
         target="_blank"
         size="sm"
-        color="primary"
-        variant="outline"
-        :label="github.label"
+        variant="soft"
+        class="tabular-nums"
+        :label="githubStars?.toString()"
       />
     </template>
 

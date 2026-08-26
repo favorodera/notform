@@ -5,7 +5,10 @@ const navigation = await useAsyncData('navigation', () => queryCollectionNavigat
 
 const sectionsSearch = useAsyncData('search', () => queryCollectionSearchSections('docs'))
 
-provide('navigation', navigation)
+const githubStars = useFetch('/api/github/stars')
+
+provide('navigation', navigation.data)
+provide('githubStars', githubStars.data)
 
 useSeoMeta({
   description: () => siteDescription,
