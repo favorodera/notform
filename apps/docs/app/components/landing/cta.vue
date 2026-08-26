@@ -32,7 +32,7 @@ const itemVariants = {
     class="relative overflow-hidden border-be border-default"
     aria-labelledby="home:cta:title"
   >
-   <LandingGlow />
+    <LandingGlow />
 
     <Motion
       as="div"

@@ -68,7 +68,6 @@ const cardVariants = {
     class="relative border-be border-default"
     aria-labelledby="home:why-notform:title"
   >
-
     <Container
       class="
         py-20

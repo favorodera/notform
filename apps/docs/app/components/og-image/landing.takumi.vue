@@ -108,7 +108,7 @@
       >
         <div class="flex items-center gap-2">
           <span
-            class="inline-block text-forest-500"
+            class="text-forest-500 inline-block"
           >
             Vue
           </span> Forms
@@ -116,7 +116,7 @@
 
         <div class="flex items-center gap-2">
           <span
-            class="inline-block text-forest-500"
+            class="text-forest-500 inline-block"
           >
             without
           </span> the friction.
