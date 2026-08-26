@@ -62,7 +62,7 @@ defineOgImage('Image.takumi', { ...seo.value })
         <template #links>
           <Button
             :label="clipboard.copied.value ? 'Copied' : 'Copy Markdown'"
-            :icon="clipboard.copied.value ? 'lucide:check' : 'lucide:copy'"
+            :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:copy'"
             color="neutral"
             variant="outline"
             size="sm"

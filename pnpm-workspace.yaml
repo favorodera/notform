@@ -53,8 +53,8 @@ catalogs:
     vue-tsc: ^3.3.11
 
   vendor:
-    '@iconify-json/lucide': ^1.2.125
     '@iconify-json/simple-icons': ^1.2.93
+    '@iconify-json/tabler': ^1.2.38
     '@iconify-json/vscode-icons': ^1.2.74
     '@nuxt/content': ^3.15.2
     '@nuxt/image': ^2.1.0

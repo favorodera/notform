@@ -26,8 +26,8 @@
     "lint": "nuxt prepare && eslint . --fix"
   },
   "dependencies": {
-    "@iconify-json/lucide": "catalog:vendor",
     "@iconify-json/simple-icons": "catalog:vendor",
+    "@iconify-json/tabler": "catalog:vendor",
     "@iconify-json/vscode-icons": "catalog:vendor",
     "@nuxt/content": "catalog:vendor",
     "@nuxt/image": "catalog:vendor",
