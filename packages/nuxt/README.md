@@ -1,6 +1,6 @@
 <div align="center">
 <h1>notform-nuxt</h1>
-<p><strong>NotForm, seamlessly integrated with Nuxt.</strong></p>
+<p><strong>Headless Form Management, Seamlessly Integrated with Nuxt</strong></p>
 <p>
 <a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/v/notform-nuxt.svg?style=plastic&label=NPM%20Version&color=blue" alt="NPM Version"></a>
 <a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/dt/notform-nuxt.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
@@ -10,9 +10,15 @@
 
 <br>
 
-`notform-nuxt` is the official Nuxt module for [NotForm](../core). It provides auto-imports for NotForm composables and components, making form development in Nuxt applications seamless and type-safe.
+`notform-nuxt` is the official Nuxt module for [NotForm](../core). It provides auto-imports for NotForm composables and components, making form development in Nuxt applications seamless and type-safe. Works with any Standard Schema-compatible validator (Zod, Valibot, ArkType) and any UI library.
 
 ## Installation
+
+```bash
+npx nuxi module add notform
+```
+
+Alternatively, install manually:
 
 ```bash
 pnpm add notform-nuxt
@@ -117,9 +123,8 @@ No imports needed — everything is auto-imported by the module.
 ## Documentation
 
 For detailed guides, API reference, and examples, visit:
-**[notformdocs.vercel.app](https://notformdocs.vercel.app/getting-started/nuxt-module)**
+**[notformdocs.vercel.app](https://notformdocs.vercel.app/)**
 
 ## License
 
 [MIT](../../LICENSE) &copy; [Favour Emeka](https://github.com/favorodera)
-

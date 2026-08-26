@@ -21,6 +21,11 @@ export default defineNuxtConfig({
     asyncContext: true,
   },
 
+  components: [
+    { path: '~/demos', prefix: 'Demos' },
+    '~/components',
+  ],
+
   eslint: {
     config: {
       standalone: false,
@@ -28,7 +33,7 @@ export default defineNuxtConfig({
   },
 
   devtools: {
-    enabled: false,
+    enabled: true,
   },
 
   site: {
@@ -194,8 +199,6 @@ export default defineNuxtConfig({
     zeroRuntime: true,
   },
 
-  // seo: { redirectToCanonicalSiteUrl: true },
-
   schemaOrg: {
     identity: defineSoftwareApp({
       'description': 'Vue forms without the friction.',
@@ -252,8 +255,8 @@ export default defineNuxtConfig({
     sections: [
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/get-started%' }],
-        title: 'Get Started',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/getting-started%' }],
+        title: 'Getting Started',
       },
       {
         contentCollection: 'docs',
@@ -262,18 +265,13 @@ export default defineNuxtConfig({
       },
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/composables%' }],
-        title: 'Composables',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/building-forms%' }],
+        title: 'Building Forms',
       },
       {
         contentCollection: 'docs',
         contentFilters: [{ field: 'path', operator: 'LIKE', value: '/advanced%' }],
         title: 'Advanced',
-      },
-      {
-        contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/ai%' }],
-        title: 'Working with AI',
       },
     ],
     title: 'NotForm',

@@ -62,13 +62,8 @@ defineOgImage('Docs.takumi', { ...seo.value })
       <PageHeader
         :title="page.title"
         :description="page.description"
-        class="flex flex-col-reverse inline-full"
-        :ui="{
-          title:'text-[1.75em] font-semibold',
-          headline:'mb-0 mt-2.5'
-        }"
       >
-        <template #headline>
+        <template #links>
           <Button
             :label="copied ? 'Copied' : 'Copy Markdown'"
             :icon="copied ? 'lucide:check' : 'lucide:copy'"
@@ -80,21 +75,18 @@ defineOgImage('Docs.takumi', { ...seo.value })
         </template>
       </PageHeader>
 
-      <PageBody
-        class="
-          pbe-6
-
-          md:pbe-8
-
-          xl:pbe-14
-        "
-      >
+      <PageBody>
         <ContentRenderer
           v-if="page"
           :value="page"
         />
 
-        <ContentSurround :surround="surround" />
+        <ContentSurround
+          :surround="surround"
+          :ui="{
+            link:'p-4'
+          }"
+        />
       </PageBody>
 
       <template
@@ -105,24 +97,10 @@ defineOgImage('Docs.takumi', { ...seo.value })
           :links="page?.body?.toc?.links"
           :ui="{
             title:'text-sm text-muted font-normal',
-            indicator:'ms-0',
-            container:'py-3! sm:py-3!'
           }"
           highlight
           highlight-variant="circuit"
-          class="
-            border-y border-dashed border-default
-
-            lg:border-x
-          "
-        >
-          <template #leading>
-            <Icon
-              name="lucide:text-align-start"
-              class="text-muted block-4 inline-4"
-            />
-          </template>
-        </ContentToc>
+        />
       </template>
     </Page>
   </div>

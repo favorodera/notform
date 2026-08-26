@@ -16,28 +16,13 @@ const NuxtLink = resolveComponent('NuxtLink')
     :is="to ? NuxtLink : 'div'"
     :to="to"
     class="
-      group relative rounded-lg bg-default p-6 transition-colors duration-200
-      block-full
+      group relative rounded-lg border border-default bg-default bg-clip-padding
+      p-4 shadow-xs shadow-neutral-800 transition-colors duration-200 block-full
 
       hover:bg-muted
     "
     aria-describedby="app:card:title"
-    style="
-      box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--ui-border) 100%, transparent),
-        0 0 0 4px color-mix(in srgb, var(--ui-border) 40%, transparent);
-      background-clip: padding-box;
-    "
   >
-    <!-- Inner dashed border ring -->
-    <span
-      class="
-        pointer-events-none absolute inset-[4px] rounded-md border border-dashed
-        border-default/60
-      "
-      aria-hidden
-    />
-
     <Icon
       :name="icon"
       class="

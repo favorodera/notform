@@ -2,32 +2,32 @@
 const whys = [
   {
     description: 'Drop in any Standard Schema compliant validator. No adapter layer, no rewiring — swap libraries without touching your form logic.',
-    icon: 'i-lucide-puzzle',
+    icon: 'tabler:puzzle',
     title: 'Schema-agnostic',
   },
   {
     description: 'Zero UI opinions. Slot-based primitives hand you full render control — works with any component library or none at all.',
-    icon: 'i-lucide-eye-off',
+    icon: 'tabler:eye-off',
     title: 'Headless by design',
   },
   {
     description: 'Run as many independent forms as you need on the same page. Each instance is fully isolated — no global state, no ID conflicts.',
-    icon: 'i-lucide-layers',
+    icon: 'tabler:layers-intersect',
     title: 'Multiple instances',
   },
   {
     description: 'Validate the whole form or a single field. Override when each field validates — eager, lazy, or any event-driven trigger.',
-    icon: 'i-lucide-zap',
+    icon: 'tabler:bolt',
     title: 'Granular validation',
   },
   {
     description: 'Full array manipulation with stable item keys. Items reorder, insert, and remove without causing unnecessary re-mounts.',
-    icon: 'i-lucide-list',
+    icon: 'tabler:list',
     title: 'Array fields built-in',
   },
   {
     description: 'Field paths and their value types are inferred straight from your schema. Wrong paths and mismatched values are caught at compile time.',
-    icon: 'i-lucide-braces',
+    icon: 'tabler:braces',
     title: 'End-to-end type safety',
   },
 ]
@@ -65,25 +65,9 @@ const cardVariants = {
 
 <template>
   <section
-    class="relative border-be border-dashed border-default"
+    class="relative border-be border-default"
     aria-labelledby="home:why-notform:title"
   >
-    <!-- Corner accents -->
-    <span
-      class="
-        pointer-events-none absolute inset-s-0 inset-bs-0 border-s border-bs
-        border-dashed border-primary/30 block-8 inline-8
-      "
-      aria-hidden
-    />
-
-    <span
-      class="
-        pointer-events-none absolute inset-e-0 inset-be-0 border-e border-be
-        border-dashed border-primary/30 block-8 inline-8
-      "
-      aria-hidden
-    />
 
     <Container
       class="

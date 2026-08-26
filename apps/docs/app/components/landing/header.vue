@@ -16,7 +16,6 @@ const { github } = useAppConfig()
     <Header
       :ui="{ center: 'flex-1' }"
       to="/"
-      class="border-dashed"
       :toggle="false"
     >
       <template #title>
@@ -36,8 +35,8 @@ const { github } = useAppConfig()
         </Button>
 
         <Button
-          to="/get-started"
-          icon="i-lucide-book-open"
+          to="/getting-started"
+          icon="tabler:book"
           size="sm"
           color="primary"
           variant="subtle"

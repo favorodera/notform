@@ -16,5 +16,5 @@ seo:
 ::landing-cta
 ::
 
-::landing-footer
+::app-footer
 ::

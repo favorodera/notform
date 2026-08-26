@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
 import { Motion } from 'motion-v'
-
-const { copied, copy } = useClipboard({ legacy: true, source: 'npx nypm add notform' })
 
 const container = {
   hidden: {},
@@ -37,20 +34,10 @@ const item = {
 
 <template>
   <section
-    class="relative overflow-hidden border-be border-dashed border-default"
+    class="relative overflow-hidden border-be border-default"
     aria-labelledby="landing:hero:title"
   >
-    <!-- atmospheric glow -->
-    <div
-      class="pointer-events-none absolute inset-0"
-      style="
-        background:
-          radial-gradient(ellipse 75% 55% at 50% -5%, var(--ui-primary), transparent 70%),
-          radial-gradient(ellipse 50% 35% at 80% 110%, var(--ui-primary), transparent 65%);
-        opacity: 0.13;
-      "
-      aria-hidden
-    />
+    <LandingGlow />
 
     <Motion
       as-child
@@ -94,10 +81,7 @@ const item = {
           "
         >
           <span
-            class="
-              inline-block border-be border-dashed border-primary/20
-              text-primary
-            "
+            class="inline-block border-be border-primary/20 text-primary"
           >
             Vue
           </span>
@@ -105,10 +89,7 @@ const item = {
           Forms<br>
 
           <span
-            class="
-              inline-block border-be border-dashed border-primary/20
-              text-primary
-            "
+            class="inline-block border-be border-primary/20 text-primary"
           >
             without
           </span> the friction.
@@ -138,7 +119,7 @@ const item = {
           "
         >
           <Button
-            to="/get-started"
+            to="/getting-started"
             size="lg"
             color="primary"
             variant="subtle"
@@ -146,26 +127,7 @@ const item = {
             Read Docs
           </Button>
 
-          <Button
-            size="lg"
-            :ui="{ trailingIcon: 'size-3' }"
-            color="neutral"
-            variant="outline"
-            :trailing-icon="copied ? 'lucide:check' : 'lucide:copy'"
-            class="relative overflow-hidden font-mono"
-            @click="copy()"
-          >
-            <span
-              class="
-                pointer-events-none absolute inset-0 opacity-[0.07]
-
-                dark:opacity-[0.13]
-              "
-              style="background-image: repeating-linear-gradient(-45deg, currentColor, currentColor 1px, transparent 1px, transparent 5px)"
-              aria-hidden
-            />
-            npm install notform
-          </Button>
+          <LandingInstallCommand />
         </Motion>
       </Container>
     </Motion>

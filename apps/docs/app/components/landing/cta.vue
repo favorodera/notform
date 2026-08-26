@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
-
-const { copied, copy } = useClipboard({ legacy: true, source: 'npx nypm add notform' })
-
 const containerVariants = {
   hidden: {},
   visible: {
@@ -33,37 +29,10 @@ const itemVariants = {
 
 <template>
   <section
-    class="relative overflow-hidden border-be border-dashed border-default"
+    class="relative overflow-hidden border-be border-default"
     aria-labelledby="home:cta:title"
   >
-    <!-- Atmospheric glow — same language as hero -->
-    <div
-      class="pointer-events-none absolute inset-0"
-      style="
-        background:
-          radial-gradient(ellipse 75% 55% at 50% -5%, var(--ui-primary), transparent 70%),
-          radial-gradient(ellipse 50% 35% at 80% 110%, var(--ui-primary), transparent 65%);
-        opacity: 0.13;
-      "
-      aria-hidden
-    />
-
-    <!-- Corner accents -->
-    <span
-      class="
-        pointer-events-none absolute inset-s-0 inset-bs-0 border-s border-bs
-        border-dashed border-primary/30 block-8 inline-8
-      "
-      aria-hidden
-    />
-
-    <span
-      class="
-        pointer-events-none absolute inset-e-0 inset-be-0 border-e border-be
-        border-dashed border-primary/30 block-8 inline-8
-      "
-      aria-hidden
-    />
+   <LandingGlow />
 
     <Motion
       as="div"
@@ -131,7 +100,7 @@ const itemVariants = {
         >
           <!-- Docs -->
           <Button
-            to="/get-started"
+            to="/getting-started"
             size="lg"
             color="primary"
             variant="subtle"
@@ -139,27 +108,7 @@ const itemVariants = {
             Read docs
           </Button>
 
-          <!-- Install command -->
-          <Button
-            size="lg"
-            :ui="{ trailingIcon: 'size-3' }"
-            color="neutral"
-            variant="outline"
-            :trailing-icon="copied ? 'lucide:check' : 'lucide:copy'"
-            class="relative overflow-hidden font-mono"
-            @click="copy()"
-          >
-            <span
-              class="
-                pointer-events-none absolute inset-0 opacity-[0.06]
-
-                dark:opacity-[0.12]
-              "
-              style="background-image: repeating-linear-gradient(-45deg, currentColor, currentColor 1px, transparent 1px, transparent 5px)"
-              aria-hidden
-            />
-            npm install notform
-          </Button>
+          <LandingInstallCommand />
         </Motion>
       </Container>
     </Motion>
