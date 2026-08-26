@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
-
 definePageMeta({
   layout: 'docs',
 })
@@ -18,13 +16,6 @@ if (!page.data.value) {
     statusMessage: 'Page not found',
   })
 }
-
-const pageMarkdown = await useAsyncData(`${route.path}-markdown`, () => $fetch<string>(`/raw${route.path}.md`))
-
-const clipboard = useClipboard({
-  legacy: true,
-  source: computed(() => pageMarkdown.data.value ?? ''),
-})
 
 const pageSurround = await useAsyncData(`${route.path}-surround`, () => {
   return queryCollectionItemSurroundings('docs', route.path, {
@@ -60,21 +51,14 @@ defineOgImage('Image.takumi', { ...seo.value })
         :description="page.data.value.description"
       >
         <template #links>
-          <Button
-            :label="clipboard.copied.value ? 'Copied' : 'Copy Markdown'"
-            :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:copy'"
-            color="neutral"
-            variant="outline"
-            size="sm"
-            @click="clipboard.copy()"
-          />
+          <DocsContextExporter />
         </template>
       </PageHeader>
 
       <PageBody>
         <ContentRenderer
-          v-if="page"
-          :value="page"
+          v-if="page.data.value"
+          :value="page.data.value"
         />
 
         <ContentSurround
