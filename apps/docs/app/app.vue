@@ -21,7 +21,10 @@ useSeoMeta({
   twitterTitle: () => siteTitle,
 })
 
-defineOgImage('Landing.takumi')
+defineOgImage('OgImage.takumi', {
+  description: 'Vue Forms Without the Friction.',
+  title: 'NotForm',
+})
 </script>
 
 <template>

@@ -53,7 +53,7 @@ useSeoMeta({
   twitterTitle: () => seo.value.title,
 })
 
-defineOgImage('Docs.takumi', { ...seo.value })
+defineOgImage('OgImage.takumi', { ...seo.value })
 </script>
 
 <template>
