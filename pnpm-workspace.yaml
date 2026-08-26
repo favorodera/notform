@@ -60,7 +60,6 @@ catalogs:
     '@nuxt/image': ^2.1.0
     '@nuxt/kit': ^4.5.2
     '@nuxt/ui': ^4.11.0
-    '@nuxtjs/mcp-toolkit': ^0.18.0
     '@nuxtjs/mdc': ^0.23.1
     '@nuxtjs/seo': ^5.3.14
     '@standard-schema/spec': ^1.1.0

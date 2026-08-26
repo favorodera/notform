@@ -32,7 +32,6 @@
     "@nuxt/content": "catalog:vendor",
     "@nuxt/image": "catalog:vendor",
     "@nuxt/ui": "catalog:vendor",
-    "@nuxtjs/mcp-toolkit": "catalog:vendor",
     "@nuxtjs/mdc": "catalog:vendor",
     "@nuxtjs/seo": "catalog:vendor",
     "@tailwindcss/vite": "catalog:vendor",

@@ -6,7 +6,6 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxt/image',
     '@nuxt/ui',
-    '@nuxtjs/mcp-toolkit',
     '@nuxtjs/seo',
     'motion-v/nuxt',
     'notform-nuxt',
@@ -275,10 +274,6 @@ export default defineNuxtConfig({
       },
     ],
     title: 'NotForm',
-  },
-
-  mcp: {
-    name: 'NotForm',
   },
 
   devServer: {
