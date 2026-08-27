@@ -6,7 +6,6 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxt/image',
     '@nuxt/ui',
-    '@nuxtjs/mcp-toolkit',
     '@nuxtjs/seo',
     'motion-v/nuxt',
     'notform-nuxt',
@@ -21,6 +20,11 @@ export default defineNuxtConfig({
     asyncContext: true,
   },
 
+  components: [
+    { path: '~/demos', prefix: 'Demos' },
+    '~/components',
+  ],
+
   eslint: {
     config: {
       standalone: false,
@@ -28,7 +32,7 @@ export default defineNuxtConfig({
   },
 
   devtools: {
-    enabled: false,
+    enabled: true,
   },
 
   site: {
@@ -72,19 +76,31 @@ export default defineNuxtConfig({
           type: 'image/svg+xml',
         },
         {
-          href: '/favicon-32x32.png',
+          href: '/icon-32x32.png',
           rel: 'icon',
           sizes: '32x32',
           type: 'image/png',
         },
         {
-          href: '/favicon-16x16.png',
+          href: '/icon-192x192.png',
+          rel: 'icon',
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          href: '/icon-512x512.png',
+          rel: 'icon',
+          sizes: '512x512',
+          type: 'image/png',
+        },
+        {
+          href: '/icon-16x16.png',
           rel: 'icon',
           sizes: '16x16',
           type: 'image/png',
         },
         {
-          href: '/favicon.svg',
+          href: '/icon.svg',
           rel: 'icon',
           sizes: 'any',
           type: 'image/svg+xml',
@@ -194,8 +210,6 @@ export default defineNuxtConfig({
     zeroRuntime: true,
   },
 
-  // seo: { redirectToCanonicalSiteUrl: true },
-
   schemaOrg: {
     identity: defineSoftwareApp({
       'description': 'Vue forms without the friction.',
@@ -252,8 +266,8 @@ export default defineNuxtConfig({
     sections: [
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/get-started%' }],
-        title: 'Get Started',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/getting-started%' }],
+        title: 'Getting Started',
       },
       {
         contentCollection: 'docs',
@@ -262,25 +276,16 @@ export default defineNuxtConfig({
       },
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/composables%' }],
-        title: 'Composables',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/building-forms%' }],
+        title: 'Building Forms',
       },
       {
         contentCollection: 'docs',
         contentFilters: [{ field: 'path', operator: 'LIKE', value: '/advanced%' }],
         title: 'Advanced',
       },
-      {
-        contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/ai%' }],
-        title: 'Working with AI',
-      },
     ],
     title: 'NotForm',
-  },
-
-  mcp: {
-    name: 'NotForm',
   },
 
   devServer: {

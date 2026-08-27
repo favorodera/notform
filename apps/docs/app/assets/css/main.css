@@ -8,54 +8,43 @@
 
   --font-sans: 'Geist', sans-serif;
   --font-mono: 'Geist Mono', monospace;
-
-  --color-forest-50: #f0faf4;
-  --color-forest-100: #d6f5e3;
-  --color-forest-200: #a8e9c4;
-  --color-forest-300: #6dd6a0;
-  --color-forest-400: #34be7a;
-  --color-forest-500: #1a9e5e;
-  --color-forest-600: #137e4a;
-  --color-forest-700: #0f6038;
-  --color-forest-800: #0c4d2e;
-  --color-forest-900: #093d24;
-  --color-forest-950: #041f12;
 }
 
 :root {
   --ui-container: var(--container-8xl);
-
-  --ui-header-height: 3.5rem;
+  --ui-header-height: 3rem;
+  --ui-radius: 0.5rem;
+  --ui-primary: black;
 }
 
 .dark {
-  --ui-bg: black;
+  --ui-primary: white;
+  --ui-bg: var(--ui-color-neutral-950);
+  --ui-bg-muted: var(--ui-color-neutral-900);
+  --ui-bg-elevated: var(--ui-color-neutral-900);
 }
 
+@layer components {
+  [data-demo-form] {
+    @apply flex flex-col gap-4 mx-auto w-full max-w-md;
+  }
 
-@utility form {
-  @apply grid gap-4 max-w-md w-full
-}
+  [data-demo-field] {
+    @apply flex flex-col w-full gap-y-2 gap-x-4;
 
-@utility label {
-  @apply flex flex-col gap-2 font-medium text-highlighted w-full text-sm
-}
+    > label, [data-demo-label] {
+      @apply text-sm font-medium;
+    }
 
-@utility field {
-  @apply grid gap-2 w-full
-}
+    > input {
+      @apply block rounded-md border border-default px-3 py-1.5;
+      @apply bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-primary;
+    }
 
-@utility input {
-  @apply w-full rounded-lg focus-visible:ring-2 focus-visible:ring-primary text-sm placeholder:text-muted outline-none bg-transparent border-default border px-2.5 h-8
-}
-
-@utility message {
-  @apply text-sm text-error font-normal text-sm inline-full min-inline-0 first-letter:uppercase
-}
-
-
-* {
-  border-style: dashed;
+    > [data-demo-message] {
+      @apply block text-sm text-error;
+    }
+  }
 }
 
 .fade-out-in-enter-active,

@@ -1,5 +1,5 @@
 <script lang="ts">
-const sources = import.meta.glob('../demos/**/*', {
+const sources = import.meta.glob('../../demos/**/*', {
   eager: true,
   import: 'default',
   query: '?raw',
@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const code = computed(() => {
   // Find the file content in the glob map
-  const content = sources[`../demos/${props.file}.vue`] as string
+  const content = sources[`../../demos/${props.file}.vue`] as string
 
   if (!content) {
     return `> **Error**: File \`${props.file}\` not found.`

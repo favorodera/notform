@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "streetsidesoftware.code-spell-checker",
+    "dbaeumer.vscode-eslint",
+    "streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries",
+    "usernamehw.errorlens",
+    "Vue.volar",
+    "Nuxt.mdc"
+  ]
+}

@@ -18,33 +18,28 @@ const lazyForm = useNotForm({
 </script>
 
 <template>
-  <div class="form">
+  <div data-demo-form>
     <NotField
       v-slot="{ events, path }"
       path="value"
       :form="eagerForm"
     >
-      <div class="field">
-        <label
-          class="label"
-          :for="path"
-        >
-          Eager
-
-          <input
-            v-bind="events"
-            :id="path"
-            v-model="eagerForm.values.value"
-            placeholder="Type then blur…"
-            class="input"
-            :name="path"
-          >
+      <div data-demo-field>
+        <label :for="`eager-${path}`">
+          Eager Mode (Default)
         </label>
+
+        <input
+          :id="`eager-${path}`"
+          v-model="eagerForm.values.value"
+          placeholder="Type then blur…"
+          v-bind="events"
+        >
 
         <NotMessage
           :form="eagerForm"
           :path="path"
-          class="message"
+          data-demo-message
         />
       </div>
     </NotField>
@@ -54,27 +49,24 @@ const lazyForm = useNotForm({
       path="value"
       :form="lazyForm"
     >
-      <div class="field">
+      <div data-demo-field>
         <label
-          class="label"
-          :for="path"
+          :for="`lazy-${path}`"
         >
-          Lazy
-
-          <input
-            v-bind="events"
-            :id="path"
-            v-model="lazyForm.values.value"
-            placeholder="Type then blur…"
-            class="input"
-            :name="path"
-          >
+          Lazy Mode
         </label>
+
+        <input
+          :id="`lazy-${path}`"
+          v-model="lazyForm.values.value"
+          placeholder="Type then blur…"
+          v-bind="events"
+        >
 
         <NotMessage
           :form="lazyForm"
           :path="path"
-          class="message"
+          data-demo-message
         />
       </div>
     </NotField>

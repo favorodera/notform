@@ -27,19 +27,18 @@ const form = useNotForm({
 <template>
   <NotForm
     :form="form"
-    class="form"
+    data-demo-form
     @submit="form.submit"
     @reset="form.reset()"
   >
     <NotField
-      v-slot="{ events,path }"
+      v-slot="{ events, path }"
       path="email"
     >
-      <label
-        class="label"
-        :for="path"
-      >
-        Email
+      <div data-demo-field>
+        <label :for="path">
+          Email
+        </label>
 
         <input
           :id="path"
@@ -48,25 +47,21 @@ const form = useNotForm({
           placeholder="jane@example.com"
           v-bind="events"
           autocomplete="email"
-          class="input"
         >
 
         <NotMessage
           :path="path"
-          class="message"
+          data-demo-message
         />
-      </label>
+      </div>
     </NotField>
 
     <NotField
-      v-slot="{ events,path }"
+      v-slot="{ events, path }"
       path="password"
     >
-      <label
-        class="label"
-        :for="path"
-      >
-        Password
+      <div data-demo-field>
+        <label :for="path">Password</label>
 
         <input
           :id="path"
@@ -75,34 +70,34 @@ const form = useNotForm({
           placeholder="Min. 8 characters"
           v-bind="events"
           autocomplete="current-password"
-          class="input"
         >
 
         <NotMessage
           :path="path"
-          class="message"
+          data-demo-message
         />
-      </label>
+      </div>
     </NotField>
 
-    <div class="field grid-cols-2">
+    <div
+      data-demo-field
+      class="flex-row"
+    >
       <Button
         type="reset"
         :disabled="form.isSubmitting.value"
-        color="neutral"
-        variant="subtle"
         block
-      >
-        Reset
-      </Button>
+        variant="soft"
+        label="Reset"
+      />
 
       <Button
         type="submit"
-        :loading="form.isSubmitting.value"
         block
-      >
-        Submit
-      </Button>
+        :disabled="form.isSubmitting.value"
+        :loading="form.isSubmitting.value"
+        :label="form.isSubmitting.value ? 'Submitting...' : 'Submit'"
+      />
     </div>
   </NotForm>
 </template>

@@ -255,9 +255,9 @@ describe('core', () => {
     })
 
     it('isSubmitting is true during submission and false after', async () => {
-      let submittingDuring = false
+      let isSubmittingDuring = false
       const onSubmit = vi.fn(async () => {
-        submittingDuring = true
+        isSubmittingDuring = true
       })
 
       const { form, wrapper } = mountForm(onSubmit)
@@ -268,7 +268,7 @@ describe('core', () => {
       await wrapper.get('form').trigger('submit')
       await flushPromises()
 
-      expect(submittingDuring).toBe(true)
+      expect(isSubmittingDuring).toBe(true)
       expect(form.isSubmitting.value).toBe(false)
     })
   })

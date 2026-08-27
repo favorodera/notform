@@ -21,7 +21,6 @@ export function provideNotFormInstance<TSchema extends ObjectSchema>(instance: N
  * @returns The NotForm instance.
  */
 export function useNotFormInstance<TSchema extends ObjectSchema>(explicitInstance?: NotFormInstance<TSchema>) {
-  // eslint-disable-next-line unicorn/no-useless-undefined
   const injected = inject(NOT_FORM_INSTANCE_KEY, undefined) as NotFormInstance<TSchema> | undefined
 
   const instance = explicitInstance ?? injected

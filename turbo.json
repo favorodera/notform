@@ -35,7 +35,7 @@
     },
     "postinstall": {
       "outputs": [".nuxt/**"],
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build"]
     },
     "prepublishOnly": {
       "outputs": []

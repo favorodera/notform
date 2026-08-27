@@ -1,10 +1,10 @@
 <template>
-  <div class="flex items-center gap-1 text-primary">
+  <div class="flex items-center gap-2 text-primary">
     <Icon
       name="custom:logo"
-      class="block-[18px] shrink-0"
+      class="shrink-0 block-lh"
     />
 
-    <span class="font-mono text-lg leading-none font-normal!">notform</span>
+    <span class="font-mono text-lg leading-none font-normal!">NotForm</span>
   </div>
 </template>

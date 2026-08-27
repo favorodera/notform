@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
-
-const { copied, copy } = useClipboard({ legacy: true, source: 'npx nypm add notform' })
-
 const containerVariants = {
   hidden: {},
   visible: {
@@ -19,12 +15,7 @@ const itemVariants = {
     opacity: 1,
     transition: {
       duration: 0.35,
-      ease: [
-        0.25,
-        0.1,
-        0.25,
-        1,
-      ] as const,
+      ease: [0.25, 0.1, 0.25, 1] as const,
     },
     y: 0,
   },
@@ -33,37 +24,10 @@ const itemVariants = {
 
 <template>
   <section
-    class="relative overflow-hidden border-be border-dashed border-default"
+    class="relative overflow-hidden border-be border-default"
     aria-labelledby="home:cta:title"
   >
-    <!-- Atmospheric glow — same language as hero -->
-    <div
-      class="pointer-events-none absolute inset-0"
-      style="
-        background:
-          radial-gradient(ellipse 75% 55% at 50% -5%, var(--ui-primary), transparent 70%),
-          radial-gradient(ellipse 50% 35% at 80% 110%, var(--ui-primary), transparent 65%);
-        opacity: 0.13;
-      "
-      aria-hidden
-    />
-
-    <!-- Corner accents -->
-    <span
-      class="
-        pointer-events-none absolute inset-bs-0 inset-s-0 block-8 inline-8
-        border-bs border-s border-dashed border-primary/30
-      "
-      aria-hidden
-    />
-
-    <span
-      class="
-        pointer-events-none absolute inset-e-0 inset-be-0 block-8 inline-8
-        border-e border-be border-dashed border-primary/30
-      "
-      aria-hidden
-    />
+    <LandingGlow />
 
     <Motion
       as="div"
@@ -99,8 +63,8 @@ const itemVariants = {
           as="h2"
           :variants="itemVariants"
           class="
-            mx-auto max-inline-2xl text-3xl font-semibold tracking-tight
-            text-highlighted
+            mx-auto text-3xl font-semibold tracking-tight text-highlighted
+            max-inline-2xl
 
             lg:text-4xl
           "
@@ -113,7 +77,7 @@ const itemVariants = {
         <Motion
           as="p"
           :variants="itemVariants"
-          class="mx-auto mbs-4 max-inline-md text-sm font-light text-muted"
+          class="mx-auto mbs-4 text-sm font-light text-muted max-inline-md"
         >
           Read the docs to get up and running in minutes,
           or install the package and start building right now.
@@ -131,7 +95,7 @@ const itemVariants = {
         >
           <!-- Docs -->
           <Button
-            to="/get-started"
+            to="/getting-started"
             size="lg"
             color="primary"
             variant="subtle"
@@ -139,27 +103,7 @@ const itemVariants = {
             Read docs
           </Button>
 
-          <!-- Install command -->
-          <Button
-            size="lg"
-            :ui="{ trailingIcon: 'size-3' }"
-            color="neutral"
-            variant="outline"
-            :trailing-icon="copied ? 'lucide:check' : 'lucide:copy'"
-            class="relative overflow-hidden font-mono"
-            @click="copy()"
-          >
-            <span
-              class="
-                pointer-events-none absolute inset-0 opacity-[0.06]
-
-                dark:opacity-[0.12]
-              "
-              style="background-image: repeating-linear-gradient(-45deg, currentColor, currentColor 1px, transparent 1px, transparent 5px)"
-              aria-hidden
-            />
-            npm install notform
-          </Button>
+          <LandingInstallCommand />
         </Motion>
       </Container>
     </Motion>

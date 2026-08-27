@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
 import { Motion } from 'motion-v'
-
-const { copied, copy } = useClipboard({ legacy: true, source: 'npx nypm add notform' })
 
 const container = {
   hidden: {},
@@ -23,12 +20,7 @@ const item = {
     opacity: 1,
     transition: {
       duration: 0.3,
-      ease: [
-        0.25,
-        0.1,
-        0.25,
-        1,
-      ] as const,
+      ease: [0.25, 0.1, 0.25, 1] as const,
     },
     y: 0,
   },
@@ -37,20 +29,10 @@ const item = {
 
 <template>
   <section
-    class="relative overflow-hidden border-be border-dashed border-default"
+    class="relative overflow-hidden border-be border-default"
     aria-labelledby="landing:hero:title"
   >
-    <!-- atmospheric glow -->
-    <div
-      class="pointer-events-none absolute inset-0"
-      style="
-        background:
-          radial-gradient(ellipse 75% 55% at 50% -5%, var(--ui-primary), transparent 70%),
-          radial-gradient(ellipse 50% 35% at 80% 110%, var(--ui-primary), transparent 65%);
-        opacity: 0.13;
-      "
-      aria-hidden
-    />
+    <LandingGlow />
 
     <Motion
       as-child
@@ -85,8 +67,8 @@ const item = {
           as="h1"
           :variants="item"
           class="
-            relative max-inline-4xl overflow-hidden text-3xl/tight
-            tracking-tight
+            relative overflow-hidden text-3xl/tight tracking-tight
+            max-inline-4xl
 
             sm:text-3xl
 
@@ -94,10 +76,7 @@ const item = {
           "
         >
           <span
-            class="
-              inline-block border-be border-dashed border-primary/20
-              text-primary
-            "
+            class="inline-block border-be border-primary/20 text-primary"
           >
             Vue
           </span>
@@ -105,10 +84,7 @@ const item = {
           Forms<br>
 
           <span
-            class="
-              inline-block border-be border-dashed border-primary/20
-              text-primary
-            "
+            class="inline-block border-be border-primary/20 text-primary"
           >
             without
           </span> the friction.
@@ -118,7 +94,7 @@ const item = {
         <Motion
           as="p"
           :variants="item"
-          class="mbs-5 max-inline-md text-base/relaxed font-light text-muted"
+          class="mbs-5 text-base/relaxed font-light text-muted max-inline-md"
         >
           Headless, composable Vue 3 forms. Bring your own schema —
           Zod, Valibot, ArkType, or anything Standard Schema compliant.
@@ -138,7 +114,7 @@ const item = {
           "
         >
           <Button
-            to="/get-started"
+            to="/getting-started"
             size="lg"
             color="primary"
             variant="subtle"
@@ -146,26 +122,7 @@ const item = {
             Read Docs
           </Button>
 
-          <Button
-            size="lg"
-            :ui="{ trailingIcon: 'size-3' }"
-            color="neutral"
-            variant="outline"
-            :trailing-icon="copied ? 'lucide:check' : 'lucide:copy'"
-            class="relative overflow-hidden font-mono"
-            @click="copy()"
-          >
-            <span
-              class="
-                pointer-events-none absolute inset-0 opacity-[0.07]
-
-                dark:opacity-[0.13]
-              "
-              style="background-image: repeating-linear-gradient(-45deg, currentColor, currentColor 1px, transparent 1px, transparent 5px)"
-              aria-hidden
-            />
-            npm install notform
-          </Button>
+          <LandingInstallCommand />
         </Motion>
       </Container>
     </Motion>

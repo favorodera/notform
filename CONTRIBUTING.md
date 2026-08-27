@@ -14,8 +14,8 @@ By participating in this project, you agree to abide by the [Contributor Covenan
 
 ### Prerequisites
 
-  - [Node.js](https://nodejs.org/) (v20 or later)
-  - [pnpm](https://pnpm.io/installation) (v11 or later)
+  - [Node.js](https://nodejs.org/) v22 or later
+  - [pnpm](https://pnpm.io/installation) v11 or later
 
 ### Setup
 
@@ -25,6 +25,11 @@ cd notform
 pnpm install
 pnpm dev
 ```
+
+This will:
+- Install all dependencies across the monorepo
+- Start all packages in watch mode via Turborepo
+- Launch the documentation site at `http://localhost:3000`
 
 ---
 
@@ -57,23 +62,23 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/). `relizy`
 ### Code Style
 
 ```bash
-pnpm lint       # check linting errors
-pnpm typecheck  # verify TypeScript types
-pnpm test       # run all tests
+pnpm lint       # Check linting errors across all packages
+pnpm typecheck  # Verify TypeScript types in all packages
+pnpm test       # Run all test suites with Vitest
 ```
 
 ---
 
 ## Testing
 
-  We use [Vitest](https://vitest.dev/) coupled with [Vue Test Utils](https://test-utils.vuejs.org/) in a jsdom environment.
+We use [Vitest](https://vitest.dev/) coupled with [Vue Test Utils](https://test-utils.vuejs.org/) in a jsdom environment.
 
 ```bash
-pnpm test         # run all tests
-pnpm test:watch   # watch mode
+pnpm test         # Run all tests
+pnpm test:watch   # Watch mode for development
 ```
 
-  When adding new features or fixing bugs, please include tests as this helps us validate upcoming features before they are fully integrated.
+When adding new features or fixing bugs, please include tests as this helps us validate upcoming features before they are fully integrated.
 
 ---
 
@@ -88,6 +93,8 @@ pnpm test:watch   # watch mode
 pnpm ready
 ```
 
+This command runs the complete pipeline: install → lint → typecheck → test → build.
+
 5. Commit using Conventional Commits and open a Pull Request.
 6. Push your branch and open a Pull Request.
 
@@ -95,12 +102,12 @@ pnpm ready
 
 ## Reporting Bugs
 
-  Before filing a report, check existing issues. When you do file one, include:
+Before filing a report, check existing issues. When you do file one, include:
 
-  - A clear, descriptive title
-  - Steps to reproduce
-  - Expected vs. actual behaviour
-  - Your environment (OS, Node.js version, pnpm version)
+- A clear, descriptive title
+- Steps to reproduce
+- Expected vs. actual behaviour
+- Your environment (OS, Node.js version, pnpm version)
 
 ---
 
@@ -116,9 +123,9 @@ We welcome feature suggestions! Please open an issue describing:
 
 ## Questions?
 
-  If you have questions, feel free to:
+If you have questions, feel free to:
 
-  - Open a [Discussion](https://github.com/favorodera/notform/discussions)
-  - Check the [Documentation](https://notformdocs.vercel.app/)
+- Open a [Discussion](https://github.com/favorodera/notform/discussions)
+- Check the [Documentation](https://notformdocs.vercel.app/)
 
-  Thank you for contributing! 🎉
+Thank you for contributing! 🎉

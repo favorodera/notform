@@ -30,41 +30,41 @@ catalogs:
     vue: ^3.0.0
 
   tools:
-    '@favorodera/eslint-config': ^1.0.4
+    '@favorodera/eslint-config': ^1.1.2
     '@nuxt/eslint': ^1.17.0
     '@nuxt/module-builder': ^1.0.3
     '@nuxt/schema': ^4.5.2
-    '@tsconfig/node24': ^24.0.4
+    '@tsconfig/node24': ^24.0.5
     '@types/node': ^26.2.0
     '@vitejs/plugin-vue': ^6.0.8
-    '@vitest/ui': ^4.1.10
+    '@vitest/ui': ^4.1.11
     '@vue/test-utils': ^2.4.11
     '@vue/tsconfig': ^0.9.1
-    eslint: ^10.8.1
-    happy-dom: ^20.11.2
+    eslint: ^10.9.0
+    happy-dom: ^20.11.6
+    nuxtseo-layer-devtools: ^5.3.14
     relizy: ^1.4.9
     tsdown: ^0.22.14
-    turbo: ^2.10.9
+    turbo: ^2.10.11
     type-fest: ^5.7.0
     typescript: ^6.0.3
-    vite: ^8.2.1
-    vitest: ^4.1.10
-    vue-tsc: ^3.3.9
+    vite: ^8.2.2
+    vitest: ^4.1.11
+    vue-tsc: ^3.3.11
 
   vendor:
-    '@iconify-json/lucide': ^1.2.123
     '@iconify-json/simple-icons': ^1.2.93
-    '@iconify-json/vscode-icons': ^1.2.72
+    '@iconify-json/tabler': ^1.2.38
+    '@iconify-json/vscode-icons': ^1.2.74
     '@nuxt/content': ^3.15.2
     '@nuxt/image': ^2.1.0
     '@nuxt/kit': ^4.5.2
-    '@nuxt/ui': ^4.10.0
-    '@nuxtjs/mcp-toolkit': ^0.18.0
+    '@nuxt/ui': ^4.11.0
     '@nuxtjs/mdc': ^0.23.1
-    '@nuxtjs/seo': ^5.3.12
+    '@nuxtjs/seo': ^5.3.14
     '@standard-schema/spec': ^1.1.0
     '@tailwindcss/vite': ^4.3.3
-    '@takumi-rs/core': ^2.7.3
+    '@takumi-rs/core': ^2.12.0
     '@vercel/analytics': ^2.0.1
     '@vueuse/core': ^14.4.0
     better-sqlite3: ^13.0.0
@@ -72,10 +72,10 @@ catalogs:
     dot-prop: ^10.2.0
     klona: ^2.0.6
     minimark: ^1.0.0
-    motion-v: ^2.3.0
+    motion-v: ^2.4.0
     nuxt: ^4.5.2
     nuxt-llms: ^0.2.0
-    nuxt-schema-org: ^6.2.9
+    nuxt-schema-org: ^6.3.0
     tailwindcss: ^4.3.3
     ufo: ^1.6.4
     vue: ^3.5.41

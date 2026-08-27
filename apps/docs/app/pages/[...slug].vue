@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
+import type { PageLink } from '@nuxt/ui'
+import { computed } from '#imports'
 
 definePageMeta({
   layout: 'docs',
 })
 
 const route = useRoute()
+const appConfig = useAppConfig()
 
-const { data: page } = await useAsyncData(
-  route.path,
-  () => queryCollection('docs')
-    .path(route.path)
-    .first(),
-)
-if (!page.value) {
+const page = await useAsyncData(route.path, () => queryCollection('docs').path(route.path)
+  .first())
+
+if (!page.data.value) {
   throw createError({
     fatal: true,
     statusCode: 404,
@@ -21,25 +20,43 @@ if (!page.value) {
   })
 }
 
-const { data: markdownContent } = await useAsyncData(`${route.path}-markdown`, () => $fetch<string>(`/raw${route.path}.md`))
-
-const { copied, copy } = useClipboard({
-  legacy: true,
-  source: computed(() => markdownContent.value ?? ''),
-})
-
-const { siteDescription, siteName, siteUrl } = useAppConfig()
-
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
+const pageSurround = await useAsyncData(`${route.path}-surround`, () => {
   return queryCollectionItemSurroundings('docs', route.path, {
     fields: ['description'],
   })
 })
 
+const tocFooterLinks = computed<PageLink[]>(() => [
+  {
+    icon: 'tabler:edit',
+    label: 'Edit this page',
+    target: '_blank',
+    to: `https://github.com/favorodera/notform/edit/main/apps/docs/content/${page.data.value?.stem}.md`,
+  },
+  {
+    icon: 'tabler:star',
+    label: 'Star on GitHub',
+    target: '_blank',
+    to: 'https://github.com/favorodera/notform',
+  },
+  {
+    class: 'font-semibold text-pink-400 hover:text-pink-500',
+    icon: 'tabler:heart',
+    label: 'Sponsor on GitHub',
+    target: '_blank',
+    to: 'https://github.com/sponsors/favorodera',
+  },
+  {
+    icon: 'tabler:rocket',
+    label: 'Releases',
+    to: 'https://github.com/favorodera/notform/releases',
+  },
+])
+
 const seo = computed(() => {
   return {
-    description: page.value?.description ?? siteDescription,
-    title: page.value?.title ?? siteName,
+    description: page.data.value?.description ?? appConfig.siteDescription,
+    title: page.data.value?.title ?? appConfig.siteName,
   }
 })
 
@@ -47,79 +64,62 @@ useSeoMeta({
   description: () => seo.value.description,
   ogDescription: () => seo.value.description,
   ogTitle: () => seo.value.title,
-  ogUrl: () => `${siteUrl}${route.fullPath}`,
+  ogUrl: () => `${appConfig.siteUrl}${route.fullPath}`,
   title: () => seo.value.title,
   twitterDescription: () => seo.value.description,
   twitterTitle: () => seo.value.title,
 })
 
-defineOgImage('Docs.takumi', { ...seo.value })
+defineOgImage('Image.takumi', { ...seo.value })
 </script>
 
 <template>
   <div>
-    <Page v-if="page">
+    <Page v-if="page.data.value">
       <PageHeader
-        :title="page.title"
-        :description="page.description"
-        class="flex inline-full flex-col-reverse"
-        :ui="{
-          title:'text-[1.75em] font-semibold',
-          headline:'mb-0 mt-2.5'
-        }"
+        :title="page.data.value.title"
+        :description="page.data.value.description"
       >
-        <template #headline>
-          <Button
-            :label="copied ? 'Copied' : 'Copy Markdown'"
-            :icon="copied ? 'lucide:check' : 'lucide:copy'"
-            color="neutral"
-            variant="outline"
-            size="sm"
-            @click="copy()"
-          />
+        <template #links>
+          <DocsContextExporter />
         </template>
       </PageHeader>
 
-      <PageBody
-        class="
-          pbe-6
-
-          md:pbe-8
-
-          xl:pbe-14
-        "
-      >
+      <PageBody>
         <ContentRenderer
-          v-if="page"
-          :value="page"
+          v-if="page.data.value"
+          :value="page.data.value"
         />
 
-        <ContentSurround :surround="surround" />
+        <ContentSurround
+          :surround="pageSurround.data.value"
+          :ui="{
+            link:'p-4',
+            linkDescription:'truncate line-clamp-1'
+          }"
+        />
       </PageBody>
 
       <template
-        v-if="page?.body?.toc?.links?.length"
+        v-if="page.data.value?.body?.toc?.links?.length"
         #right
       >
         <ContentToc
-          :links="page?.body?.toc?.links"
+          :links="page.data.value?.body?.toc?.links"
           :ui="{
             title:'text-sm text-muted font-normal',
-            indicator:'ms-0',
-            container:'py-3! sm:py-3!'
           }"
           highlight
           highlight-variant="circuit"
-          class="
-            border-y border-dashed border-default
-
-            lg:border-x
-          "
         >
-          <template #leading>
-            <Icon
-              name="lucide:text-align-start"
-              class="block-4 inline-4 text-muted"
+          <template #bottom>
+            <Separator />
+
+            <PageLinks
+              :links="tocFooterLinks"
+              :ui="{
+                linkLabelExternalIcon: 'hidden',
+              }"
             />
           </template>
         </ContentToc>

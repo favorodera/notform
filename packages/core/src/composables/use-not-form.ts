@@ -61,10 +61,12 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     const result: Partial<Record<Paths<TInput>, string>> = {}
 
     for (const issue of errors) {
-      if (issue.path) {
-        const path = issue.path.map(element => normalizeSegment(element)).join('.') as Paths<TInput>
-        if (path && !result[path]) result[path] = issue.message
+      if (!issue.path) {
+        continue
       }
+
+      const path = issue.path.map(element => normalizeSegment(element)).join('.') as Paths<TInput>
+      if (path && !Object.hasOwn(result, path)) result[path] = issue.message
     }
     return result
   })
@@ -194,7 +196,7 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
   /** Clears all error issues from the errors array. */
   function clearErrors() {
-    errors.splice(0)
+    errors.length = 0
   }
 
   /**
@@ -272,7 +274,8 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
    * Submits the form, validating it and executing the submit handler if provided.
    * @param event The submit event.
    */
-  async function submit(event: Event): Promise<void> {
+  async function submit(event: SubmitEvent): Promise<void> {
+    event.preventDefault()
     isSubmitting.value = true
 
     try {
@@ -281,19 +284,15 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
 
       const result = await validate()
 
-      // Validation failed — block native submission
+      // Validation failed
       if (result?.issues) {
-        event.preventDefault()
         return
       }
 
-      // Execute custom handler if provided, otherwise allow native submission
+      // Execute custom handler if provided
       if (config.onSubmit) {
-        event.preventDefault()
         await config.onSubmit(result.value)
       }
-    } catch {
-      event.preventDefault()
     } finally {
       isSubmitting.value = false
     }

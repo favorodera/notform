@@ -1,34 +1,35 @@
 <div align="center">
-<img src="https://notformdocs.vercel.app/favicon.svg" alt="NotForm Logo" width="80" height="80">
-<h1>NotForm</h1>
-<p><strong>Vue Forms Without the Friction</strong></p>
-<p>
-<a href="https://github.com/favorodera/notform/blob/main/LICENSE"><img src="https://img.shields.io/github/license/favorodera/notform.svg?style=plastic&label=License&color=blue" alt="License"></a>
-<a href="https://github.com/favorodera/notform/stargazers"><img src="https://img.shields.io/github/stars/favorodera/notform.svg?style=plastic&label=Stars&color=blue" alt="GitHub Stars"></a>
-<a href="https://notformdocs.vercel.app/"><img src="https://img.shields.io/badge/-Documentation-blue?style=plastic" alt="NotForm Documentation"></a>
-</p>
-<p>
-<a href="https://codewiki.google/github.com/favorodera/notform"><img src="https://img.shields.io/badge/-Ask%20Code%20Wiki-blue?style=plastic&logo=google-gemini&logoColor=white" alt="Ask Code Wiki"></a>
-<a href="https://deepwiki.com/favorodera/notform"><img src="https://img.shields.io/badge/-Ask%20Devin-blue?style=plastic&logo=windsurf&logoColor=white" alt="Ask Devin"></a>
-</p>
-<p>
-<a href="./packages/core"><img src="https://img.shields.io/badge/Core-blue?style=plastic&logo=vuedotjs&logoColor=white" alt="NotForm Core"></a>
-<a href="./packages/nuxt"><img src="https://img.shields.io/badge/Nuxt%20Module-blue?style=plastic&logo=nuxt&logoColor=white" alt="NotForm Nuxt Module"></a>
-</p>
+  <img src="https://notformdocs.vercel.app/favicon.svg" alt="NotForm Logo" width="80" height="80">
+
+  <h1>NotForm</h1>
+
+  <p><strong>Headless, Schema-Agnostic Form Management for Vue 3 & Nuxt</strong></p>
+
+  <p>
+    <a href="https://github.com/favorodera/notform/blob/main/LICENSE"><img src="https://img.shields.io/github/license/favorodera/notform.svg?style=plastic&label=License" alt="License"></a>
+    <a href="https://github.com/favorodera/notform/stargazers"><img src="https://img.shields.io/github/stars/favorodera/notform.svg?style=plastic&label=Stars" alt="GitHub Stars"></a>
+    <a href="https://notformdocs.vercel.app/"><img src="https://img.shields.io/badge/-Documentation-blue?style=plastic" alt="NotForm Documentation"></a>
+  </p>
+
+  <p>
+    <a href="./packages/core"><img src="https://img.shields.io/badge/Core-blue?style=plastic&logo=vuedotjs&logoColor=white" alt="NotForm Core"></a>
+    <a href="./packages/nuxt"><img src="https://img.shields.io/badge/Nuxt%20Module-blue?style=plastic&logo=nuxt&logoColor=white" alt="NotForm Nuxt Module"></a>
+  </p>
 </div>
 
 <br>
 
-NotForm is a powerful, yet simple form validation and state management library for Vue and Nuxt. It focuses on providing a seamless developer experience with a type-safe API and minimal boilerplate. Built with TypeScript from the ground up, it offers a composable API that integrates perfectly with Vue 3's Composition API.
+NotForm is a headless form validation and state management library for Vue 3 and Nuxt. It provides the logic and state for your forms, while giving you complete control over the UI. Built with TypeScript from the ground up, it integrates seamlessly with any Standard Schema-compatible validator (Zod, Valibot, ArkType) and works with any UI library—native HTML, Nuxt UI, Shadcn, or your own components.
 
 ## Features
 
-- **Type-safe** — Built with TypeScript from the ground up for end-to-end type safety.
-- **Composable** — Easy to use with Vue 3 Composition API for flexible form management.
-- **Lightweight** — Tiny footprint with no unnecessary bloat, keeping your bundles small.
-- **Flexible** — Works with any validation library (Yup, Zod, etc.) via Standard Schema integration.
-- **Nuxt-ready** — Drop in the [`notform-nuxt`](./packages/nuxt) module for auto-registration and zero config.
-- **Minimal boilerplate** — Get started quickly with simple, intuitive APIs.
+- **Headless** — Renders nothing. You bring the UI, NotForm brings the logic.
+- **Schema-agnostic** — Works with any Standard Schema validator (Zod, Valibot, ArkType, etc.)
+- **Type-safe** — Full TypeScript support with inferred types from your schema.
+- **Composable** — Built for Vue 3 Composition API with a clean, intuitive API.
+- **Lightweight** — Tiny footprint with tree-shaking support.
+- **Nuxt-ready** — Official Nuxt module with auto-imports and zero configuration.
+- **Flexible** — Use with any UI library—native HTML, Nuxt UI, Shadcn, or your own components.
 
 ## Monorepo Structure
 
@@ -75,6 +76,10 @@ pnpm ready
 | `pnpm typecheck` | Type-check all packages with `vue-tsc` / `tsc` |
 | `pnpm test` | Run all test suites with Vitest |
 | `pnpm ready` | Full pipeline: install → lint → typecheck → test → build |
+
+## Documentation
+
+For detailed guides, API reference, and examples, visit **[notformdocs.vercel.app](https://notformdocs.vercel.app/)**.
 
 ## License
 

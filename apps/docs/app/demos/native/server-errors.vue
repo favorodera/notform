@@ -8,22 +8,20 @@ const form = useNotForm({
   onSubmit: async (values) => {
     // Simulate a server 409 — email taken
     await new Promise((resolve) => {
-      setTimeout(resolve, 600)
+      setTimeout(resolve, 500)
     })
 
     if (values.email === 'taken@example.com') {
       form.setError({
         message: 'This email is already registered',
-        path: [{ key: 'email' }],
+        path: ['email'],
       })
-
       return
     }
 
     toast.add({
       color: 'success',
-      description: `Email:${values.email}`,
-      title: 'Account created successfully',
+      title: `Account created successfully for: ${values.email}`,
     })
   },
   schema: z.object({
@@ -35,56 +33,53 @@ const form = useNotForm({
 <template>
   <NotForm
     :form="form"
-    class="form"
-    @reset="form.reset()"
+    data-demo-form
     @submit="form.submit"
+    @reset="form.reset()"
   >
     <NotField
       v-slot="{ events, path }"
       path="email"
     >
-      <div class="field">
-        <label
-          class="label"
-          :for="path"
-        >
-          Email
-
-          <input
-            v-bind="events"
-            :id="path"
-            v-model="form.values.email"
-            type="email"
-            placeholder="Try taken@example.com"
-            class="input"
-          >
+      <div data-demo-field>
+        <label :for="path">
+          Email Address
         </label>
+
+        <input
+          :id="path"
+          v-model="form.values.email"
+          type="email"
+          placeholder="Try taken@example.com"
+          v-bind="events"
+        >
 
         <NotMessage
           :path="path"
-          class="message"
+          data-demo-message
         />
       </div>
     </NotField>
 
-    <div class="field grid-cols-2">
+    <div
+      data-demo-field
+      class="flex-row"
+    >
       <Button
         type="reset"
         :disabled="form.isSubmitting.value"
-        color="neutral"
-        variant="subtle"
         block
-      >
-        Reset
-      </Button>
+        variant="soft"
+        label="Reset"
+      />
 
       <Button
         type="submit"
-        :loading="form.isSubmitting.value"
         block
-      >
-        Submit
-      </Button>
+        :disabled="form.isSubmitting.value"
+        :loading="form.isSubmitting.value"
+        :label="form.isSubmitting.value ? 'Submitting...' : 'Submit'"
+      />
     </div>
   </NotForm>
 </template>

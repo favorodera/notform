@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('index', () => queryCollection('landing').first())
+const page = await useAsyncData('index', () => queryCollection('landing').first())
 
-if (!page.value) {
+if (!page.data.value) {
   throw createError({
     fatal: true,
     statusCode: 404,
@@ -13,8 +13,8 @@ if (!page.value) {
 <template>
   <div>
     <ContentRenderer
-      v-if="page"
-      :value="page"
+      v-if="page.data.value"
+      :value="page.data.value"
       :prose="false"
     />
   </div>

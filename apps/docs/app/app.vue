@@ -1,11 +1,14 @@
 <script setup lang="ts">
 const { siteDescription, siteName, siteTitle } = useAppConfig()
 
-const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs'))
+const navigation = await useAsyncData('navigation', () => queryCollectionNavigation('docs'))
 
-const { data: files } = useAsyncData('search', () => queryCollectionSearchSections('docs'))
+const sectionsSearch = useAsyncData('search', () => queryCollectionSearchSections('docs'))
 
-provide('navigation', navigation)
+const githubStars = useFetch('/api/github/stars')
+
+provide('navigation', navigation.data)
+provide('githubStars', githubStars.data)
 
 useSeoMeta({
   description: () => siteDescription,
@@ -21,7 +24,10 @@ useSeoMeta({
   twitterTitle: () => siteTitle,
 })
 
-defineOgImage('Landing.takumi')
+defineOgImage('Image.takumi', {
+  description: 'Vue Forms Without the Friction.',
+  title: 'NotForm',
+})
 </script>
 
 <template>
@@ -40,8 +46,8 @@ defineOgImage('Landing.takumi')
 
     <ClientOnly>
       <LazyContentSearch
-        :files="files"
-        :navigation="navigation"
+        :files="sectionsSearch.data.value"
+        :navigation="navigation.data.value"
       />
     </ClientOnly>
   </App>

@@ -19,7 +19,7 @@ const form = useNotFormInstance(props.form)
 const isValidating = ref(false)
 
 /** Timer handle for the current pending debounced validation. */
-let debounceTimer: ReturnType<typeof setTimeout> | undefined
+const debounceTimer = ref<ReturnType<typeof setTimeout>>()
 
 // Computed Properties
 
@@ -39,10 +39,12 @@ const isDirty = computed(() => form.dirtyFields.has(props.path))
 
 /** Cancels pending debounced validation on blur/unmount to prevent rogue execution. */
 function clearDebounce() {
-  if (debounceTimer !== undefined) {
-    clearTimeout(debounceTimer)
-    debounceTimer = undefined
+  if (debounceTimer.value === undefined) {
+    return
   }
+
+  clearTimeout(debounceTimer.value)
+  debounceTimer.value = undefined
 }
 
 /** Compares current value against baseline to sync dirty state tracking. */
@@ -62,7 +64,7 @@ function scheduleValidation() {
     return
   }
   clearDebounce()
-  debounceTimer = setTimeout(validate, props.debounce)
+  debounceTimer.value = setTimeout(validate, props.debounce)
 }
 
 // Exposed Actions & Event Handlers
