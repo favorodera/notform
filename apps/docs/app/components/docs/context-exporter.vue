@@ -59,7 +59,7 @@ async function copyPage() {
 <template>
   <FieldGroup>
     <Button
-      :label="clipboard.copied.value ? 'Copied' : 'Copy Markdown'"
+      label="Copy Markdown"
       :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:copy'"
       color="neutral"
       variant="outline"
