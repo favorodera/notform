@@ -1,5 +1,5 @@
 <div align="center">
-<h1>notform</h1>
+<h1><code>notform</core></h1>
 <p><strong>Headless, Schema-Agnostic Form Management for Vue 3</strong></p>
 <p>
 <a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/v/notform.svg?style=plastic&label=NPM%20Version&color=blue" alt="NPM Version"></a>
