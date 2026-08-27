@@ -23,9 +23,6 @@ const appConfig = useAppConfig()
       <Button
         :to="appConfig.github.url"
         :icon="appConfig.github.icon"
-        :ui="{
-          label:'max-sm:hidden',
-        }"
         target="_blank"
         size="sm"
         variant="soft"

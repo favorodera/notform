@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import type { PageLink } from '@nuxt/ui'
+import { computed } from '#imports'
+
 definePageMeta({
   layout: 'docs',
 })
@@ -22,6 +25,24 @@ const pageSurround = await useAsyncData(`${route.path}-surround`, () => {
     fields: ['description'],
   })
 })
+
+const tocFooterLinks = computed<PageLink[]>(() => [
+  {
+    icon: 'tabler:edit',
+    label: 'Edit this page',
+    target: '_blank',
+    to: `https://github.com/favorodera/notform/edit/main/apps/docs/content/${page.data.value?.stem}.md`,
+  }, {
+    icon: 'tabler:star',
+    label: 'Star on GitHub',
+    target: '_blank',
+    to: 'https://github.com/favorodera/notform',
+  }, {
+    icon: 'tabler:rocket',
+    label: 'Releases',
+    to: 'https://github.com/favorodera/notform/releases',
+  },
+])
 
 const seo = computed(() => {
   return {
@@ -64,7 +85,8 @@ defineOgImage('Image.takumi', { ...seo.value })
         <ContentSurround
           :surround="pageSurround.data.value"
           :ui="{
-            link:'p-4'
+            link:'p-4',
+            linkDescription:'truncate line-clamp-1'
           }"
         />
       </PageBody>
@@ -80,7 +102,18 @@ defineOgImage('Image.takumi', { ...seo.value })
           }"
           highlight
           highlight-variant="circuit"
-        />
+        >
+          <template #bottom>
+            <Separator />
+
+            <PageLinks
+              :links="tocFooterLinks"
+              :ui="{
+                linkLabelExternalIcon: 'hidden',
+              }"
+            />
+          </template>
+        </ContentToc>
       </template>
     </Page>
   </div>

@@ -35,10 +35,16 @@ const items = [
     to: `https://chatgpt.com/?hints=search&q=${encodeURIComponent(`Read ${mdPath.value} so I can ask questions about it.`)}`,
   },
   {
-    icon: 'simple-icons:anthropic',
+    icon: 'simple-icons:claude',
     label: 'Open in Claude',
     target: '_blank',
     to: `https://claude.ai/new?q=${encodeURIComponent(`Read ${mdPath.value} so I can ask questions about it.`)}`,
+  },
+  {
+    icon: 'tabler:brand-x',
+    label: 'Open in Grok',
+    target: '_blank',
+    to: `https://x.com/i/grok?text=${encodeURIComponent(`Read ${mdPath.value} so I can ask questions about it.`)}`,
   },
 ]
 
