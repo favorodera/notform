@@ -31,32 +31,6 @@ NotForm is a headless form validation and state management library for Vue 3 and
 - **Nuxt-ready** — Official Nuxt module with auto-imports and zero configuration.
 - **Flexible** — Use with any UI library—native HTML, Nuxt UI, Shadcn, or your own components.
 
-## Quick Start
-
-### Vue 3 / Vite
-
-```bash
-pnpm add notform zod
-```
-
-```ts
-import notform from 'notform'
-import { createApp } from 'vue'
-import App from './App.vue'
-
-const app = createApp(App)
-app.use(notform)
-app.mount('#app')
-```
-
-### Nuxt
-
-```bash
-npx nuxi module add notform
-```
-
-That's it—all composables and components are auto-imported.
-
 ## Monorepo Structure
 
 This monorepo is managed with [pnpm](https://pnpm.io/) workspaces and [Turborepo](https://turbo.build/repo).
@@ -102,6 +76,10 @@ pnpm ready
 | `pnpm typecheck` | Type-check all packages with `vue-tsc` / `tsc` |
 | `pnpm test` | Run all test suites with Vitest |
 | `pnpm ready` | Full pipeline: install → lint → typecheck → test → build |
+
+## Documentation
+
+For detailed guides, API reference, and examples, visit **[notformdocs.vercel.app](https://notformdocs.vercel.app/)**.
 
 ## License
 

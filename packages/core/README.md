@@ -30,7 +30,9 @@ Each form consists of:
 - **Submission handling** — Built-in submission lifecycle with loading states
 - **Your UI** — NotForm renders nothing—you bring your own components
 
-### Basic Usage
+## Basic Usage
+
+Import the components and composable you need:
 
 ```vue
 <script setup lang="ts">
@@ -53,7 +55,7 @@ const form = useNotForm({
 <template>
   <NotForm
     :form
-    @submit="form.submit"
+    @submit.prevent="form.submit"
     @reset="form.reset()"
   >
     <NotField
@@ -101,7 +103,74 @@ const form = useNotForm({
 </template>
 ```
 
-### Validation Libraries
+## Array Fields
+
+NotForm includes built-in support for dynamic array fields with add, remove, and reorder operations:
+
+```vue
+<script setup lang="ts">
+import { NotArrayField, NotField, NotForm, NotMessage, useNotForm } from 'notform'
+import { z } from 'zod'
+
+const tagSchema = z.string().min(1, 'Tag cannot be empty')
+
+const schema = z.object({
+  tags: z.array(tagSchema).min(1, 'At least one tag is required'),
+})
+
+const form = useNotForm({
+  schema,
+})
+</script>
+
+<template>
+  <NotForm
+    :form
+    @submit.prevent="form.submit"
+  >
+    <NotArrayField
+      v-slot="{ items, append, remove }"
+      path="tags"
+      :item-schema="tagSchema"
+    >
+      <div
+        v-for="(item, index) in items"
+        :key="item.key"
+      >
+        <NotField
+          v-slot="{ events }"
+          :path="item.path"
+        >
+          <input
+            v-bind="events"
+            :id="item.path"
+            v-model="form.values.tags[index]"
+            type="text"
+          >
+        </NotField>
+
+        <button
+          type="button"
+          @click="remove(index)"
+        >
+          Remove
+        </button>
+      </div>
+
+      <button
+        type="button"
+        @click="append('')"
+      >
+        Add Tag
+      </button>
+
+      <NotMessage path="tags" />
+    </NotArrayField>
+  </NotForm>
+</template>
+```
+
+## Validation Libraries
 
 NotForm works with any validation library that implements the Standard Schema interface:
 
@@ -109,6 +178,19 @@ NotForm works with any validation library that implements the Standard Schema in
 - **Valibot** — Modular and type-safe schema validation
 - **ArkType** — High-performance runtime type checking
 - And any other Standard Schema-compatible library
+
+## Components and Composables
+
+### Composables
+
+- `useNotForm` — Main composable for creating form instances
+
+### Components
+
+- `NotForm` — Form wrapper component that provides form context
+- `NotField` — Field component for individual form inputs
+- `NotMessage` — Error message display component
+- `NotArrayField` — Array field component for dynamic form arrays
 
 ## Features
 
@@ -128,4 +210,3 @@ For detailed guides, API reference, and examples, visit:
 ## License
 
 [MIT](../../LICENSE) &copy; [Favour Emeka](https://github.com/favorodera)
-
