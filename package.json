@@ -1,6 +1,6 @@
 {
   "name": "notform-monorepo",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "private": true,
   "packageManager": "pnpm@11.23.0",
   "description": "Vue Forms Without the Friction",

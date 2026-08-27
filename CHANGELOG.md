@@ -1,5 +1,165 @@
 # Changelog
 
+## v2.2.2...v2.2.3
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.2.2...v2.2.3)
+
+### Added
+
+- **docs:** Add unified header with github stars count ([7b55b41](https://github.com/favorodera/notform/commit/7b55b41))
+
+  - Unify landing and docs headers into single component
+  - Add cached API endpoint to fetch GitHub stars count
+  - Display live star count in the header action button
+
+- **docs:** Add markdown context exporter component ([e1c5a7e](https://github.com/favorodera/notform/commit/e1c5a7e))
+
+  - Add dropdown menu to export markdown and AI prompts
+  - Move clipboard logic out of slug page into component
+  - Fix content renderer data binding on docs page
+
+- **docs:** Enhance documentation layout and links ([03ade37](https://github.com/favorodera/notform/commit/03ade37))
+
+  - Add Grok option to context exporter
+  - Add TOC footer links for editing, star, and releases
+  - Update Claude icon in context exporter
+  - Refine surround link text styling
+
+- **docs:** Add github sponsor links ([251d06b](https://github.com/favorodera/notform/commit/251d06b))
+
+  - Add sponsor config under github settings
+  - Add sponsor button with tooltip in header
+  - Add sponsor link to documentation toc footer
+
+
+### Fixed
+
+- **docs:** Update OG image component reference ([ef4f602](https://github.com/favorodera/notform/commit/ef4f602))
+
+  - Update OgImage component prefix in template calls
+  - Apply code formatting to docs components and content
+
+- **docs:** Span footer border across full width ([31d83e9](https://github.com/favorodera/notform/commit/31d83e9))
+
+  - Wrap container in native footer element
+  - Allow top border to stretch across full viewport
+
+
+### Refactors
+
+- **docs:** Simplify useAsyncData usage across app ([30560ff](https://github.com/favorodera/notform/commit/30560ff))
+
+  - Avoid destructuring data from useAsyncData calls
+  - Remove unused search logic from error page
+  - Streamline appConfig and clipboard composable calls
+
+- **docs:** Switch markdown copy icons to tabler ([c040966](https://github.com/favorodera/notform/commit/c040966))
+
+  - Replace lucide icons with tabler icons
+  - Add @iconify-json/tabler dependency
+
+- **docs:** Simplify landing page animation logic ([2045b70](https://github.com/favorodera/notform/commit/2045b70))
+
+  - Clean up unused animation variants in why-notform
+  - Inline Motion properties with staggered delays
+  - Format transition ease arrays consistently
+
+- **docs:** Revise README for notform branding and description ([3d3f0bf](https://github.com/favorodera/notform/commit/3d3f0bf))
+
+  Updated the README to reflect changes in branding and integration.
+
+- **docs:** Keep copy button label static ([32acfd6](https://github.com/favorodera/notform/commit/32acfd6))
+
+  - Keep button text consistent after copying
+  - Rely on icon change to indicate success
+  - Prevent layout shift from label length changes
+
+
+### Documentation
+
+- **site:** Revamp documentation and ui theme ([fb1eb1d](https://github.com/favorodera/notform/commit/fb1eb1d))
+
+  - Reorganize getting started and advanced guides
+  - Update demos to use native form elements
+  - Refresh docs theme, styling, and icon set
+  - Add ai-models reference guide for llms
+  - Improve readme and contributing instructions
+
+- **advanced:** Expand guides and update demo components ([816afc1](https://github.com/favorodera/notform/commit/816afc1))
+
+  - Rewrite validation, server error, and schema guides
+  - Refactor native demo components with data attributes
+  - Add nuxtseo-layer-devtools to docs dependencies
+
+- **app:** Refresh branding, og-images, and content ([242722b](https://github.com/favorodera/notform/commit/242722b))
+
+  - consolidate og-image into a single component
+  - update favicon and application icons
+  - format and clean up documentation content
+  - update eslint configurations
+
+- **content:** Streamline quickstart and array field docs ([18e0921](https://github.com/favorodera/notform/commit/18e0921))
+
+  - Simplify heading in quickstart guide
+  - Remove redundant basic usage section from array field
+
+- **quickstart:** Update next steps links ([c4d6ef2](https://github.com/favorodera/notform/commit/c4d6ef2))
+
+  - Fix broken navigation links in quickstart guide
+  - Clean up array formatting in landing components
+
+- Revamp documentation structure and styling ([4a68d12](https://github.com/favorodera/notform/commit/4a68d12))
+
+  - Restructure docs navigation and content sections
+  - Add UI library integration guides and examples
+  - Update landing page components and design system
+  - Refresh project READMEs and contribution guide
+
+- **core:** Format library title in README ([045be98](https://github.com/favorodera/notform/commit/045be98))
+- **docs:** Wrap notes in callout components ([79e9814](https://github.com/favorodera/notform/commit/79e9814))
+
+  - Wrap notes and cautions in Nuxt callout blocks
+  - Improve visual hierarchy and reader emphasis
+
+
+### Chores
+
+- Update dependencies and editor configuration ([d8fb67a](https://github.com/favorodera/notform/commit/d8fb67a))
+
+  - Add shared VS Code settings and extensions
+  - Upgrade pnpm, ESLint, Vitest, and workspace tools
+  - Improve submit event typing in core package
+  - Refine reactive refs and cleanup in components
+
+- **docs:** Remove MCP toolkit integration ([4685787](https://github.com/favorodera/notform/commit/4685787))
+
+  - Remove unused `@nuxtjs/mcp-toolkit` module
+  - Delete page search and retrieval MCP tools
+
+- **turbo:** Remove build dep from postinstall ([6302f87](https://github.com/favorodera/notform/commit/6302f87))
+
+  - Prevent unnecessary upstream builds on install
+  - Avoid circular dependencies and speed up setup
+
+- **docs:** Remove Grok export option ([4e8b811](https://github.com/favorodera/notform/commit/4e8b811))
+
+  - Remove Grok link from context exporter menu
+
+- **turbo:** Add build dependency to postinstall ([860fb5a](https://github.com/favorodera/notform/commit/860fb5a))
+
+  - Ensure dependencies build before postinstall runs
+
+
+### Styling
+
+- **docs:** Add missing trailing comma in context exporter ([3d8cc77](https://github.com/favorodera/notform/commit/3d8cc77))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+- Favour  Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.1...v2.2.2
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.1...v2.2.2)

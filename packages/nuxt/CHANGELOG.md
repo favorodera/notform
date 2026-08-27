@@ -1,5 +1,41 @@
 # Changelog
 
+## v2.2.2...v2.2.3
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.2.2...v2.2.3)
+
+### Documentation
+
+- **site:** Revamp documentation and ui theme ([fb1eb1d](https://github.com/favorodera/notform/commit/fb1eb1d))
+
+  - Reorganize getting started and advanced guides
+  - Update demos to use native form elements
+  - Refresh docs theme, styling, and icon set
+  - Add ai-models reference guide for llms
+  - Improve readme and contributing instructions
+
+- Revamp documentation structure and styling ([4a68d12](https://github.com/favorodera/notform/commit/4a68d12))
+
+  - Restructure docs navigation and content sections
+  - Add UI library integration guides and examples
+  - Update landing page components and design system
+  - Refresh project READMEs and contribution guide
+
+
+### Chores
+
+- Update dependencies and editor configuration ([d8fb67a](https://github.com/favorodera/notform/commit/d8fb67a))
+
+  - Add shared VS Code settings and extensions
+  - Upgrade pnpm, ESLint, Vitest, and workspace tools
+  - Improve submit event typing in core package
+  - Refine reactive refs and cleanup in components
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.1...v2.2.2
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.1...v2.2.2)
