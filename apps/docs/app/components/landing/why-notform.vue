@@ -31,36 +31,6 @@ const whys = [
     title: 'End-to-end type safety',
   },
 ]
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: 0.1,
-      staggerChildren: 0.08,
-    },
-  },
-}
-
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.35,
-      ease: [
-        0.25,
-        0.1,
-        0.25,
-        1,
-      ] as const,
-    },
-    y: 0,
-  },
-}
 </script>
 
 <template>
@@ -75,7 +45,6 @@ const cardVariants = {
         lg:py-28
       "
     >
-      <!-- Section header -->
       <Motion
         as-child
         :initial="{ opacity: 0, y: 16 }"
@@ -109,13 +78,7 @@ const cardVariants = {
         </div>
       </Motion>
 
-      <!-- Feature grid — each card is its own bordered island -->
-      <Motion
-        as="ul"
-        initial="hidden"
-        while-in-view="visible"
-        :in-view-options="{ once: true, margin: '-40px' }"
-        :variants="containerVariants"
+      <ul
         class="
           mbs-12 grid gap-4
 
@@ -128,13 +91,21 @@ const cardVariants = {
           v-for="(why, index) in whys"
           :key="index"
           as="li"
-          :variants="cardVariants"
+          :initial="{ opacity: 0, y: 20 }"
+          :while-in-view="{
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: 0.35,
+              delay: (index % 3) * 0.08,
+              ease: [0.25, 0.1, 0.25, 1],
+            },
+          }"
+          :in-view-options="{ once: true, margin: '-40px' }"
         >
-          <AppCard
-            v-bind="why"
-          />
+          <AppCard v-bind="why" />
         </Motion>
-      </Motion>
+      </ul>
     </Container>
   </section>
 </template>
