@@ -32,12 +32,21 @@ const tocFooterLinks = computed<PageLink[]>(() => [
     label: 'Edit this page',
     target: '_blank',
     to: `https://github.com/favorodera/notform/edit/main/apps/docs/content/${page.data.value?.stem}.md`,
-  }, {
+  },
+  {
     icon: 'tabler:star',
     label: 'Star on GitHub',
     target: '_blank',
     to: 'https://github.com/favorodera/notform',
-  }, {
+  },
+  {
+    class: 'font-semibold text-pink-400 hover:text-pink-500',
+    icon: 'tabler:heart',
+    label: 'Sponsor on GitHub',
+    target: '_blank',
+    to: 'https://github.com/sponsors/favorodera',
+  },
+  {
     icon: 'tabler:rocket',
     label: 'Releases',
     to: 'https://github.com/favorodera/notform/releases',

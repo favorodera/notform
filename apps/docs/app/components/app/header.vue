@@ -21,14 +21,30 @@ const appConfig = useAppConfig()
       <ColorModeButton />
 
       <Button
-        :to="appConfig.github.url"
-        :icon="appConfig.github.icon"
+        :to="appConfig.github.repo.url"
+        :icon="appConfig.github.repo.icon"
         target="_blank"
         size="sm"
         variant="soft"
         class="tabular-nums"
         :label="githubStars?.toString()"
       />
+
+      <Tooltip
+        text="Sponsor on GitHub"
+        :delay-duration="0"
+        arrow
+      >
+        <Button
+          :to="appConfig.github.sponsor.url"
+          :icon="appConfig.github.sponsor.icon"
+          target="_blank"
+          size="sm"
+          variant="soft"
+          aria-label="Sponsor on GitHub"
+          class="text-pink-500"
+        />
+      </Tooltip>
     </template>
 
     <template #body>

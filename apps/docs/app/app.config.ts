@@ -4,9 +4,16 @@ export default defineAppConfig({
     url: 'https://favorodera.vercel.app',
   },
   github: {
-    icon: 'simple-icons:github',
-    label: 'GitHub',
-    url: 'https://github.com/favorodera/notform',
+    repo: {
+      icon: 'simple-icons:github',
+      label: 'GitHub',
+      url: 'https://github.com/favorodera/notform',
+    },
+    sponsor: {
+      icon: 'tabler:heart',
+      label: 'Sponsor',
+      url: 'https://github.com/sponsors/favorodera',
+    },
   },
   siteDescription: 'Vue Forms without the friction.',
   siteName: 'NotForm',
