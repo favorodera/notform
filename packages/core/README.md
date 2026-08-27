@@ -1,14 +1,12 @@
 <div align="center">
-<h1><code>notform</core></h1>
-<p><strong>Headless, Schema-Agnostic Form Management for Vue 3</strong></p>
+<h1><code>notform</code></h1>
+<p><strong>Headless Form Management, Seamlessly Integrated with Nuxt</strong></p>
 <p>
-<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/v/notform.svg?style=plastic&label=NPM%20Version&color=blue" alt="NPM Version"></a>
+<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/v/notform.svg?style=plastic&label=NPM%20Version" alt="NPM Version"></a>
 <a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/dt/notform.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
 <a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/unpacked-size/notform?style=plastic&label=NPM%20Unpacked%20Size&color=blue" alt="NPM Unpacked Size"></a>
 </p>
 </div>
-
-<br>
 
 `notform` is the core package of the NotForm ecosystem. It provides headless form validation and state management for Vue 3 applications. Built with TypeScript from the ground up, it offers a composable API that integrates perfectly with Vue 3's Composition API and works with any Standard Schema-compatible validator.
 
