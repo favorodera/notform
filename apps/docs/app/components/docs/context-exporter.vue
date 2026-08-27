@@ -39,7 +39,7 @@ const items = [
     label: 'Open in Claude',
     target: '_blank',
     to: `https://claude.ai/new?q=${encodeURIComponent(`Read ${mdPath.value} so I can ask questions about it.`)}`,
-  }
+  },
 ]
 
 /** Copy the current page markdown to the clipboard */
