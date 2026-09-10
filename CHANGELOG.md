@@ -1,5 +1,42 @@
 # Changelog
 
+## v2.2.3...v2.2.4
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.2.3...v2.2.4)
+
+### Fixed
+
+- **core:** Track field validation cycles separately ([379963c](https://github.com/favorodera/notform/commit/379963c))
+
+  - allow concurrent field validations without drops
+  - invalidate pending validations when form resets
+
+
+### Refactors
+
+- **core:** Handle concurrent validation cycles ([0f85251](https://github.com/favorodera/notform/commit/0f85251))
+
+  - Track validation cycles to ignore stale results
+  - Restructure core unit tests into subdirectories
+  - Bump minimum Node engine requirement to v24
+
+- **core:** Handle concurrent validation cycles ([#79](https://github.com/favorodera/notform/pull/79))
+
+### Documentation
+
+- Update READMEs with usage and setup guides ([551fb0e](https://github.com/favorodera/notform/commit/551fb0e))
+
+  - Refresh root and package READMEs documentation
+  - Add explicit Quick Start and Nuxt examples
+  - Clarify package roles and requirements
+  - Update badge links and development commands
+
+### ❤️ Contributors
+
+- Favour  Emeka ([@favorodera](https://github.com/favorodera))
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.2...v2.2.3
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.2...v2.2.3)
