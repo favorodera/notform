@@ -1,22 +1,26 @@
 <div align="center">
 <h1><code>notform-nuxt</code></h1>
-<p><strong>Headless Form Management, Seamlessly Integrated with Nuxt</strong></p>
+<p><strong>NotForm integration for Nuxt</strong></p>
 <p>
-<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/v/notform-nuxt.svg?style=plastic&label=NPM%20Version&color=blue" alt="NPM Version"></a>
-<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/dt/notform-nuxt.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
-<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/unpacked-size/notform-nuxt?style=plastic&label=NPM%20Unpacked%20Size&color=blue" alt="NPM Unpacked Size"></a>
+<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/v/notform-nuxt.svg?style=plastic&label=Version" alt="Version"></a>
+<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/dm/notform-nuxt.svg?style=plastic&label=Downloads&color=blue" alt="Downloads"></a>
+<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/unpacked-size/notform-nuxt?style=plastic&label=Unpacked%20Size" alt="Unpacked Size"></a>
 </p>
 </div>
 
-`notform-nuxt` is the official Nuxt module for [NotForm](../core). It provides auto-imports for NotForm composables and components, making form development in Nuxt applications seamless and type-safe. Works with any Standard Schema-compatible validator (Zod, Valibot, ArkType) and any UI library.
+`notform-nuxt` is the official Nuxt module for [NotForm](../core).
+
+It integrates the NotForm core package with Nuxt's auto-import system so the composable and components are available directly in your Nuxt application.
 
 ## Installation
+
+The module is available through the Nuxt Modules Registry:
 
 ```bash
 npx nuxi module add notform
 ```
 
-Alternatively, install manually:
+Or install it directly:
 
 ```bash
 pnpm add notform-nuxt
@@ -24,7 +28,7 @@ pnpm add notform-nuxt
 
 ## Setup
 
-Add `notform-nuxt` to the `modules` section of your `nuxt.config.ts`:
+Add the module to `nuxt.config.ts` when installing manually:
 
 ```ts
 export default defineNuxtConfig({
@@ -32,23 +36,110 @@ export default defineNuxtConfig({
 })
 ```
 
-That's it — all NotForm composables and components are now auto-imported in your Nuxt application.
+That's it. The NotForm composable and components are auto-imported in your Nuxt application.
 
-## What the Module Does
+## Usage
 
-1. **Auto-imports composables** — `useNotForm`, `NotForm`, `NotField`, `NotMessage`, `NotArrayField` are available everywhere without manual imports.
-2. **Auto-imports components** — All NotForm components are globally available in your templates.
-3. **Type-safe** — Full TypeScript support with auto-completion for all NotForm APIs.
+You can use NotForm without importing the composable or components in your Vue files:
 
-## Prerequisites
+```vue
+<script setup lang="ts">
+import { z } from 'zod'
 
-- [Nuxt](https://nuxt.com/) v4 or later
+const schema = z.object({
+  email: z.email('Enter a valid email address'),
+  name: z.string('Enter a valid name'),
+})
 
-## Documentation
+const form = useNotForm({
+  initialValues: {
+    email: '',
+    name: '',
+  },
+  schema,
+})
+</script>
 
-For detailed guides, API reference, and examples, visit:
-**[notformdocs.vercel.app](https://notformdocs.vercel.app/)**
+<template>
+  <NotForm
+    :form="form"
+    @submit.prevent="form.submit"
+  >
+    <NotField
+      v-slot="{ events, path }"
+      path="name"
+    >
+      <div>
+        <label :for="path">Name</label>
+
+        <input
+          :id="path"
+          v-model="form.values.name"
+          v-bind="events"
+          name="name"
+          type="text"
+          autocomplete="name"
+        >
+
+        <NotMessage :path="path" />
+      </div>
+    </NotField>
+
+    <NotField
+      v-slot="{ events, path }"
+      path="email"
+    >
+      <div>
+        <label :for="path">Email address</label>
+
+        <input
+          :id="path"
+          v-model="form.values.email"
+          v-bind="events"
+          name="email"
+          type="email"
+          autocomplete="email"
+        >
+
+        <NotMessage :path="path" />
+      </div>
+    </NotField>
+
+    <button type="submit">
+      Submit
+    </button>
+  </NotForm>
+</template>
+```
+
+## What It Adds
+
+The module provides Nuxt integration for the APIs exported by `notform`:
+
+- `useNotForm`
+- `NotForm`
+- `NotField`
+- `NotMessage`
+- `NotArrayField`
+
+The form behavior itself is provided by the core `notform` package.
+
+## Requirements
+
+- Nuxt 4 or later
+- Node.js 24 or later for development in this repository
+- A Standard Schema-compatible validator
+
+## Development
+
+From the repository root:
+
+```bash
+pnpm install
+pnpm --filter notform-nuxt typecheck
+pnpm --filter notform-nuxt build
+```
 
 ## License
 
-[MIT](../../LICENSE) &copy; [Favour Emeka](https://github.com/favorodera)
+[MIT](../../LICENSE) © [Favour Emeka](https://github.com/favorodera)
