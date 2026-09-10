@@ -43,12 +43,14 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    *
    * Useful for deeply nested paths or custom inputs that do not use `v-model`.
    * Does **not** trigger validation — the field's event handlers are responsible for that.
+   * @param path The dot-separated path to the field.
+   * @param value The value to set.
    * @example
    * ```ts
    * form.setValue('address.city', 'Lagos')
    * ```
    */
-  setValue: <const TPath extends Paths<StandardSchemaV1.InferInput<TSchema>>>(path: TPath, value: Get<StandardSchemaV1.InferInput<TSchema>, TPath, { strict: false }>) => void
+  setValue: <TPath extends Paths<StandardSchemaV1.InferInput<TSchema>>>(path: TPath, value: Get<StandardSchemaV1.InferInput<TSchema>, TPath, { strict: false }>) => void
 
   /**
    * The set of field paths the user has interacted with.
@@ -62,6 +64,11 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
   /**
    * Marks a field as touched.
    * Called automatically by the field's `onBlur` handler.
+   * @param path The dot-separated path to the field.
+   * @example
+   * ```ts
+   * form.touchField('address.city')
+   * ```
    */
   touchField: (path: Paths<StandardSchemaV1.InferInput<TSchema>>) => void
 
@@ -74,6 +81,11 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
   /**
    * Marks a field as dirty.
    * Called automatically when a field value changes.
+   * @param path The dot-separated path to the field.
+   * @example
+   * ```ts
+   * form.dirtyField('address.city')
+   * ```
    */
   dirtyField: (path: Paths<StandardSchemaV1.InferInput<TSchema>>) => void
 
@@ -96,17 +108,34 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
   /**
    * Replaces an existing error for the same path, or appends it if none exists.
    * Useful for setting server-side errors after submission.
+   * @param error The validation issue to set.
+   * @example
+   * ```ts
+   * form.setError({ message: 'Invalid email', path: ['email'] })
+   * ```
    */
   setError: (error: StandardSchemaV1.Issue) => void
 
-  /** Replaces all current errors with the provided issues. */
+  /**
+   * Replaces all current errors with the provided issues.
+   * @param errors The validation issues to set.
+   * @example
+   * ```ts
+   * form.setErrors([
+   *   { message: 'Invalid email', path: ['email'] },
+   *   { message: 'Phone number must be at least 11 digits', path: ['phone'] }
+   * ])
+   * ```
+   */
   setErrors: (errors: Array<StandardSchemaV1.Issue>) => void
 
   /** Removes all active validation errors. */
   clearErrors: () => void
 
   /**
-   * Returns all validation issues for a specific field path.
+   * Get all the validation issues for a specific field path.
+   * @param path The dot-separated path to the field.
+   * @returns An array of validation issues for the given field path.
    * @example
    * ```ts
    * form.getFieldErrors('address.city')
@@ -120,12 +149,19 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
   /**
    * Validates the entire form against the schema.
    * Replaces all current errors with the result.
+   * @returns A promise that resolves to the result of the validation.
    */
   validate: () => Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>>
 
   /**
    * Validates a single field against the schema.
    * Only replaces errors for that field — all other fields are left untouched.
+   * @param path The dot-separated path to the field.
+   * @returns A promise that resolves to the result of the validation.
+   * @example
+   * ```ts
+   * form.validateField('email')
+   * ```
    */
   validateField: (path: Paths<StandardSchemaV1.InferInput<TSchema>>) => Promise<StandardSchemaV1.Result<StandardSchemaV1.InferOutput<TSchema>>>
 
@@ -140,14 +176,8 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    *
    * Marks all fields as touched and dirty before validating so all errors surface.
    * If validation fails, submission is aborted.
-   * Bind to the native form's `@submit` event:
-   * @example
-   * ```vue
-   * <template>
-   *   <form v-on:submit="form.submit">
-   *   </form>
-   * </template>
-   * ```
+   * @param event The submit event.
+   * @returns A promise that resolves when the form is submitted.
    */
   submit: (event: SubmitEvent) => Promise<void>
 
@@ -156,13 +186,20 @@ export type NotFormInstance<TSchema extends ObjectSchema> = Raw<{
    *
    * Clears all touched and dirty tracking. If `values` or `errors` are passed,
    * they replace the stored baseline so subsequent resets return to the new state.
+   * @param values Optional new values to reset the form to.
+   * @param errors Optional new errors to reset the form to.
    * @example
    * ```ts
    * // Reset to original initial values
    * form.reset()
    *
-   * // Reset to new values (becomes the new baseline)
-   * form.reset({ name: 'Jane' })
+   * // Reset to new values and errors (becomes the new baseline)
+   * form.reset(
+   *  { name: 'Jane' },
+   *  [
+   *    { message: 'Invalid email', path: ['email'] }
+   *  ]
+   * )
    * ```
    */
   reset: (values?: DeepPartial<StandardSchemaV1.InferInput<TSchema>>, errors?: Array<StandardSchemaV1.Issue>) => void

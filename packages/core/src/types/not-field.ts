@@ -10,28 +10,13 @@ export interface NotFieldProps {
   /**
    * Explicit form instance override.
    * Takes priority over the instance provided by a `NotForm` ancestor.
-   * Required when using `NotField` outside of a `NotForm` (singleton fields).
-   * @example
-   * ```vue
-   * <template>
-   *   <NotField :form="form" path="email" v-slot="{ events }">
-   *     <input v-bind="events" />
-   *   </NotField>
-   * </template>
-   * ```
+   * Required when using `NotField` outside of a `NotForm`.
    */
   form?: NotFormInstance<any>
 
   /**
    * Per-field validation trigger overrides.
    * Merged over the form-wide `validateOn` — only the keys you specify are overridden.
-   * @example
-   * ```vue
-   * <template>
-   *   <!-- form validates on blur only, but this field also validates on every input -->
-   *   <NotField :validateOn="{ onInput: true }" path="username" />
-   * </template>
-   * ```
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
 
@@ -45,15 +30,6 @@ export interface NotFieldProps {
    *
    * Blur- and submit-triggered validation always runs immediately, regardless
    * of this setting, so the field never feels unresponsive when the user leaves.
-   * @example
-   * ```vue
-   * <template>
-   *   <!-- validate 400ms after the user stops typing -->
-   *   <NotField path="username" :debounce="400" v-slot="{ events }">
-   *     <input v-model="form.values.username" v-bind="events" />
-   *   </NotField>
-   * </template>
-   * ```
    *
    * Omit or set to `0` to disable debouncing (default behaviour).
    */
@@ -95,6 +71,7 @@ export interface NotFieldSlots<TSchema extends ObjectSchema> {
     /**
      * Manually triggers validation for this field.
      * Useful for custom inputs that manage their own interaction events.
+     * @returns A promise that resolves to the result of the validation.
      */
     validate: () => ReturnType<NotFormInstance<TSchema>['validateField']>
 

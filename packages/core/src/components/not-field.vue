@@ -6,7 +6,7 @@ import type { NotFieldProps, NotFieldSlots } from '../types/not-field'
 import type { ObjectSchema } from '../types/shared'
 import { useNotFormInstance } from '../utils/instance'
 
-// Setup & Baseline
+// Setup
 
 defineSlots<NotFieldSlots<TSchema>>()
 
@@ -14,20 +14,23 @@ const props = defineProps<NotFieldProps>()
 
 const form = useNotFormInstance(props.form)
 
-// Reactive State
+// Internal State
 
 const isValidating = ref(false)
+const validatingCount = ref(0)
 
 /** Timer handle for the current pending debounced validation. */
 const debounceTimer = ref<ReturnType<typeof setTimeout>>()
 
-// Computed Properties
+// Internal Computed
 
-/** Merges per-field overrides with the form-wide validation config */
+/** Merges per-field overrides with the form-wide validation config. */
 const validateOn = computed(() => ({
   ...form.validateOn,
   ...props.validateOn,
 }))
+
+// Public Computed
 
 const value = computed(() => getProperty(form.values, props.path))
 const errors = computed(() => form.getFieldErrors(props.path))
@@ -36,6 +39,21 @@ const isTouched = computed(() => form.touchedFields.has(props.path))
 const isDirty = computed(() => form.dirtyFields.has(props.path))
 
 // Internal Helpers
+
+/** Starts a local field validation execution. */
+function beginValidation() {
+  validatingCount.value++
+  isValidating.value = true
+}
+
+/** Ends a local field validation execution. */
+function endValidation() {
+  validatingCount.value--
+
+  if (validatingCount.value === 0) {
+    isValidating.value = false
+  }
+}
 
 /** Cancels pending debounced validation on blur/unmount to prevent rogue execution. */
 function clearDebounce() {
@@ -50,6 +68,7 @@ function clearDebounce() {
 /** Compares current value against baseline to sync dirty state tracking. */
 function updateDirty() {
   const isClean = dequal(value.value, getProperty(form.initialValues, props.path))
+
   if (isClean) {
     form.dirtyFields.delete(props.path)
   } else {
@@ -57,34 +76,36 @@ function updateDirty() {
   }
 }
 
-/** Replaces pending validations with a new timer, or runs synchronously if no debounce. */
+/** Replaces pending debounced validation with a new timer, or runs immediately when no debounce is configured. */
 function scheduleValidation() {
   if (!props.debounce) {
     validate()
     return
   }
+
   clearDebounce()
   debounceTimer.value = setTimeout(validate, props.debounce)
 }
 
-// Exposed Actions & Event Handlers
+// Public Actions & Event Handlers
 
 /**
  * Validates the field and returns the validation result.
  * @returns A promise that resolves to the validation result.
  */
 async function validate() {
-  isValidating.value = true
+  beginValidation()
+
   try {
     return await form.validateField(props.path)
   } finally {
-    isValidating.value = false
+    endValidation()
   }
 }
 
 /** Handles the blur event for the field. */
 function onBlur() {
-  // Blur's immediate validation takes over
+  // Blur's immediate validation takes over.
   clearDebounce()
 
   form.touchField(props.path)
@@ -102,7 +123,7 @@ function onInput() {
     return
   }
 
-  // Eager mode: only revalidate if there is already an error to clear
+  // Eager mode: only revalidate if there is already an error to clear.
   if (form.validationMode === 'eager' && !isValid.value) {
     scheduleValidation()
   }
@@ -116,7 +137,7 @@ function onChange() {
     return
   }
 
-  // Eager mode: only revalidate if there is already an error to clear
+  // Eager mode: only revalidate if there is already an error to clear.
   if (form.validationMode === 'eager' && !isValid.value) {
     scheduleValidation()
   }
@@ -129,10 +150,11 @@ function onFocus() {
   }
 }
 
-// Lifecycle Hooks
+// Lifecycle
 
 onMounted(async () => {
   await nextTick()
+
   if (validateOn.value.onMount) {
     validate()
   }

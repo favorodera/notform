@@ -13,14 +13,6 @@ export interface NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = Stand
   /**
    * Schema for a single array item — used purely for type inference.
    * Enables typed `append`, `prepend`, `insert`, and `update` methods in the slot.
-   * @example
-   * ```vue
-   * <template>
-   *   <NotArrayField path="tags" :item-schema="z.string()">
-   *     <!-- append now expects a string -->
-   *   </NotArrayField>
-   * </template>
-   * ```
    */
   itemSchema?: TItemSchema
 
@@ -39,22 +31,9 @@ export interface NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = Stand
   validateOn?: Partial<Record<Extract<ValidationTrigger, 'onChange' | 'onMount'>, boolean>>
 }
 
-/**
- * Represents a single item in the array field.
- * Use `key` for `v-for` tracking and `path` to pass to a nested `NotField`.
- * @example
- * ```vue
- * <template>
- *   <NotArrayField path="tags" v-slot="{ items }">
- *     <NotField v-for="item in items" :key="item.key" :path="item.path" v-slot="{ events }">
- *       <input v-model="form.values.tags[item.index]" v-bind="events" />
- *     </NotField>
- *   </NotArrayField>
- * </template>
- * ```
- */
+/** Represents a single item in the array field. */
 export interface NotArrayFieldItem {
-  /** Stable key for `v-for` — does not change when items are reordered. */
+  /** Stable key used for looping — does not change when items are reordered. */
   key: string
 
   /** Current index of this item in the array. */
@@ -75,7 +54,7 @@ export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItem = any> {
   /** The dot-separated path to this array field. */
     path: string
 
-    /** The array items with stable keys and paths for use with `v-for`. */
+    /** The array items with stable keys and paths. */
     items: Array<NotArrayFieldItem>
 
     /** All validation issues for this array field from the last validation run. */
@@ -102,6 +81,7 @@ export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItem = any> {
     /**
      * Manually triggers validation for this array field.
      * Useful when mutations are performed programmatically outside of the normal flow.
+     * @returns A promise that resolves to the result of the validation.
      */
     validate: () => ReturnType<NotFormInstance<TSchema>['validateField']>
 

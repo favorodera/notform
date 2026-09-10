@@ -15,13 +15,7 @@ export interface NotMessageProps {
   /**
    * Explicit form instance override.
    * Takes priority over the instance provided by a `NotForm` ancestor.
-   * Required when using `NotMessage` outside of a `NotForm` (singleton fields).
-   * @example
-   * ```vue
-   * <template>
-   *   <NotMessage :form="form" path="email" />
-   * </template>
-   * ```
+   * Required when using `NotMessage` outside of a `NotForm`.
    */
   form?: NotFormInstance<any>
 }
