@@ -2,6 +2,8 @@
 import type { NotFormProps, NotFormSlots } from '../types/not-form'
 import { provideNotFormInstance } from '../utils/instance'
 
+// Setup
+
 defineSlots<NotFormSlots>()
 
 const props = defineProps<NotFormProps>()

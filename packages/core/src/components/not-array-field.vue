@@ -12,7 +12,7 @@ import type { ObjectSchema } from '../types/shared'
 import { remapArrayFieldState } from '../utils/array-field'
 import { useNotFormInstance } from '../utils/instance'
 
-// Setup & Baseline
+// Setup
 
 defineSlots<NotArrayFieldSlots<TSchema, TItem>>()
 
@@ -20,9 +20,10 @@ const props = defineProps<NotArrayFieldProps<TItemSchema>>()
 
 const form = useNotFormInstance(props.form)
 
-// Reactive State
+// Internal State
 
 const isValidating = ref(false)
+const validatingCount = ref(0)
 
 /** Counter to ensure absolute uniqueness for generated keys. */
 const keyCounter = ref(0)
@@ -31,10 +32,14 @@ const keyCounter = ref(0)
 const itemKeys = ref<string[]>((() => {
   const initial = getProperty(form.values, props.path)
   const length = Array.isArray(initial) ? initial.length : 0
-  return Array.from({ length }, () => `${props.path}-${keyCounter.value++}`)
+
+  return Array.from(
+    { length },
+    () => `${props.path}-${keyCounter.value++}`,
+  )
 })())
 
-// Computed Properties
+// Internal Computed
 
 const validateOn = computed(() => ({
   onChange: props.validateOn?.onChange ?? form.validateOn.onChange,
@@ -45,6 +50,8 @@ const array = computed<TItem[]>(() => {
   const value = getProperty(form.values, props.path)
   return Array.isArray(value) ? value : []
 })
+
+// Public Computed
 
 const items = computed<NotArrayFieldItem[]>(() => {
   return array.value.map((_, index) => ({
@@ -67,17 +74,40 @@ const isDirty = computed(() => {
     || [...form.dirtyFields].some(path => path.startsWith(`${props.path}.`))
 })
 
-// Internal Helpers & Mutations
+// Internal Helpers
+
+/**
+ * Starts a local field validation execution.
+ */
+function beginValidation() {
+  validatingCount.value++
+  isValidating.value = true
+}
+
+/**
+ * Ends a local field validation execution.
+ */
+function endValidation() {
+  validatingCount.value--
+
+  if (validatingCount.value === 0) {
+    isValidating.value = false
+  }
+}
 
 /**
  * Generates a unique key string using the field path and counter.
- * @returns A unique key string
+ * @returns A unique key string.
  */
 function generateKey() {
   return `${props.path}-${keyCounter.value++}`
 }
 
-/** Re-aligns itemKeys with current array length (used mostly after external resets) */
+/**
+ * Re-aligns itemKeys with current array length.
+ *
+ * Used mostly after external resets.
+ */
 function syncKeys() {
   const arrayLength = array.value.length
 
@@ -92,16 +122,20 @@ function syncKeys() {
 
 /**
  * Applies an array update, syncs form dirty/touched state, and triggers validation.
- * @param updater Function that modifies the array
+ * @param updater Function that modifies the array.
  */
 function mutate(updater: (current: TItem[]) => void): void {
   const current = [...array.value]
+
   updater(current)
 
   setProperty(form.values, props.path, current)
   form.touchField(props.path)
 
-  const isClean = dequal(current, getProperty(form.initialValues, props.path))
+  const isClean = dequal(
+    current,
+    getProperty(form.initialValues, props.path),
+  )
 
   if (isClean) {
     form.dirtyFields.delete(props.path)
@@ -114,69 +148,85 @@ function mutate(updater: (current: TItem[]) => void): void {
   }
 }
 
-// Exposed Actions & Array Methods
+// Public Actions
 
 /**
- * Validates the array field
- * @returns Promise that resolves to the validation result
+ * Validates the array field.
+ * @returns A promise that resolves to the validation result.
  */
 async function validate() {
-  isValidating.value = true
+  beginValidation()
+
   try {
     return await form.validateField(props.path)
   } finally {
-    isValidating.value = false
+    endValidation()
   }
 }
 
 /**
- * Appends an item to the array
- * @param value The value to append
+ * Appends an item to the array.
+ * @param value The value to append.
  */
 function append(value: TItem): void {
   itemKeys.value.push(generateKey())
+
   mutate((current) => {
     current.push(value)
   })
 }
 
 /**
- * Prepends an item to the array
- * @param value The value to prepend
+ * Prepends an item to the array.
+ * @param value The value to prepend.
  */
 function prepend(value: TItem): void {
   itemKeys.value.unshift(generateKey())
-  remapArrayFieldState(form, props.path, previousIndex => previousIndex + 1)
+
+  remapArrayFieldState(
+    form,
+    props.path,
+    previousIndex => previousIndex + 1,
+  )
+
   mutate((current) => {
     current.unshift(value)
   })
 }
 
 /**
- * Removes an item from the array
- * @param index The index of the item to remove
+ * Removes an item from the array.
+ * @param index The item index to remove.
  */
 function remove(index: number): void {
   itemKeys.value.splice(index, 1)
 
   remapArrayFieldState(form, props.path, (previousIndex) => {
-    if (previousIndex === index) return
-    return previousIndex > index ? previousIndex - 1 : previousIndex
+    if (previousIndex === index) {
+      return
+    }
+
+    return previousIndex > index
+      ? previousIndex - 1
+      : previousIndex
   })
 
   mutate(current => current.splice(index, 1))
 }
 
 /**
- * Inserts an item at a specific index
- * @param index The index to insert at
- * @param value The value to insert
+ * Inserts an item at a specific index.
+ * @param index The insertion index.
+ * @param value The value to insert.
  */
 function insert(index: number, value: TItem): void {
   itemKeys.value.splice(index, 0, generateKey())
 
   remapArrayFieldState(form, props.path, (previousIndex) => {
-    if (previousIndex >= index) return previousIndex + 1
+    if (previousIndex >= index) {
+      return previousIndex + 1
+    }
+
     return previousIndex
   })
 
@@ -184,51 +234,62 @@ function insert(index: number, value: TItem): void {
 }
 
 /**
- * Updates an item at a specific index
- * @param index The index to update
- * @param value The new value
+ * Updates an item at a specific index.
+ * @param index The item index to update.
+ * @param value The new item value.
  */
 function update(index: number, value: TItem): void {
-  // Key stays the same — same slot, new value
+  // Key stays the same because this is the same slot with a new value.
   mutate((current) => {
     current[index] = value
   })
 }
 
 /**
- * Swaps two items in the array
- * @param indexA The first index
- * @param indexB The second index
+ * Swaps two items in the array.
+ * @param indexA The first item index.
+ * @param indexB The second item index.
  */
 function swap(indexA: number, indexB: number): void {
   const temporaryKey = itemKeys.value[indexA]
+
   itemKeys.value[indexA] = itemKeys.value[indexB]
   itemKeys.value[indexB] = temporaryKey
 
   remapArrayFieldState(form, props.path, (previousIndex) => {
-    if (previousIndex === indexA) return indexB
-    if (previousIndex === indexB) return indexA
+    if (previousIndex === indexA) {
+      return indexB
+    }
+
+    if (previousIndex === indexB) {
+      return indexA
+    }
+
     return previousIndex
   })
 
   mutate((current) => {
     const temporaryValue = current[indexA]
+
     current[indexA] = current[indexB]
     current[indexB] = temporaryValue
   })
 }
 
 /**
- * Moves an item from one index to another
- * @param from The source index
- * @param to The destination index
+ * Moves an item from one index to another.
+ * @param from The source index.
+ * @param to The destination index.
  */
 function move(from: number, to: number): void {
   const [movedItemKey] = itemKeys.value.splice(from, 1)
+
   itemKeys.value.splice(to, 0, movedItemKey)
 
   remapArrayFieldState(form, props.path, (previousIndex) => {
-    if (previousIndex === from) return to
+    if (previousIndex === from) {
+      return to
+    }
 
     if (from < to) {
       if (previousIndex > from && previousIndex <= to) {
@@ -247,20 +308,23 @@ function move(from: number, to: number): void {
 
   mutate((current) => {
     const [movedItem] = current.splice(from, 1)
+
     current.splice(to, 0, movedItem)
   })
 }
 
-// Lifecycle & Watchers
+// Lifecycle
 
 onMounted(async () => {
   await nextTick()
+
   if (validateOn.value.onMount) {
     validate()
   }
 })
 
-// Syncs keys when array length changes outside component's own methods (e.g. form.reset).
+// Syncs keys when array length changes outside component's own methods,
+// such as form.reset().
 watch(() => array.value.length, syncKeys)
 </script>
 

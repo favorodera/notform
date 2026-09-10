@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import type { NotMessageProps, NotMessageSlots } from '../types/not-message'
 import { useNotFormInstance } from '../utils/instance'
 
+// Setup
+
 defineOptions({
   inheritAttrs: false,
 })
@@ -14,6 +16,8 @@ const props = withDefaults(defineProps<NotMessageProps>(), {
 })
 
 const form = useNotFormInstance(props.form)
+
+// Public Computed
 
 const message = computed(() => form.errorsMap.value[props.path])
 </script>

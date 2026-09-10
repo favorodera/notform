@@ -1,14 +1,16 @@
 <div align="center">
 <h1><code>notform</code></h1>
-<p><strong>Headless Form Management, Seamlessly Integrated with Nuxt</strong></p>
+<p><strong>Headless form management for Vue 3</strong></p>
 <p>
-<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/v/notform.svg?style=plastic&label=NPM%20Version" alt="NPM Version"></a>
-<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/dt/notform.svg?style=plastic&label=NPM%20Downloads&color=blue" alt="NPM Downloads"></a>
-<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/unpacked-size/notform?style=plastic&label=NPM%20Unpacked%20Size&color=blue" alt="NPM Unpacked Size"></a>
+<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/v/notform.svg?style=plastic&label=Version" alt="Version"></a>
+<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/dm/notform.svg?style=plastic&label=Downloads&color=blue" alt="Downloads"></a>
+<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/unpacked-size/notform?style=plastic&label=Unpacked%20Size" alt="Unpacked Size"></a>
 </p>
 </div>
 
-`notform` is the core package of the NotForm ecosystem. It provides headless form validation and state management for Vue 3 applications. Built with TypeScript from the ground up, it offers a composable API that integrates perfectly with Vue 3's Composition API and works with any Standard Schema-compatible validator.
+`notform` is the core NotForm package for Vue 3.
+
+It provides reactive form state, schema-based validation, field state, submission handling, and renderless components that work with any UI you choose.
 
 ## Installation
 
@@ -16,21 +18,13 @@
 pnpm add notform
 ```
 
-## How It Works
+Install a Standard Schema-compatible validator separately, for example:
 
-NotForm follows a **headless, composable-first** approach. Forms are managed through the `useNotForm` composable which handles validation, state, and submission logic in a type-safe manner.
-
-Each form consists of:
-
-- **A schema** — Defined using any validation library that supports [Standard Schema](https://standardschema.dev) (Zod, Valibot, ArkType, etc.)
-- **Form state** — Managed reactively with full TypeScript support
-- **Validation** — Automatic validation based on your schema with error messages
-- **Submission handling** — Built-in submission lifecycle with loading states
-- **Your UI** — NotForm renders nothing—you bring your own components
+```bash
+pnpm add zod
+```
 
 ## Basic Usage
-
-Import the components and composable you need:
 
 ```vue
 <script setup lang="ts">
@@ -38,13 +32,17 @@ import { NotField, NotForm, NotMessage, useNotForm } from 'notform'
 import { z } from 'zod'
 
 const schema = z.object({
-  email: z.email('Invalid email'),
-  name: z.string().min(1, 'Name is required'),
+  email: z.email('Enter a valid email address'),
+  name: z.string('Enter a valid name'),
 })
 
 const form = useNotForm({
+  initialValues: {
+    email: '',
+    name: '',
+  },
   onSubmit(values) {
-    console.log('Form:', values)
+    console.log('Submitted:', values)
   },
   schema,
 })
@@ -52,42 +50,48 @@ const form = useNotForm({
 
 <template>
   <NotForm
-    :form
+    :form="form"
     @submit.prevent="form.submit"
     @reset="form.reset()"
   >
     <NotField
-      v-slot="{events,path}"
+      v-slot="{ events, path }"
       path="name"
     >
-      <label :for="path">
-        Name
+      <div>
+        <label :for="path">Name</label>
+
         <input
-          v-bind="events"
           :id="path"
           v-model="form.values.name"
+          v-bind="events"
+          name="name"
           type="text"
+          autocomplete="name"
         >
-      </label>
 
-      <NotMessage :path="path" />
+        <NotMessage :path="path" />
+      </div>
     </NotField>
 
     <NotField
-      v-slot="{events,path}"
+      v-slot="{ events, path }"
       path="email"
     >
-      <label :for="path">
-        Email
+      <div>
+        <label :for="path">Email address</label>
+
         <input
-          v-bind="events"
           :id="path"
           v-model="form.values.email"
+          v-bind="events"
+          name="email"
           type="email"
+          autocomplete="email"
         >
-      </label>
 
-      <NotMessage :path="path" />
+        <NotMessage :path="path" />
+      </div>
     </NotField>
 
     <button type="submit">
@@ -95,116 +99,87 @@ const form = useNotForm({
     </button>
 
     <button type="reset">
-      Reset Form
+      Reset
     </button>
   </NotForm>
 </template>
 ```
 
+## API
+
+The core package exports:
+
+- `useNotForm`
+- `NotForm`
+- `NotField`
+- `NotMessage`
+- `NotArrayField`
+
+The form instance manages values, errors, touched and dirty state, validation, submission state, and reset behavior.
+
 ## Array Fields
 
-NotForm includes built-in support for dynamic array fields with add, remove, and reorder operations:
+`NotArrayField` provides renderless operations for dynamic arrays while preserving stable item keys during reordering.
 
 ```vue
-<script setup lang="ts">
-import { NotArrayField, NotField, NotForm, NotMessage, useNotForm } from 'notform'
-import { z } from 'zod'
-
-const tagSchema = z.string().min(1, 'Tag cannot be empty')
-
-const schema = z.object({
-  tags: z.array(tagSchema).min(1, 'At least one tag is required'),
-})
-
-const form = useNotForm({
-  schema,
-})
-</script>
-
-<template>
-  <NotForm
-    :form
-    @submit.prevent="form.submit"
+<NotArrayField
+  path="tags"
+  v-slot="{ items, append, remove }"
+>
+  <div
+    v-for="(item, index) in items"
+    :key="item.key"
   >
-    <NotArrayField
-      v-slot="{ items, append, remove }"
-      path="tags"
-      :item-schema="tagSchema"
-    >
-      <div
-        v-for="(item, index) in items"
-        :key="item.key"
+    <NotField :path="item.path" v-slot="{ events, path }">
+      <label :for="path">Tag {{ index + 1 }}</label>
+      <input
+        :id="path"
+        v-model="form.values.tags[index]"
+        v-bind="events"
+        :name="path"
+        type="text"
       >
-        <NotField
-          v-slot="{ events }"
-          :path="item.path"
-        >
-          <input
-            v-bind="events"
-            :id="item.path"
-            v-model="form.values.tags[index]"
-            type="text"
-          >
-        </NotField>
+      <NotMessage :path="path" />
+    </NotField>
 
-        <button
-          type="button"
-          @click="remove(index)"
-        >
-          Remove
-        </button>
-      </div>
+    <button type="button" @click="remove(index)">
+      Remove
+    </button>
+  </div>
 
-      <button
-        type="button"
-        @click="append('')"
-      >
-        Add Tag
-      </button>
-
-      <NotMessage path="tags" />
-    </NotArrayField>
-  </NotForm>
-</template>
+  <button type="button" @click="append('')">
+    Add tag
+  </button>
+</NotArrayField>
 ```
 
-## Validation Libraries
+## Type Safety
 
-NotForm works with any validation library that implements the Standard Schema interface:
+Field paths and related APIs are inferred from your schema, including nested paths.
 
-- **Zod** — TypeScript-first schema validation
-- **Valibot** — Modular and type-safe schema validation
-- **ArkType** — High-performance runtime type checking
-- And any other Standard Schema-compatible library
+```ts
+form.setValue('email', 'jane@example.com')
+await form.validateField('email')
+const errors = form.getFieldErrors('email')
+```
 
-## Components and Composables
+## Requirements
 
-### Composables
+- Vue 3
+- Node.js 24 or later for development in this repository
+- A Standard Schema-compatible validator
 
-- `useNotForm` — Main composable for creating form instances
+## Development
 
-### Components
+From the repository root:
 
-- `NotForm` — Form wrapper component that provides form context
-- `NotField` — Field component for individual form inputs
-- `NotMessage` — Error message display component
-- `NotArrayField` — Array field component for dynamic form arrays
-
-## Features
-
-- **Headless** — Renders nothing. You bring the UI, NotForm brings the logic.
-- **Schema-agnostic** — Works with any Standard Schema validator (Zod, Valibot, ArkType, etc.)
-- **Type-safe** — Full TypeScript support with inferred types from your schema
-- **Composable** — Built for Vue 3 Composition API with a clean, intuitive API
-- **Lightweight** — Tiny footprint with tree-shaking support
-- **Array fields** — Built-in support for dynamic array fields with add/remove operations
-- **Flexible** — Use with any UI library—native HTML, Nuxt UI, Shadcn, or your own components
-
-## Documentation
-
-For detailed guides, API reference, and examples, visit:
-**[notformdocs.vercel.app](https://notformdocs.vercel.app/)**
+```bash
+pnpm install
+pnpm --filter notform test
+pnpm --filter notform typecheck
+pnpm --filter notform build
+```
 
 ## License
 
-[MIT](../../LICENSE) &copy; [Favour Emeka](https://github.com/favorodera)
+[MIT](../../LICENSE) © [Favour Emeka](https://github.com/favorodera)
