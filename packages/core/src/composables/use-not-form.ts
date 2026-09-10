@@ -83,6 +83,9 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
   /** Identifier of the latest validation cycle. */
   let validationCycle = 0
 
+  /** Identifier of the latest validation cycle for each field. */
+  const fieldValidationCycles = new Map<string, number>()
+
   /**
    * Starts a validation operation.
    * @returns The identifier of the new validation cycle.
@@ -92,6 +95,33 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
     isValidating.value = true
 
     return ++validationCycle
+  }
+
+  /**
+   * Starts a validation operation for a specific field path.
+   * @param path The field path to start validation for.
+   * @returns The identifier of the new validation cycle.
+   */
+  function beginFieldValidation(path: Paths<TInput>) {
+    validatingCount.value++
+    isValidating.value = true
+
+    const key = String(path)
+    const cycle = (fieldValidationCycles.get(key) ?? 0) + 1
+
+    fieldValidationCycles.set(key, cycle)
+
+    return cycle
+  }
+
+  /**
+   * Checks if the validation cycle for a specific field path is current.
+   * @param path The field path to check.
+   * @param cycle The validation cycle identifier.
+   * @returns Whether the cycle is still current.
+   */
+  function isCurrentFieldValidation(path: Paths<TInput>, cycle: number) {
+    return fieldValidationCycles.get(String(path)) === cycle
   }
 
   /** Marks a validation operation as finished. */
@@ -269,13 +299,13 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
    * @returns An object containing either `value` or `issues` based on validation outcome.
    */
   async function validateField(path: Paths<TInput>) {
-    const cycle = beginValidation()
+    const cycle = beginFieldValidation(path)
 
     try {
       const result = await runSchema()
 
       // Ignore stale results from mutating form error state.
-      if (!isCurrentValidation(cycle)) {
+      if (!isCurrentFieldValidation(path, cycle)) {
         return result
       }
 
@@ -367,6 +397,9 @@ export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotF
    * @param newErrors The new errors to reset the form with.
    */
   function reset(newValues?: DeepPartial<TInput>, newErrors?: Array<TIssue>) {
+    // Increments the validation cycle to invalidate any pending validations
+    validationCycle++
+
     if (newValues) {
       initialValues = klona(newValues)
     }

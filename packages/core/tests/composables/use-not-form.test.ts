@@ -408,6 +408,82 @@ describe('validation', () => {
     expect(form.getFieldErrors('name')).toHaveLength(0)
   })
 
+  it('allows concurrent validation of different fields to update independently', async () => {
+  // eslint-disable-next-line ts/no-invalid-void-type
+    const { promise: namePromise, resolve: resolveName } = Promise.withResolvers<void>()
+
+    // eslint-disable-next-line ts/no-invalid-void-type
+    const { promise: emailPromise, resolve: resolveEmail } = Promise.withResolvers<void>()
+
+    let validationCount = 0
+
+    const asyncSchema = {
+      '~standard': {
+        types: { input: {} as any, output: {} as any },
+
+        async validate() {
+          validationCount++
+
+          if (validationCount === 1) {
+            await namePromise
+
+            return {
+              issues: [
+                {
+                  message: 'Invalid name',
+                  path: ['name'],
+                },
+              ],
+            }
+          }
+
+          await emailPromise
+
+          return {
+            issues: [
+              {
+                message: 'Invalid email',
+                path: ['email'],
+              },
+            ],
+          }
+        },
+
+        ...vendorVersion,
+      },
+    }
+
+    const { form } = mountForm({
+    // @ts-expect-error-next-line type of asyncSchema differs from schema but still standard-schema compliant
+      schema: asyncSchema,
+    })
+
+    // Start name validation first.
+    const nameValidation = form.validateField('name')
+    await flushPromises()
+
+    // Start email validation second.
+    const emailValidation = form.validateField('email')
+    await flushPromises()
+
+    // Let the newer email validation finish first.
+    resolveEmail()
+    await emailValidation
+    await flushPromises()
+
+    expect(form.getFieldErrors('email')).toHaveLength(1)
+    expect(form.getFieldErrors('name')).toHaveLength(0)
+
+    // Now let the older name validation finish.
+    resolveName()
+    await nameValidation
+    await flushPromises()
+
+    // Both validations should have updated their own field.
+    expect(form.getFieldErrors('name')).toHaveLength(1)
+    expect(form.getFieldErrors('email')).toHaveLength(1)
+  })
+
   it('isValidating stays true while concurrent validations overlap', async () => {
   // Separate promise controllers to control each validation run independently
   // eslint-disable-next-line ts/no-invalid-void-type
@@ -925,5 +1001,52 @@ describe('reset', () => {
     form.reset()
 
     expect(form.values).toStrictEqual({ name: 'Jane' })
+  })
+
+  it('reset invalidates an in-flight validation result', async () => {
+    // eslint-disable-next-line ts/no-invalid-void-type
+    const { promise, resolve } = Promise.withResolvers<void>()
+
+    const asyncSchema = {
+      '~standard': {
+        types: { input: {} as any, output: {} as any },
+        async validate() {
+          await promise
+
+          return {
+            issues: [
+              {
+                message: 'Stale validation failed',
+                path: ['name'],
+              },
+            ],
+          }
+        },
+        ...vendorVersion,
+      },
+    }
+
+    const { form } = mountForm({
+    // @ts-expect-error-next-line type of asyncSchema differs from schema but still standard-schema compliant
+      schema: asyncSchema,
+    })
+
+    const validation = form.validate()
+
+    await flushPromises()
+
+    // Reset while the validation is still pending.
+    form.reset()
+
+    expect(form.errors).toHaveLength(0)
+
+    // Let the old validation finish.
+    resolve()
+
+    await validation
+    await flushPromises()
+
+    // The stale validation must not repopulate errors after reset.
+    expect(form.errors).toHaveLength(0)
   })
 })
