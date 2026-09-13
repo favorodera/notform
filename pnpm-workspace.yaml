@@ -11,7 +11,6 @@ trustPolicyExclude:
 packages:
   - 'apps/*'
   - 'packages/*'
-  - 'playgrounds/*'
 
 nodeOptions: --max_old_space_size=4096
 
@@ -34,12 +33,10 @@ catalogs:
     '@nuxt/eslint': ^1.17.0
     '@nuxt/module-builder': ^1.0.3
     '@nuxt/schema': ^4.5.2
-    '@tsconfig/node24': ^24.0.5
     '@types/node': ^26.5.0
     '@vitejs/plugin-vue': ^6.0.8
     '@vitest/ui': ^4.1.11
     '@vue/test-utils': ^2.5.0
-    '@vue/tsconfig': ^0.9.1
     eslint: ^10.10.0
     happy-dom: ^20.14.0
     nuxtseo-layer-devtools: ^5.3.14

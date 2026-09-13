@@ -1,68 +1,14 @@
 import tailwindcss from '@tailwindcss/vite'
 import { defineSoftwareApp } from 'nuxt-schema-org/schema'
 
+const fontWeights = [100, 200, 300, 400, 500, 600, 700, 800, 900]
+
 export default defineNuxtConfig({
-  modules: [
-    '@nuxt/content',
-    '@nuxt/image',
-    '@nuxt/ui',
-    '@nuxtjs/seo',
-    'motion-v/nuxt',
-    'notform-nuxt',
-    'nuxt-llms',
-    '@vercel/analytics',
-    '@nuxt/eslint',
-  ],
-
-  compatibilityDate: '2026-06-21',
-
-  experimental: {
-    asyncContext: true,
-  },
-
-  components: [
-    { path: '~/demos', prefix: 'Demos' },
-    '~/components',
-  ],
-
-  eslint: {
-    config: {
-      standalone: false,
-    },
-  },
-
-  devtools: {
-    enabled: true,
-  },
-
-  site: {
-    defaultLocale: 'en',
-    description: 'Vue forms without the friction.',
-    indexable: true,
-    name: 'NotForm',
-    url: 'https://notformdocs.vercel.app',
-  },
-
   app: {
     head: {
       htmlAttrs: {
         lang: 'en',
       },
-
-      meta: [
-        {
-          content: 'width=device-width, initial-scale=1',
-          name: 'viewport',
-        },
-        {
-          charset: 'utf8',
-        },
-        {
-          content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM',
-          name: 'google-site-verification',
-        },
-      ],
-
       link: [
         {
           href: '/favicon.ico',
@@ -111,21 +57,34 @@ export default defineNuxtConfig({
           sizes: '180x180',
         },
       ],
+      meta: [
+        {
+          content: 'width=device-width, initial-scale=1',
+          name: 'viewport',
+        },
+        {
+          charset: 'utf8',
+        },
+        {
+          content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM',
+          name: 'google-site-verification',
+        },
+      ],
     },
-
-    pageTransition: {
-      mode: 'out-in',
-      name: 'fade-out-in',
-    },
-
     layoutTransition: {
       mode: 'out-in',
       name: 'fade-out-in',
     },
+    pageTransition: {
+      mode: 'out-in',
+      name: 'fade-out-in',
+    },
   },
-
-  css: ['~/assets/css/main.css'],
-
+  compatibilityDate: '2026-06-21',
+  components: [
+    { path: '~/demos', prefix: 'Demos' },
+    '~/components',
+  ],
   content: {
     build: {
       markdown: {
@@ -135,24 +94,27 @@ export default defineNuxtConfig({
       },
     },
   },
-
-  nitro: {
-    prerender: {
-      autoSubfolderIndex: false,
-      crawlLinks: true,
-      routes: [
-        '/',
-        '/sitemap.xml',
-        '/robots.txt',
-      ],
+  css: ['~/assets/css/main.css'],
+  devServer: {
+    port: 3000,
+  },
+  devtools: {
+    enabled: true,
+  },
+  eslint: {
+    config: {
+      standalone: false,
     },
   },
-
-  ui: {
-    content: true,
-    prefix: '',
+  experimental: {
+    asyncContext: true,
   },
-
+  fonts: {
+    families: [
+      { global: true, name: 'Geist', weights: fontWeights },
+      { global: true, name: 'Geist Mono', weights: fontWeights },
+    ],
+  },
   icon: {
     componentName: 'NIcon',
     customCollections: [
@@ -164,52 +126,62 @@ export default defineNuxtConfig({
     mode: 'svg',
     provider: 'iconify',
   },
-
-  fonts: {
-    families: [
-      { global: true, name: 'Geist', weights: [
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-      ] },
-      { global: true, name: 'Geist Mono', weights: [
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-      ] },
+  llms: {
+    description: 'Vue forms without the friction.',
+    domain: 'https://notformdocs.vercel.app',
+    full: {
+      description: 'Vue forms without the friction.',
+      title: 'NotForm',
+    },
+    sections: [
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/getting-started%' }],
+        title: 'Getting Started',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/components%' }],
+        title: 'Components',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/building-forms%' }],
+        title: 'Building Forms',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/advanced%' }],
+        title: 'Advanced',
+      },
     ],
+    title: 'NotForm',
   },
-
-  vite: {
-    optimizeDeps: {
-      include: [
-        'zod',
-        '@vueuse/core',
+  modules: [
+    '@nuxt/content',
+    '@nuxt/image',
+    '@nuxt/ui',
+    '@nuxtjs/seo',
+    'motion-v/nuxt',
+    'notform-nuxt',
+    'nuxt-llms',
+    '@vercel/analytics',
+    '@nuxt/eslint',
+  ],
+  nitro: {
+    prerender: {
+      autoSubfolderIndex: false,
+      crawlLinks: true,
+      routes: [
+        '/',
+        '/sitemap.xml',
+        '/robots.txt',
       ],
     },
-    plugins: [tailwindcss()],
   },
-
-  sitemap: {
-    zeroRuntime: true,
-  },
-
   ogImage: {
     zeroRuntime: true,
   },
-
   schemaOrg: {
     identity: defineSoftwareApp({
       'description': 'Vue forms without the friction.',
@@ -255,40 +227,27 @@ export default defineNuxtConfig({
       },
     }),
   },
-
-  llms: {
+  site: {
+    defaultLocale: 'en',
     description: 'Vue forms without the friction.',
-    domain: 'https://notformdocs.vercel.app',
-    full: {
-      description: 'Vue forms without the friction.',
-      title: 'NotForm',
-    },
-    sections: [
-      {
-        contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/getting-started%' }],
-        title: 'Getting Started',
-      },
-      {
-        contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/components%' }],
-        title: 'Components',
-      },
-      {
-        contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/building-forms%' }],
-        title: 'Building Forms',
-      },
-      {
-        contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/advanced%' }],
-        title: 'Advanced',
-      },
-    ],
-    title: 'NotForm',
+    indexable: true,
+    name: 'NotForm',
+    url: 'https://notformdocs.vercel.app',
   },
-
-  devServer: {
-    port: 3000,
+  sitemap: {
+    zeroRuntime: true,
+  },
+  ui: {
+    content: true,
+    prefix: '',
+  },
+  vite: {
+    optimizeDeps: {
+      include: [
+        'zod',
+        '@vueuse/core',
+      ],
+    },
+    plugins: [tailwindcss()],
   },
 })

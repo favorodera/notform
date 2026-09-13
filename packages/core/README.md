@@ -157,12 +157,6 @@ The form instance manages values, errors, touched and dirty state, validation, s
 
 Field paths and related APIs are inferred from your schema, including nested paths.
 
-```ts
-form.setValue('email', 'jane@example.com')
-await form.validateField('email')
-const errors = form.getFieldErrors('email')
-```
-
 ## Requirements
 
 - Vue 3

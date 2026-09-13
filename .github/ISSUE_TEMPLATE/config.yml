@@ -1,8 +1,18 @@
 blank_issues_enabled: false
+
 contact_links:
   - name: Documentation
     url: https://notformdocs.vercel.app/
     about: Check our documentation for guides and API reference
+
   - name: Questions & Discussions
     url: https://github.com/favorodera/notform/discussions
     about: Ask questions and discuss ideas
+
+  - name: Core Playground
+    url: https://stackblitz.com/edit/notform
+    about: Experiment with NotForm Core in an interactive playground
+
+  - name: Nuxt Module Playground
+    url: https://stackblitz.com/edit/notform-nuxt
+    about: Experiment with the NotForm Nuxt Module in an interactive playground

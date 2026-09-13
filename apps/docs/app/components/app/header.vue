@@ -1,10 +1,28 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
+import type { DropdownMenuItem } from '@nuxt/ui'
 
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 const githubStars = inject<Ref<number>>('githubStars')
 
 const appConfig = useAppConfig()
+
+const playgroundMenuItems = ref<DropdownMenuItem[]>([
+  {
+    external: true,
+    icon: 'simple-icons:vuedotjs',
+    label: 'Core',
+    target: '_blank',
+    to: 'https://stackblitz.com/edit/notform',
+  },
+  {
+    external: true,
+    icon: 'simple-icons:nuxt',
+    label: 'Nuxt',
+    target: '_blank',
+    to: 'https://stackblitz.com/edit/notform-nuxt',
+  },
+])
 </script>
 
 <template>
@@ -17,8 +35,29 @@ const appConfig = useAppConfig()
     </template>
 
     <template #right>
-      <ContentSearchButton />
-      <ColorModeButton />
+      <ContentSearchButton
+        size="sm"
+        variant="soft"
+      />
+
+      <DropdownMenu
+        :items="playgroundMenuItems"
+        :ui="{
+          itemLabelExternalIcon: 'hidden',
+        }"
+      >
+        <Button
+          icon="tabler:play"
+          size="sm"
+          variant="soft"
+        />
+      </DropdownMenu>
+
+      <ColorModeButton
+        size="sm"
+        variant="soft"
+        class="max-sm:hidden"
+      />
 
       <Button
         :to="appConfig.github.repo.url"

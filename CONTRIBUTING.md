@@ -6,7 +6,7 @@ Thank you for your interest in contributing to NotForm! We appreciate your time 
 
 ## Code of Conduct
 
-By participating in this project, you agree to abide by the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+  By participating in this project, you agree to abide by the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
 
 ---
 
@@ -14,8 +14,8 @@ By participating in this project, you agree to abide by the [Contributor Covenan
 
 ### Prerequisites
 
-  - [Node.js](https://nodejs.org/) v22 or later
-  - [pnpm](https://pnpm.io/installation) v11 or later
+- [Node.js](https://nodejs.org/) v22 or later
+- [pnpm](https://pnpm.io/installation) v11 or later
 
 ### Setup
 
@@ -37,27 +37,27 @@ This will:
 
 ### Branch Naming
 
-| Pattern | Use |
-|---------|-----|
-| `feat/<feature-name>` | New features |
-| `fix/<issue-description>` | Bug fixes |
-| `docs/<what-changed>` | Documentation changes |
-| `chore/<task>` | Maintenance tasks |
+  | Pattern | Use |
+  |---------|-----|
+  | `feat/<feature-name>` | New features |
+  | `fix/<issue-description>` | Bug fixes |
+  | `docs/<what-changed>` | Documentation changes |
+  | `chore/<task>` | Maintenance tasks |
 
 ### Commit Messages
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/). `relizy` reads these to generate changelogs automatically.
+  We follow [Conventional Commits](https://www.conventionalcommits.org/). `relizy` reads these to generate changelogs automatically.
 
-| Prefix | Use |
-|--------|-----|
-| `feat:` | A new feature |
-| `fix:` | A bug fix |
-| `docs:` | Documentation only |
-| `style:` | No logic change |
-| `refactor:` | Neither fix nor feature |
-| `perf:` | Performance improvement |
-| `test:` | Adding or correcting tests |
-| `chore:` | Build process or tooling |
+  | Prefix | Use |
+  |--------|-----|
+  | `feat:` | A new feature |
+  | `fix:` | A bug fix |
+  | `docs:` | Documentation only |
+  | `style:` | No logic change |
+  | `refactor:` | Neither fix nor feature |
+  | `perf:` | Performance improvement |
+  | `test:` | Adding or correcting tests |
+  | `chore:` | Build process or tooling |
 
 ### Code Style
 
@@ -82,21 +82,34 @@ When adding new features or fixing bugs, please include tests as this helps us v
 
 ---
 
+## Playground
+
+  Interactive StackBlitz playgrounds are also available for experimenting with the packages without setting up the repository locally.
+
+  -  [Core Playground](https://stackblitz.com/edit/notform)
+  -  [Nuxt Module Playground](https://stackblitz.com/edit/notform-nuxt)
+
+  These playgrounds are useful for quickly trying NotForm, reproducing issues, or experimenting with changes. When testing a pull request, you can also use the preview package published by `pkg.pr.new` in a playground to try the changes before they are merged.
+
+  The playgrounds are intended for experimentation and are not a replacement for running the project's full test suite locally.
+
+---
+
 ## Pull Request Process
 
-1. Ensure your code follows the project's coding standards
-2. Update documentation if you're changing functionality
-3. Add or update tests as appropriate
-4. Run the full validation suite:
+  1. Ensure your code follows the project's coding standards
+  2. Update documentation if you're changing functionality
+  3. Add or update tests as appropriate
+  4. Run the full validation suite:
 
 ```bash
 pnpm ready
 ```
 
-This command runs the complete pipeline: install → lint → typecheck → test → build.
+  This command runs the complete pipeline: install → lint → typecheck → test → build.
 
-5. Commit using Conventional Commits and open a Pull Request.
-6. Push your branch and open a Pull Request.
+  5. Commit using Conventional Commits and open a Pull Request.
+  6. Push your branch and open a Pull Request.
 
 ---
 
@@ -113,11 +126,11 @@ Before filing a report, check existing issues. When you do file one, include:
 
 ## Suggesting Features
 
-We welcome feature suggestions! Please open an issue describing:
+  We welcome feature suggestions! Please open an issue describing:
 
-- The problem you're trying to solve
-- Your proposed solution
-- Any alternatives you've considered
+  - The problem you're trying to solve
+  - Your proposed solution
+  - Any alternatives you've considered
 
 ---
 
