@@ -1,5 +1,24 @@
 # Changelog
 
+## v2.2.4...v2.2.5
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.2.4...v2.2.5)
+
+### Fixed
+
+- **form:** Prevent native form reset event ([d5ed5e2](https://github.com/favorodera/notform/commit/d5ed5e2))
+
+  - Avoid native reset clearing restored input values
+  - Preserve managed form state on reset trigger
+
+- **form:** Prevent native form reset event ([#80](https://github.com/favorodera/notform/pull/80))
+
+### ❤️ Contributors
+
+- Favour  Emeka ([@favorodera](https://github.com/favorodera))
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.3...v2.2.4
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.3...v2.2.4)

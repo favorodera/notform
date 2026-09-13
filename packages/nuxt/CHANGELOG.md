@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.2.4...v2.2.5
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.2.4...v2.2.5)
+
+No relevant changes for this release
+
+
 ## v2.2.3...v2.2.4
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.3...v2.2.4)
