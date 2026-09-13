@@ -935,6 +935,40 @@ describe('reset', () => {
     expect(form.values.name).toBe('')
   })
 
+  it('native reset does not overwrite restored input values', async () => {
+    const { form, wrapper } = mountForm({
+      initialValues: { email: 'jane@example.com', name: 'Jane' },
+    })
+
+    const nameInput = wrapper.get('#name')
+    const nameInputElement = nameInput.element as HTMLInputElement
+
+    const emailInput = wrapper.get('#email')
+    const emailInputElement = emailInput.element as HTMLInputElement
+
+    await nameInput.setValue('ChangedName')
+    await emailInput.setValue('ChangedEmail')
+
+    await flushPromises()
+
+    expect(form.values.name).toBe('ChangedName')
+    expect(form.values.email).toBe('ChangedEmail')
+
+    expect(nameInputElement.value).toBe('ChangedName')
+    expect(emailInputElement.value).toBe('ChangedEmail')
+
+    await wrapper.get('#reset').trigger('click')
+
+    expect(form.values.name).toBe('Jane')
+    // eslint-disable-next-line test/max-expects
+    expect(form.values.email).toBe('jane@example.com')
+
+    // eslint-disable-next-line test/max-expects
+    expect(nameInputElement.value).toBe('Jane')
+    // eslint-disable-next-line test/max-expects
+    expect(emailInputElement.value).toBe('jane@example.com')
+  })
+
   it('reset clears touched and dirty fields', async () => {
     const { form } = mountForm()
 
