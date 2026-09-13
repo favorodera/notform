@@ -12,7 +12,7 @@ provideNotFormInstance(props.form)
 </script>
 
 <template>
-  <form>
+  <form @reset.prevent>
     <slot />
   </form>
 </template>
