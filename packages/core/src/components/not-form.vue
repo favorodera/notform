@@ -9,9 +9,7 @@ defineSlots<NotFormSlots>()
 const props = defineProps<NotFormProps<TSchema>>()
 
 // `props.form` is typed as `NotFormAPI` (the public surface), but at runtime
-// it is always the full `NotFormInstance` created by `useNotForm`. The double-cast
-// through `unknown` is needed because `Except` with `requireExactProps` makes the
-// types structurally incompatible for a direct assertion.
+// it is always the full `NotFormInstance` created by `useNotForm`.
 provideNotFormInstance<TSchema>(props.form as unknown as NotFormInstance<TSchema>)
 </script>
 

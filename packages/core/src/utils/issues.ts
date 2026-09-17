@@ -13,10 +13,14 @@ import { areSegmentsEqual, toPropertyKey } from './segments'
  */
 export function areIssuePathsEqual(issuePathA: Issue['path'], issuePathB: Issue['path']) {
   // Both paths must be defined to be comparable
-  if (!issuePathA || !issuePathB) return false
+  if (!issuePathA || !issuePathB) {
+    return false
+  }
 
   // Different lengths can never be equal
-  if (issuePathA.length !== issuePathB.length) return false
+  if (issuePathA.length !== issuePathB.length) {
+    return false
+  }
 
   // Compare each segment after normalizing to a raw property key
   return issuePathA.every((segment, index) => {

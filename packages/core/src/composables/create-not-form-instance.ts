@@ -11,8 +11,7 @@ import { areIssuePathsEqual } from '../utils/issues'
 /**
  * Constructs the complete, reactive form instance.
  *
- * Only consumed by `use-not-form.ts` (public entry-point) and
- * `use-not-form-instance.ts` (provide/inject bridge).
+ * Only consumed by `useNotForm()` and `useNotFormInstance()`.
  * @template TSchema - The validation schema.
  * @internal
  * @param config Form configuration (schema, initial values, callbacks).
@@ -162,7 +161,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   // #endregion
 
   // ──────────────────────────────────────────────
-  // #region Dirty tracking
+  // #region Dirty
   // ──────────────────────────────────────────────
 
   /**
@@ -234,7 +233,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   // #endregion
 
   // ──────────────────────────────────────────────
-  // #region Touch tracking
+  // #region Touch
   // ──────────────────────────────────────────────
 
   /**
@@ -276,7 +275,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   // #endregion
 
   // ──────────────────────────────────────────────
-  // #region Validating-field tracking
+  // #region Validation
   // ──────────────────────────────────────────────
 
   /**
@@ -285,7 +284,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    * @param paths Iterable of dot-notated field paths.
    */
   function markFieldsAsValidating(paths: Iterable<Paths<TSchema>>) {
-    for (const path of paths) validatingFields.add(path)
+    for (const path of paths) {
+      validatingFields.add(path)
+    }
   }
 
   /**
@@ -294,14 +295,10 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    * @param paths Iterable of dot-notated field paths.
    */
   function unmarkFieldsAsValidating(paths: Iterable<Paths<TSchema>>) {
-    for (const path of paths) validatingFields.delete(path)
+    for (const path of paths) {
+      validatingFields.delete(path)
+    }
   }
-
-  // #endregion
-
-  // ──────────────────────────────────────────────
-  // #region Whole-form validation
-  // ──────────────────────────────────────────────
 
   /**
    * Validates the entire form against the schema, replacing all current errors.
@@ -320,20 +317,21 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
       const result = await executeSchemaValidation()
 
       // Discard if a newer whole-form operation started while we were awaiting
-      if (cycle !== generation) return result
+      if (cycle !== generation) {
+        return result
+      }
 
-      if (result.issues) replaceErrors([...result.issues])
-      else clearErrors()
+      if (result.issues) {
+        replaceErrors([...result.issues])
+      } else {
+        clearErrors()
+      }
 
       return result
     } finally {
       unmarkFieldsAsValidating(paths)
     }
   }
-
-  // ──────────────────────────────────────────────
-  // #region Single-field validation
-  // ──────────────────────────────────────────────
 
   /**
    * Validates a single field against the schema, updating only that field's errors.
@@ -368,7 +366,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
       // Remove existing errors for this specific field (reverse iteration for safe splicing)
       for (let index = errors.length - 1; index >= 0; index--) {
-        if (areIssuePathsEqual(errors[index].path, targetPath)) errors.splice(index, 1)
+        if (areIssuePathsEqual(errors[index].path, targetPath)) {
+          errors.splice(index, 1)
+        }
       }
 
       // Append only this field's issues from the fresh result
@@ -399,7 +399,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     event?.preventDefault()
 
     // Prevent multiple submissions
-    if (isSubmitting.value) return
+    if (isSubmitting.value) {
+      return
+    }
 
     // Surface all errors by marking everything as touched + dirty-synced
     markAllFieldsAsTouched()
@@ -415,7 +417,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
       const result = await executeSchemaValidation()
 
       // Abort if a newer whole-form operation superseded this submission
-      if (cycle !== generation) return
+      if (cycle !== generation) {
+        return
+      }
 
       if (result.issues) {
         replaceErrors([...result.issues])

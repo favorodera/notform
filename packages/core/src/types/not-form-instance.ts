@@ -11,7 +11,9 @@ import type { DeepPartial, InferInput, InferOutput, Issue, ObjectSchema, Paths }
  * @template TSchema - The validation schema.
  */
 export interface NotFormInstance<TSchema extends ObjectSchema> {
+  // ──────────────────────────────────────────────
   // #region Values
+  // ──────────────────────────────────────────────
 
   /**
    * Deeply reactive object holding current field values.
@@ -37,7 +39,9 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
 
   // #endregion
 
+  // ──────────────────────────────────────────────
   // #region Touch
+  // ──────────────────────────────────────────────
 
   /** Whether any field has been interacted with. */
   isTouched: boolean
@@ -76,7 +80,9 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
 
   // #endregion
 
+  // ──────────────────────────────────────────────
   // #region Dirty
+  // ──────────────────────────────────────────────
 
   /**
    * Set of dot-notated paths whose current value differs from the initial value.
@@ -115,7 +121,9 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
 
   // #endregion
 
+  // ──────────────────────────────────────────────
   // #region Errors
+  // ──────────────────────────────────────────────
 
   /** All validation issues from the most recent validation run. */
   errors: Array<Issue>
@@ -148,7 +156,9 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
 
   // #endregion
 
+  // ──────────────────────────────────────────────
   // #region Validation
+  // ──────────────────────────────────────────────
 
   /** Whether a validation run is currently in progress. */
   isValidating: boolean
@@ -178,7 +188,9 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
 
   // #endregion
 
+  // ──────────────────────────────────────────────
   // #region Submit
+  // ──────────────────────────────────────────────
 
   /** Whether the form is currently executing its submit handler. */
   isSubmitting: boolean
@@ -194,7 +206,9 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
 
   // #endregion
 
+  // ──────────────────────────────────────────────
   // #region Reset
+  // ──────────────────────────────────────────────
 
   /**
    * Resets the form to its initial state, or to new baselines if provided.

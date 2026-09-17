@@ -14,8 +14,7 @@ import { createNotFormInstance } from './create-not-form-instance'
  * @returns The public form API.
  */
 export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): NotFormAPI<TSchema> {
-  // createNotFormInstance returns the full NotFormInstance. The double-cast is
-  // required because Except with `requireExactProps` marks excluded keys as
-  // `?: never`, making a direct cast insufficient.
+  // createNotFormInstance returns the full NotFormInstance, we just need to
+  // cast to NotFormAPI<TSchema> to hide the internal coordination members.
   return createNotFormInstance(config) as unknown as NotFormAPI<TSchema>
 }
