@@ -5,70 +5,59 @@ const schema = z.object({
   value: z.string().min(4, 'At least 4 characters'),
 })
 
-const eagerForm = useNotForm({
+const form = useNotForm({
   initialValues: { value: '' },
   schema,
 })
 
-const lazyForm = useNotForm({
-  initialValues: { value: '' },
-  schema,
-  validationMode: 'lazy',
-})
+const validationMode = ref<'eager' | 'lazy'>('eager')
 </script>
 
 <template>
-  <div data-demo-form>
+  <NotForm
+    :form
+    data-demo-form
+    @submit="form.submit"
+    @reset="form.reset()"
+  >
     <NotField
       v-slot="{ events, path }"
       path="value"
-      :form="eagerForm"
+      :validation-mode="validationMode"
+      :validate-on="{ onInput: true }"
     >
       <div data-demo-field>
-        <label :for="`eager-${path}`">
-          Eager Mode (Default)
-        </label>
+        <div
+          data-demo-field
+          class="flex-row"
+        >
+          <label
+            :for="path"
+            class="capitalize"
+          >
+            {{ validationMode }} Mode
+          </label>
+
+          <Switch
+            v-model:model-value="validationMode"
+            size="sm"
+            true-value="eager"
+            false-value="lazy"
+          />
+        </div>
 
         <input
-          :id="`eager-${path}`"
-          v-model="eagerForm.values.value"
+          :id="path"
+          v-model="form.values.value"
           placeholder="Type then blur…"
           v-bind="events"
         >
 
         <NotMessage
-          :form="eagerForm"
           :path="path"
           data-demo-message
         />
       </div>
     </NotField>
-
-    <NotField
-      v-slot="{ events, path }"
-      path="value"
-      :form="lazyForm"
-    >
-      <div data-demo-field>
-        <label
-          :for="`lazy-${path}`"
-        >
-          Lazy Mode
-        </label>
-
-        <input
-          :id="`lazy-${path}`"
-          v-model="lazyForm.values.value"
-          placeholder="Type then blur…"
-          v-bind="events"
-        >
-
-        <NotMessage
-          :form="lazyForm"
-          :path="path"
-          data-demo-message
-        />
-      </div>
-    </NotField>
-  </div>
+  </NotForm>
 </template>

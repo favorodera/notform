@@ -27,11 +27,7 @@ export interface NotMessageProps<TSchema extends ObjectSchema> {
 
 /** Slot definitions for the `NotMessage` component. */
 export interface NotMessageSlots {
-  /**
-   * Custom render slot for the error message.
-   * @param props Slot properties.
-   * @param props.message The first active validation error message for the specified field.
-   */
+  /** Custom render slot for the error message. */
   default?: (props: {
     /** The first active validation error message for the specified field. */
     message?: string

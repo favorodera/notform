@@ -94,6 +94,14 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   isDirty: boolean
 
   /**
+   * Compares a field's current value against its initial value and
+   * updates the dirty flag accordingly.
+   * @internal
+   * @param path Dot-notated field path.
+   */
+  syncDirtyState: (path: Paths<TSchema>) => void
+
+  /**
    * Forces a field's dirty flag on.
    * @internal
    * @param path Dot-notated field path.

@@ -504,6 +504,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     setError,
     setValue,
     submit,
+    syncDirtyState,
     touchedFields,
     unmarkAllFieldsAsDirty,
     unmarkAllFieldsAsTouched,
