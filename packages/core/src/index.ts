@@ -7,6 +7,7 @@
 
 // Components
 export { default as NotForm } from './components/not-form.vue'
+export { default as NotMessage } from './components/not-message.vue'
 
 // Composables
 export { default as useNotForm } from './composables/use-not-form'
@@ -15,3 +16,4 @@ export { default as useNotForm } from './composables/use-not-form'
 export type * from './types/not-form'
 export type * from './types/not-form-api'
 export type * from './types/not-form-config'
+export type * from './types/not-message'

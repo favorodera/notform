@@ -1,6 +1,8 @@
 import { inject, type InjectionKey, provide } from 'vue'
+import type { NotFormAPI } from '../types/not-form-api'
 import type { NotFormInstance } from '../types/not-form-instance'
 import type { ObjectSchema } from '../types/shared'
+import { toNotFormInstance } from '../utils/instance'
 
 /**
  * Vue injection key for the full {@linkcode NotFormInstance}.
@@ -13,12 +15,12 @@ export const NOT_FORM_INSTANCE_KEY: InjectionKey<NotFormInstance<any>> = Symbol(
  *
  * Called once by the `<NotForm>` component so child components
  * (`NotField`, `NotArrayField`, `NotMessage`) can inject it.
- * @template TSchema - The validation schema.
+ * @template TSchema The validation schema.
  * @internal
- * @param instance The form instance to provide.
+ * @param instance The form instance or public API to provide.
  */
-export function provideNotFormInstance<TSchema extends ObjectSchema>(instance: NotFormInstance<TSchema>) {
-  provide<NotFormInstance<TSchema>>(NOT_FORM_INSTANCE_KEY, instance)
+export function provideNotFormInstance<TSchema extends ObjectSchema>(instance: NotFormAPI<TSchema> | NotFormInstance<TSchema>) {
+  provide<NotFormInstance<TSchema>>(NOT_FORM_INSTANCE_KEY, toNotFormInstance(instance))
 }
 
 /**
@@ -26,17 +28,17 @@ export function provideNotFormInstance<TSchema extends ObjectSchema>(instance: N
  *
  * Used internally by `NotField`, `NotArrayField`, and `NotMessage`
  * to access both the public API and private coordination helpers.
- * @template TSchema - The validation schema.
+ * @template TSchema The validation schema.
  * @internal
- * @param explicitInstance Optional instance passed via a `form` prop, bypassing the `<NotForm>` provider when a field is used standalone.
+ * @param explicitInstance Optional instance or API passed via a `form` prop, bypassing the `<NotForm>` provider.
  * @returns The resolved {@linkcode NotFormInstance}.
  * @throws If no instance is found via injection or prop.
  */
-export function useNotFormInstance<TSchema extends ObjectSchema>(explicitInstance?: NotFormInstance<TSchema>) {
+export function useNotFormInstance<TSchema extends ObjectSchema>(explicitInstance?: NotFormAPI<TSchema> | NotFormInstance<TSchema>) {
   const injectedInstance = inject<NotFormInstance<TSchema> | undefined>(NOT_FORM_INSTANCE_KEY, undefined)
 
   // Prefer an explicitly provided instance over the injected one
-  const resolvedInstance = explicitInstance ?? injectedInstance
+  const resolvedInstance = toNotFormInstance(explicitInstance) ?? injectedInstance
 
   if (!resolvedInstance) {
     throw new Error(`

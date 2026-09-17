@@ -1,6 +1,5 @@
 <script setup lang="ts" generic="TSchema extends ObjectSchema">
 import type { NotFormProps, NotFormSlots } from '../types/not-form'
-import type { NotFormInstance } from '../types/not-form-instance'
 import type { ObjectSchema } from '../types/shared'
 import { provideNotFormInstance } from '../composables/use-not-form-instance'
 
@@ -8,9 +7,8 @@ defineSlots<NotFormSlots>()
 
 const props = defineProps<NotFormProps<TSchema>>()
 
-// `props.form` is typed as `NotFormAPI` (the public surface), but at runtime
-// it is always the full `NotFormInstance` created by `useNotForm`.
-provideNotFormInstance<TSchema>(props.form as unknown as NotFormInstance<TSchema>)
+// Provide form instance to all descendant components
+provideNotFormInstance<TSchema>(props.form)
 </script>
 
 <template>
