@@ -238,7 +238,6 @@ export default defineNuxtConfig({
     zeroRuntime: true,
   },
   ui: {
-    content: true,
     prefix: '',
   },
   vite: {

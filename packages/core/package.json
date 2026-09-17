@@ -29,7 +29,9 @@
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -53,7 +55,8 @@
     "@standard-schema/spec": "catalog:vendor",
     "dequal": "catalog:vendor",
     "dot-prop": "catalog:vendor",
-    "klona": "catalog:vendor"
+    "klona": "catalog:vendor",
+    "type-fest": "catalog:vendor"
   },
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:tools",
@@ -63,7 +66,6 @@
     "@vue/test-utils": "catalog:tools",
     "happy-dom": "catalog:tools",
     "tsdown": "catalog:tools",
-    "type-fest": "catalog:tools",
     "vite": "catalog:tools",
     "vitest": "catalog:tools",
     "vue": "catalog:peer",

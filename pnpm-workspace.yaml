@@ -43,7 +43,6 @@ catalogs:
     relizy: ^1.4.9
     tsdown: ^0.22.14
     turbo: ^2.10.12
-    type-fest: ^5.9.0
     typescript: ^6.0.3
     vite: ^8.2.2
     vitest: ^4.1.11
@@ -74,6 +73,7 @@ catalogs:
     nuxt-llms: ^0.2.0
     nuxt-schema-org: ^6.3.1
     tailwindcss: ^4.3.3
+    type-fest: ^5.9.0
     ufo: ^1.6.4
     vue: ^3.5.42
     vue-router: ^5.3.1

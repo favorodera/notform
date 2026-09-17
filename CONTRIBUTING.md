@@ -97,48 +97,48 @@ When adding new features or fixing bugs, please include tests as this helps us v
 
 ## Pull Request Process
 
-  1. Ensure your code follows the project's coding standards
-  2. Update documentation if you're changing functionality
-  3. Add or update tests as appropriate
-  4. Run the full validation suite:
+1. Ensure your code follows the project's coding standards
+2. Update documentation if you're changing functionality
+3. Add or update tests as appropriate
+4. Run the full validation suite:
 
 ```bash
 pnpm ready
 ```
 
-  This command runs the complete pipeline: install → lint → typecheck → test → build.
+This command runs the complete pipeline: install → lint → typecheck → test → build.
 
-  5. Commit using Conventional Commits and open a Pull Request.
-  6. Push your branch and open a Pull Request.
+5. Commit using Conventional Commits and open a Pull Request.
+6. Push your branch and open a Pull Request.
 
 ---
 
 ## Reporting Bugs
 
-Before filing a report, check existing issues. When you do file one, include:
+  Before filing a report, check existing issues. When you do file one, include:
 
 - A clear, descriptive title
 - Steps to reproduce
-- Expected vs. actual behaviour
+- Expected vs. actual behavior
 - Your environment (OS, Node.js version, pnpm version)
 
 ---
 
 ## Suggesting Features
 
-  We welcome feature suggestions! Please open an issue describing:
+We welcome feature suggestions! Please open an issue describing:
 
-  - The problem you're trying to solve
-  - Your proposed solution
-  - Any alternatives you've considered
+- The problem you're trying to solve
+- Your proposed solution
+- Any alternatives you've considered
 
 ---
 
 ## Questions?
 
-If you have questions, feel free to:
+  If you have questions, feel free to:
 
 - Open a [Discussion](https://github.com/favorodera/notform/discussions)
 - Check the [Documentation](https://notformdocs.vercel.app/)
 
-Thank you for contributing! 🎉
+  Thank you for contributing! 🎉

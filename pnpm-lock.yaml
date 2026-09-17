@@ -55,9 +55,6 @@ catalogs:
     turbo:
       specifier: ^2.10.12
       version: 2.10.12
-    type-fest:
-      specifier: ^5.9.0
-      version: 5.9.0
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
@@ -143,6 +140,9 @@ catalogs:
     tailwindcss:
       specifier: ^4.3.3
       version: 4.3.3
+    type-fest:
+      specifier: ^5.9.0
+      version: 5.9.0
     ufo:
       specifier: ^1.6.4
       version: 1.6.4
@@ -287,6 +287,9 @@ importers:
       klona:
         specifier: catalog:vendor
         version: 2.0.6
+      type-fest:
+        specifier: catalog:vendor
+        version: 5.9.0
     devDependencies:
       '@favorodera/eslint-config':
         specifier: catalog:tools
@@ -309,9 +312,6 @@ importers:
       tsdown:
         specifier: catalog:tools
         version: 0.22.14(@volar/typescript@2.4.28(typescript@6.0.3))(typescript@6.0.3)(vue-tsc@3.3.11(typescript@6.0.3))
-      type-fest:
-        specifier: catalog:tools
-        version: 5.9.0
       vite:
         specifier: catalog:tools
         version: 8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)
