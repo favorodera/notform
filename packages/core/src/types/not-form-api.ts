@@ -23,6 +23,5 @@ export type NotFormAPI<TSchema extends ObjectSchema> = Except<
   | 'unmarkAllFieldsAsTouched'
   | 'unmarkFieldAsDirty'
   | 'unmarkFieldAsTouched'
-  | 'validatingFields',
-  { requireExactProps: true }
+  | 'validatingFields'
 >
