@@ -75,6 +75,13 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    */
   const fieldValidationCycleMap = new Map<Paths<TSchema>, number>()
 
+  /**
+   * Reference count of active validation operations per field path.
+   * Prevents one operation from clearing `validatingFields` for a path
+   * that another concurrent operation is still validating.
+   */
+  const validatingFieldCounts = new Map<Paths<TSchema>, number>()
+
   // #endregion
 
   // ──────────────────────────────────────────────
@@ -285,6 +292,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    */
   function markFieldsAsValidating(paths: Iterable<Paths<TSchema>>) {
     for (const path of paths) {
+      // Increments the validation count for the given path
+      validatingFieldCounts.set(path, (validatingFieldCounts.get(path) ?? 0) + 1)
+
       validatingFields.add(path)
     }
   }
@@ -296,7 +306,16 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    */
   function unmarkFieldsAsValidating(paths: Iterable<Paths<TSchema>>) {
     for (const path of paths) {
-      validatingFields.delete(path)
+      const nextCount = (validatingFieldCounts.get(path) ?? 0) - 1
+
+      // Decrements the validation count for the given path if it exists
+      if (nextCount <= 0) {
+      // Removes the field from the "currently validating" set
+        validatingFieldCounts.delete(path)
+        validatingFields.delete(path)
+      } else {
+        validatingFieldCounts.set(path, nextCount)
+      }
     }
   }
 
@@ -352,7 +371,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     // Capture generation at call-time to detect whole-form invalidation later
     const startGeneration = generation
 
-    validatingFields.add(path)
+    markFieldsAsValidating([path])
 
     try {
       const result = await executeSchemaValidation()
@@ -377,7 +396,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
       return result
     } finally {
-      validatingFields.delete(path)
+      unmarkFieldsAsValidating([path])
     }
   }
 
@@ -453,11 +472,19 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     // Invalidate every in-flight validation (whole-form + per-field)
     generation++
     fieldValidationCycleMap.clear()
+    validatingFieldCounts.clear()
     validatingFields.clear()
 
     // Update baselines if new ones were provided
     if (nextValues) {
-      Object.assign(initialValues, klona(nextValues))
+      const freshValues = klona(nextValues)
+
+      // Wipe initialValues clean before assigning new values
+      for (const key of Object.keys(initialValues)) {
+        deleteProperty(initialValues, key)
+      }
+
+      Object.assign(initialValues, freshValues)
     }
 
     if (nextErrors) {

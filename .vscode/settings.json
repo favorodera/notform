@@ -190,6 +190,7 @@
     "jsdom",
     "klona",
     "llms",
+    "misrouted",
     "noopener",
     "noreferrer",
     "notform",

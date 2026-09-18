@@ -62,7 +62,7 @@ const priorityTemplate = `
 `
 
 const pTagTemplate = `
- <NotForm :form="form" @submit="form.submit">
+  <NotForm :form="form" @submit="form.submit">
     <NotField path="name" v-slot="{ events, path }">
       <input :id="path" v-model="form.values.name" v-bind="events" />
       <NotMessage :path v-slot="{ message }" as="p" />
@@ -71,12 +71,9 @@ const pTagTemplate = `
 `
 
 /**
- * Mounts a form with a `name` field, its input, and a NotMessage.
- *
- * The template and components can be overridden to cover multi-field,
- * custom rendering, and singleton (no NotForm ancestor) scenarios.
- * @param template Template string for the form.
- * @returns An object containing the form instance and the wrapper.
+ * Mounts a form with a `name` field, its input, and a `<NotMessage>`.
+ * @param template Template string to mount. Defaults to {@linkcode singleFieldTemplate}.
+ * @returns The form instance and the mounted wrapper.
  */
 function mountForm(template?: string) {
   const form = useNotForm(baseConfig)
@@ -101,7 +98,6 @@ describe('error message display', () => {
     const { wrapper } = mountForm()
 
     await wrapper.find('#name').setValue('H')
-
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
@@ -161,7 +157,6 @@ describe('default slot', () => {
     const { wrapper } = mountForm(customRenderTemplate)
 
     await wrapper.find('#name').setValue('H')
-
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
@@ -174,7 +169,6 @@ describe('singleton', () => {
     const { wrapper } = mountForm(singletonTemplate)
 
     await wrapper.find('#name').setValue('H')
-
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
@@ -183,8 +177,11 @@ describe('singleton', () => {
   })
 
   it(':form prop takes priority over NotForm ancestor', async () => {
+    // Deliberately mismatched constraints, so a misrouted :form prop
+    // produces a visible rendered error instead of an identical result
+    // that would pass either way.
     const primaryForm = useNotForm({
-      schema: object({ name: string(10, 50) }), // different constraint → different error text
+      schema: object({ name: string(10, 50) }),
     })
     const secondaryForm = useNotForm({
       schema: object({ name: string(2, 50) }),
@@ -196,22 +193,21 @@ describe('singleton', () => {
       template: priorityTemplate,
     })
 
-    // 'Jo' is valid for secondaryForm (min 2) but would be invalid for primaryForm (min 10).
+    // 'Jo' is valid for secondaryForm (min 2) but would fail primaryForm (min 10).
     await wrapper.find('#name').setValue('Jo')
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
     // If NotField/NotMessage silently fell back to the ancestor primaryForm,
-    // this would render an error — this is a content assertion, not a flag check.
+    // this would render an error — a content assertion, not a flag check.
     expect(wrapper.find('span').exists()).toBe(false)
 
-    // Confirm the interaction actually landed on secondaryForm's own state.
     expect(secondaryForm.getFieldErrors('name')).toHaveLength(0)
     expect(primaryForm.getFieldErrors('name')).toHaveLength(0)
 
-    // Force a real, visible error directly onto primaryForm at the same path.
-    // If NotMessage were reading from primaryForm instead of secondaryForm,
-    // this would now render — proving the priority resolution is correct.
+    // Force a real, visible error directly onto primaryForm at the same
+    // path, unrelated to any DOM interaction. If NotMessage were reading
+    // from primaryForm instead of secondaryForm, this would now render.
     primaryForm.setError({ message: 'wrong form error', path: ['name'] })
     await flushPromises()
 

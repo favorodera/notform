@@ -8,6 +8,11 @@ const schema = object({
   name: string(2, 50),
 })
 
+/**
+ * Every test in this file disables onBlur/onChange by default so each
+ * describe block can enable exactly the trigger(s) it's testing, without
+ * the other defaults firing and muddying the assertions.
+ */
 const baseFieldProps: Partial<NotFieldProps<typeof schema>> = {
   validateOn: {
     onBlur: false,
@@ -40,13 +45,12 @@ const priorityTemplate = `
 `
 
 /**
- * Mounts a form with a `name` field and its input.
- *
- * The template and components can be overridden to cover multi-field,
- * custom rendering, and singleton (no NotForm ancestor) scenarios.
- * @param fieldProps Field props.
- * @param template Template string for the form.
- * @returns An object containing the form instance and the wrapper.
+ * Mounts a form with a single `name` field, wiring `fieldProps` onto
+ * `<NotField>` via `v-bind` so each test can override `validateOn`,
+ * `validationMode`, or `debounce` without needing a new template.
+ * @param fieldProps Overrides merged over {@linkcode baseFieldProps}.
+ * @param template Template string to mount. Defaults to {@linkcode singleFieldTemplate}.
+ * @returns The form instance and the mounted wrapper.
  */
 function mountForm(fieldProps?: Partial<NotFieldProps<typeof schema>>, template?: string) {
   const form = useNotForm({ schema })
@@ -54,7 +58,6 @@ function mountForm(fieldProps?: Partial<NotFieldProps<typeof schema>>, template?
   const wrapper = mount({
     components: { NotField, NotForm },
     setup: () => ({
-      // merge field props with base field props
       fieldProps: { ...baseFieldProps, ...fieldProps },
       form,
     }),
@@ -102,9 +105,10 @@ describe('onMount', () => {
   })
 })
 
-// onInput and onChange gate revalidation identically in eager mode
-describe.for(['onInput', 'onChange'])('%s', (trigger) => {
-  const triggerEvent = trigger.replace('on', '').toLocaleLowerCase()
+// onInput and onChange gate revalidation identically in eager mode, so both
+// triggers are exercised through the same two tests via `describe.for`.
+describe.for(['onInput', 'onChange'] as const)('%s', (trigger) => {
+  const triggerEvent = trigger.replace('on', '').toLowerCase()
 
   it(`validates on ${trigger} when ${trigger} is enabled`, async () => {
     const { form, wrapper } = mountForm({
@@ -123,6 +127,8 @@ describe.for(['onInput', 'onChange'])('%s', (trigger) => {
       validateOn: { onBlur: true, [trigger]: false },
     })
 
+    // Seed an error via blur first, so a would-be revalidation on the
+    // disabled trigger has something to (incorrectly) clear if it fired.
     await wrapper.get('#name').trigger('blur')
     await flushPromises()
 
@@ -139,10 +145,10 @@ describe.for(['onInput', 'onChange'])('%s', (trigger) => {
 })
 
 describe('lazy mode', () => {
-  it.for(['onInput', 'onChange'])(
+  it.for(['onInput', 'onChange'] as const)(
     'does not revalidate %s in lazy mode even when errors exist',
     async (trigger) => {
-      const triggerEvent = trigger.replace('on', '').toLocaleLowerCase()
+      const triggerEvent = trigger.replace('on', '').toLowerCase()
 
       const { form, wrapper } = mountForm({
         validateOn: { onBlur: true, [trigger]: false },
@@ -179,6 +185,10 @@ describe('singleton', () => {
   })
 
   it(':form prop takes priority over NotForm ancestor', async () => {
+    // Deliberately mismatched constraints: 'Jo' passes secondaryForm's
+    // schema but would fail primaryForm's. This turns "which form actually
+    // validated the field" into a visible content difference rather than
+    // something only detectable via internal touch/dirty bookkeeping.
     const primaryForm = useNotForm({
       schema: object({ name: string(10, 50) }),
     })
@@ -192,7 +202,6 @@ describe('singleton', () => {
       template: priorityTemplate,
     })
 
-    // 'Jo' is valid for secondaryForm's schema but would fail primaryForm's.
     await wrapper.get('#name').setValue('Jo')
     await wrapper.get('#name').trigger('blur')
     await flushPromises()
@@ -202,7 +211,7 @@ describe('singleton', () => {
     expect(secondaryForm.getFieldErrors('name')).toHaveLength(0)
 
     // If :form priority were broken and NotField fell back to primaryForm,
-    // this would have a validation error instead of staying untouched.
+    // this would show a validation error instead.
     expect(primaryForm.getFieldErrors('name')).toHaveLength(0)
     expect(primaryForm.values.name).not.toBe('Jo')
   })
@@ -232,108 +241,87 @@ describe('debounce', () => {
 
   it('defers input-triggered validation until the debounce timer expires', async () => {
     const { form, wrapper } = mountForm(debounceMountFieldProps)
-
     const input = wrapper.get('#name')
 
-    // Trigger blur first — this creates an error state
+    // Blur first, creating an error state to observe clearing.
     await input.trigger('blur')
-
-    // Set the value of the input
     await input.setValue('ada')
 
-    // The error should still be present because the debounce timer has not expired
+    // Debounce hasn't elapsed yet — the stale error must still be present.
     expect(form.getFieldErrors('name')).toHaveLength(1)
 
-    // Fast-forward time instantly past the 50ms debounce threshold
     vi.advanceTimersByTime(debounceMs + 10)
-
     await flushPromises()
 
-    // The error should be gone because the debounce timer has expired
     expect(form.getFieldErrors('name')).toHaveLength(0)
   })
 
   it('only runs the last validation when inputs arrive rapidly', async () => {
     const { form, wrapper } = mountForm(debounceMountFieldProps)
-
     const input = wrapper.get('#name')
 
-    // Trigger blur first — this creates an error state
     await input.trigger('blur')
 
-    // Set the value of the input multiple times
+    // Multiple rapid inputs should each reset the same debounce timer,
+    // not queue up multiple validation runs.
     await input.setValue('a')
     await input.setValue('Ja')
     await input.setValue('Jane')
 
-    // The error should still be present because the debounce timer has not expired
     expect(form.getFieldErrors('name')).toHaveLength(1)
 
-    // Fast-forward time instantly past the 50ms debounce threshold
     vi.advanceTimersByTime(debounceMs + 10)
-
     await flushPromises()
 
-    // The error should be gone because the debounce timer has expired
     expect(form.getFieldErrors('name')).toHaveLength(0)
   })
 
   it('validates immediately on blur, cancelling the pending debounce', async () => {
     const { form, wrapper } = mountForm(debounceMountFieldProps)
-
     const input = wrapper.get('#name')
 
-    // Force an error state via blur
     await input.trigger('blur')
     await flushPromises()
 
-    // Confirmed: we have an error
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
 
-    // Type a VALID value. This schedules a debounce timer to REMOVE the error.
+    // Type a VALID value — this schedules a debounce timer that would clear the error.
     await input.setValue('ada')
 
-    // Immediately change the input back to an INVALID value and BLUR.
-    // This blur executes immediately, evaluating the invalid value.
+    // Immediately overwrite with an INVALID value and blur, which validates synchronously.
     await input.setValue('')
     await input.trigger('blur')
     await flushPromises()
 
-    // Blur happened instantly. The field is still invalid, so the error remains.
+    // Blur ran immediately against the invalid value, so the error remains.
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
 
-    // Fast-forward past the original 50ms debounce threshold
     vi.advanceTimersByTime(debounceMs + 10)
     await flushPromises()
 
-    // If cancellation works, the old 'ada' debounce was destroyed.
-    // The error must STILL be present.
+    // If the stale 'ada' debounce wasn't cancelled by blur, it would have
+    // fired after the fact and incorrectly cleared this error.
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
   })
 
   it('cancels the pending debounce timer on unmount', async () => {
     const { form, wrapper } = mountForm(debounceMountFieldProps)
-
     const input = wrapper.get('#name')
 
-    // Force an error state via blur
     await input.trigger('blur')
     await flushPromises()
 
-    // Confirmed: we have an error
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
 
-    // Type a VALID value. This schedules a debounce timer to REMOVE the error.
+    // Schedule a debounce timer, then destroy the component before it fires.
     await input.setValue('ada')
-
-    //  Destroy/Unmount the component immediately before the timer finishes
     wrapper.unmount()
 
-    // Fast-forward past the original 50ms debounce threshold
     vi.advanceTimersByTime(debounceMs + 10)
     await flushPromises()
 
-    // The error must still be present after the debounce timer expires.
+    // If the timer weren't cleared on unmount, it would still fire here and
+    // attempt to validate a field that no longer has a mounted component.
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
   })
 })
