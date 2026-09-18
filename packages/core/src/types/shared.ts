@@ -23,13 +23,13 @@ export type DeepPartial<TData> = PartialDeep<TData, {
  * Infers the input type accepted by a validation schema.
  * @template TSchema - The validation schema.
  */
-export type InferInput<TSchema extends ObjectSchema> = StandardSchemaV1.InferInput<TSchema>
+export type InferInput<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferInput<TSchema>
 
 /**
  * Infers the validated output type produced by a validation schema.
  * @template TSchema - The validation schema.
  */
-export type InferOutput<TSchema extends ObjectSchema> = StandardSchemaV1.InferOutput<TSchema>
+export type InferOutput<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferOutput<TSchema>
 
 /** A single validation issue from a Standard Schema validation run. */
 export type Issue = StandardSchemaV1.Issue
@@ -38,7 +38,7 @@ export type Issue = StandardSchemaV1.Issue
  * Union of all dot-notated field paths derivable from a schema's input type.
  * @template TSchema - The validation schema.
  */
-export type Paths<TSchema extends ObjectSchema> = Extract<TypeFestPaths<InferInput<TSchema>, { maxRecursionDepth: 10 }>, string> | (string & {})
+export type Paths<TSchema extends StandardSchemaV1> = Extract<TypeFestPaths<InferInput<TSchema>, { maxRecursionDepth: 10 }>, string> | (string & {})
 
 /**
  * A Standard Schema–compliant validation schema constrained to object inputs.
