@@ -4,17 +4,11 @@ import type { ObjectSchema } from '../types/shared'
 import { createNotFormInstance } from './create-not-form-instance'
 
 /**
- * Creates a reactive form instance for managing state and validation.
- *
- * Returns the public {@linkcode NotFormAPI} surface — internal coordination
- * members are hidden from the consumer. The full instance is still
- * available to child components via `<NotForm>` injection.
- * @template TSchema - The validation schema.
- * @param config Form configuration (schema, initial values/errors, callbacks).
- * @returns The public form API.
+ * Creates a form instance and returns the public {@linkcode NotFormAPI}.
+ * @template TSchema The form schema.
+ * @param config Schema, initial values/errors, and submit handler.
+ * @returns Public form API. Child components still inject the full instance via `<NotForm>`.
  */
 export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): NotFormAPI<TSchema> {
-  // createNotFormInstance returns the full NotFormInstance, we just need to
-  // cast to NotFormAPI<TSchema> to hide the internal coordination members.
   return createNotFormInstance(config) as unknown as NotFormAPI<TSchema>
 }

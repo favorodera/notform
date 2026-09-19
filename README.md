@@ -1,16 +1,13 @@
-<div align="center">
-<img src="https://notformdocs.vercel.app/favicon.svg" alt="NotForm Logo" width="80" height="80">
-
-<h1>NotForm</h1>
-
-<p><strong>Headless, schema-agnostic form management for Vue 3</strong></p>
-
-<p>
-<a href="https://github.com/favorodera/notform/blob/main/LICENSE"><img src="https://img.shields.io/github/license/favorodera/notform.svg?style=plastic&label=License" alt="License"></a>
-<a href="https://github.com/favorodera/notform/stargazers"><img src="https://img.shields.io/github/stars/favorodera/notform.svg?style=plastic&label=Stars" alt="GitHub Stars"></a>
-<a href="https://notformdocs.vercel.app/"><img src="https://img.shields.io/badge/-Documentation-blue?style=plastic" alt="NotForm Documentation"></a>
+<p align="center">
+<img alt="header" src="https://shieldcn.dev/header/transparent.svg?title=NotForm&amp;subtitle=Headless%2C+schema-agnostic+form+management+for+Vue+3&amp;logo=https%3A%2F%2Fnotformdocs.vercel.app%2Ffavicon.svg&amp;size=wide&amp;mode=dark&amp;font=fira-code" />
 </p>
-</div>
+
+<p align="center">
+<a href="https://github.com/favorodera/notform"><img alt="license" src="https://shieldcn.dev/github/favorodera/notform/license.svg?size=xs&amp;variant=outline&amp;font=fira-code" /></a>
+<a href="https://github.com/favorodera/notform"><img alt="stars" src="https://shieldcn.dev/github/favorodera/notform/stars.svg?size=xs&amp;variant=outline&amp;font=fira-code" /></a>
+<a href="https://notformdocs.vercel.app/"><img alt="Custom badge" src="https://shieldcn.dev/badge/Documentation.svg?size=xs&amp;variant=outline&amp;font=fira-code" /></a>
+<a href="https://github.com/sponsors/favorodera"><img alt="badge" src="https://shieldcn.dev/badge/Sponsor%20this%20project-FF69B4.svg?variant=outline&amp;size=xs&amp;font=fira-code&amp;" /></a>
+</p>
 
 NotForm provides the form state, validation, field state, submission lifecycle, and dynamic array-field primitives for Vue 3 while you decide how the form looks and behaves. There are no opinionated inputs, styles, or UI components built into the core.
 
@@ -43,7 +40,9 @@ Then install a Standard Schema-compatible validator, for example:
 pnpm add zod
 ```
 
-## Quick Start
+## Basic Usage
+
+### Single Fields
 
 ```vue
 <script setup lang="ts">
@@ -61,7 +60,7 @@ const form = useNotForm({
     name: '',
   },
   onSubmit(values) {
-    console.log(values)
+    console.log('Submitted:', values)
   },
   schema,
 })
@@ -121,6 +120,76 @@ const form = useNotForm({
       Reset
     </button>
   </NotForm>
+</template>
+```
+
+### Array Fields
+
+`NotArrayField` provides renderless operations for dynamic arrays while preserving stable item keys during reordering.
+
+```vue
+<script setup lang="ts">
+import { NotArrayField, NotField, NotForm, NotMessage, useNotForm } from 'notform'
+import { z } from 'zod'
+
+const schema = z.object({
+  email: z.email('Enter a valid email address'),
+  name: z.string('Enter a valid name'),
+})
+
+const form = useNotForm({
+  initialValues: {
+    email: '',
+    name: '',
+  },
+  onSubmit(values) {
+    console.log('Submitted:', values)
+  },
+  schema,
+})
+</script>
+
+<template>
+  <NotArrayField
+    v-slot="{ items, append, remove }"
+    path="tags"
+  >
+    <div
+      v-for="(item, index) in items"
+      :key="item.key"
+    >
+      <NotField
+        v-slot="{ events, path }"
+        :path="item.path"
+      >
+        <label :for="path">Tag {{ index + 1 }}</label>
+
+        <input
+          :id="path"
+          v-model="form.values.tags[index]"
+          v-bind="events"
+          :name="path"
+          type="text"
+        >
+
+        <NotMessage :path="path" />
+      </NotField>
+
+      <button
+        type="button"
+        @click="remove(index)"
+      >
+        Remove
+      </button>
+    </div>
+
+    <button
+      type="button"
+      @click="append('')"
+    >
+      Add tag
+    </button>
+  </NotArrayField>
 </template>
 ```
 

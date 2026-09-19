@@ -50,6 +50,7 @@ const form = useNotForm({
           :path="item.path"
         >
           <div data-demo-field>
+            {{ item.key }}
             <div
               data-demo-field
               class="flex-row"

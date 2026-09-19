@@ -2,16 +2,15 @@ import type { NotFormAPI } from './not-form-api'
 import type { ObjectSchema } from './shared'
 
 /**
- * Props accepted by the `NotForm` wrapper component.
- * @template TSchema - The validation schema.
+ * Props for `<NotForm>`.
+ * @template TSchema The form schema.
  */
 export interface NotFormProps<TSchema extends ObjectSchema> {
-  /** The form instance to provide to all descendant field components via injection. */
+  /** Form instance provided to descendant field components. */
   form: NotFormAPI<TSchema>
 }
 
-/** Slot definitions for the `NotForm` wrapper component. */
+/** Slot props for `<NotForm>`. */
 export interface NotFormSlots {
-  /** Default slot — place field components and other content here. */
   default?: () => void
 }

@@ -1,16 +1,12 @@
 import type { PathSegment } from '../types/shared'
 
 /**
- * Converts a {@linkcode PathSegment} into a plain `PropertyKey`.
- *
- * Standard Schema path segments may be wrapped in `{ key: ... }` objects;
- * this unwraps them so callers can compare raw keys directly.
+ * Unwraps a Standard Schema path segment to a property key.
  * @internal
- * @param segment The path segment to convert.
- * @returns The unwrapped property key.
+ * @param segment Plain key or `{ key }`.
+ * @returns The underlying property key.
  */
-export function toPropertyKey(segment: PathSegment) {
-  // Standard Schema wraps some segments in { key: ... } — unwrap if so
+export function toPropertyKey(segment: PathSegment): PropertyKey {
   if (typeof segment === 'object' && segment !== null && 'key' in segment) {
     return segment.key
   }
@@ -19,20 +15,26 @@ export function toPropertyKey(segment: PathSegment) {
 }
 
 /**
- * Checks whether two path segments refer to the same field.
- *
- * Numeric segments are coerced before comparison so that `"1"` and `1`
- * are treated as equivalent (common with array indices).
+ * Whether two path segments name the same property. `0` and `"0"` are equal.
  * @internal
- * @param segmentA First segment to compare.
- * @param segmentB Second segment to compare.
- * @returns `true` if both segments refer to the same key or index.
+ * @param segmentA First segment.
+ * @param segmentB Second segment.
+ * @returns `true` when both refer to the same key.
  */
-export function areSegmentsEqual(segmentA: PathSegment, segmentB: PathSegment) {
-  // Coerce to number when either side is numeric (handles "0" === 0 for array paths)
-  if (typeof segmentA === 'number' || typeof segmentB === 'number') {
-    return Number(segmentA) === Number(segmentB)
+export function areSegmentsEqual(
+  segmentA: PathSegment,
+  segmentB: PathSegment,
+): boolean {
+  const keyA = toPropertyKey(segmentA)
+  const keyB = toPropertyKey(segmentB)
+
+  if (typeof keyA === 'number' && typeof keyB === 'string') {
+    return Number.isSafeInteger(Number(keyB)) && keyA === Number(keyB)
   }
 
-  return segmentA === segmentB
+  if (typeof keyA === 'string' && typeof keyB === 'number') {
+    return Number.isSafeInteger(Number(keyA)) && Number(keyA) === keyB
+  }
+
+  return keyA === keyB
 }

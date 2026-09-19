@@ -9,89 +9,66 @@ import type { InferInput, Issue, ObjectSchema, Paths } from '../types/shared'
 import { areIssuePathsEqual } from '../utils/issues'
 
 /**
- * Constructs the complete, reactive form instance.
- *
- * Only consumed by `useNotForm()` and `useNotFormInstance()`.
- * @template TSchema - The validation schema.
+ * Builds the full reactive form instance used by `useNotForm` and field components.
+ * @template TSchema The form schema.
  * @internal
- * @param config Form configuration (schema, initial values, callbacks).
- * @returns A fully assembled {@link NotFormInstance}.
+ * @param config Schema, initial values/errors, and submit handler.
+ * @returns Assembled {@link NotFormInstance}.
  */
 export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): NotFormInstance<TSchema> {
-  /** Convenience alias to avoid repeating the generic everywhere. */
   type Instance = NotFormInstance<TSchema>
 
-  // ──────────────────────────────────────────────
-  // #region State — reactive primitives
-  // ──────────────────────────────────────────────
+  // #region State
 
-  /** Deep-cloned snapshot of the starting field values (used as reset baseline). */
+  /** Baseline values for reset. */
   const initialValues = klona(config.initialValues ?? {} as InferInput<TSchema>)
 
-  /** Deeply reactive object holding live field values. */
+  /** Live field values. */
   const values = reactive(klona(initialValues))
 
-  /** Deep-cloned snapshot of the starting errors (used as reset baseline). */
+  /** Baseline issues for reset. */
   const initialErrors = klona(config.initialErrors ?? [] as Array<Issue>)
 
-  /** Reactive list of current validation issues. */
+  /** Current validation issues. */
   const errors = reactive<Array<Issue>>([...initialErrors])
 
-  /** Set of dot-notated paths the user has interacted with. */
+  /** Paths the user has interacted with. */
   const touchedFields = reactive(new Set<Paths<TSchema>>())
 
-  /** `true` when at least one field has been touched. */
   const isTouched = computed(() => touchedFields.size > 0)
 
-  /** Set of dot-notated paths whose value differs from the baseline. */
+  /** Paths whose value differs from the baseline. */
   const dirtyFields = reactive(new Set<Paths<TSchema>>())
 
-  /** `true` when at least one field is dirty. */
   const isDirty = computed(() => dirtyFields.size > 0)
 
-  /** Set of dot-notated paths currently being validated asynchronously. */
+  /** Paths with an in-flight validation. */
   const validatingFields = reactive(new Set<Paths<TSchema>>())
 
-  /** `true` when there are zero validation issues. */
   const isValid = computed(() => errors.length === 0)
 
-  /** `true` while any validation is running. */
   const isValidating = computed(() => validatingFields.size > 0)
 
-  /** `true` while the submit handler is executing. */
   const isSubmitting = ref(false)
 
   /**
-   * Monotonic counter incremented by whole-form operations (validate, submit, reset).
-   * In-flight field validations started before the current generation are discarded
-   * on resolution, preventing stale results from overwriting fresh state.
+   * Bumped by validate, submit, and reset. Older in-flight runs are discarded.
    */
   let generation = 0
 
-  /**
-   * Maps each field path to its latest per-field validation cycle id.
-   * Used to discard stale async results when the same field is validated again
-   * before the previous run completes.
-   */
+  /** Latest per-field validation cycle id, used to drop stale field results. */
   const fieldValidationCycleMap = new Map<Paths<TSchema>, number>()
 
-  /**
-   * Reference count of active validation operations per field path.
-   * Prevents one operation from clearing `validatingFields` for a path
-   * that another concurrent operation is still validating.
-   */
+  /** Active validation count per path so overlapping runs do not clear too early. */
   const validatingFieldCounts = new Map<Paths<TSchema>, number>()
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Schema execution
-  // ──────────────────────────────────────────────
 
   /**
-   * Resolves the (possibly ref/getter) schema and runs its Standard Schema
-   * validation against the current `values`.
-   * @returns The Standard Schema result containing either `value` or `issues`.
+   * Runs the current schema against `values`.
+   * @returns Standard Schema result.
    */
   function executeSchemaValidation() {
     const schema = toValue(config.schema)
@@ -100,55 +77,47 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Values
-  // ──────────────────────────────────────────────
 
   /**
-   * Sets a field's value by dot-notated path and synchronizes its dirty state.
-   * @template TPath - The dot-notated field path.
-   * @param path Dot-notated path to the target field.
-   * @param value The value to assign.
+   * Sets a field value and syncs its dirty flag.
+   * @template TPath Field path.
+   * @param path Dot path.
+   * @param value Value to assign.
    */
   function setValue<TPath extends Paths<TSchema>>(path: TPath, value: Get<InferInput<TSchema>, TPath, { strict: false }>) {
     setProperty(values, path, value)
-    // Keep dirty tracking in sync whenever a value changes
     syncDirtyState(path)
   }
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Errors
-  // ──────────────────────────────────────────────
 
   /**
-   * Upserts a validation issue — replaces an existing issue at the same path,
-   * or appends it if no matching issue exists.
-   * @param error The validation issue to set.
+   * Upserts an issue at the same path, or appends it.
+   * @param error Issue to set.
    */
   function setError(error: Issue) {
     const existingIndex = errors.findIndex(existing => areIssuePathsEqual(existing.path, error.path))
 
     if (existingIndex === -1) {
-      // No issue at this path yet — append
       errors.push(error)
     } else {
-      // Replace existing issue in-place to preserve reactivity
       errors[existingIndex] = error
     }
   }
 
   /**
-   * Replaces the entire error list with a new set of issues.
-   * @param newErrors The replacement validation issues.
+   * Replaces the entire error list.
+   * @param nextErrors Replacement issues.
    */
-  function replaceErrors(newErrors: Array<Issue>) {
-    errors.splice(0, errors.length, ...newErrors)
+  function replaceErrors(nextErrors: Array<Issue>) {
+    errors.splice(0, errors.length, ...nextErrors)
   }
 
   /**
-   * Removes all validation issues.
+   * Removes every issue.
    * @internal
    */
   function clearErrors() {
@@ -156,9 +125,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Returns every validation issue whose path matches the given field.
-   * @param path Dot-notated field path.
-   * @returns Filtered array of matching issues.
+   * Issues whose path equals `path`.
+   * @param path Dot path.
+   * @returns Matching issues.
    */
   function getFieldErrors(path: Paths<TSchema>) {
     const targetPath = parsePath(path)
@@ -167,21 +136,19 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Dirty
-  // ──────────────────────────────────────────────
 
   /**
-   * Forces a field's dirty flag on.
+   * Forces a field dirty.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   function markFieldAsDirty(path: Paths<TSchema>) {
     dirtyFields.add(path)
   }
 
   /**
-   * Forces the dirty flag on for every leaf field in `values`.
+   * Forces every leaf field dirty.
    * @internal
    */
   function markAllFieldsAsDirty() {
@@ -191,16 +158,16 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Clears the dirty flag for a single field.
+   * Clears dirty state for one field.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   function unmarkFieldAsDirty(path: Paths<TSchema>) {
     dirtyFields.delete(path)
   }
 
   /**
-   * Clears the dirty flag for all fields.
+   * Clears dirty state for all fields.
    * @internal
    */
   function unmarkAllFieldsAsDirty() {
@@ -208,16 +175,14 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Compares a field's current value against its initial value and
-   * updates the dirty flag accordingly.
+   * Sets dirty from a deep compare against the baseline.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   function syncDirtyState(path: Paths<TSchema>) {
     const currentValue = getProperty(values, path)
     const baselineValue = getProperty(initialValues, path)
 
-    // Deep equality check — if unchanged, clear dirty; otherwise mark dirty
     const isUnchanged = dequal(currentValue, baselineValue)
 
     if (isUnchanged) {
@@ -228,7 +193,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Recalculates dirty state for every leaf field in `values`.
+   * Recalculates dirty state for every leaf path.
    * @internal
    */
   function syncAllDirtyStates() {
@@ -239,21 +204,19 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Touch
-  // ──────────────────────────────────────────────
 
   /**
-   * Records a field as touched (user has interacted with it).
+   * Marks a field as touched.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   function markFieldAsTouched(path: Paths<TSchema>) {
     touchedFields.add(path)
   }
 
   /**
-   * Records every leaf field as touched.
+   * Marks every leaf field as touched.
    * @internal
    */
   function markAllFieldsAsTouched() {
@@ -263,16 +226,16 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Removes the touched flag from a single field.
+   * Clears touched state for one field.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   function unmarkFieldAsTouched(path: Paths<TSchema>) {
     touchedFields.delete(path)
   }
 
   /**
-   * Removes the touched flag from all fields.
+   * Clears touched state for all fields.
    * @internal
    */
   function unmarkAllFieldsAsTouched() {
@@ -281,36 +244,30 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Validation
-  // ──────────────────────────────────────────────
 
   /**
-   * Adds multiple fields to the "currently validating" set.
+   * Increments the in-flight validation count for each path.
    * @internal
-   * @param paths Iterable of dot-notated field paths.
+   * @param paths Field paths.
    */
   function markFieldsAsValidating(paths: Iterable<Paths<TSchema>>) {
     for (const path of paths) {
-      // Increments the validation count for the given path
       validatingFieldCounts.set(path, (validatingFieldCounts.get(path) ?? 0) + 1)
-
       validatingFields.add(path)
     }
   }
 
   /**
-   * Removes multiple fields from the "currently validating" set.
+   * Decrements in-flight counts and clears a path when the count hits zero.
    * @internal
-   * @param paths Iterable of dot-notated field paths.
+   * @param paths Field paths.
    */
   function unmarkFieldsAsValidating(paths: Iterable<Paths<TSchema>>) {
     for (const path of paths) {
       const nextCount = (validatingFieldCounts.get(path) ?? 0) - 1
 
-      // Decrements the validation count for the given path if it exists
       if (nextCount <= 0) {
-      // Removes the field from the "currently validating" set
         validatingFieldCounts.delete(path)
         validatingFields.delete(path)
       } else {
@@ -320,14 +277,10 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Validates the entire form against the schema, replacing all current errors.
-   *
-   * Bumps the shared generation counter, invalidating any in-flight per-field
-   * validations as well as other whole-form validations already in progress.
-   * @returns The Standard Schema validation result.
+   * Validates the whole form, replacing all errors. Bumps `generation`.
+   * @returns Standard Schema result.
    */
   async function validate() {
-    // Increment generation so any in-flight validation (field or form) becomes stale
     const cycle = ++generation
     const paths = [...deepKeys(values)] as Array<Paths<TSchema>>
     markFieldsAsValidating(paths)
@@ -335,7 +288,6 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     try {
       const result = await executeSchemaValidation()
 
-      // Discard if a newer whole-form operation started while we were awaiting
       if (cycle !== generation) {
         return result
       }
@@ -353,22 +305,16 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Validates a single field against the schema, updating only that field's errors.
+   * Validates the form and writes issues only for `path`.
    *
-   * Staleness is checked on two axes:
-   * 1. **Per-field cycle** — a newer call for the *same* field cancels this one.
-   * 2. **Generation** — any whole-form operation that started after this call cancels it.
-   *
-   * Calls for *different* fields never cancel each other.
-   * @param path Dot-notated field path.
-   * @returns The Standard Schema validation result.
+   * Dropped if a newer call for the same path or a newer whole-form generation starts.
+   * @param path Dot path.
+   * @returns Standard Schema result.
    */
   async function validateField(path: Paths<TSchema>) {
-    // Assign a per-field cycle id so only the latest call for this path wins
     const cycle = (fieldValidationCycleMap.get(path) ?? 0) + 1
     fieldValidationCycleMap.set(path, cycle)
 
-    // Capture generation at call-time to detect whole-form invalidation later
     const startGeneration = generation
 
     markFieldsAsValidating([path])
@@ -376,21 +322,18 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     try {
       const result = await executeSchemaValidation()
 
-      // Discard stale: a newer form-wide op or a newer per-field call superseded us
       if (generation !== startGeneration || fieldValidationCycleMap.get(path) !== cycle) {
         return result
       }
 
       const targetPath = parsePath(path)
 
-      // Remove existing errors for this specific field (reverse iteration for safe splicing)
-      for (let index = errors.length - 1; index >= 0; index--) {
-        if (areIssuePathsEqual(errors[index].path, targetPath)) {
-          errors.splice(index, 1)
+      for (let errorIndex = errors.length - 1; errorIndex >= 0; errorIndex--) {
+        if (areIssuePathsEqual(errors[errorIndex].path, targetPath)) {
+          errors.splice(errorIndex, 1)
         }
       }
 
-      // Append only this field's issues from the fresh result
       const fieldIssues = (result.issues ?? []).filter(issue => areIssuePathsEqual(issue.path, targetPath))
       errors.push(...fieldIssues)
 
@@ -402,31 +345,22 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Submit
-  // ──────────────────────────────────────────────
 
   /**
-   * Validates the form and invokes `onSubmit` when validation passes.
-   *
-   * Before validation, all fields are marked as touched and dirty state is
-   * synchronized so every potential error surfaces. If validation fails,
-   * submission is aborted silently.
-   * @param event Optional native submit event (`preventDefault` is called automatically).
+   * Touches all fields, validates, then runs `onSubmit` when valid.
+   * @param event Optional submit event; `preventDefault` is always called.
    */
   async function submit(event?: SubmitEvent) {
     event?.preventDefault()
 
-    // Prevent multiple submissions
     if (isSubmitting.value) {
       return
     }
 
-    // Surface all errors by marking everything as touched + dirty-synced
     markAllFieldsAsTouched()
     syncAllDirtyStates()
 
-    // Bump generation so stale in-flight validations are discarded
     const cycle = ++generation
     const paths = [...deepKeys(values)] as Array<Paths<TSchema>>
     markFieldsAsValidating(paths)
@@ -435,7 +369,6 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     try {
       const result = await executeSchemaValidation()
 
-      // Abort if a newer whole-form operation superseded this submission
       if (cycle !== generation) {
         return
       }
@@ -445,7 +378,6 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
         return
       }
 
-      // Validation passed — clear errors and invoke the consumer's handler
       clearErrors()
       await config.onSubmit?.(result.value)
     } finally {
@@ -456,30 +388,22 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Reset
-  // ──────────────────────────────────────────────
 
   /**
-   * Resets the form to its initial state (or to new baselines if provided).
-   *
-   * Invalidates all in-flight validations, clears touched/dirty tracking,
-   * and restores values and errors to their baselines.
-   * @param nextValues Optional new baseline values.
-   * @param nextErrors Optional new baseline errors.
+   * Restores values and errors to the baseline. Optional arguments become the new baseline.
+   * @param nextValues New baseline values.
+   * @param nextErrors New baseline issues.
    */
   function reset(nextValues?: Partial<InferInput<TSchema>>, nextErrors?: Array<Issue>) {
-    // Invalidate every in-flight validation (whole-form + per-field)
     generation++
     fieldValidationCycleMap.clear()
     validatingFieldCounts.clear()
     validatingFields.clear()
 
-    // Update baselines if new ones were provided
     if (nextValues) {
       const freshValues = klona(nextValues)
 
-      // Wipe initialValues clean before assigning new values
       for (const key of Object.keys(initialValues)) {
         deleteProperty(initialValues, key)
       }
@@ -491,27 +415,21 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
       initialErrors.splice(0, initialErrors.length, ...klona(nextErrors))
     }
 
-    // Wipe current values, then restore from baseline
     for (const key of Object.keys(values)) {
       deleteProperty(values, key)
     }
     Object.assign(values, klona(initialValues))
 
-    // Restore errors from baseline
     replaceErrors(klona(initialErrors))
 
-    // Clear all interaction tracking
     unmarkAllFieldsAsTouched()
     unmarkAllFieldsAsDirty()
   }
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Instance assembly
-  // ──────────────────────────────────────────────
 
-  /** The assembled instance, wrapped in `reactive()` for deep reactivity. */
   const instance: Instance = reactive({
     clearErrors,
     dirtyFields,

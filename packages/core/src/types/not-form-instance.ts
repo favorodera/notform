@@ -3,240 +3,196 @@ import type { Get } from 'type-fest'
 import type { DeepPartial, InferInput, InferOutput, Issue, ObjectSchema, Paths } from './shared'
 
 /**
- * Complete state and API of a form instance, including internal members
- * used by `NotField`, `NotArrayField`, and `NotMessage`.
- *
- * Consumers receive the narrowed {@linkcode NotFormAPI} from `useNotForm`;
- * members marked `@internal` are hidden from that public surface.
- * @template TSchema - The validation schema.
+ * Full form instance used by field components. `useNotForm` returns {@linkcode NotFormAPI}.
+ * @template TSchema The form schema.
  */
 export interface NotFormInstance<TSchema extends ObjectSchema> {
-  // ──────────────────────────────────────────────
   // #region Values
-  // ──────────────────────────────────────────────
 
   /**
-   * Deeply reactive object holding current field values.
+   * Live field values.
    * @example
    * ```ts
-   * // Direct access
    * form.values.email
-   *
-   * // Two-way binding
-   * <input v-model="form.values.email" />
    * ```
    */
   values: InferInput<TSchema>
 
   /**
-   * Sets a single field value by dot-notated path.
-   * Does **not** trigger validation — field event handlers are responsible for that.
-   * @template TPath - The dot-notated field path.
-   * @param path Dot-notated path to the target field.
-   * @param value The value to assign.
+   * Sets a field by path. Does not validate.
+   * @template TPath Field path.
+   * @param path Dot path.
+   * @param value Value to assign.
    */
   setValue: <TPath extends Paths<TSchema>>(path: TPath, value: Get<InferInput<TSchema>, TPath, { strict: false }>) => void
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Touch
-  // ──────────────────────────────────────────────
 
-  /** Whether any field has been interacted with. */
+  /** Whether any field is touched. */
   isTouched: boolean
 
   /**
-   * Set of dot-notated paths for fields the user has interacted with.
+   * Touched field paths.
    * @internal
    */
   touchedFields: Set<Paths<TSchema>>
 
   /**
-   * Records a field as touched.
+   * Marks a field as touched.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   markFieldAsTouched: (path: Paths<TSchema>) => void
 
   /**
-   * Records every field as touched.
+   * Marks every leaf field as touched.
    * @internal
    */
   markAllFieldsAsTouched: () => void
 
   /**
-   * Removes the touched flag from a field.
+   * Clears touched state for one field.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   unmarkFieldAsTouched: (path: Paths<TSchema>) => void
 
   /**
-   * Removes the touched flag from all fields.
+   * Clears touched state for all fields.
    * @internal
    */
   unmarkAllFieldsAsTouched: () => void
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Dirty
-  // ──────────────────────────────────────────────
 
   /**
-   * Set of dot-notated paths whose current value differs from the initial value.
+   * Paths whose value differs from the baseline.
    * @internal
    */
   dirtyFields: Set<Paths<TSchema>>
 
-  /** Whether any field value differs from its initial value. */
+  /** Whether any field is dirty. */
   isDirty: boolean
 
   /**
-   * Compares a field's current value against its initial value and
-   * updates the dirty flag accordingly.
+   * Updates dirty state by comparing current and baseline values.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   syncDirtyState: (path: Paths<TSchema>) => void
 
   /**
-   * Forces a field's dirty flag on.
+   * Forces a field dirty.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   markFieldAsDirty: (path: Paths<TSchema>) => void
 
   /**
-   * Forces the dirty flag on for every field.
+   * Forces every leaf field dirty.
    * @internal
    */
   markAllFieldsAsDirty: () => void
 
   /**
-   * Clears a field's dirty flag (e.g. when its value matches the initial value again).
+   * Clears dirty state for one field.
    * @internal
-   * @param path Dot-notated field path.
+   * @param path Dot path.
    */
   unmarkFieldAsDirty: (path: Paths<TSchema>) => void
 
   /**
-   * Clears the dirty flag for all fields.
+   * Clears dirty state for all fields.
    * @internal
    */
   unmarkAllFieldsAsDirty: () => void
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Errors
-  // ──────────────────────────────────────────────
 
-  /** All validation issues from the most recent validation run. */
+  /** Issues from the last validation that wrote errors. */
   errors: Array<Issue>
 
   /**
-   * Upserts a validation issue — replaces an existing issue for the same path,
-   * or appends it if none exists. Useful for server-side errors.
-   * @param error The validation issue to set.
+   * Upserts an issue at the same path, or appends it.
+   * @param error Issue to set.
    */
   setError: (error: Issue) => void
 
   /**
-   * Replaces the entire error list with the provided issues.
-   * @param errors The new validation issues.
+   * Replaces the entire error list.
+   * @param errors Replacement issues.
    */
   replaceErrors: (errors: Array<Issue>) => void
 
   /**
-   * Removes all validation issues.
+   * Removes every issue.
    * @internal
    */
   clearErrors: () => void
 
   /**
-   * Returns all validation issues for a specific field.
-   * @param path Dot-notated field path.
-   * @returns Array of issues matching the given path.
+   * Issues whose path equals `path`.
+   * @param path Dot path.
+   * @returns Matching issues.
    */
   getFieldErrors: (path: Paths<TSchema>) => Array<Issue>
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Validation
-  // ──────────────────────────────────────────────
 
-  /** Whether a validation run is currently in progress. */
+  /** Whether any validation is in flight. */
   isValidating: boolean
 
-  /** Whether the form has zero validation errors. */
+  /** Whether there are zero issues. */
   isValid: boolean
 
   /**
-   * Set of dot-notated paths currently undergoing async validation.
+   * Paths currently validating.
    * @internal
    */
   validatingFields: Set<Paths<TSchema>>
 
   /**
-   * Validates the entire form against the schema, replacing all current errors.
-   * @returns The Standard Schema validation result.
+   * Validates the whole form and replaces all errors.
+   * @returns Standard Schema result.
    */
   validate: () => Promise<StandardSchemaV1.Result<InferOutput<TSchema>>>
 
   /**
-   * Validates a single field against the schema.
-   * Only updates errors for that field — other fields' errors are preserved.
-   * @param path Dot-notated field path.
-   * @returns The Standard Schema validation result.
+   * Validates the form and writes issues only for `path`.
+   * @param path Dot path.
+   * @returns Standard Schema result.
    */
   validateField: (path: Paths<TSchema>) => Promise<StandardSchemaV1.Result<InferOutput<TSchema>>>
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Submit
-  // ──────────────────────────────────────────────
 
-  /** Whether the form is currently executing its submit handler. */
+  /** Whether `onSubmit` is running. */
   isSubmitting: boolean
 
   /**
-   * Validates the form and invokes `onSubmit` if validation passes.
-   *
-   * Marks all fields as touched and syncs dirty state before validating
-   * so every potential error surfaces. Aborts if validation fails.
-   * @param event Optional native submit event (automatically `preventDefault`-ed).
+   * Touches all fields, validates, then runs `onSubmit` when valid.
+   * @param event Optional submit event; `preventDefault` is always called.
    */
   submit: (event?: SubmitEvent) => Promise<void>
 
   // #endregion
 
-  // ──────────────────────────────────────────────
   // #region Reset
-  // ──────────────────────────────────────────────
 
   /**
-   * Resets the form to its initial state, or to new baselines if provided.
-   *
-   * Clears all touched/dirty tracking and cancels in-flight validations.
-   * When `values` or `errors` are supplied they become the new baseline
-   * for subsequent resets.
-   * @param values Optional new baseline values.
-   * @param errors Optional new baseline errors.
-   * @example
-   * ```ts
-   * // Reset to original initial values
-   * form.reset()
-   *
-   * // Reset with a new baseline
-   * form.reset(
-   *   { name: 'Jane' },
-   *   [{ message: 'Invalid email', path: ['email'] }]
-   * )
-   * ```
+   * Restores values/errors to the baseline. Optional arguments become the new baseline.
+   * @param values New baseline values.
+   * @param errors New baseline issues.
    */
   reset: (values?: DeepPartial<InferInput<TSchema>>, errors?: Array<Issue>) => void
 

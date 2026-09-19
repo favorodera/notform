@@ -1,12 +1,9 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { NotField, NotForm, NotMessage, useNotForm, type UseNotFormConfig } from '../../src'
-import { object, string } from '../not-validator'
+import { nameEmailSchema, object, string } from '../helpers/not-validator'
 
-const schema = object({
-  email: string(5, 100),
-  name: string(2, 50),
-})
+const schema = nameEmailSchema
 
 const baseConfig: UseNotFormConfig<typeof schema> = { schema }
 
@@ -71,9 +68,9 @@ const pTagTemplate = `
 `
 
 /**
- * Mounts a form with a `name` field, its input, and a `<NotMessage>`.
- * @param template Template string to mount. Defaults to {@linkcode singleFieldTemplate}.
- * @returns The form instance and the mounted wrapper.
+ * Mounts a NotForm with the given template.
+ * @param template Optional template to render.
+ * @returns Object containing the form and wrapper.
  */
 function mountForm(template?: string) {
   const form = useNotForm(baseConfig)
@@ -177,9 +174,6 @@ describe('singleton', () => {
   })
 
   it(':form prop takes priority over NotForm ancestor', async () => {
-    // Deliberately mismatched constraints, so a misrouted :form prop
-    // produces a visible rendered error instead of an identical result
-    // that would pass either way.
     const primaryForm = useNotForm({
       schema: object({ name: string(10, 50) }),
     })
@@ -193,21 +187,14 @@ describe('singleton', () => {
       template: priorityTemplate,
     })
 
-    // 'Jo' is valid for secondaryForm (min 2) but would fail primaryForm (min 10).
     await wrapper.find('#name').setValue('Jo')
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
-    // If NotField/NotMessage silently fell back to the ancestor primaryForm,
-    // this would render an error — a content assertion, not a flag check.
     expect(wrapper.find('span').exists()).toBe(false)
-
     expect(secondaryForm.getFieldErrors('name')).toHaveLength(0)
     expect(primaryForm.getFieldErrors('name')).toHaveLength(0)
 
-    // Force a real, visible error directly onto primaryForm at the same
-    // path, unrelated to any DOM interaction. If NotMessage were reading
-    // from primaryForm instead of secondaryForm, this would now render.
     primaryForm.setError({ message: 'wrong form error', path: ['name'] })
     await flushPromises()
 

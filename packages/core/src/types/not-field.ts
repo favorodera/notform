@@ -2,71 +2,59 @@ import type { NotFormAPI } from './not-form-api'
 import type { Issue, ObjectSchema, Paths, ValidationTrigger } from './shared'
 
 /**
- * Props accepted by the `NotField` component.
- * @template TSchema The validation schema.
+ * Props for `<NotField>`.
+ * @template TSchema The form schema.
  */
 export interface NotFieldProps<TSchema extends ObjectSchema> {
-  /** Dot-notated field path to this field. */
+  /** Dot path of this field. */
   path: Paths<TSchema>
 
   /**
-   * Explicit form instance.
-   *
-   * Takes priority over the instance provided by an ancestor `<NotForm>`.
-   * Required when using `<NotField>` outside of `<NotForm>`.
+   * Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`.
    */
   form?: NotFormAPI<TSchema>
 
   /**
-   * Interaction events that trigger validation for this field.
-   * 
-   * Only set what you need, it will be merged with the default
-   * - `onBlur` — when the field loses focus.
-   * - `onChange` — when the field value is committed.
-   * - `onInput` — on every keystroke.
-   * - `onMount` — when the field component mounts.
+   * Validation triggers merged over `{ onBlur: true, onChange: true }`.
    * @default { onBlur: true, onChange: true }
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
 
   /**
-   * Validation timing strategy:
-   * - `lazy`: Validates on blur or submission only.
-   * - `eager`: Validates on blur, then on every change while errors exist.
+   * `lazy` — blur/submit only. `eager` — also revalidate on change while invalid.
    * @default 'eager'
    */
   validationMode?: 'eager' | 'lazy'
 
   /**
-   * Delay in milliseconds before executing debounced validation on input or change.
-   * Blur validation always runs immediately.
+   * Debounce in ms for input/change validation. Blur always runs immediately.
+   * @default 0
    */
   debounce?: number
 }
 
-/** Slot definitions for the `NotField` component. */
+/** Slot props for `<NotField>`. */
 export interface NotFieldSlots {
-  /** The default slot receives the field state and event handlers. */
   default?: (props: {
-    /** Active validation issues for this field. */
+    /** Issues for this field path. */
     errors: Array<Issue>
 
-    /** Interaction event handlers to bind to inputs. */
+    /** Handlers to bind to the input. */
     events: Record<ValidationTrigger, () => void>
 
-    /** Whether the field value differs from its initial state. */
+    /** Whether the value differs from the baseline. */
     isDirty: boolean
 
-    /** Whether the field has been interacted with. */
+    /** Whether the user has interacted with this field. */
     isTouched: boolean
 
-    /** Whether the field has zero validation errors. */
+    /** Whether this field has no issues. */
     isValid: boolean
 
-    /** Whether validation is currently running for this field. */
+    /** Whether this field is currently validating. */
     isValidating: boolean
 
-    /** Dot-notated path to this field. */
+    /** Dot path of this field. */
     path: string
   }) => void
 }

@@ -29,9 +29,7 @@
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "publishConfig": {
     "access": "public"
   },
@@ -62,6 +60,7 @@
     "@favorodera/eslint-config": "catalog:tools",
     "@types/node": "catalog:tools",
     "@vitejs/plugin-vue": "catalog:tools",
+    "@vitest/coverage-v8": "catalog:tools",
     "@vitest/ui": "catalog:tools",
     "@vue/test-utils": "catalog:tools",
     "happy-dom": "catalog:tools",

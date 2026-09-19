@@ -3,33 +3,29 @@ import type { NotFormAPI } from './not-form-api'
 import type { ObjectSchema, Paths } from './shared'
 
 /**
- * Props accepted by the `NotMessage` component.
- * @template TSchema The validation schema.
+ * Props for `<NotMessage>`.
+ * @template TSchema The form schema.
  */
 export interface NotMessageProps<TSchema extends ObjectSchema> {
   /**
-   * HTML tag name or component to render as the root element.
+   * Root element or component.
    * @default 'span'
    */
   as?: Component | string
 
-  /** Dot-notated field path whose error message should be displayed. */
+  /** Field path whose first error message is shown. */
   path: Paths<TSchema>
 
   /**
-   * Explicit form instance.
-   *
-   * Takes priority over the instance provided by an ancestor `<NotForm>`.
-   * Required when using `<NotMessage>` outside of `<NotForm>`.
+   * Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`.
    */
   form?: NotFormAPI<TSchema>
 }
 
-/** Slot definitions for the `NotMessage` component. */
+/** Slot props for `<NotMessage>`. */
 export interface NotMessageSlots {
-  /** Custom render slot for the error message. */
   default?: (props: {
-    /** The first active validation error message for the specified field. */
+    /** First active error message for `path`. */
     message?: string
   }) => void
 }

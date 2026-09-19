@@ -1,12 +1,12 @@
-<div align="center">
-<h1><code>notform-nuxt</code></h1>
-<p><strong>NotForm integration for Nuxt</strong></p>
-<p>
-<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/v/notform-nuxt.svg?style=plastic&label=Version" alt="Version"></a>
-<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/dm/notform-nuxt.svg?style=plastic&label=Downloads&color=blue" alt="Downloads"></a>
-<a href="https://npmx.dev/package/notform-nuxt" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/unpacked-size/notform-nuxt?style=plastic&label=Unpacked%20Size" alt="Unpacked Size"></a>
+<p align="center">
+<img alt="header" src="https://shieldcn.dev/header/transparent.svg?title=NotForm%28nuxt+module%29&amp;subtitle=Headless%2C+schema-agnostic+form+management+for+Vue+3&amp;logo=https%3A%2F%2Fnotformdocs.vercel.app%2Ffavicon.svg&amp;size=wide&amp;mode=dark&amp;font=fira-code" />
 </p>
-</div>
+
+<p align="center">
+<a href="https://www.npmjs.com/package/notform-nuxt"><img alt="version" src="https://shieldcn.dev/npm/notform-nuxt.svg?variant=outline&amp;size=xs&amp;font=fira-code&amp;label=Version" /></a>
+<a href="https://www.npmjs.com/package/notform-nuxt"><img alt="downloads" src="https://shieldcn.dev/npm/dm/notform-nuxt.svg?variant=outline&amp;size=xs&amp;font=fira-code&amp;label=Downloads" /></a>
+<a href="https://www.npmjs.com/package/notform-nuxt"><img alt="Custom badge" src="https://shieldcn.dev/bundlephobia/min/notform-nuxt.svg?variant=outline&amp;size=xs&amp;font=fira-code&amp;label=Unpacked+Size" /></a>
+</p>
 
 `notform-nuxt` is the official Nuxt module for [NotForm](../core).
 
@@ -35,12 +35,15 @@ export default defineNuxtConfig({
   modules: ['notform-nuxt'],
 })
 ```
-
 That's it. The NotForm composable and components are auto-imported in your Nuxt application.
 
-## Usage
+## Basic Usage
 
 You can use NotForm without importing the composable or components in your Vue files:
+
+## Basic Usage
+
+### Single Fields
 
 ```vue
 <script setup lang="ts">
@@ -56,6 +59,9 @@ const form = useNotForm({
     email: '',
     name: '',
   },
+  onSubmit(values) {
+    console.log('Submitted:', values)
+  },
   schema,
 })
 </script>
@@ -64,6 +70,7 @@ const form = useNotForm({
   <NotForm
     :form="form"
     @submit.prevent="form.submit"
+    @reset="form.reset()"
   >
     <NotField
       v-slot="{ events, path }"
@@ -108,37 +115,88 @@ const form = useNotForm({
     <button type="submit">
       Submit
     </button>
+
+    <button type="reset">
+      Reset
+    </button>
   </NotForm>
 </template>
 ```
 
-## What It Adds
+### Array Fields
 
-The module provides Nuxt integration for the APIs exported by `notform`:
+`NotArrayField` provides renderless operations for dynamic arrays while preserving stable item keys during reordering.
 
-- `useNotForm`
-- `NotForm`
-- `NotField`
-- `NotMessage`
-- `NotArrayField`
+```vue
+<script setup lang="ts">
+import { z } from 'zod'
 
-The form behavior itself is provided by the core `notform` package.
+const schema = z.object({
+  email: z.email('Enter a valid email address'),
+  name: z.string('Enter a valid name'),
+})
+
+const form = useNotForm({
+  initialValues: {
+    email: '',
+    name: '',
+  },
+  onSubmit(values) {
+    console.log('Submitted:', values)
+  },
+  schema,
+})
+</script>
+
+<template>
+  <NotArrayField
+    v-slot="{ items, append, remove }"
+    path="tags"
+  >
+    <div
+      v-for="(item, index) in items"
+      :key="item.key"
+    >
+      <NotField
+        v-slot="{ events, path }"
+        :path="item.path"
+      >
+        <label :for="path">Tag {{ index + 1 }}</label>
+
+        <input
+          :id="path"
+          v-model="form.values.tags[index]"
+          v-bind="events"
+          :name="path"
+          type="text"
+        >
+
+        <NotMessage :path="path" />
+      </NotField>
+
+      <button
+        type="button"
+        @click="remove(index)"
+      >
+        Remove
+      </button>
+    </div>
+
+    <button
+      type="button"
+      @click="append('')"
+    >
+      Add tag
+    </button>
+  </NotArrayField>
+</template>
+```
 
 ## Requirements
 
 - Nuxt 4 or later
 - Node.js 24 or later for development in this repository
 - A Standard Schema-compatible validator
-
-## Development
-
-From the repository root:
-
-```bash
-pnpm install
-pnpm --filter notform-nuxt typecheck
-pnpm --filter notform-nuxt build
-```
 
 ## License
 

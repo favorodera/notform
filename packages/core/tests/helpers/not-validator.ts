@@ -175,3 +175,106 @@ export function array<TItem extends StandardSchemaV1>(itemSchema: TItem, min?: n
     },
   }
 }
+
+/**
+ * Wraps a schema so `validate` waits on `gate` before delegating.
+ * @template TSchema Inner schema.
+ * @param schema Schema to run after the gate.
+ * @param gate Promise that must resolve first.
+ * @returns Gated schema with the same types.
+ */
+export function delayed<TSchema extends StandardSchemaV1>(schema: TSchema, gate: Promise<void>): TSchema {
+  return {
+    ...schema,
+    '~standard': {
+      ...schema['~standard'],
+      async validate(value) {
+        await gate
+        return schema['~standard'].validate(value)
+      },
+    },
+  } as TSchema
+}
+
+/**
+ * Wraps a schema so each `validate` waits on `nextGate(callNumber)`.
+ * @template TSchema Inner schema.
+ * @param schema Schema to run after each gate.
+ * @param nextGate Promise for the 1-based call number.
+ * @returns Gated schema with the same types.
+ */
+export function delayedByCall<TSchema extends StandardSchemaV1>(schema: TSchema, nextGate: (callNumber: number) => Promise<void>): TSchema {
+  let callCount = 0
+
+  return {
+    ...schema,
+    '~standard': {
+      ...schema['~standard'],
+      async validate(value) {
+        callCount++
+        await nextGate(callCount)
+        return schema['~standard'].validate(value)
+      },
+    },
+  } as TSchema
+}
+
+export const nameEmailSchema = object({
+  email: string(5, 100),
+  name: string(2, 50),
+})
+
+export const tagsSchema = object({
+  tags: array(string(1, 20), 2, 5),
+})
+
+/**
+ * Schema whose first `validate` waits on `gate` and fails; later calls succeed with `{ value }`.
+ * @param gate Promise the first call awaits.
+ * @returns A Standard Schema used to race stale validations.
+ */
+export function createFirstCallBlockingSchema(gate: Promise<void>) {
+  let callCount = 0
+
+  return {
+    '~standard': {
+      types: { input: {} as Record<string, unknown>, output: {} as Record<string, unknown> },
+      async validate(value: unknown) {
+        callCount++
+
+        if (callCount === 1) {
+          await gate
+          return { issues: [{ message: 'Stale validation failed' }] }
+        }
+
+        return { value }
+      },
+      ...vendorVersion,
+    },
+  }
+}
+
+/**
+ * Schema whose `validate` waits on `nextGate(callNumber)` then returns `nextResult(callNumber)`.
+ * @param nextGate Promise to await for this call.
+ * @param nextResult Result after the gate resolves.
+ * @returns A Standard Schema for overlapping-validation tests.
+ */
+export function createGatedCallSchema(
+  nextGate: (callNumber: number) => Promise<void>,
+  nextResult: (callNumber: number, value: unknown) => Promise<StandardSchemaV1.Result<unknown>> | StandardSchemaV1.Result<unknown>,
+) {
+  let callCount = 0
+
+  return {
+    '~standard': {
+      types: { input: {} as Record<string, unknown>, output: {} as Record<string, unknown> },
+      async validate(value: unknown) {
+        const currentCall = ++callCount
+        await nextGate(currentCall)
+        return nextResult(currentCall, value)
+      },
+      ...vendorVersion,
+    },
+  }
+}

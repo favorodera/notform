@@ -4,6 +4,8 @@ import type { NotMessageProps, NotMessageSlots } from '../types/not-message'
 import type { ObjectSchema } from '../types/shared'
 import { useNotFormInstance } from '../composables/use-not-form-instance'
 
+// #region Setup
+
 defineOptions({
   inheritAttrs: false,
 })
@@ -16,13 +18,17 @@ const props = withDefaults(defineProps<NotMessageProps<TSchema>>(), {
 
 const form = useNotFormInstance(props.form)
 
-/** First active validation error message for the specified field path. */
+// #endregion
+
+// #region State
+
 const message = computed(() => form.getFieldErrors(props.path)[0]?.message)
+
+// #endregion
 </script>
 
 <!-- eslint-disable-next-line vue/no-root-v-if -->
 <template>
-  <!-- Render root element only when an active error message exists -->
   <component
     :is="as"
     v-if="message"
