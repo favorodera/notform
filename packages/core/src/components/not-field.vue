@@ -4,6 +4,10 @@ import type { NotFieldProps, NotFieldSlots } from '../types/not-field'
 import type { ObjectSchema, ValidationTrigger } from '../types/shared'
 import { useNotFormInstance } from '../composables/use-not-form-instance'
 
+// ──────────────────────────────────────────────
+// #region Setup
+// ──────────────────────────────────────────────
+
 defineSlots<NotFieldSlots>()
 
 const props = withDefaults(defineProps<NotFieldProps<TSchema>>(), {
@@ -13,6 +17,8 @@ const props = withDefaults(defineProps<NotFieldProps<TSchema>>(), {
 })
 
 const form = useNotFormInstance(props.form)
+
+// #endregion
 
 // ──────────────────────────────────────────────
 // #region State
@@ -40,14 +46,14 @@ const validateOn = computed<NotFieldProps<TSchema>['validateOn']>(() => ({
   ...props.validateOn,
 }))
 
+/** Handle for any pending debounced validation timer. */
+let debounceTimer: ReturnType<typeof setTimeout> | undefined
+
 // #endregion
 
 // ──────────────────────────────────────────────
-// #region Validation & Debounce
+// #region Debounce
 // ──────────────────────────────────────────────
-
-/** Handle for any pending debounced validation timer. */
-let debounceTimer: ReturnType<typeof setTimeout> | undefined
 
 /** Cancels any in-flight debounce timer. */
 function clearDebounce() {
@@ -59,6 +65,12 @@ function clearDebounce() {
   // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
   debounceTimer = undefined
 }
+
+// #endregion
+
+// ──────────────────────────────────────────────
+// #region Validation
+// ──────────────────────────────────────────────
 
 /** Schedules validation after the configured debounce interval, or executes immediately if debounce is 0. */
 function scheduleValidation() {
