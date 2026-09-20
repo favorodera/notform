@@ -1,3 +1,4 @@
+import type { ExcludeStrict } from 'type-fest'
 import type { NotFormAPI } from './not-form-api'
 import type { Issue, ObjectSchema, Paths, ValidationTrigger } from './shared'
 
@@ -9,9 +10,7 @@ export interface NotFieldProps<TSchema extends ObjectSchema> {
   /** Dot path of this field. */
   path: Paths<TSchema>
 
-  /**
-   * Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`.
-   */
+  /** Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`. */
   form?: NotFormAPI<TSchema>
 
   /**
@@ -21,15 +20,12 @@ export interface NotFieldProps<TSchema extends ObjectSchema> {
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
 
   /**
-   * `lazy` — blur/submit only. `eager` — also revalidate on change while invalid.
+   * `lazy` — blur/submit only. `eager` — also revalidate on change/input while invalid.
    * @default 'eager'
    */
   validationMode?: 'eager' | 'lazy'
 
-  /**
-   * Debounce in ms for input/change validation. Blur always runs immediately.
-   * @default 0
-   */
+  /** Debounce in ms for input/change validation. Blur always runs immediately. */
   debounce?: number
 }
 
@@ -40,7 +36,7 @@ export interface NotFieldSlots {
     errors: Array<Issue>
 
     /** Handlers to bind to the input. */
-    events: Record<ValidationTrigger, () => void>
+    events: Record<ExcludeStrict<ValidationTrigger, 'onMount'>, () => void>
 
     /** Whether the value differs from the baseline. */
     isDirty: boolean

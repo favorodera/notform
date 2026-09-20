@@ -8,7 +8,7 @@ import { useNotField } from '../composables/use-not-field'
 defineSlots<NotFieldSlots>()
 
 const props = withDefaults(defineProps<NotFieldProps<TSchema>>(), {
-  debounce: 0,
+  debounce: undefined,
   validateOn: undefined,
   validationMode: 'eager',
 })
