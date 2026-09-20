@@ -140,7 +140,7 @@ describe('submission', () => {
 
     const submitPromise = form.submit(submitEvent)
     await flushPromises()
-    
+
     await submitPromise
     await flushPromises()
 

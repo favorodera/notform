@@ -1,12 +1,12 @@
 <p align="center">
-<img alt="header" src="https://shieldcn.dev/header/transparent.svg?title=NotForm&amp;subtitle=Headless%2C+schema-agnostic+form+management+for+Vue+3&amp;logo=https%3A%2F%2Fnotformdocs.vercel.app%2Ffavicon.svg&amp;size=wide&amp;mode=dark&amp;font=fira-code" />
+<img alt="header" src="https://shieldcn.dev/header/surface.svg?title=NotForm&amp;subtitle=Headless%2C+schema-agnostic+form+management+for+Vue+3&amp;logo=https%3A%2F%2Fnotformdocs.vercel.app%2Ffavicon.svg&amp;size=wide&amp;mode=dark&amp;font=fira-code" />
 </p>
 
 <p align="center">
-<a href="https://github.com/favorodera/notform"><img alt="license" src="https://shieldcn.dev/github/favorodera/notform/license.svg?size=xs&amp;variant=outline&amp;font=fira-code" /></a>
-<a href="https://github.com/favorodera/notform"><img alt="stars" src="https://shieldcn.dev/github/favorodera/notform/stars.svg?size=xs&amp;variant=outline&amp;font=fira-code" /></a>
-<a href="https://notformdocs.vercel.app/"><img alt="Custom badge" src="https://shieldcn.dev/badge/Documentation.svg?size=xs&amp;variant=outline&amp;font=fira-code" /></a>
-<a href="https://github.com/sponsors/favorodera"><img alt="badge" src="https://shieldcn.dev/badge/Sponsor%20this%20project-FF69B4.svg?variant=outline&amp;size=xs&amp;font=fira-code&amp;" /></a>
+<a href="https://github.com/favorodera/notform"><img alt="license" src="https://shieldcn.dev/github/favorodera/notform/license.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Licence" /></a>
+<a href="https://github.com/favorodera/notform"><img alt="stars" src="https://shieldcn.dev/github/favorodera/notform/stars.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Stars" /></a>
+<a href="https://notformdocs.vercel.app/"><img alt="Custom badge" src="https://shieldcn.dev/badge/Documentation.svg?variant=secondary&amp;size=xs&amp;font=fira-code" /></a>
+<a href="https://github.com/sponsors/favorodera"><img alt="badge" src="https://shieldcn.dev/badge/Sponsor%20this%20project-FF69B4.svg?variant=outline&amp;size=xs&amp;font=fira-code&amp;logo=false" /></a>
 </p>
 
 NotForm provides the form state, validation, field state, submission lifecycle, and dynamic array-field primitives for Vue 3 while you decide how the form looks and behaves. There are no opinionated inputs, styles, or UI components built into the core.
@@ -69,7 +69,7 @@ const form = useNotForm({
 <template>
   <NotForm
     :form="form"
-    @submit.prevent="form.submit"
+    @submit="form.submit"
     @reset="form.reset()"
   >
     <NotField
@@ -132,15 +132,15 @@ const form = useNotForm({
 import { NotArrayField, NotField, NotForm, NotMessage, useNotForm } from 'notform'
 import { z } from 'zod'
 
+const tagSchema = z.string()
+
 const schema = z.object({
-  email: z.email('Enter a valid email address'),
-  name: z.string('Enter a valid name'),
+  tags: z.array(tagSchema).optional(),
 })
 
 const form = useNotForm({
   initialValues: {
-    email: '',
-    name: '',
+    tags: [''],
   },
   onSubmit(values) {
     console.log('Submitted:', values)
@@ -150,46 +150,53 @@ const form = useNotForm({
 </script>
 
 <template>
-  <NotArrayField
-    v-slot="{ items, append, remove }"
-    path="tags"
+  <NotForm
+    :form="form"
+    @submit="form.submit"
+    @reset="form.reset()"
   >
-    <div
-      v-for="(item, index) in items"
-      :key="item.key"
+    <NotArrayField
+      v-slot="{ items, append, remove }"
+      path="tags"
+      :item-schema="tagSchema"
     >
-      <NotField
-        v-slot="{ events, path }"
-        :path="item.path"
+      <div
+        v-for="(item, index) in items"
+        :key="item.key"
       >
-        <label :for="path">Tag {{ index + 1 }}</label>
-
-        <input
-          :id="path"
-          v-model="form.values.tags[index]"
-          v-bind="events"
-          :name="path"
-          type="text"
+        <NotField
+          v-slot="{ events, path }"
+          :path="item.path"
         >
+          <label :for="path">Tag {{ index + 1 }}</label>
 
-        <NotMessage :path="path" />
-      </NotField>
+          <input
+            :id="path"
+            v-model="form.values.tags[index]"
+            v-bind="events"
+            :name="path"
+            type="text"
+          >
+
+          <NotMessage :path="path" />
+        </NotField>
+
+        <button
+          type="button"
+          @click="remove(index)"
+        >
+          Remove
+        </button>
+      </div>
 
       <button
         type="button"
-        @click="remove(index)"
+        @click="append('')"
       >
-        Remove
+        Add tag
       </button>
-    </div>
-
-    <button
-      type="button"
-      @click="append('')"
-    >
-      Add tag
-    </button>
-  </NotArrayField>
+    </NotArrayField>
+  </NotForm>
 </template>
 ```
 
