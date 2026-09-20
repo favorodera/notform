@@ -86,6 +86,12 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   syncDirtyState: (path: Paths<TSchema>) => void
 
   /**
+   * Updates dirty state for all fields by comparing current and baseline values.
+   * @internal
+   */
+  syncAllDirtyStates: () => void
+
+  /**
    * Forces a field dirty.
    * @internal
    * @param path Dot path.
@@ -126,6 +132,7 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
 
   /**
    * Replaces the entire error list.
+   * @internal
    * @param errors Replacement issues.
    */
   replaceErrors: (errors: Array<Issue>) => void

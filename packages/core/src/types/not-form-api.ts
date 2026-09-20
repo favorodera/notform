@@ -14,6 +14,8 @@ export type NotFormAPI<TSchema extends ObjectSchema> = Except<
   | 'markAllFieldsAsTouched'
   | 'markFieldAsDirty'
   | 'markFieldAsTouched'
+  | 'replaceErrors'
+  | 'syncAllDirtyStates'
   | 'syncDirtyState'
   | 'touchedFields'
   | 'unmarkAllFieldsAsDirty'

@@ -110,6 +110,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   /**
    * Replaces the entire error list.
+   * @internal
    * @param nextErrors Replacement issues.
    */
   function replaceErrors(nextErrors: Array<Issue>) {
@@ -449,6 +450,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     setError,
     setValue,
     submit,
+    syncAllDirtyStates,
     syncDirtyState,
     touchedFields,
     unmarkAllFieldsAsDirty,
