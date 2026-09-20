@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<NotMessageProps<TSchema>>(), {
   as: 'span',
 })
 
-const form = useNotFormInstance(props.form)
+const form = useNotFormInstance<TSchema>(props.form)
 
 // #endregion
 

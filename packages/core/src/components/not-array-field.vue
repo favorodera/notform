@@ -10,7 +10,7 @@ defineSlots<NotArrayFieldSlots<TSchema, TItemSchema>>()
 
 const props = defineProps<NotArrayFieldProps<TSchema, TItemSchema>>()
 
-const arrayField = useNotArrayField(props)
+const arrayField = useNotArrayField<TSchema, TItemSchema>(props)
 
 // #endregion
 </script>

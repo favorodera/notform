@@ -1,7 +1,7 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { getProperty, setProperty } from 'dot-prop'
 import { computed, reactive, ref, watch } from 'vue'
-import type { NotArrayFieldItem, NotArrayFieldProps } from '../types/not-array-field'
+import type { NotArrayFieldItem, NotArrayFieldProps, NotArrayFieldSlots } from '../types/not-array-field'
 import type { InferInput, ObjectSchema, Paths } from '../types/shared'
 import { remapArrayFieldState } from '../utils/array-field'
 import { useNotFormInstance } from './use-not-form-instance'
@@ -21,10 +21,10 @@ import { useNotFormInstance } from './use-not-form-instance'
 export function useNotArrayField<
   TSchema extends ObjectSchema,
   TItemSchema extends StandardSchemaV1 = StandardSchemaV1,
->(props: NotArrayFieldProps<TSchema, TItemSchema>) {
+>(props: NotArrayFieldProps<TSchema, TItemSchema>): Parameters<NonNullable<NotArrayFieldSlots<TSchema, TItemSchema>['default']>>[0] {
   // #region Setup
 
-  const form = useNotFormInstance(props.form)
+  const form = useNotFormInstance<TSchema>(props.form)
 
   // #endregion
 
