@@ -16,9 +16,7 @@ export interface NotMessageProps<TSchema extends ObjectSchema> {
   /** Field path whose first error message is shown. */
   path: Paths<TSchema>
 
-  /**
-   * Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`.
-   */
+  /** Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`. */
   form?: NotFormAPI<TSchema>
 }
 
