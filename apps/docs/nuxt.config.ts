@@ -149,11 +149,6 @@ export default defineNuxtConfig({
         contentFilters: [{ field: 'path', operator: 'LIKE', value: '/composables%' }],
         title: 'Composables',
       },
-      {
-        contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/advanced%' }],
-        title: 'Advanced',
-      },
     ],
     title: 'NotForm',
   },
