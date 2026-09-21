@@ -53,7 +53,7 @@ const form = useNotForm({
             class="
               border-muted
 
-              not-first:mbs-8 not-first:border-bs not-first:pbs-8
+              not-first:mbs-6 not-first:border-bs not-first:pbs-6
             "
             data-demo-field
           >
@@ -187,7 +187,7 @@ const form = useNotForm({
           variant="subtle"
           label="Add group"
           block
-          class="mbs-8"
+          class="mbs-6"
           @click="appendGroup({ name: '', tags: [''] })"
         />
       </NotArrayField>
