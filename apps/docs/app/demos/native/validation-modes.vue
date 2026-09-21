@@ -29,7 +29,7 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
       <div data-demo-field>
         <div
           data-demo-field
-          class="flex-row"
+          class="flex-row justify-between"
         >
           <label
             :for="path"

@@ -146,8 +146,8 @@ export default defineNuxtConfig({
       },
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/building-forms%' }],
-        title: 'Building Forms',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/composables%' }],
+        title: 'Composables',
       },
       {
         contentCollection: 'docs',
