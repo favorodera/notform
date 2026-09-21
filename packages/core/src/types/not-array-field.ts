@@ -28,14 +28,10 @@ export interface NotArrayFieldProps<TSchema extends ObjectSchema, TItemSchema ex
   /** Dot path of the array field. */
   path: Paths<TSchema>
 
-  /**
-   * Item schema for type inference only; never read at runtime.
-   */
+  /** Item schema for type inference only; never read at runtime. */
   itemSchema?: TItemSchema
 
-  /**
-   * Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`.
-   */
+  /** Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`. */
   form?: NotFormAPI<TSchema>
 }
 
