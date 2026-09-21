@@ -3,11 +3,16 @@ import { z } from 'zod'
 
 const toast = useToast()
 
-const itemSchema = z.string().min(1, 'Tag cannot be empty')
+const tagItemSchema = z.string().min(1, 'Tag cannot be empty')
+
+const groupItemSchema = z.object({
+  name: z.string().min(1, 'Group name is required'),
+  tags: z.array(tagItemSchema).min(1, 'Add at least one tag'),
+})
 
 const form = useNotForm({
   initialValues: {
-    tags: ['vue', 'typescript'],
+    groups: [{ name: 'Frontend', tags: ['vue', 'typescript'] }],
   },
   async onSubmit(data) {
     await new Promise((resolve) => {
@@ -21,7 +26,7 @@ const form = useNotForm({
     })
   },
   schema: z.object({
-    tags: z.array(itemSchema).min(2, 'Add at least two tags'),
+    groups: z.array(groupItemSchema).min(1, 'Add at least one group'),
   }),
 })
 </script>
@@ -35,76 +40,144 @@ const form = useNotForm({
   >
     <div data-demo-field>
       <NotArrayField
-        v-slot="{ items, append, remove, move, path }"
-        path="tags"
-        :item-schema="itemSchema"
+        v-slot="{ items: groups, append: appendGroup, remove: removeGroup, path: groupsPath }"
+        path="groups"
+        :item-schema="groupItemSchema"
       >
-        <NotField
-          v-for="item in items"
-          :key="item.key"
-          v-slot="{ events }"
-          :path="item.path"
+        <div
+          data-demo-field
         >
-          <div data-demo-field>
+          <div
+            v-for="group in groups"
+            :key="group.key"
+            class="
+              border-muted
+
+              not-first:mbs-8 not-first:border-bs not-first:pbs-8
+            "
+            data-demo-field
+          >
             <div
               data-demo-field
               class="flex-row"
             >
-              <input
-                :id="item.path"
-                v-model="form.values.tags[item.index]"
-                placeholder="Enter tag name..."
-                v-bind="events"
-                autocomplete="off"
-                class="flex-1"
+              <NotField
+                v-slot="{ events }"
+                :path="`${group.path}.name`"
               >
+                <input
+                  :id="`${group.path}.name`"
+                  v-model="form.values.groups[group.index]!.name"
+                  placeholder="Group name..."
+                  v-bind="events"
+                  autocomplete="off"
+                  class="flex-1"
+                >
+              </NotField>
 
-              <div
-                data-demo-field
-                class="flex-row gap-2 inline-fit"
-              >
-                <Button
-                  icon="tabler:chevron-up"
-                  type="button"
-                  :disabled="item.index === 0"
-                  variant="soft"
-                  title="Move up"
-                  size="sm"
-                  @click="move(item.index, item.index - 1)"
-                />
-
-                <Button
-                  icon="tabler:chevron-down"
-                  type="button"
-                  :disabled="item.index === items.length - 1"
-                  variant="soft"
-                  title="Move down"
-                  size="sm"
-                  @click="move(item.index, item.index + 1)"
-                />
-
-                <Button
-                  icon="tabler:trash"
-                  type="button"
-                  :disabled="items.length === 1"
-                  variant="soft"
-                  color="error"
-                  title="Remove"
-                  size="sm"
-                  @click="remove(item.index)"
-                />
-              </div>
+              <Button
+                icon="tabler:trash"
+                type="button"
+                variant="soft"
+                color="error"
+                title="Remove group"
+                size="sm"
+                @click="removeGroup(group.index)"
+              />
             </div>
 
             <NotMessage
-              :path="item.path"
+              :path="`${group.path}.name`"
               data-demo-message
             />
+
+            <NotArrayField
+              v-slot="{ items: tags, append: appendTag, remove: removeTag, move: moveTag, path: tagsPath }"
+              :path="`${group.path}.tags`"
+              :item-schema="tagItemSchema"
+            >
+              <NotField
+                v-for="tag in tags"
+                :key="tag.key"
+                v-slot="{ events }"
+                :path="tag.path"
+              >
+                <div
+                  data-demo-field
+                  class="flex-row"
+                >
+                  <input
+                    :id="tag.path"
+                    v-model="form.values.groups[group.index]!.tags[tag.index]"
+                    placeholder="Enter tag name..."
+                    v-bind="events"
+                    autocomplete="off"
+                    class="flex-1"
+                  >
+
+                  <div
+                    data-demo-field
+                    class="flex-row gap-2 inline-fit"
+                  >
+                    <Button
+                      icon="tabler:chevron-up"
+                      type="button"
+                      :disabled="tag.index === 0"
+                      variant="soft"
+                      title="Move up"
+                      size="sm"
+                      @click="moveTag(tag.index, tag.index - 1)"
+                    />
+
+                    <Button
+                      icon="tabler:chevron-down"
+                      type="button"
+                      :disabled="tag.index === tags.length - 1"
+                      variant="soft"
+                      title="Move down"
+                      size="sm"
+                      @click="moveTag(tag.index, tag.index + 1)"
+                    />
+
+                    <Button
+                      icon="tabler:trash"
+                      type="button"
+                      :disabled="tags.length === 1"
+                      variant="soft"
+                      color="error"
+                      title="Remove"
+                      size="sm"
+                      @click="removeTag(tag.index)"
+                    />
+                  </div>
+                </div>
+
+                <NotMessage
+                  :path="tag.path"
+                  data-demo-message
+                />
+              </NotField>
+
+              <NotMessage
+                :path="tagsPath"
+                data-demo-message
+              />
+
+              <Button
+                icon="tabler:plus"
+                type="button"
+                variant="subtle"
+                label="Add tag"
+                block
+                class="mbs-2"
+                @click="appendTag('')"
+              />
+            </NotArrayField>
           </div>
-        </NotField>
+        </div>
 
         <NotMessage
-          :path="path"
+          :path="groupsPath"
           data-demo-message
         />
 
@@ -112,10 +185,10 @@ const form = useNotForm({
           icon="tabler:plus"
           type="button"
           variant="subtle"
-          label="Add tag"
+          label="Add group"
           block
-          class="mbs-2"
-          @click="append('')"
+          class="mbs-8"
+          @click="appendGroup({ name: '', tags: [''] })"
         />
       </NotArrayField>
     </div>
