@@ -49,13 +49,11 @@ export function useNotArrayField<
     path: `${props.path}.${index}` as Paths<TSchema>,
   })))
 
-  /** Issues on the array path plus every item path. */
-  const errors = computed(() => [
-    ...form.getFieldErrors(props.path),
-    ...items.value.flatMap(item => form.getFieldErrors(item.path)),
-  ])
+  const errors = computed(() => form.getFieldErrors(props.path))
 
-  const isValid = computed(() => errors.value.length === 0)
+  const itemsErrors = computed(() => items.value.flatMap(item => form.getFieldErrors(item.path)))
+
+  const isValid = computed(() => errors.value.length === 0 && itemsErrors.value.length === 0)
 
   const isTouched = computed(() => {
     return form.touchedFields.has(props.path) || items.value.some(item => form.touchedFields.has(item.path))

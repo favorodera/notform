@@ -48,19 +48,19 @@ export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItemSchema ex
     /** Current items, each with a stable key and current path. */
     items: Array<NotArrayFieldItem<TSchema>>
 
-    /** Issues on the array itself and on every item. */
+    /** Issues for this field path. */
     errors: Array<Issue>
 
-    /** `true` when the array and all items have no issues. */
+    /** Whether the array and all item fields has no issues. */
     isValid: boolean
 
-    /** `true` when any item path is touched. */
+    /** Whether the user has interacted with any item field. */
     isTouched: boolean
 
-    /** `true` when any item path is dirty. */
+    /** Whether the value of any item field differs from the baseline. */
     isDirty: boolean
 
-    /** `true` when any item path is validating. */
+    /** Whether any item field is currently is validating. */
     isValidating: boolean
 
     /**
