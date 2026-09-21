@@ -4,7 +4,6 @@ import { z } from 'zod'
 const toast = useToast()
 
 const form = useNotForm({
-  initialValues: { email: '' },
   onSubmit: async (values) => {
     // Simulate a server 409 — email taken
     await new Promise((resolve) => {
