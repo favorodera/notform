@@ -1,4 +1,3 @@
-import type { Except } from 'type-fest'
 import type { NotFormInstance } from './not-form-instance'
 import type { ObjectSchema } from './shared'
 
@@ -6,21 +5,20 @@ import type { ObjectSchema } from './shared'
  * Public API from `useNotForm`: {@linkcode NotFormInstance} without `@internal` members.
  * @template TSchema The form schema.
  */
-export type NotFormAPI<TSchema extends ObjectSchema> = Except<
+export type NotFormAPI<TSchema extends ObjectSchema> = Pick<
   NotFormInstance<TSchema>,
-  | 'clearErrors'
-  | 'dirtyFields'
-  | 'markAllFieldsAsDirty'
-  | 'markAllFieldsAsTouched'
-  | 'markFieldAsDirty'
-  | 'markFieldAsTouched'
-  | 'replaceErrors'
-  | 'syncAllDirtyStates'
-  | 'syncDirtyState'
-  | 'touchedFields'
-  | 'unmarkAllFieldsAsDirty'
-  | 'unmarkAllFieldsAsTouched'
-  | 'unmarkFieldAsDirty'
-  | 'unmarkFieldAsTouched'
-  | 'validatingFields'
+  | 'errors'
+  | 'getFieldErrors'
+  | 'isDirty'
+  | 'isSubmitting'
+  | 'isTouched'
+  | 'isValid'
+  | 'isValidating'
+  | 'reset'
+  | 'setError'
+  | 'setValue'
+  | 'submit'
+  | 'validate'
+  | 'validateField'
+  | 'values'
 >

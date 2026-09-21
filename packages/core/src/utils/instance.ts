@@ -5,7 +5,7 @@ import type { ObjectSchema } from '../types/shared'
 /**
  * Treats a public {@linkcode NotFormAPI} as the full {@linkcode NotFormInstance}.
  *
- * Runtime objects from `useNotForm` already are the full instance; this closes the `Except` gap.
+ * Runtime objects from `useNotForm` already are the full instance; this closes the `Pick` gap.
  * @template TSchema The form schema.
  * @internal
  * @param form Public API or full instance.

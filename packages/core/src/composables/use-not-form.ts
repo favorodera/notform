@@ -10,5 +10,5 @@ import { createNotFormInstance } from './create-not-form-instance'
  * @returns Public form API. Child components still inject the full instance via `<NotForm>`.
  */
 export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): NotFormAPI<TSchema> {
-  return createNotFormInstance(config) as unknown as NotFormAPI<TSchema>
+  return createNotFormInstance(config) as NotFormAPI<TSchema>
 }
