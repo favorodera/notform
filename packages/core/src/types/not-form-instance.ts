@@ -19,7 +19,7 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   values: InferInput<TSchema>
 
   /**
-   * Sets a field by path. Does not validate.
+   * Sets a field value by path. Does not validate.
    * @template TPath Field path.
    * @param path Dot path.
    * @param value Value to assign.
