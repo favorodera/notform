@@ -71,7 +71,7 @@ export default defineAppConfig({
     prose: {
       codePreview: {
         slots: {
-          code: '[&_pre]:rounded-t-none [&>div]:my-0 [&>div>div]:my-0',
+          code: '[&_pre]:rounded-t-none [&>div]:my-0 [&>div]:rounded-t-0 [&>div>div]:my-0',
         },
       },
     },

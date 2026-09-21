@@ -22,7 +22,7 @@ const code = computed(() => {
 
   // Wrap in markdown code block for highlighting, with a disclaimer
   // about demo-only dependencies that aren't part of NotForm itself.
-  return `::note{class="!rounded-none !border-0 bg-transparent"}
+  return `::note{class="rounded-none border-muted"}
 This demo uses [Nuxt UI](https://ui.nuxt.com) components (\`Button\`, \`Switch\`, \`useToast\`) and \`data-demo-*\` attributes for this documentation site's own styling and interactions. Neither is required by NotForm — copy the \`NotForm\`/\`NotField\`/\`NotArrayField\`/\`NotMessage\` usage and replace the rest with your own markup and components.
 ::
 
