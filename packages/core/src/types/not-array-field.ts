@@ -51,7 +51,7 @@ export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItemSchema ex
     /** Issues for this field path. */
     errors: Array<Issue>
 
-    /** Whether the array and all item fields has no issues. */
+    /** Whether the array field and all item fields has no issues. */
     isValid: boolean
 
     /** Whether the user has interacted with any item field. */
@@ -60,7 +60,7 @@ export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItemSchema ex
     /** Whether the value of any item field differs from the baseline. */
     isDirty: boolean
 
-    /** Whether any item field is currently is validating. */
+    /** Whether any item field is currently validating. */
     isValidating: boolean
 
     /**
