@@ -7,9 +7,7 @@ import type { InferInput, Issue, ObjectSchema, Paths } from './shared'
  * @template TSchema The form schema.
  */
 export interface NotArrayFieldItem<TSchema extends ObjectSchema> {
-  /**
-   * Stable identity for `v-for` `:key`. Independent of the current index.
-   */
+  /** Stable identity for `v-for` `:key`. Independent of the current index. */
   key: string
 
   /** Dot path of this item at its **current** index. */
