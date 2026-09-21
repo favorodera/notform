@@ -1,6 +1,6 @@
 import { computed, nextTick, onMounted, onUnmounted, reactive } from 'vue'
 import type { NotFieldProps, NotFieldSlots } from '../types/not-field'
-import type { ObjectSchema, ValidationTrigger } from '../types/shared'
+import type { ObjectSchema } from '../types/shared'
 import { useNotFormInstance } from './use-not-form-instance'
 
 /**
@@ -115,11 +115,10 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
     }
   }
 
-  const events: Record<ValidationTrigger, () => void> = {
+  const events: Parameters<NonNullable<NotFieldSlots['default']>>[0]['events'] = {
     onBlur,
     onChange,
     onInput,
-    onMount,
   }
 
   // #endregion
