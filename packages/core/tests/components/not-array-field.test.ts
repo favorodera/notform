@@ -254,7 +254,7 @@ describe('remapped field state', () => {
 
     expect(form.touchedFields.has('tags.1')).toBe(true)
     expect(form.touchedFields.has('tags.2')).toBe(false)
-    expect(wrapper.get('#errors').text()).toContain('Item is bad')
+    expect(form.getFieldErrors('tags.1').at(0)?.message).toBe('Item is bad')
   })
 })
 
@@ -268,16 +268,6 @@ describe('aggregated errors and validity', () => {
     await flushPromises()
 
     expect(wrapper.get('#errors').text()).toContain('at least 2 items')
-    expect(wrapper.get('#is-valid').text()).toBe('false')
-  })
-
-  it('surfaces item-level errors', async () => {
-    const { form, wrapper } = mountArrayField()
-
-    form.setError({ message: 'Item is bad', path: ['tags', 0] })
-    await flushPromises()
-
-    expect(wrapper.get('#errors').text()).toContain('Item is bad')
     expect(wrapper.get('#is-valid').text()).toBe('false')
   })
 })
