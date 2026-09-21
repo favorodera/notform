@@ -34,10 +34,6 @@ const form = useNotForm({
     @reset="form.reset()"
   >
     <div data-demo-field>
-      <div data-demo-label>
-        Tags (Min. 2)
-      </div>
-
       <NotArrayField
         v-slot="{ items, append, remove, move, path }"
         path="tags"
