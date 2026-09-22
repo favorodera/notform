@@ -181,6 +181,7 @@
   "cSpell.words": [
     "arktype",
     "bunx",
+    "demi",
     "dequal",
     "Emeka",
     "enctype",
@@ -193,15 +194,18 @@
     "klona",
     "llms",
     "minimark",
+    "minlength",
     "misrouted",
     "noopener",
     "noreferrer",
     "notform",
+    "novalidate",
     "nums",
     "nuxi",
     "Nuxt",
     "nuxtdotjs",
     "nuxtjs",
+    "nuxtseo",
     "relizy",
     "remint",
     "renderless",
@@ -213,6 +217,7 @@
     "tsup",
     "Turborepo",
     "Unmarks",
+    "unrs",
     "Upserts",
     "Valibot",
     "vercel",
@@ -220,9 +225,6 @@
     "vitejs",
     "Vitest",
     "vuedotjs",
-    "vueuse",
-    "demi",
-    "nuxtseo",
-    "unrs"
+    "vueuse"
   ]
 }
