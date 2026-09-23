@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TSchema extends ObjectSchema">
 import type { NotFormProps, NotFormSlots } from '../types/not-form'
 import type { ObjectSchema } from '../types/shared'
-import { provideNotFormInstance } from '../utils/instance';
+import { provideNotFormInstance } from '../utils/instance'
 
 // #region Setup
 

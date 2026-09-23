@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
 
+const runtimeConfig = useRuntimeConfig()
+
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 const githubStars = inject<Ref<number>>('githubStars')
 
@@ -10,10 +12,18 @@ const appConfig = useAppConfig()
 <template>
   <Header
     to="/"
-    :ui="{ center: 'flex-1' }"
+    :ui="{
+      center: 'flex-1',
+      title:'items-center'
+    }"
   >
     <template #title>
       <AppLogo />
+
+      <Badge
+        :label="`v${runtimeConfig.public.version}`"
+        variant="subtle"
+      />
     </template>
 
     <template #right>

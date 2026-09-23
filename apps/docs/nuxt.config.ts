@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import { defineSoftwareApp } from 'nuxt-schema-org/schema'
+import packageJson from '../../package.json'
 
 const fontWeights = [100, 200, 300, 400, 500, 600, 700, 800, 900]
 
@@ -176,6 +177,11 @@ export default defineNuxtConfig({
   },
   ogImage: {
     zeroRuntime: true,
+  },
+  runtimeConfig: {
+    public: {
+      version: packageJson.version,
+    },
   },
   schemaOrg: {
     identity: defineSoftwareApp({
