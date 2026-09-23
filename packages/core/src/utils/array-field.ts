@@ -8,7 +8,7 @@ import type {
   Paths,
   PathSegment,
 } from '../types/shared'
-import { areSegmentsEqual, toPropertyKey } from './segments'
+import { isPathWithinScope, toPropertyKey } from './segments'
 
 interface ArrayPathLocation<TPathSegment extends PathSegment> {
   index: number
@@ -16,7 +16,9 @@ interface ArrayPathLocation<TPathSegment extends PathSegment> {
 }
 
 /**
- * Locates a field path inside an array field, e.g. `users.1.email` under `users`.
+ * Locates a field path inside an array field, e.g. `users.1.email` under
+ * `users`, or `users.1.addresses.0.city` under `users` — `remainingPathSegments`
+ * holds whatever comes after the index, however many segments deep that is.
  * @template TPathSegment Segment type of the candidate path.
  * @template TArraySegment Segment type of the array field path.
  * @internal
@@ -31,14 +33,8 @@ export function locatePathInArrayField<
   pathSegments: ReadonlyArray<TPathSegment>,
   arrayFieldPathSegments: ReadonlyArray<TArraySegment>,
 ): ArrayPathLocation<TPathSegment> | undefined {
-  if (pathSegments.length <= arrayFieldPathSegments.length) {
+  if (pathSegments.length <= arrayFieldPathSegments.length || !isPathWithinScope(pathSegments, arrayFieldPathSegments)) {
     return undefined
-  }
-
-  for (const [segmentIndex, arrayFieldPathSegment] of arrayFieldPathSegments.entries()) {
-    if (!areSegmentsEqual(pathSegments[segmentIndex], arrayFieldPathSegment)) {
-      return undefined
-    }
   }
 
   const itemIndexSegment = toPropertyKey(pathSegments[arrayFieldPathSegments.length])
@@ -116,7 +112,11 @@ function remapPathSet<TSchema extends ObjectSchema>(
 }
 
 /**
- * Moves touched, dirty, and error state with array items after a structural mutation.
+ * Moves touched, dirty, and error state with array items after a structural
+ * mutation. Because {@link locatePathInArrayField} keeps whatever follows the
+ * item's index as `remainingPathSegments`, this already handles state nested
+ * arbitrarily deep inside an item — a field on an object item, or an item
+ * inside a nested array of its own — not just the item's own top-level path.
  *
  * Validating state is not remapped; generation tracking already drops stale results.
  * @template TSchema The form schema.

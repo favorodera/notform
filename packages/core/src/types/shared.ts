@@ -32,12 +32,23 @@ export type Issue = StandardSchemaV1.Issue
 
 /**
  * Dot-notated field paths derived from a schema's input type.
+ *
+ * The `| (string & {})` union member is deliberate: it keeps editor
+ * autocomplete suggesting the schema's real paths, while still letting any
+ * arbitrary string through the type checker — needed because a dynamically
+ * built path (e.g. `` `${item.path}.name` ``) can't always be proven to match
+ * the literal union `TypeFestPaths` computes.
  * @template TSchema Validation schema.
  */
 export type Paths<TSchema extends StandardSchemaV1> = Extract<TypeFestPaths<InferInput<TSchema>, { maxRecursionDepth: 10 }>, string> | (string & {})
 
 /**
  * Standard Schema constrained to object input.
+ *
+ * The `~standard.types.input` check exists purely at the type level, so that
+ * `useNotForm`'s `TSchema` is only inferred when the schema's input type is
+ * actually an `object` — this is what makes passing a non-object schema
+ * (e.g. `z.string()`) a compile-time error rather than a runtime surprise.
  * @see {@linkcode https://github.com/standard-schema/standard-schema Standard Schema spec}
  */
 export type ObjectSchema = StandardSchemaV1 & {

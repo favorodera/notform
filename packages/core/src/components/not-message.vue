@@ -6,6 +6,11 @@ import { useNotFormInstance } from '../composables/use-not-form-instance'
 
 // #region Setup
 
+// Unlike the other three components, this one is NOT renderless — it
+// renders a real element (see the template below). inheritAttrs is disabled
+// and $attrs is bound manually onto that element, which is what lets a
+// consumer pass class/id/data-* straight through to whatever `as` resolves to.
+
 defineOptions({
   inheritAttrs: false,
 })

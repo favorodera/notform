@@ -15,6 +15,9 @@ export interface NotFieldProps<TSchema extends ObjectSchema> {
 
   /**
    * Validation triggers merged over `{ onBlur: true, onChange: true }`.
+   * `onMount` is also a valid trigger here, even though it has no matching
+   * entry in `events` below — there's no DOM event to bind for "the field
+   * just appeared," so it runs automatically, once, when the field mounts.
    * @default { onBlur: true, onChange: true }
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
@@ -35,7 +38,10 @@ export interface NotFieldSlots {
     /** Issues for this field path. */
     errors: Array<Issue>
 
-    /** Handlers to bind to the input. */
+    /**
+     * Handlers to bind to the input. `onMount` is deliberately excluded —
+     * see the note on `validateOn` above for why.
+     */
     events: Record<ExcludeStrict<ValidationTrigger, 'onMount'>, () => void>
 
     /** Whether the value differs from the baseline. */

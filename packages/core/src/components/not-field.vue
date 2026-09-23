@@ -5,6 +5,11 @@ import { useNotField } from '../composables/use-not-field'
 
 // #region Setup
 
+// Fully renderless, like <NotArrayField>. validationMode defaults to 'eager'
+// here; useNotField applies the { onBlur: true, onChange: true } validateOn
+// defaults internally, merged with whatever is passed through the
+// validateOn prop.
+
 defineSlots<NotFieldSlots>()
 
 const props = withDefaults(defineProps<NotFieldProps<TSchema>>(), {

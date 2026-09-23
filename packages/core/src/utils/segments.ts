@@ -38,3 +38,36 @@ export function areSegmentsEqual(
 
   return keyA === keyB
 }
+
+/**
+ * Whether `pathSegments` names the same field as `scopeSegments`, or a field
+ * nested underneath it, at any depth.
+ *
+ * This is the general **"at-or-under"** test: `isPathWithinScope(path, scope)`
+ * is `true` when `path` equals `scope` exactly, or when `path` extends
+ * `scope` with one or more extra trailing segments. It underlies both
+ * {@linkcode locatePathInArrayField} (which additionally requires at least one
+ * extra segment, since it locates a specific item) and the recursive
+ * `isValid`/`isTouched`/`isDirty`/`isValidating` aggregates on
+ * `<NotArrayField>`, which allow zero extra segments too, since the array's
+ * own path should count toward its own aggregate.
+ * @template TPathSegment Segment type of the candidate path.
+ * @template TScopeSegment Segment type of the scope path.
+ * @internal
+ * @param pathSegments Candidate path, already split.
+ * @param scopeSegments Scope path, already split.
+ * @returns `true` when `pathSegments` is `scopeSegments` or a descendant of it.
+ */
+export function isPathWithinScope<
+  TPathSegment extends PathSegment,
+  TScopeSegment extends PathSegment,
+>(
+  pathSegments: ReadonlyArray<TPathSegment>,
+  scopeSegments: ReadonlyArray<TScopeSegment>,
+): boolean {
+  if (pathSegments.length < scopeSegments.length) {
+    return false
+  }
+
+  return scopeSegments.every((scopeSegment, segmentIndex) => areSegmentsEqual(pathSegments[segmentIndex], scopeSegment))
+}

@@ -8,7 +8,9 @@ import type { ObjectSchema, Paths } from './shared'
  */
 export interface NotMessageProps<TSchema extends ObjectSchema> {
   /**
-   * Root element or component.
+   * Root element or component. When a component is given, the message is
+   * passed to it as **default slot content**, not as a prop — a component
+   * expecting a `message` prop instead will render with no visible text.
    * @default 'span'
    */
   as?: Component | string

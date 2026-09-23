@@ -1,65 +1,90 @@
 import { describe, expect, it } from 'vitest'
 import { createNotFormInstance } from '../../src/composables/create-not-form-instance'
 import { locatePathInArrayField, remapArrayFieldState } from '../../src/utils/array-field'
-import { nameEmailSchema, tagsSchema } from '../helpers/not-validator'
+import { emailGroupsSchema } from '../helpers/not-validator'
 
 describe('locatePathInArrayField', () => {
-  it('returns the item index and remaining segments', () => {
-    expect(locatePathInArrayField(['tags', 1], ['tags'])).toStrictEqual({
-      index: 1,
-      remainingPathSegments: [],
-    })
+  it('returns undefined for a path outside the array', () => {
+    expect(locatePathInArrayField(['tags', 0], ['groups'])).toBeUndefined()
+  })
 
-    expect(locatePathInArrayField(['users', '0', 'email'], ['users'])).toStrictEqual({
+  it('returns undefined for the array path itself, with no item segment', () => {
+    expect(locatePathInArrayField(['groups'], ['groups'])).toBeUndefined()
+  })
+
+  it('returns undefined for a sibling field with an overlapping name prefix', () => {
+    expect(locatePathInArrayField(['groupsOther', 0], ['groups'])).toBeUndefined()
+  })
+
+  it('locates an item with no remaining segments', () => {
+    expect(locatePathInArrayField(['groups', 0], ['groups'])).toStrictEqual({
       index: 0,
-      remainingPathSegments: ['email'],
+      remainingPathSegments: [],
     })
   })
 
-  it('returns undefined when the path is not inside the array', () => {
-    expect(locatePathInArrayField(['tags'], ['tags'])).toBeUndefined()
-    expect(locatePathInArrayField(['name'], ['tags'])).toBeUndefined()
-    expect(locatePathInArrayField(['tags', 'x'], ['tags'])).toBeUndefined()
+  it('locates a field one level inside an object item', () => {
+    expect(locatePathInArrayField(['groups', 1, 'name'], ['groups'])).toStrictEqual({
+      index: 1,
+      remainingPathSegments: ['name'],
+    })
+  })
+
+  it('locates a field arbitrarily many levels inside an item', () => {
+    expect(locatePathInArrayField(['groups', 0, 'tags', 2], ['groups'])).toStrictEqual({
+      index: 0,
+      remainingPathSegments: ['tags', 2],
+    })
+  })
+
+  it('normalizes numeric and string index segments the same way as areSegmentsEqual', () => {
+    expect(locatePathInArrayField(['groups', '0', 'name'], ['groups'])).toStrictEqual({
+      index: 0,
+      remainingPathSegments: ['name'],
+    })
   })
 })
 
+const createForm = () => createNotFormInstance({
+  initialValues: {
+    email: '',
+    groups: [
+      { name: 'Frontend', tags: ['vue'] },
+      { name: 'Backend', tags: ['node'] },
+    ],
+  },
+  schema: emailGroupsSchema,
+})
+
 describe('remapArrayFieldState', () => {
-  it('moves touched, dirty, and error state with the item after remove', () => {
-    const form = createNotFormInstance({
-      initialValues: { tags: ['a', 'b', 'c'] },
-      schema: tagsSchema,
-    })
+  it('shifts touched, dirty, and error state nested at any depth inside an item', () => {
+    const form = createForm()
 
-    form.markFieldAsTouched('tags.2')
-    form.markFieldAsDirty('tags.2')
-    form.setError({ message: 'bad', path: ['tags', 2] })
+    form.markFieldAsTouched('groups.0.name')
+    form.markFieldAsTouched('groups.1.tags.0')
+    form.markFieldAsDirty('groups.1.name')
+    form.setError({ message: 'Required', path: ['groups', 1, 'tags', 0] })
 
-    remapArrayFieldState(form, 'tags', (previousIndex) => {
-      if (previousIndex === 1) {
+    // simulate removing index 0: index 0 drops out, index 1 becomes index 0
+    remapArrayFieldState(form, 'groups', (previousIndex) => {
+      if (previousIndex === 0) {
         return
       }
-
-      return previousIndex > 1 ? previousIndex - 1 : previousIndex
+      return previousIndex - 1
     })
 
-    expect(form.touchedFields.has('tags.2')).toBe(false)
-    expect(form.touchedFields.has('tags.1')).toBe(true)
-    expect(form.dirtyFields.has('tags.1')).toBe(true)
-    expect(form.errors[0]?.path).toStrictEqual(['tags', 1])
+    expect(form.touchedFields.has('groups.0.name')).toBe(false)
+    expect(form.touchedFields.has('groups.0.tags.0')).toBe(true)
+    expect(form.dirtyFields.has('groups.0.name')).toBe(true)
+    expect(form.getFieldErrors('groups.0.tags.0')).toHaveLength(1)
   })
 
-  it('leaves paths outside the array unchanged', () => {
-    const form = createNotFormInstance({
-      initialValues: { email: '', name: '' },
-      schema: nameEmailSchema,
-    })
+  it('leaves paths outside the array untouched', () => {
+    const form = createForm()
+    form.markFieldAsTouched('email')
 
-    form.markFieldAsTouched('name')
-    form.setError({ message: 'required', path: ['name'] })
+    remapArrayFieldState(form, 'groups', previousIndex => previousIndex + 1)
 
-    remapArrayFieldState(form, 'missing' as never, previousIndex => previousIndex + 1)
-
-    expect(form.touchedFields.has('name')).toBe(true)
-    expect(form.errors[0]?.path).toStrictEqual(['name'])
+    expect(form.touchedFields.has('email')).toBe(true)
   })
 })

@@ -108,7 +108,11 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
     }
   }
 
-  /** Validates on mount when `validateOn.onMount` is set. */
+  /**
+   * Validates on mount when `validateOn.onMount` is set. This is the only
+   * trigger not exposed through `events` below, since there's no DOM event
+   * to bind — it runs on its own via the `onMounted` hook further down.
+   */
   function onMount() {
     if (validateOn.value?.onMount) {
       form.validateField(props.path)

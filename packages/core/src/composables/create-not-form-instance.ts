@@ -5,7 +5,7 @@ import { klona } from 'klona'
 import { computed, reactive, ref, toValue } from 'vue'
 import type { UseNotFormConfig } from '../types/not-form-config'
 import type { NotFormInstance } from '../types/not-form-instance'
-import type { InferInput, Issue, ObjectSchema, Paths } from '../types/shared'
+import type { DeepPartial, InferInput, Issue, ObjectSchema, Paths } from '../types/shared'
 import { areIssuePathsEqual } from '../utils/issues'
 
 /**
@@ -52,7 +52,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   const isSubmitting = ref(false)
 
   /**
-   * Bumped by validate, submit, and reset. Older in-flight runs are discarded.
+   * Bumped by validate, submit, and reset. Older in-flight runs are discarded:
+   * each still resolves with its own result, but only the run matching the
+   * current generation when it finishes gets to write to `errors`.
    */
   let generation = 0
 
@@ -67,7 +69,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   // #region Schema execution
 
   /**
-   * Runs the current schema against `values`.
+   * Runs the current schema against `values`. Resolves `config.schema`
+   * first via `toValue`, so a ref or a getter function works the same as
+   * passing the schema directly.
    * @returns Standard Schema result.
    */
   function executeSchemaValidation() {
@@ -80,7 +84,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   // #region Values
 
   /**
-   * Sets a field value and syncs its dirty flag.
+   * Sets a field value and syncs its dirty flag. Does not validate.
    * @template TPath Field path.
    * @param path Dot path.
    * @param value Value to assign.
@@ -126,7 +130,8 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Issues whose path equals `path`.
+   * Issues whose path exactly equals `path` — see the same note on
+   * {@linkcode NotFormInstance.getFieldErrors}.
    * @param path Dot path.
    * @returns Matching issues.
    */
@@ -149,7 +154,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Forces every leaf field dirty.
+   * Forces every current leaf field dirty. Only paths present in `values`
+   * right now are affected — see the note on
+   * {@linkcode NotFormInstance.markAllFieldsAsTouched}.
    * @internal
    */
   function markAllFieldsAsDirty() {
@@ -194,7 +201,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Recalculates dirty state for every leaf path.
+   * Recalculates dirty state for every current leaf path.
    * @internal
    */
   function syncAllDirtyStates() {
@@ -217,7 +224,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Marks every leaf field as touched.
+   * Marks every current leaf field as touched. Only paths present in
+   * `values` right now are affected — see the note on
+   * {@linkcode NotFormInstance.markAllFieldsAsTouched}.
    * @internal
    */
   function markAllFieldsAsTouched() {
@@ -278,7 +287,8 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Validates the whole form, replacing all errors. Bumps `generation`.
+   * Validates the whole form, replacing all errors. Bumps `generation`; see
+   * {@linkcode NotFormInstance.validate} for the concurrency guarantee this gives.
    * @returns Standard Schema result.
    */
   async function validate() {
@@ -306,7 +316,8 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   }
 
   /**
-   * Validates the form and writes issues only for `path`.
+   * Validates the form and writes issues only for `path`. `path` can be any
+   * granularity — see {@linkcode NotFormInstance.validateField}.
    *
    * Dropped if a newer call for the same path or a newer whole-form generation starts.
    * @param path Dot path.
@@ -350,7 +361,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   /**
    * Touches all fields, validates, then runs `onSubmit` when valid.
-   * @param event Optional submit event; `preventDefault` is always called.
+   * @param event Optional submit event. `event.preventDefault()` is called
+   * immediately if `event` is given, before checking whether a submission
+   * is already in flight or whether validation passes.
    */
   async function submit(event?: SubmitEvent) {
     event?.preventDefault()
@@ -392,11 +405,13 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   // #region Reset
 
   /**
-   * Restores values and errors to the baseline. Optional arguments become the new baseline.
+   * Restores values and errors to the baseline. Optional arguments become
+   * the new baseline and fully replace the previous one — see
+   * {@linkcode NotFormInstance.reset} for the "replace, not merge" detail.
    * @param nextValues New baseline values.
    * @param nextErrors New baseline issues.
    */
-  function reset(nextValues?: Partial<InferInput<TSchema>>, nextErrors?: Array<Issue>) {
+  function reset(nextValues?: DeepPartial<InferInput<TSchema>>, nextErrors?: Array<Issue>) {
     generation++
     fieldValidationCycleMap.clear()
     validatingFieldCounts.clear()

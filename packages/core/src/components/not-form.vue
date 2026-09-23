@@ -15,6 +15,15 @@ provideNotFormInstance<TSchema>(props.form)
 </script>
 
 <template>
+  <!--
+    Reset is always prevented here, regardless of what (if anything) the
+    consumer binds to @reset, since a native reset would otherwise clear
+    every input before `values` has a chance to react to it.
+
+    Submit is NOT prevented here. `form.submit()` calls `event.preventDefault()`
+    itself when it runs, which only happens if the consumer binds @submit to it
+    (e.g. `@submit="form.submit"`) — see the NotForm docs for why this matters.
+  -->
   <form @reset.prevent>
     <slot />
   </form>

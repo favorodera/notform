@@ -228,6 +228,16 @@ export const tagsSchema = object({
   tags: array(string(1, 20), 2, 5),
 })
 
+export const groupSchema = object({
+  name: string(1, 50),
+  tags: array(string(1, 20), 2, 5),
+})
+
+export const emailGroupsSchema = object({
+  email: string(5, 100),
+  groups: array(groupSchema, 1, 3),
+})
+
 /**
  * Schema whose first `validate` waits on `gate` and fails; later calls succeed with `{ value }`.
  * @param gate Promise the first call awaits.

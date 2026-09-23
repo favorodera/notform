@@ -1,9 +1,10 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import { getProperty, setProperty } from 'dot-prop'
+import { getProperty, parsePath, setProperty } from 'dot-prop'
 import { computed, reactive, ref, watch } from 'vue'
 import type { NotArrayFieldItem, NotArrayFieldProps, NotArrayFieldSlots } from '../types/not-array-field'
 import type { InferInput, ObjectSchema, Paths } from '../types/shared'
 import { remapArrayFieldState } from '../utils/array-field'
+import { isPathWithinScope } from '../utils/segments'
 import { useNotFormInstance } from './use-not-form-instance'
 
 /**
@@ -12,6 +13,13 @@ import { useNotFormInstance } from './use-not-form-instance'
  * `itemKeys` is the only source of `item.key`. Length-only external changes
  * pad or trim keys from the end; use the mutation helpers to keep identity
  * through insert, remove, swap, and move.
+ *
+ * `isValid`/`isTouched`/`isDirty`/`isValidating` are recursive: they reflect
+ * the array field's own path plus every path nested underneath it, at any
+ * depth — an item's own value, a field inside an object item, or an item
+ * inside a nested array. `errors`, by contrast, is intentionally exact: it
+ * only ever reflects issues reported at the array field's own path, the same
+ * way `<NotField>`'s `errors` only reflects issues at that one field's path.
  * @template TSchema The form schema.
  * @template TItemSchema Schema used only to type mutation values.
  * @internal
@@ -49,22 +57,36 @@ export function useNotArrayField<
     path: `${props.path}.${index}` as Paths<TSchema>,
   })))
 
+  /** `props.path`, pre-split into segments, for the scope checks below. */
+  const arrayPathSegments = computed(() => parsePath(props.path))
+
+  /** Issues reported exactly at this array field's own path — never issues from items. */
   const errors = computed(() => form.getFieldErrors(props.path))
 
-  const itemsErrors = computed(() => items.value.flatMap(item => form.getFieldErrors(item.path)))
+  /**
+   * Whether the array field's own path, or any path nested under it — an
+   * item, a field inside an object item, or an item inside a nested array —
+   * has an active issue. Unlike `errors` above, this recurses to any depth.
+   * Issues without a `path` are never attributed to a specific field, so
+   * they don't affect this — only the top-level `form.isValid` reflects them.
+   */
+  const isValid = computed(() => {
+    return form.errors.every(issue => issue.path === undefined || !isPathWithinScope(issue.path, arrayPathSegments.value))
+  })
 
-  const isValid = computed(() => errors.value.length === 0 && itemsErrors.value.length === 0)
-
+  /** Whether the array field's own path, or any path nested under it, has been touched. */
   const isTouched = computed(() => {
-    return form.touchedFields.has(props.path) || items.value.some(item => form.touchedFields.has(item.path))
+    return [...form.touchedFields].some(touchedPath => isPathWithinScope(parsePath(touchedPath), arrayPathSegments.value))
   })
 
+  /** Whether the array field's own path, or any path nested under it, differs from the baseline. */
   const isDirty = computed(() => {
-    return form.dirtyFields.has(props.path) || items.value.some(item => form.dirtyFields.has(item.path))
+    return [...form.dirtyFields].some(dirtyPath => isPathWithinScope(parsePath(dirtyPath), arrayPathSegments.value))
   })
 
+  /** Whether the array field's own path, or any path nested under it, is currently validating. */
   const isValidating = computed(() => {
-    return form.validatingFields.has(props.path) || items.value.some(item => form.validatingFields.has(item.path))
+    return [...form.validatingFields].some(validatingPath => isPathWithinScope(parsePath(validatingPath), arrayPathSegments.value))
   })
 
   // #endregion
@@ -144,7 +166,8 @@ export function useNotArrayField<
   }
 
   /**
-   * Inserts `value` at the start and remaps later item state up by one.
+   * Inserts `value` at the start and remaps later item state — at any depth
+   * underneath each item — up by one.
    * @param value Item to prepend.
    */
   function prepend(value: InferInput<TItemSchema>) {
@@ -154,7 +177,8 @@ export function useNotArrayField<
   }
 
   /**
-   * Inserts `value` at `index` and remaps later item state up by one.
+   * Inserts `value` at `index` and remaps later item state — at any depth
+   * underneath each item — up by one.
    * @param index Insertion index.
    * @param value Item to insert.
    */
@@ -167,7 +191,9 @@ export function useNotArrayField<
   }
 
   /**
-   * Removes the item at `index` and remaps later item state down by one.
+   * Removes the item at `index` and remaps later item state — at any depth
+   * underneath each item — down by one. State nested under the removed
+   * item's own path, at any depth, is discarded along with it.
    * @param index Index to remove.
    */
   function remove(index: number) {
@@ -193,7 +219,8 @@ export function useNotArrayField<
   }
 
   /**
-   * Swaps two items, moving keys and form state with them.
+   * Swaps two items, moving keys and form state — at any depth underneath
+   * each item — with them.
    * @param indexA First index.
    * @param indexB Second index.
    */
@@ -220,7 +247,8 @@ export function useNotArrayField<
   }
 
   /**
-   * Moves one item to `toIndex`, shifting neighbors and remapping form state.
+   * Moves one item to `toIndex`, shifting neighbors and remapping form
+   * state — at any depth underneath each item.
    * @param fromIndex Current index.
    * @param toIndex Destination index.
    */
