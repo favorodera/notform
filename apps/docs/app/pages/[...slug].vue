@@ -46,11 +46,6 @@ const tocFooterLinks = computed<PageLink[]>(() => [
     target: '_blank',
     to: 'https://github.com/sponsors/favorodera',
   },
-  {
-    icon: 'tabler:rocket',
-    label: 'Releases',
-    to: 'https://github.com/favorodera/notform/releases',
-  },
 ])
 
 const seo = computed(() => {
