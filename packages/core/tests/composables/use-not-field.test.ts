@@ -23,6 +23,7 @@ function setupNameField(overrides?: Partial<NotFieldProps<typeof nameEmailSchema
     form,
     path: 'name',
     validateOn: { onBlur: false, onChange: false },
+    validationMode: 'eager',
     ...overrides,
   }))
 
@@ -147,15 +148,14 @@ describe('debounce', () => {
     const { field, form } = setupNameField(debounceOverrides)
 
     field.events.onBlur()
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(0)
 
     form.setValue('name', 'ada')
     field.events.onInput()
 
     expect(form.getFieldErrors('name')).toHaveLength(1)
 
-    vi.advanceTimersByTime(debounceMs + 10)
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(debounceMs + 10)
 
     expect(form.getFieldErrors('name')).toHaveLength(0)
   })
@@ -164,7 +164,7 @@ describe('debounce', () => {
     const { field, form } = setupNameField(debounceOverrides)
 
     field.events.onBlur()
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(0)
 
     for (const value of ['a', 'Ja', 'Jane']) {
       form.setValue('name', value)
@@ -173,8 +173,7 @@ describe('debounce', () => {
 
     expect(form.getFieldErrors('name')).toHaveLength(1)
 
-    vi.advanceTimersByTime(debounceMs + 10)
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(debounceMs + 10)
 
     expect(form.getFieldErrors('name')).toHaveLength(0)
   })
@@ -183,7 +182,7 @@ describe('debounce', () => {
     const { field, form } = setupNameField(debounceOverrides)
 
     field.events.onBlur()
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(0)
 
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
 
@@ -192,12 +191,11 @@ describe('debounce', () => {
     form.setValue('name', '')
     field.events.onInput()
     field.events.onBlur()
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(0)
 
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
 
-    vi.advanceTimersByTime(debounceMs + 10)
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(debounceMs + 10)
 
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
   })
@@ -211,7 +209,7 @@ describe('debounce', () => {
     }))
 
     field.events.onBlur()
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(0)
 
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
 
@@ -219,8 +217,7 @@ describe('debounce', () => {
     field.events.onInput()
     app.unmount()
 
-    vi.advanceTimersByTime(debounceMs + 10)
-    await flushPromises()
+    await vi.advanceTimersByTimeAsync(debounceMs + 10)
 
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
   })
