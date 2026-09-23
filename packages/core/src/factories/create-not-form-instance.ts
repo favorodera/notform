@@ -13,7 +13,7 @@ import { areIssuePathsEqual } from '../utils/issues'
  * @template TSchema The form schema.
  * @internal
  * @param config Schema, initial values/errors, and submit handler.
- * @returns Assembled {@link NotFormInstance}.
+ * @returns Assembled {@linkcode NotFormInstance}.
  */
 export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): NotFormInstance<TSchema> {
   type Instance = NotFormInstance<TSchema>

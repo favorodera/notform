@@ -38,7 +38,7 @@ export function useNotArrayField<
 
   // #region State
 
-  /** Monotonic id used by {@link createItemKey}. */
+  /** Monotonic id used by {@linkcode createItemKey}. */
   let nextItemKeyId = 0
 
   /** Stable identity per current array index; mutated in lockstep with values. */

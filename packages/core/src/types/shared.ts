@@ -1,9 +1,7 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { PartialDeep, Paths as TypeFestPaths } from 'type-fest'
 
-/**
- * Events that can trigger field validation.
- */
+/** Events that can trigger field validation. */
 export type ValidationTrigger = 'onBlur' | 'onChange' | 'onInput' | 'onMount'
 
 /**

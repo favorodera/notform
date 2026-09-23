@@ -52,35 +52,41 @@ export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItemSchema ex
 
     /**
      * Issues reported exactly at the array field's own path — not issues
-     * from individual items. The same exact-match behavior as `<NotField>`'s
-     * `errors`. See {@link isValid} for the aggregate that also accounts
-     * for item-level issues.
+     * from individual items. 
+     * 
+     * The same exact-match behavior as `<NotField>`'s `errors`.
+     * 
+     * See {@linkcode isValid} for the aggregate that also accounts for item-level issues.
      */
     errors: Array<Issue>
 
     /**
      * Whether the array field's own path, and every path nested underneath
      * it, have no issues — an item's own value, a field inside an object
-     * item, or an item inside a nested array, at any depth. Unlike
-     * {@link errors}, this recurses.
+     * item, or an item inside a nested array, at any depth. 
+     * 
+     * Unlike {@linkcode errors}, this recurses.
      */
     isValid: boolean
 
     /**
-     * Whether the array field's own path, or any path nested underneath it,
-     * has been touched. Recurses the same way as {@link isValid}.
+     * Whether the array field's own path, or any path nested underneath it, has been touched. 
+     * 
+     * Recurses the same way as {@linkcode isValid}.
      */
     isTouched: boolean
 
     /**
-     * Whether the array field's own path, or any path nested underneath it,
-     * differs from the baseline. Recurses the same way as {@link isValid}.
+     * Whether the array field's own path, or any path nested underneath it, differs from the baseline. 
+     * 
+     * Recurses the same way as {@linkcode isValid}.
      */
     isDirty: boolean
 
     /**
-     * Whether the array field's own path, or any path nested underneath it,
-     * is currently validating. Recurses the same way as {@link isValid}.
+     * Whether the array field's own path, or any path nested underneath it, is currently validating. 
+     * 
+     * Recurses the same way as {@linkcode isValid}.
      */
     isValidating: boolean
 

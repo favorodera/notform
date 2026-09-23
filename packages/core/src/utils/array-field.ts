@@ -113,7 +113,7 @@ function remapPathSet<TSchema extends ObjectSchema>(
 
 /**
  * Moves touched, dirty, and error state with array items after a structural
- * mutation. Because {@link locatePathInArrayField} keeps whatever follows the
+ * mutation. Because {@linkcode locatePathInArrayField} keeps whatever follows the
  * item's index as `remainingPathSegments`, this already handles state nested
  * arbitrarily deep inside an item — a field on an object item, or an item
  * inside a nested array of its own — not just the item's own top-level path.
