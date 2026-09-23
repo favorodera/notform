@@ -35,6 +35,35 @@ describe('validation', () => {
     expect(form.getFieldErrors('email')).toHaveLength(0)
   })
 
+  it('validateField resolves without issues when the targeted field is valid even if other fields are invalid', async () => {
+    const form = createNameEmailForm()
+
+    form.setValue('name', 'Jane')
+
+    await form.validate()
+
+    expect(form.getFieldErrors('name')).toHaveLength(0)
+    expect(form.getFieldErrors('email')).toHaveLength(1)
+
+    const result = await form.validateField('name')
+
+    expect(result.issues).toBeUndefined()
+    expect(form.getFieldErrors('name')).toHaveLength(0)
+    expect(form.getFieldErrors('email')).toHaveLength(1)
+  })
+
+  it('validateField returns only issues for the targeted field', async () => {
+    const form = createNameEmailForm()
+
+    const result = await form.validateField('name')
+
+    expect(result.issues).toHaveLength(1)
+    expect(result.issues?.[0]?.path).toStrictEqual(['name'])
+
+    expect(form.getFieldErrors('name')).toHaveLength(1)
+    expect(form.getFieldErrors('email')).toHaveLength(0)
+  })
+
   it('validateField clears stale errors for a field that becomes valid while other errors persist', async () => {
     const form = createNameEmailForm()
 

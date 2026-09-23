@@ -304,12 +304,16 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
       }
 
       if (result.issues) {
-        replaceErrors([...result.issues])
-      } else {
-        clearErrors()
+        const issues = [...result.issues]
+
+        replaceErrors(issues)
+
+        return { issues }
       }
 
-      return result
+      clearErrors()
+
+      return { value: result.value }
     } finally {
       unmarkFieldsAsValidating(paths)
     }
@@ -349,7 +353,15 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
       const fieldIssues = (result.issues ?? []).filter(issue => areIssuePathsEqual(issue.path, targetPath))
       errors.push(...fieldIssues)
 
-      return result
+      if (fieldIssues.length > 0) {
+        return {
+          issues: fieldIssues,
+        }
+      }
+
+      return {
+        value: getProperty(values, path),
+      }
     } finally {
       unmarkFieldsAsValidating([path])
     }
