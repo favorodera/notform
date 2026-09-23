@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createNotFormInstance } from '../../src/composables/create-not-form-instance'
 import { useNotArrayField } from '../../src/composables/use-not-array-field'
+import { createNotFormInstance } from '../../src/factories/create-not-form-instance'
 import { emailGroupsSchema, object, string } from '../helpers/not-validator'
 
 const createForm = () => createNotFormInstance({
@@ -45,7 +45,6 @@ describe('isValid/isTouched/isDirty/isValidating recurse to any depth', () => {
     form.setError({ message: 'Required', path: ['groups', 0, 'name'] })
 
     expect(groups.isValid).toBe(false)
-    // still exact-match only:
     expect(groups.errors).toStrictEqual([])
   })
 
@@ -96,11 +95,9 @@ describe('isValid/isTouched/isDirty/isValidating recurse to any depth', () => {
 
     form.setError({ message: 'Tag cannot be empty', path: ['groups', 0, 'tags', 0] })
 
-    // exact-match errors: neither array's `errors` includes it directly
     expect(firstGroupTags.errors).toStrictEqual([])
     expect(groups.errors).toStrictEqual([])
 
-    // recursive aggregates: both ancestors see it
     expect(firstGroupTags.isValid).toBe(false)
     expect(groups.isValid).toBe(false)
   })

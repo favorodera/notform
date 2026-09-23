@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { mountNameEmailForm } from '../helpers/mount-form'
+import { createNameEmailForm } from '../helpers/create-form'
 
 describe('touch', () => {
   it('markFieldAsTouched marks the field as touched', () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
     form.markFieldAsTouched('name')
 
     expect(form.touchedFields.has('name')).toBe(true)
@@ -11,7 +11,7 @@ describe('touch', () => {
   })
 
   it('markAllFieldsAsTouched marks every field as touched', () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
     form.markAllFieldsAsTouched()
 
     expect(form.touchedFields.has('name')).toBe(true)
@@ -19,13 +19,13 @@ describe('touch', () => {
   })
 
   it('isTouched is false when no fields have been touched', () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
 
     expect(form.isTouched).toBe(false)
   })
 
   it('unmarkFieldAsTouched clears touched state for a single field', () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
     form.markAllFieldsAsTouched()
     form.unmarkFieldAsTouched('name')
 

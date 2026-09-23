@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createNotFormInstance } from '../../src/composables/create-not-form-instance'
+import { createNotFormInstance } from '../../src/factories/create-not-form-instance'
 import { locatePathInArrayField, remapArrayFieldState } from '../../src/utils/array-field'
 import { emailGroupsSchema } from '../helpers/not-validator'
 

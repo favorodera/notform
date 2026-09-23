@@ -1,12 +1,7 @@
 import { mount } from '@vue/test-utils'
+import type { nameEmailSchema } from './not-validator'
 import { NotField, NotForm, type UseNotFormConfig } from '../../src'
-import { createNotFormInstance } from '../../src/composables/create-not-form-instance'
-import { nameEmailSchema } from './not-validator'
-
-export const nameEmailFormConfig: UseNotFormConfig<typeof nameEmailSchema> = {
-  initialValues: { email: '', name: '' },
-  schema: nameEmailSchema,
-}
+import { createNameEmailForm } from './create-form'
 
 export const nameEmailFormTemplate = `
   <NotForm :form="form" @submit="form.submit" @reset="form.reset()">
@@ -22,12 +17,13 @@ export const nameEmailFormTemplate = `
 `
 
 /**
- * Mounts a name/email form on the full internal instance.
- * @param formConfig Overrides merged over {@link nameEmailFormConfig}.
+ * Mounts a name/email form. Only use this when a test needs a real DOM —
+ * see the note on {@link createNameEmailForm} for when to prefer that instead.
+ * @param formConfig Overrides merged over the base name/email config.
  * @returns The instance and wrapper.
  */
 export function mountNameEmailForm(formConfig?: Partial<UseNotFormConfig<typeof nameEmailSchema>>) {
-  const form = createNotFormInstance({ ...nameEmailFormConfig, ...formConfig })
+  const form = createNameEmailForm(formConfig)
 
   const wrapper = mount({
     components: { NotField, NotForm },

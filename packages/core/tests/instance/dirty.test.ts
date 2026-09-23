@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { mountNameEmailForm } from '../helpers/mount-form'
+import { createNameEmailForm } from '../helpers/create-form'
 
 describe('dirty', () => {
   it('markFieldAsDirty marks the field as dirty', () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
     form.markFieldAsDirty('name')
 
     expect(form.dirtyFields.has('name')).toBe(true)
@@ -11,7 +11,7 @@ describe('dirty', () => {
   })
 
   it('markAllFieldsAsDirty marks every field as dirty', () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
     form.markAllFieldsAsDirty()
 
     expect(form.dirtyFields.has('name')).toBe(true)
@@ -19,13 +19,13 @@ describe('dirty', () => {
   })
 
   it('isDirty is false when no fields have been dirtied', () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
 
     expect(form.isDirty).toBe(false)
   })
 
   it('unmarkFieldAsDirty clears dirty state for a single field', () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
     form.markAllFieldsAsDirty()
     form.unmarkFieldAsDirty('name')
 

@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { NotArrayField, type UseNotFormConfig } from '../../src'
-import { createNotFormInstance } from '../../src/composables/create-not-form-instance'
+import { createNotFormInstance } from '../../src/factories/create-not-form-instance'
 import { delayed, tagsSchema } from '../helpers/not-validator'
 
 const baseConfig: UseNotFormConfig<typeof tagsSchema> = {

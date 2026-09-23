@@ -1,7 +1,7 @@
 import type { NotFormAPI } from '../types/not-form-api'
 import type { UseNotFormConfig } from '../types/not-form-config'
 import type { ObjectSchema } from '../types/shared'
-import { createNotFormInstance } from './create-not-form-instance'
+import { createNotFormInstance } from '../factories/create-not-form-instance'
 
 /**
  * Creates a form instance and returns the public {@linkcode NotFormAPI}.

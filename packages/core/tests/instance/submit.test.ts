@@ -1,9 +1,7 @@
-/* eslint-disable test/no-hooks, test/max-expects, ts/no-invalid-void-type */
+/* eslint-disable test/max-expects, ts/no-invalid-void-type */
 import { flushPromises } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createNotFormInstance } from '../../src/composables/create-not-form-instance'
-import { mountNameEmailForm } from '../helpers/mount-form'
-import { nameEmailSchema } from '../helpers/not-validator'
+import { createNameEmailForm } from '../helpers/create-form'
 
 describe('submission', () => {
   const onSubmit = vi.fn()
@@ -12,13 +10,14 @@ describe('submission', () => {
     preventDefault: vi.fn(),
   } as unknown as SubmitEvent
 
+  // eslint-disable-next-line test/no-hooks
   beforeEach(() => {
     onSubmit.mockClear()
     vi.mocked(submitEvent.preventDefault).mockClear()
   })
 
   it('submit marks all fields as touched and dirty', async () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
 
     form.setValue('name', 'Jane')
     form.setValue('email', 'jane@example.com')
@@ -32,7 +31,7 @@ describe('submission', () => {
   })
 
   it('submit does not call onSubmit when form is invalid', async () => {
-    const { form } = mountNameEmailForm({ onSubmit })
+    const form = createNameEmailForm({ onSubmit })
 
     await form.submit(submitEvent)
 
@@ -40,7 +39,7 @@ describe('submission', () => {
   })
 
   it('submit calls onSubmit with validated values when form is valid', async () => {
-    const { form } = mountNameEmailForm({ onSubmit })
+    const form = createNameEmailForm({ onSubmit })
 
     form.setValue('name', 'Jane')
     form.setValue('email', 'jane@example.com')
@@ -53,52 +52,30 @@ describe('submission', () => {
     })
   })
 
-  it('isSubmitting is true during submission and false after', async () => {
-    const { promise: submitPromise, resolve: resolveSubmit } = Promise.withResolvers<void>()
-
-    const pendingOnSubmit = vi.fn(() => submitPromise)
-
-    const { form, wrapper } = mountNameEmailForm({ onSubmit: pendingOnSubmit })
-
-    form.setValue('name', 'Jane')
-    form.setValue('email', 'jane@example.com')
-
-    await wrapper.get('form').trigger('submit')
-    await flushPromises()
-
-    expect(form.isSubmitting).toBe(true)
-
-    resolveSubmit()
-    await flushPromises()
-
-    expect(form.isSubmitting).toBe(false)
-  })
-
   it('submit ignores the second call while the first is in progress', async () => {
     const { promise: submitPromise, resolve: resolveSubmit } = Promise.withResolvers<void>()
 
     const pendingOnSubmit = vi.fn(() => submitPromise)
 
-    const { form, wrapper } = mountNameEmailForm({ onSubmit: pendingOnSubmit })
+    const form = createNameEmailForm({ onSubmit: pendingOnSubmit })
 
     form.setValue('name', 'Jane')
     form.setValue('email', 'jane@example.com')
 
-    const formElement = wrapper.get('form')
-
-    await formElement.trigger('submit')
+    const firstSubmit = form.submit(submitEvent)
     await flushPromises()
 
     expect(form.isSubmitting).toBe(true)
     expect(pendingOnSubmit).toHaveBeenCalledTimes(1)
 
-    await formElement.trigger('submit')
+    const secondSubmit = form.submit(submitEvent)
     await flushPromises()
 
     expect(form.isSubmitting).toBe(true)
     expect(pendingOnSubmit).toHaveBeenCalledTimes(1)
 
     resolveSubmit()
+    await Promise.all([firstSubmit, secondSubmit])
     await flushPromises()
 
     expect(form.isSubmitting).toBe(false)
@@ -106,7 +83,7 @@ describe('submission', () => {
   })
 
   it('submit bails out when a newer validation starts during its validation phase', async () => {
-    const { form } = mountNameEmailForm({
+    const form = createNameEmailForm({
       initialValues: { name: 'Jane' },
       onSubmit,
     })
@@ -124,10 +101,9 @@ describe('submission', () => {
   it('resets isSubmitting even when onSubmit throws', async () => {
     const throwingOnSubmit = vi.fn().mockRejectedValue(new Error('Network error'))
 
-    const form = createNotFormInstance({
+    const form = createNameEmailForm({
       initialValues: { email: 'jane@example.com', name: 'Jane' },
       onSubmit: throwingOnSubmit,
-      schema: nameEmailSchema,
     })
 
     await expect(form.submit(submitEvent)).rejects.toThrow('Network error')
@@ -136,7 +112,7 @@ describe('submission', () => {
   })
 
   it('submit resets isSubmitting when validation fails', async () => {
-    const { form } = mountNameEmailForm({ onSubmit })
+    const form = createNameEmailForm({ onSubmit })
 
     const submitPromise = form.submit(submitEvent)
     await flushPromises()
@@ -150,7 +126,7 @@ describe('submission', () => {
   })
 
   it('submit calls preventDefault on the event', async () => {
-    const { form } = mountNameEmailForm({ onSubmit })
+    const form = createNameEmailForm({ onSubmit })
 
     await form.submit(submitEvent)
     await flushPromises()
@@ -159,7 +135,7 @@ describe('submission', () => {
   })
 
   it('submit with no onSubmit handler still validates and completes', async () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
 
     await expect(form.submit(submitEvent)).resolves.not.toThrow()
 
@@ -173,7 +149,7 @@ describe('submission', () => {
 
     const pendingOnSubmit = vi.fn(() => submitPromise)
 
-    const { form } = mountNameEmailForm({
+    const form = createNameEmailForm({
       initialValues: { email: 'jane@example.com', name: 'Jane' },
       onSubmit: pendingOnSubmit,
     })

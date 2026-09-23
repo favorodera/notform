@@ -1,13 +1,13 @@
 /* eslint-disable ts/no-invalid-void-type */
 import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import type { createNotFormInstance } from '../../src/composables/create-not-form-instance'
-import { mountNameEmailForm } from '../helpers/mount-form'
+import type { createNotFormInstance } from '../../src/factories/create-not-form-instance'
+import { createNameEmailForm } from '../helpers/create-form'
 import { createFirstCallBlockingSchema, createGatedCallSchema, type nameEmailSchema } from '../helpers/not-validator'
 
 describe('validation', () => {
   it('validate resolves with issues when values are invalid', async () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
     const result = await form.validate()
 
     expect(result.issues).toBeDefined()
@@ -16,7 +16,7 @@ describe('validation', () => {
   })
 
   it('validate resolves with value when values are valid', async () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
 
     form.setValue('name', 'Jane')
     form.setValue('email', 'jane@example.com')
@@ -28,7 +28,7 @@ describe('validation', () => {
   })
 
   it('validateField only updates errors for the targeted field', async () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
     await form.validateField('name')
 
     expect(form.getFieldErrors('name').length).toBeGreaterThan(0)
@@ -36,7 +36,7 @@ describe('validation', () => {
   })
 
   it('validateField clears stale errors for a field that becomes valid while other errors persist', async () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
 
     form.setValue('name', 'a')
 
@@ -54,7 +54,7 @@ describe('validation', () => {
   })
 
   it('isValidating is true during validation and false after', async () => {
-    const { form } = mountNameEmailForm()
+    const form = createNameEmailForm()
 
     const validationPromise = form.validate()
 
@@ -69,7 +69,7 @@ describe('validation', () => {
     it('ignores a stale result once a newer call has started', async () => {
       const { promise: stalePromise, resolve: resolveStale } = Promise.withResolvers<void>()
 
-      const { form } = mountNameEmailForm({
+      const form = createNameEmailForm({
         initialValues: { name: 'Jane' },
         schema: createFirstCallBlockingSchema(stalePromise) as typeof nameEmailSchema,
       })
@@ -96,7 +96,7 @@ describe('validation', () => {
     const { promise: namePromise, resolve: resolveName } = Promise.withResolvers<void>()
     const { promise: emailPromise, resolve: resolveEmail } = Promise.withResolvers<void>()
 
-    const { form } = mountNameEmailForm({
+    const form = createNameEmailForm({
       schema: createGatedCallSchema(
         callNumber => (callNumber === 1 ? namePromise : emailPromise),
         callNumber => ({
@@ -138,7 +138,7 @@ describe('validation', () => {
       const { promise: firstPromise, resolve: resolveFirst } = Promise.withResolvers<void>()
       const { promise: secondPromise, resolve: resolveSecond } = Promise.withResolvers<void>()
 
-      const { form } = mountNameEmailForm({
+      const form = createNameEmailForm({
         initialValues: { name: 'Jane' },
         schema: createGatedCallSchema(
           callNumber => (callNumber === 1 ? firstPromise : secondPromise),
@@ -173,7 +173,7 @@ describe('validation', () => {
     const { promise: rootPromise, resolve: resolveRoot } = Promise.withResolvers<void>()
     const { promise: fieldPromise, resolve: resolveField } = Promise.withResolvers<void>()
 
-    const { form } = mountNameEmailForm({
+    const form = createNameEmailForm({
       initialValues: { name: 'Jane' },
       schema: createGatedCallSchema(
         callNumber => (callNumber === 1 ? rootPromise : fieldPromise),
