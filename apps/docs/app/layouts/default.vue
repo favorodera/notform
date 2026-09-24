@@ -4,7 +4,7 @@
 
     <Container>
       <Page>
-        <Main>
+        <Main class="grid grid-cols-1">
           <slot />
         </Main>
       </Page>

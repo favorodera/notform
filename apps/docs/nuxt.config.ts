@@ -100,7 +100,7 @@ export default defineNuxtConfig({
     port: 3000,
   },
   devtools: {
-    enabled: true,
+    enabled: false,
   },
   eslint: {
     config: {
@@ -249,6 +249,7 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
+      exclude: ['@vue/repl'],
       include: [
         'zod',
         '@vueuse/core',

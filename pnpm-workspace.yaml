@@ -40,6 +40,7 @@ catalogs:
     '@vue/test-utils': ^2.5.1
     eslint: ^10.10.0
     happy-dom: ^20.14.5
+    monaco-editor-core: ^0.56.0
     nuxtseo-layer-devtools: ^5.3.16
     relizy: ^1.4.9
     tsdown: ^0.23.0
