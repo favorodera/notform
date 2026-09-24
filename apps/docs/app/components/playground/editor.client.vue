@@ -1,10 +1,12 @@
 <!-- eslint-disable no-useless-escape -->
 <script setup lang="ts">
 import type * as monaco from 'monaco-editor-core'
-import type { Component } from 'vue'
 import { Repl, type SFCOptions, useStore, useVueImportMap } from '@vue/repl'
-import { breakpointsTailwind, useBreakpoints, useClipboard } from '@vueuse/core'
+import MonacoEditor from '@vue/repl/monaco-editor'
 import '@vue/repl/style.css'
+import { breakpointsTailwind, useBreakpoints, useClipboard, useLocalStorage } from '@vueuse/core'
+
+const savedRouteHash = useLocalStorage('notform-playground-route-hash', '')
 
 const colorMode = useColorMode()
 const theme = computed(() => (colorMode.value === 'dark' ? 'dark' : 'light'))
@@ -12,10 +14,27 @@ const theme = computed(() => (colorMode.value === 'dark' ? 'dark' : 'light'))
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const replLayout = computed(() => (breakpoints.smaller('lg').value ? 'vertical' : 'horizontal'))
 
+// If the URL has a hash (e.g. an explicitly shared link), it takes priority.
+// Otherwise fall back to the last saved local session.
+const initialRouteHash = location.hash || (savedRouteHash.value
+  ? `#${savedRouteHash.value.replace(/^#/, '')}`
+  : '')
+
+// If we loaded from a URL hash, make sure localStorage reflects it right away,
+// so a later plain visit (no hash) restores this rather than a stale save.
+if (location.hash) {
+  savedRouteHash.value = location.hash
+}
+
+const clipboard = useClipboard({
+  legacy: true,
+  source: () => location.href,
+})
+
 const vueImportMap = useVueImportMap({
-  runtimeDev: 'https://esm.sh/vue@3/dist/vue.esm-browser.js',
-  runtimeProd: 'https://esm.sh/vue@3/dist/vue.esm-browser.prod.js',
-  serverRenderer: 'https://esm.sh/@vue/server-renderer@3/dist/server-renderer.esm-browser.js',
+  runtimeDev: 'https://esm.sh/vue@3.5/dist/vue.esm-browser.js',
+  runtimeProd: 'https://esm.sh/vue@3.5/dist/vue.esm-browser.prod.js',
+  serverRenderer: 'https://esm.sh/@vue/server-renderer@3.5/dist/server-renderer.esm-browser.js',
 })
 
 const builtinImportMap = computed(() => ({
@@ -25,6 +44,19 @@ const builtinImportMap = computed(() => ({
     zod: 'https://esm.sh/zod@4?external=vue',
   },
 }))
+
+const previewOptions = {
+  headHTML: [
+    '<script>window.__VUE_PROD_DEVTOOLS__=false<\/script>',
+    '<link rel="preconnect" href="https://fonts.googleapis.com">',
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+    '<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&family=Geist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">',
+    '<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>',
+    '<style type="text/tailwindcss">@theme { --font-sans: \'Geist\', sans-serif; --font-mono: \'Geist Mono\', monospace;}</style>',
+    '<style>body { font-family: var(--font-sans); }</style>',
+    '<style>#app { isolation: isolate; }</style>',
+  ].join(''),
+}
 
 const sfcOptions = computed<SFCOptions>(() => ({
   script: {
@@ -43,19 +75,6 @@ const sfcOptions = computed<SFCOptions>(() => ({
   },
 }))
 
-const previewOptions = {
-  headHTML: [
-    '<script>window.__VUE_PROD_DEVTOOLS__=false<\/script>',
-    '<link rel="preconnect" href="https://fonts.googleapis.com">',
-    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
-    '<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&family=Geist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">',
-    '<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>',
-    '<style type="text/tailwindcss">@theme { --font-sans: \'Geist\', sans-serif; --font-mono: \'Geist Mono\', monospace;}</style>',
-    '<style>body { font-family: var(--font-sans); }</style>',
-    '<style>#app { isolation: isolate; }</style>',
-  ].join(''),
-}
-
 const monacoOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   automaticLayout: true,
   minimap: { enabled: false },
@@ -69,7 +88,7 @@ const replStore = useStore({
   showOutput: ref(false),
   typescriptVersion: ref('6.0.3'),
   vueVersion: vueImportMap.vueVersion,
-})
+}, initialRouteHash)
 
 const defaultCode = `<script setup lang="ts">
 import { NotField, NotForm, NotMessage, useNotForm } from 'notform'
@@ -109,77 +128,47 @@ const form = useNotForm({
   </NotForm>
 </template>
 `
-const MonacoEditor = shallowRef<Component>()
-const loading = ref(true)
-let cleanupSync: (() => void) | undefined
 
 /**
  * Resets the playground to its default state.
- * Clears the URL hash to prevent restoring the code from the URL.
+ * Clears the URL hash and saved localStorage state to prevent restoring
+ * the code from either source.
  */
 function resetToDefault() {
   replStore.setFiles({ 'src/App.vue': defaultCode }, 'src/App.vue')
+
+  savedRouteHash.value = ''
+
   if (location.hash) {
     history.replaceState({}, '', location.pathname)
   }
 }
 
-const clipboard = useClipboard({
-  legacy: true,
-  source: () => location.href,
-})
+const hasInitialRouteHash = !!initialRouteHash
 
-onMounted(async () => {
-  // 1. Initialize store files: hash state or default code
-  const hasInitialHash = !!location.hash
-  if (hasInitialHash) {
-    replStore.deserialize(location.hash)
-  } else {
-    replStore.setFiles({ 'src/App.vue': defaultCode }, 'src/App.vue')
-  }
+if (!hasInitialRouteHash) {
+  replStore.setFiles({ 'src/App.vue': defaultCode }, 'src/App.vue')
+}
 
-  // Always initialize store to register watchers, tsconfig, and compiler pipeline
-  replStore.init()
+const areThereChanges = ref(hasInitialRouteHash)
 
-  // 2. Dynamically import Monaco Editor (browser-only)
-  const monacoModule = await import('@vue/repl/monaco-editor')
-  MonacoEditor.value = monacoModule.default
+watchEffect(() => {
+  const serializedStore = replStore.serialize()
 
-  loading.value = false
+  const isDefaultStoreState = !hasInitialRouteHash && replStore.getFiles()['App.vue']?.trimEnd() === defaultCode.trimEnd()
+  areThereChanges.value = !isDefaultStoreState
 
-  // 3. Sync store state to URL hash
-  const stopSync = watchEffect(() => {
-    const serialized = replStore.serialize()
-    const isDefault = !hasInitialHash && replStore.getFiles()['App.vue']?.trimEnd() === defaultCode.trimEnd()
-
-    if (isDefault) {
-      if (location.hash) {
-        history.replaceState({}, '', location.pathname)
-      }
-      return
+  if (isDefaultStoreState) {
+    if (location.hash) {
+      history.replaceState({}, '', location.pathname)
     }
 
-    history.replaceState({}, '', serialized)
-  })
-
-  // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
-  cleanupSync = stopSync
-})
-
-onBeforeUnmount(() => {
-  cleanupSync?.()
-
-  // Dispose Monaco models to prevent duplicate models and memory leaks on route changes
-  try {
-    const monaco = (globalThis as any).monaco as typeof import('monaco-editor-core')
-    if (monaco?.editor) {
-      for (const model of monaco.editor.getModels()) {
-        model.dispose()
-      }
-    }
-  } catch {
-    // ignore
+    savedRouteHash.value = ''
+    return
   }
+
+  history.replaceState({}, '', serializedStore)
+  savedRouteHash.value = serializedStore
 })
 </script>
 
@@ -190,7 +179,6 @@ onBeforeUnmount(() => {
       shadow-xs shadow-neutral-800 block-full inline-full
     "
   >
-    <!-- Playground Top Toolbar -->
     <div
       class="
         flex shrink-0 items-center justify-between gap-2 border-be
@@ -222,14 +210,8 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <!-- Editor / REPL container -->
     <div class="relative flex flex-1 flex-col inline-full min-block-0">
-      <PlaygroundSpinner v-if="loading">
-        Initializing editor & compiler
-      </PlaygroundSpinner>
-
       <Repl
-        v-else-if="MonacoEditor"
         :store="replStore"
         :editor="MonacoEditor"
         :theme="theme"
@@ -239,7 +221,7 @@ onBeforeUnmount(() => {
         :show-import-map="true"
         :clear-console="false"
         :auto-resize="true"
-        :editor-options="{ monacoOptions }"
+        :editor-options="{ monacoOptions, autoSaveText: false,showErrorText:false }"
         :preview-options="previewOptions"
         preview-theme
         class="flex-1! block-full! inline-full!"
@@ -280,6 +262,10 @@ onBeforeUnmount(() => {
 
   & .tab-buttons {
     @apply hidden;
+  }
+
+  & .import-map-wrapper {
+    @apply bg-none;
   }
 }
 </style>

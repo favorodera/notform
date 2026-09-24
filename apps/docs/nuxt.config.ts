@@ -100,7 +100,7 @@ export default defineNuxtConfig({
     port: 3000,
   },
   devtools: {
-    enabled: false,
+    enabled: true,
   },
   eslint: {
     config: {
