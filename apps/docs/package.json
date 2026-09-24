@@ -37,6 +37,7 @@
     "@tailwindcss/vite": "catalog:vendor",
     "@takumi-rs/core": "catalog:vendor",
     "@vercel/analytics": "catalog:vendor",
+    "@vue/repl": "catalog:vendor",
     "@vueuse/core": "catalog:vendor",
     "better-sqlite3": "catalog:vendor",
     "minimark": "catalog:vendor",

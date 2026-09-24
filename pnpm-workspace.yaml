@@ -63,6 +63,7 @@ catalogs:
     '@tailwindcss/vite': ^4.3.3
     '@takumi-rs/core': ^2.14.0
     '@vercel/analytics': ^2.0.1
+    '@vue/repl': ^4.7.2
     '@vueuse/core': ^15.0.0
     better-sqlite3: ^13.0.0
     dequal: ^2.0.3
