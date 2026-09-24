@@ -7,7 +7,9 @@ const sectionsSearch = useAsyncData('search', () => queryCollectionSearchSection
 
 const githubStars = useFetch('/api/github/stars')
 
-provide('navigation', navigation.data)
+const resolvedNavigation = computed(() => navigation.data.value?.[0]?.children ?? [])
+
+provide('navigation', resolvedNavigation)
 provide('githubStars', githubStars.data)
 
 useSeoMeta({
@@ -38,16 +40,16 @@ defineOgImage('Image.takumi', {
       duration:4000
     }"
   >
-    <Main>
+    <div>
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
-    </Main>
+    </div>
 
     <ClientOnly>
       <LazyContentSearch
         :files="sectionsSearch.data.value"
-        :navigation="navigation.data.value"
+        :navigation="resolvedNavigation"
       />
     </ClientOnly>
   </App>

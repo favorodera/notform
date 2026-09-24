@@ -42,7 +42,7 @@ const tocFooterLinks = computed<PageLink[]>(() => [
   {
     class: 'font-semibold text-pink-400 hover:text-pink-500',
     icon: 'tabler:heart',
-    label: 'Sponsor on GitHub',
+    label: 'Sponsor this project',
     target: '_blank',
     to: 'https://github.com/sponsors/favorodera',
   },

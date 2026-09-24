@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ layout: false })
+
 const page = await useAsyncData('index', () => queryCollection('landing').first())
 
 if (!page.data.value) {

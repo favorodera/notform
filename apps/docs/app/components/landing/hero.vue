@@ -114,7 +114,7 @@ const item = {
           "
         >
           <Button
-            to="/getting-started"
+            to="/docs/getting-started"
             size="lg"
             color="primary"
             variant="subtle"

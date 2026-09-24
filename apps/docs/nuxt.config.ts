@@ -137,17 +137,17 @@ export default defineNuxtConfig({
     sections: [
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/getting-started%' }],
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/getting-started%' }],
         title: 'Getting Started',
       },
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/components%' }],
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/components%' }],
         title: 'Components',
       },
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/composables%' }],
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/composables%' }],
         title: 'Composables',
       },
     ],
@@ -174,9 +174,15 @@ export default defineNuxtConfig({
         '/robots.txt',
       ],
     },
+    routeRules: {
+      '/docs': { redirect: '/docs/getting-started' },
+    },
   },
   ogImage: {
     zeroRuntime: true,
+  },
+  routeRules: {
+    '/docs': { redirect: '/docs/getting-started' },
   },
   runtimeConfig: {
     public: {
