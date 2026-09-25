@@ -21879,7 +21879,7 @@ var require_estree_walker = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			}
 		}
 		/** @typedef { import('estree').BaseNode} BaseNode */
-		/** @typedef { import('./walker.js').WalkerContext} WalkerContext */
+		/** @typedef { import('./walker').WalkerContext} WalkerContext */
 		/** @typedef {(
 		*    this: WalkerContext,
 		*    node: BaseNode,

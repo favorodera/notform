@@ -29,7 +29,9 @@
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -47,27 +49,27 @@
     "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
-    "vue": "catalog:peer"
+    "vue": "^3.5.0"
   },
   "dependencies": {
-    "@standard-schema/spec": "catalog:vendor",
-    "dequal": "catalog:vendor",
-    "dot-prop": "catalog:vendor",
-    "klona": "catalog:vendor",
-    "type-fest": "catalog:vendor"
+    "@standard-schema/spec": "catalog:",
+    "dequal": "catalog:",
+    "dot-prop": "catalog:",
+    "klona": "catalog:",
+    "type-fest": "catalog:"
   },
   "devDependencies": {
-    "@favorodera/eslint-config": "catalog:tools",
-    "@types/node": "catalog:tools",
-    "@vitejs/plugin-vue": "catalog:tools",
-    "@vitest/coverage-v8": "catalog:tools",
-    "@vitest/ui": "catalog:tools",
-    "@vue/test-utils": "catalog:tools",
-    "happy-dom": "catalog:tools",
-    "tsdown": "catalog:tools",
-    "vite": "catalog:tools",
-    "vitest": "catalog:tools",
-    "vue": "catalog:peer",
-    "vue-tsc": "catalog:tools"
+    "@favorodera/eslint-config": "catalog:",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "@vue/test-utils": "catalog:",
+    "happy-dom": "catalog:",
+    "tsdown": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "catalog:"
   }
 }

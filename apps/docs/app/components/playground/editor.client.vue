@@ -1,5 +1,5 @@
 <script lang="ts">
-import appVue from '../../../public/playground-templates/app.vue?raw'
+import defaultVue from '../../../public/playground-templates/default.vue?raw'
 import tailwindCSS from '../../../public/playground-templates/tailwind.css?raw'
 </script>
 
@@ -104,7 +104,7 @@ const replStore = useStore({
  * the code from either source.
  */
 function resetToDefault() {
-  replStore.setFiles({ 'src/App.vue': appVue }, 'src/App.vue')
+  replStore.setFiles({ 'src/App.vue': defaultVue }, 'src/App.vue')
 
   savedRouteHash.value = ''
 
@@ -116,7 +116,7 @@ function resetToDefault() {
 const hasInitialRouteHash = !!initialRouteHash
 
 if (!hasInitialRouteHash) {
-  replStore.setFiles({ 'src/App.vue': appVue }, 'src/App.vue')
+  replStore.setFiles({ 'src/App.vue': defaultVue }, 'src/App.vue')
 }
 
 const areThereChanges = ref(hasInitialRouteHash)
@@ -124,7 +124,7 @@ const areThereChanges = ref(hasInitialRouteHash)
 watchEffect(() => {
   const serializedStore = replStore.serialize()
 
-  const isDefaultStoreState = !hasInitialRouteHash && replStore.getFiles()['App.vue']?.trimEnd() === appVue.trimEnd()
+  const isDefaultStoreState = !hasInitialRouteHash && replStore.getFiles()['App.vue']?.trimEnd() === defaultVue.trimEnd()
   areThereChanges.value = !isDefaultStoreState
 
   if (isDefaultStoreState) {

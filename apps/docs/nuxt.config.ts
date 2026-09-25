@@ -11,65 +11,18 @@ export default defineNuxtConfig({
         lang: 'en',
       },
       link: [
-        {
-          href: '/favicon.ico',
-          rel: 'icon',
-          sizes: '48x48',
-        },
-        {
-          href: '/favicon.svg',
-          rel: 'icon',
-          sizes: 'any',
-          type: 'image/svg+xml',
-        },
-        {
-          href: '/icon-32x32.png',
-          rel: 'icon',
-          sizes: '32x32',
-          type: 'image/png',
-        },
-        {
-          href: '/icon-192x192.png',
-          rel: 'icon',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          href: '/icon-512x512.png',
-          rel: 'icon',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-        {
-          href: '/icon-16x16.png',
-          rel: 'icon',
-          sizes: '16x16',
-          type: 'image/png',
-        },
-        {
-          href: '/icon.svg',
-          rel: 'icon',
-          sizes: 'any',
-          type: 'image/svg+xml',
-        },
-        {
-          href: '/apple-touch-icon.png',
-          rel: 'apple-touch-icon',
-          sizes: '180x180',
-        },
+        { href: '/favicon.ico', rel: 'icon', sizes: '48x48' },
+        { href: '/favicon.svg', rel: 'icon', sizes: 'any', type: 'image/svg+xml' },
+        { href: '/icon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png' },
+        { href: '/icon-192x192.png', rel: 'icon', sizes: '192x192', type: 'image/png' },
+        { href: '/icon-512x512.png', rel: 'icon', sizes: '512x512', type: 'image/png' },
+        { href: '/icon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png' },
+        { href: '/icon.svg', rel: 'icon', sizes: 'any', type: 'image/svg+xml' },
+        { href: '/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180' },
       ],
       meta: [
-        {
-          content: 'width=device-width, initial-scale=1',
-          name: 'viewport',
-        },
-        {
-          charset: 'utf8',
-        },
-        {
-          content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM',
-          name: 'google-site-verification',
-        },
+        { charset: 'utf8' },
+        { content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM', name: 'google-site-verification' },
       ],
     },
     layoutTransition: {
@@ -243,6 +196,11 @@ export default defineNuxtConfig({
   },
   sitemap: {
     zeroRuntime: true,
+  },
+  typescript: {
+    nodeTsConfig: {
+      include: ['./scripts/**/*'],
+    },
   },
   ui: {
     prefix: '',

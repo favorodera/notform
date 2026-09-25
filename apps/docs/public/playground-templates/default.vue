@@ -88,7 +88,7 @@ const form = useNotForm({
 
     <div data-field>
       <div data-label>
-        Intrests
+        interests
       </div>
 
       <NotArrayField
@@ -178,16 +178,16 @@ const form = useNotForm({
     >
       <button
         type="reset"
-        :disabled="form.isSubmitting.value"
+        :disabled="form.isSubmitting"
       >
         Reset
       </button>
 
       <button
         type="submit"
-        :disabled="form.isSubmitting.value"
+        :disabled="form.isSubmitting"
       >
-        <span v-if="form.isSubmitting.value"> Submitting... </span>
+        <span v-if="form.isSubmitting"> Submitting... </span>
         <span v-else> Submit </span>
       </button>
     </div>

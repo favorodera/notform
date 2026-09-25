@@ -6,12 +6,12 @@ export default defineNuxtPlugin(() => {
       const url = scriptURL.toString()
 
       if (url.includes('vue.worker')) {
-        super('/vue-repl-workers/vue.worker.js', options)
+        super('/repl-workers/vue.worker.js', options)
         return
       }
 
       if (url.includes('editor.worker')) {
-        super('/vue-repl-workers/editor.worker.js', options)
+        super('/repl-workers/editor.worker.js', options)
         return
       }
 
