@@ -84,14 +84,18 @@ When adding new features or fixing bugs, please include tests as this helps us v
 
 ## Playground
 
-  Interactive StackBlitz playgrounds are also available for experimenting with the packages without setting up the repository locally.
+  Interactive playgrounds are available for experimenting with NotForm packages without setting up the repository locally:
 
-  -  [Core Playground](https://stackblitz.com/edit/notform)
-  -  [Nuxt Module Playground](https://stackblitz.com/edit/notform-nuxt)
+  - [Interactive in-browser Vue 3 SFC REPL with live Monaco editor, Tailwind CSS v4, and instant shareable links.](https://notformdocs.vercel.app/playground)
+  - [Full Vite + Vue 3 project playground on StackBlitz.](https://stackblitz.com/edit/notform)
+  - [Nuxt 4 project playground on StackBlitz.](https://stackblitz.com/edit/notform-nuxt)
 
-  These playgrounds are useful for quickly trying NotForm, reproducing issues, or experimenting with changes. When testing a pull request, you can also use the preview package published by `pkg.pr.new` in a playground to try the changes before they are merged.
+  These playgrounds are useful for:
+  - **Trying NotForm**: Quickly testing components, composables, and schema validation.
+  - **Bug Reproductions**: Building minimal, reproducible examples when filing bug reports. Use the **Share** button in the NotForm Playground to generate a persistent URL containing your exact code.
+  - **Testing Pull Requests with `pkg.pr.new`**: Every pull request automatically publishes continuous preview packages to [pkg.pr.new](https://github.com/stackblitz-labs/pkg.pr.new).
 
-  The playgrounds are intended for experimentation and are not a replacement for running the project's full test suite locally.
+  The playgrounds are intended for experimentation and reproduction, and are not a replacement for running the project's full test suite locally.
 
 ---
 
@@ -117,10 +121,11 @@ This command runs the complete pipeline: install → lint → typecheck → test
 
   Before filing a report, check existing issues. When you do file one, include:
 
-- A clear, descriptive title
-- Steps to reproduce
-- Expected vs. actual behavior
-- Your environment (OS, Node.js version, pnpm version)
+  - A clear, descriptive title
+  - A minimal reproduction link (using the any of the playgrounds or a GitHub repository)
+  - Steps to reproduce
+  - Expected vs. actual behavior
+  - Your environment (OS, Node.js version, pnpm version)
 
 ---
 
@@ -138,7 +143,7 @@ We welcome feature suggestions! Please open an issue describing:
 
   If you have questions, feel free to:
 
-- Open a [Discussion](https://github.com/favorodera/notform/discussions)
-- Check the [Documentation](https://notformdocs.vercel.app/)
+  - Open a [Discussion](https://github.com/favorodera/notform/discussions)
+  - Check the [Documentation](https://notformdocs.vercel.app/)
 
   Thank you for contributing! 🎉

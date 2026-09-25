@@ -18,7 +18,7 @@ const navigationMenuItems = [
   },
   {
     active: route.path.startsWith('/playground'),
-    icon: 'tabler:device-gamepad',
+    icon: 'tabler:player-play',
     label: 'Playground',
     to: '/playground',
   },

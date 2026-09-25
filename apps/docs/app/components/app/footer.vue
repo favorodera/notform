@@ -5,10 +5,6 @@ const appConfig = useAppConfig()
 
 const navigationMenuitems = [
   {
-    label: 'Playground',
-    to: '/playground',
-  },
-  {
     class: ' text-pink-400 hover:text-pink-500',
     external: true,
     label: 'Sponsor',

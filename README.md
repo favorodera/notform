@@ -6,6 +6,7 @@
 <a href="https://github.com/favorodera/notform"><img alt="license" src="https://shieldcn.dev/github/favorodera/notform/license.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Licence" /></a>
 <a href="https://github.com/favorodera/notform"><img alt="stars" src="https://shieldcn.dev/github/favorodera/notform/stars.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Stars" /></a>
 <a href="https://notformdocs.vercel.app/"><img alt="Custom badge" src="https://shieldcn.dev/badge/Documentation.svg?variant=secondary&amp;size=xs&amp;font=fira-code" /></a>
+<a href="https://notformdocs.vercel.app/playground"><img alt="Playground badge" src="https://shieldcn.dev/badge/Playground.svg?variant=secondary&amp;size=xs&amp;font=fira-code" /></a>
 <a href="https://github.com/sponsors/favorodera"><img alt="badge" src="https://shieldcn.dev/badge/Sponsor%20this%20project-FF69B4.svg?variant=outline&amp;size=xs&amp;font=fira-code&amp;logo=false" /></a>
 </p>
 

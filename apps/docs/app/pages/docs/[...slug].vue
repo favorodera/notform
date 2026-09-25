@@ -57,12 +57,8 @@ const seo = computed(() => {
 
 useSeoMeta({
   description: () => seo.value.description,
-  ogDescription: () => seo.value.description,
-  ogTitle: () => seo.value.title,
   ogUrl: () => `${appConfig.siteUrl}${route.fullPath}`,
   title: () => seo.value.title,
-  twitterDescription: () => seo.value.description,
-  twitterTitle: () => seo.value.title,
 })
 
 defineOgImage('Image.takumi', { ...seo.value })
