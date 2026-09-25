@@ -1,3 +1,8 @@
+<script lang="ts">
+import appVue from '../../../public/playground-templates/app.vue?raw'
+import tailwindCSS from '../../../public/playground-templates/tailwind.css?raw'
+</script>
+
 <!-- eslint-disable no-useless-escape -->
 <script setup lang="ts">
 import type * as monaco from 'monaco-editor-core'
@@ -52,7 +57,7 @@ const previewOptions = {
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
     '<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&family=Geist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">',
     '<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>',
-    '<style type="text/tailwindcss">@theme { --font-sans: \'Geist\', sans-serif; --font-mono: \'Geist Mono\', monospace;}</style>',
+    `<style type="text/tailwindcss">${tailwindCSS}</style>`,
     '<style>body { font-family: var(--font-sans); }</style>',
     '<style>#app { isolation: isolate; }</style>',
   ].join(''),
@@ -78,6 +83,9 @@ const sfcOptions = computed<SFCOptions>(() => ({
 const monacoOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   automaticLayout: true,
   minimap: { enabled: false },
+  stickyScroll: {
+    enabled: false,
+  },
   tabSize: 2,
 }
 
@@ -90,52 +98,13 @@ const replStore = useStore({
   vueVersion: vueImportMap.vueVersion,
 }, initialRouteHash)
 
-const defaultCode = `<script setup lang="ts">
-import { NotField, NotForm, NotMessage, useNotForm } from 'notform'
-import { z } from 'zod'
-
-const schema = z.object({
-  email: z.string().email('Enter a valid email'),
-})
-
-const form = useNotForm({
-  onSubmit(values) {
-    console.log('Submitted:', values)
-  },
-  schema,
-})
-<\/script>
-
-<template>
-  <NotForm :form="form" @submit="form.submit">
-    <NotField v-slot="{ events, path }" path="email">
-      <label :for="path">Email</label>
-
-      <input
-        :id="path"
-        v-model="form.values.email"
-        v-bind="events"
-        type="email"
-        placeholder="user@example.com"
-      >
-
-      <NotMessage :path="path" />
-    </NotField>
-
-    <button type="submit">
-      Submit
-    </button>
-  </NotForm>
-</template>
-`
-
 /**
  * Resets the playground to its default state.
  * Clears the URL hash and saved localStorage state to prevent restoring
  * the code from either source.
  */
 function resetToDefault() {
-  replStore.setFiles({ 'src/App.vue': defaultCode }, 'src/App.vue')
+  replStore.setFiles({ 'src/App.vue': appVue }, 'src/App.vue')
 
   savedRouteHash.value = ''
 
@@ -147,7 +116,7 @@ function resetToDefault() {
 const hasInitialRouteHash = !!initialRouteHash
 
 if (!hasInitialRouteHash) {
-  replStore.setFiles({ 'src/App.vue': defaultCode }, 'src/App.vue')
+  replStore.setFiles({ 'src/App.vue': appVue }, 'src/App.vue')
 }
 
 const areThereChanges = ref(hasInitialRouteHash)
@@ -155,7 +124,7 @@ const areThereChanges = ref(hasInitialRouteHash)
 watchEffect(() => {
   const serializedStore = replStore.serialize()
 
-  const isDefaultStoreState = !hasInitialRouteHash && replStore.getFiles()['App.vue']?.trimEnd() === defaultCode.trimEnd()
+  const isDefaultStoreState = !hasInitialRouteHash && replStore.getFiles()['App.vue']?.trimEnd() === appVue.trimEnd()
   areThereChanges.value = !isDefaultStoreState
 
   if (isDefaultStoreState) {
