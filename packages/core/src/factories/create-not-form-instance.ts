@@ -21,9 +21,12 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   // #region State
 
   /** Baseline values for reset. */
+  // Cloned so mutating `values` later can never leak back into this baseline.
   const initialValues = klona(config.initialValues ?? {} as InferInput<TSchema>)
 
   /** Live field values. */
+  // Cloned again from `initialValues` (not the same reference) so `values`
+  // and `initialValues` can diverge independently once fields change.
   const values = reactive(klona(initialValues))
 
   /** Baseline issues for reset. */
@@ -118,6 +121,8 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    * @param nextErrors Replacement issues.
    */
   function replaceErrors(nextErrors: Array<Issue>) {
+    // Splice in place rather than reassigning `errors` — it's a `reactive()`
+    // array, so replacing the reference would break existing subscriptions.
     errors.splice(0, errors.length, ...nextErrors)
   }
 
@@ -191,6 +196,8 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     const currentValue = getProperty(values, path)
     const baselineValue = getProperty(initialValues, path)
 
+    // Deep compare (not `===`) since values can be objects/arrays — dirty
+    // means "differs in content from baseline," not "different reference."
     const isUnchanged = dequal(currentValue, baselineValue)
 
     if (isUnchanged) {
@@ -263,6 +270,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    */
   function markFieldsAsValidating(paths: Iterable<Paths<TSchema>>) {
     for (const path of paths) {
+      // A count, not a boolean flag: `validate()` and `validateField()` can
+      // both be running against the same path at once, and the path must
+      // stay "validating" until *every* overlapping run has finished.
       validatingFieldCounts.set(path, (validatingFieldCounts.get(path) ?? 0) + 1)
       validatingFields.add(path)
     }
@@ -277,6 +287,8 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     for (const path of paths) {
       const nextCount = (validatingFieldCounts.get(path) ?? 0) - 1
 
+      // Only clear once every overlapping run for this path has finished —
+      // an earlier finisher must not mark the path as done for a later one.
       if (nextCount <= 0) {
         validatingFieldCounts.delete(path)
         validatingFields.delete(path)
@@ -299,6 +311,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     try {
       const result = await executeSchemaValidation()
 
+      // A newer `validate()`/`submit()`/`reset()` started while this one was
+      // awaiting the schema — let it resolve normally, but don't let its
+      // (now stale) result overwrite whatever the newer run already wrote.
       if (cycle !== generation) {
         return result
       }
@@ -338,12 +353,18 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     try {
       const result = await executeSchemaValidation()
 
+      // Two independent staleness checks: `generation` catches a whole-form
+      // `validate()`/`submit()`/`reset()` that superseded this call, while
+      // the per-path cycle id catches a *newer* `validateField()` call for
+      // this same path — either one means this result must not be written.
       if (generation !== startGeneration || fieldValidationCycleMap.get(path) !== cycle) {
         return result
       }
 
       const targetPath = parsePath(path)
 
+      // Iterate backwards so splicing mid-loop doesn't skip the element
+      // that shifts into the current index.
       for (let errorIndex = errors.length - 1; errorIndex >= 0; errorIndex--) {
         if (areIssuePathsEqual(errors[errorIndex].path, targetPath)) {
           errors.splice(errorIndex, 1)
@@ -380,6 +401,8 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   async function submit(event?: SubmitEvent) {
     event?.preventDefault()
 
+    // Guards against double-submit (e.g. a rapid double-click) — a second
+    // call while one is already running is simply ignored.
     if (isSubmitting.value) {
       return
     }
@@ -395,6 +418,8 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     try {
       const result = await executeSchemaValidation()
 
+      // Same staleness guard as `validate()`: something newer (another
+      // submit, a validate, or a reset) has already taken over.
       if (cycle !== generation) {
         return
       }
@@ -424,6 +449,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    * @param nextErrors New baseline issues.
    */
   function reset(nextValues?: DeepPartial<InferInput<TSchema>>, nextErrors?: Array<Issue>) {
+    // Bumping `generation` here (rather than just clearing the maps below)
+    // is what makes any `validate()`/`submit()` already in flight land as a
+    // no-op instead of overwriting what reset is about to set.
     generation++
     fieldValidationCycleMap.clear()
     validatingFieldCounts.clear()
@@ -432,6 +460,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     if (nextValues) {
       const freshValues = klona(nextValues)
 
+      // Delete-then-assign instead of reassigning `initialValues` itself:
+      // it's a plain object referenced elsewhere by closure, so the object
+      // identity has to be preserved — only its contents can change.
       for (const key of Object.keys(initialValues)) {
         deleteProperty(initialValues, key)
       }
@@ -443,6 +474,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
       initialErrors.splice(0, initialErrors.length, ...klona(nextErrors))
     }
 
+    // Same delete-then-assign pattern here, but for a stronger reason:
+    // `values` is `reactive()`, so replacing the object outright would
+    // break every existing binding/computed that closed over this reference.
     for (const key of Object.keys(values)) {
       deleteProperty(values, key)
     }

@@ -33,24 +33,34 @@ export function locatePathInArrayField<
   pathSegments: ReadonlyArray<TPathSegment>,
   arrayFieldPathSegments: ReadonlyArray<TArraySegment>,
 ): ArrayPathLocation<TPathSegment> | undefined {
+  // `<=` (not `<`) rules out the array's own path too: a path must have at
+  // least one segment past the array path — the item index — to be "inside" it.
   if (pathSegments.length <= arrayFieldPathSegments.length || !isPathWithinScope(pathSegments, arrayFieldPathSegments)) {
     return undefined
   }
 
+  // The segment right after the array path should be the item index.
   const itemIndexSegment = toPropertyKey(pathSegments[arrayFieldPathSegments.length])
 
+  // An object key (not number/string) here means this isn't actually an
+  // array index position — bail rather than force a bad match.
   if (typeof itemIndexSegment !== 'number' && typeof itemIndexSegment !== 'string') {
     return undefined
   }
 
   const itemIndex = Number(itemIndexSegment)
 
+  // Guards against non-numeric-looking string keys (e.g. an object field
+  // that happens to share the array's path prefix) and negative/fractional
+  // values that can't be a real array index.
   if (!Number.isSafeInteger(itemIndex) || itemIndex < 0) {
     return undefined
   }
 
   return {
     index: itemIndex,
+    // Everything past the index, at any depth — lets callers relocate state
+    // nested arbitrarily deep inside the item, not just the item's own path.
     remainingPathSegments: pathSegments.slice(arrayFieldPathSegments.length + 1),
   }
 }
@@ -68,6 +78,8 @@ function remapPathSet<TSchema extends ObjectSchema>(
   arraySegments: ReadonlyArray<DotPropPathSegment>,
   remapIndex: ArrayItemIndexMap,
 ) {
+  // Mutating `paths` mid-iteration would be unsafe, so collect changes first
+  // and apply them in a separate pass below.
   const pathsToRemove: Array<Paths<TSchema>> = []
   const pathsToAdd: Array<Paths<TSchema>> = []
 
@@ -79,18 +91,25 @@ function remapPathSet<TSchema extends ObjectSchema>(
       arraySegments,
     )
 
+    // Path isn't inside this array field at all — leave it untouched.
     if (!location) {
       continue
     }
 
+    // Every path inside the array is removed unconditionally: it either
+    // gets re-added at its new index below, or was on a removed item and
+    // is dropped for good.
     pathsToRemove.push(path)
 
     const nextIndex = remapIndex(location.index)
 
+    // `undefined` means this item was removed — its state goes with it.
     if (nextIndex === undefined) {
       continue
     }
 
+    // Rebuild the full path at the item's new index, keeping whatever was
+    // nested underneath it (e.g. `.name`, `.tags.0`) unchanged.
     const nextPath = stringifyPath([
       ...arraySegments,
       nextIndex,
@@ -144,9 +163,12 @@ export function remapArrayFieldState<TSchema extends ObjectSchema>(
     remapIndex,
   )
 
+  // Errors aren't a plain path Set (they're Issue objects with a path plus
+  // a message), so they're remapped by hand rather than via `remapPathSet`.
   const remappedErrors: Array<Issue> = []
 
   for (const issue of form.errors) {
+    // Form-level issues (no path) are never scoped to a field — always kept.
     if (!issue.path) {
       remappedErrors.push(issue)
       continue
@@ -157,6 +179,7 @@ export function remapArrayFieldState<TSchema extends ObjectSchema>(
       arraySegments,
     )
 
+    // Issue belongs to some other field entirely — pass it through unchanged.
     if (!location) {
       remappedErrors.push(issue)
       continue
@@ -164,6 +187,8 @@ export function remapArrayFieldState<TSchema extends ObjectSchema>(
 
     const nextIndex = remapIndex(location.index)
 
+    // Item was removed — its issue is discarded along with it, rather than
+    // being pushed to `remappedErrors`.
     if (nextIndex === undefined) {
       continue
     }
@@ -178,5 +203,7 @@ export function remapArrayFieldState<TSchema extends ObjectSchema>(
     })
   }
 
+  // Whole-array replace rather than in-place edits, since indices shifted
+  // and the array's length/order may itself have changed.
   form.replaceErrors(remappedErrors)
 }

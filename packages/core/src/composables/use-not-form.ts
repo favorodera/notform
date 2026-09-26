@@ -10,5 +10,8 @@ import { createNotFormInstance } from '../factories/create-not-form-instance'
  * @returns Public form API. Child components still inject the full instance via `<NotForm>`.
  */
 export default function useNotForm<TSchema extends ObjectSchema>(config: UseNotFormConfig<TSchema>): NotFormAPI<TSchema> {
+  // Type-only narrowing, not a real conversion: the returned object is still
+  // the full instance (see `toNotFormInstance`) — this cast just presents
+  // callers with the smaller public surface instead of the internal one.
   return createNotFormInstance(config) as unknown as NotFormAPI<TSchema>
 }

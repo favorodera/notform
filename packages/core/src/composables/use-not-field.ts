@@ -29,6 +29,9 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
 
   const isValidating = computed(() => form.validatingFields.has(props.path))
 
+  // Merged over the defaults rather than replacing them wholesale, so a
+  // caller passing `validateOn={{ onInput: true }}` still keeps blur/change
+  // validation instead of silently losing it.
   const validateOn = computed<NotFieldProps<TSchema>['validateOn']>(() => ({
     onBlur: true,
     onChange: true,
@@ -57,11 +60,15 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
 
   /** Runs field validation immediately, or after `debounce` ms. */
   function scheduleValidation() {
+    // No debounce configured — validate right away rather than scheduling a
+    // zero-delay timer, which would still cost a tick for no reason.
     if (!props.debounce) {
       form.validateField(props.path)
       return
     }
 
+    // Restart the timer on every call so only the last input in a burst
+    // actually triggers validation.
     clearDebounce()
     debounceTimer = setTimeout(() => {
       form.validateField(props.path)
@@ -74,6 +81,9 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
 
   /** Marks touched and validates on blur when enabled. */
   function onBlur() {
+    // Blur should validate immediately regardless of any pending debounce
+    // from a prior input/change — cancel it so it can't fire a stale,
+    // redundant validation right after this one.
     clearDebounce()
     form.markFieldAsTouched(props.path)
 
@@ -90,6 +100,9 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
       return
     }
 
+    // Eager mode only revalidates while the field is already invalid — a
+    // valid field doesn't re-run on every keystroke, only once it needs to
+    // recover from an error.
     if (props.validationMode === 'eager' && !isValid.value) {
       scheduleValidation()
     }
@@ -130,11 +143,16 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
   // #region Lifecycle
 
   onMounted(async () => {
+    // Deferred a tick so `v-model`'s initial DOM sync has actually landed
+    // before validation reads the field's value — validating immediately on
+    // mount could otherwise run against a not-yet-settled value.
     await nextTick()
     onMount()
   })
 
   onUnmounted(() => {
+    // Prevents a pending debounced validation from firing (and touching a
+    // form instance) after the field's own component is already gone.
     clearDebounce()
   })
 

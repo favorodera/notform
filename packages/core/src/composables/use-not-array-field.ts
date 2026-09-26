@@ -47,12 +47,17 @@ export function useNotArrayField<
   /** Live array at `props.path`, or `[]` when the path is missing or not an array. */
   const arrayValue = computed<Array<unknown>>(() => {
     const value = getProperty(form.values, props.path)
+    // Falls back to `[]` rather than throwing/returning `undefined` so the
+    // field renders safely (zero items) even before the array exists on the
+    // form, or if something else set that path to a non-array value.
     return Array.isArray(value) ? value : []
   })
 
   /** Slot items: current index, stored key, and index-based path. */
   const items = computed<Array<NotArrayFieldItem<TSchema>>>(() => arrayValue.value.map((_, index) => ({
     index,
+    // `?? ''` guards a brief render where `arrayValue` has already grown but
+    // the `watch` below hasn't synced `itemKeys` to match yet.
     key: itemKeys.value[index] ?? '',
     path: `${props.path}.${index}` as Paths<TSchema>,
   })))
@@ -71,6 +76,9 @@ export function useNotArrayField<
    * they don't affect this — only the top-level `form.isValid` reflects them.
    */
   const isValid = computed(() => {
+    // "Valid" means *no* issue falls within scope — phrased as `.every`
+    // over a negation rather than `!.some(...)` for the same result, but
+    // reads as "every issue is either unrelated or pathless."
     return form.errors.every(issue => issue.path === undefined || !isPathWithinScope(issue.path, arrayPathSegments.value))
   })
 
@@ -98,6 +106,9 @@ export function useNotArrayField<
    * @returns A key that never repeats in this field instance.
    */
   function createItemKey() {
+    // A simple counter, not a random id or timestamp: uniqueness only needs
+    // to hold within this one field instance's lifetime, and a counter is
+    // deterministic and cheap.
     return `notform-array-item-${nextItemKeyId++}`
   }
 
@@ -106,6 +117,9 @@ export function useNotArrayField<
    * @param targetLength Desired key count.
    */
   function syncItemKeysToLength(targetLength: number) {
+    // Only reached for *external* length changes (e.g. `form.setValue`
+    // replacing the whole array) — our own mutation helpers below keep
+    // `itemKeys` in sync directly and never rely on this padding/trimming.
     while (itemKeys.value.length < targetLength) {
       itemKeys.value.push(createItemKey())
     }
@@ -130,6 +144,9 @@ export function useNotArrayField<
       return existingArray
     }
 
+    // Lazily materializes the array on first mutation (e.g. calling
+    // `append` before any value was ever set at this path) instead of
+    // requiring callers to pre-initialize it.
     const createdArray: Array<unknown> = []
     setProperty(form.values, props.path, createdArray)
     return createdArray
@@ -147,6 +164,9 @@ export function useNotArrayField<
       return
     }
 
+    // Clamp rather than reject an out-of-range `toIndex` — moving "to the
+    // end" is a common caller intent and shouldn't require them to compute
+    // `length - 1` themselves.
     const clampedToIndex = Math.max(0, Math.min(toIndex, target.length - 1))
     const [movedItem] = target.splice(fromIndex, 1)
     target.splice(clampedToIndex, 0, movedItem)
@@ -161,6 +181,8 @@ export function useNotArrayField<
    * @param value Item to append.
    */
   function append(value: InferInput<TItemSchema>) {
+    // No remap needed: every existing item keeps its index when adding to
+    // the end, so there's nothing for `remapArrayFieldState` to do here.
     getOrCreateArrayValue().push(value)
     itemKeys.value.push(createItemKey())
   }
@@ -173,6 +195,9 @@ export function useNotArrayField<
   function prepend(value: InferInput<TItemSchema>) {
     getOrCreateArrayValue().unshift(value)
     itemKeys.value.unshift(createItemKey())
+    // Every existing item shifted one position to the right — their
+    // touched/dirty/error state must move with them or it'll end up
+    // attached to the wrong item.
     remapArrayFieldState(form, props.path, previousIndex => previousIndex + 1)
   }
 
@@ -185,6 +210,8 @@ export function useNotArrayField<
   function insert(index: number, value: InferInput<TItemSchema>) {
     getOrCreateArrayValue().splice(index, 0, value)
     itemKeys.value.splice(index, 0, createItemKey())
+    // Only items at or after the insertion point shift forward — anything
+    // before `index` is unaffected and keeps its state as-is.
     remapArrayFieldState(form, props.path, previousIndex => (
       previousIndex >= index ? previousIndex + 1 : previousIndex
     ))
@@ -201,6 +228,9 @@ export function useNotArrayField<
     itemKeys.value.splice(index, 1)
 
     remapArrayFieldState(form, props.path, (previousIndex) => {
+      // Returning `undefined` here (rather than an index) is the signal
+      // `remapArrayFieldState` uses to drop this item's state entirely —
+      // it no longer has anywhere to move to.
       if (previousIndex === index) {
         return
       }
@@ -215,6 +245,8 @@ export function useNotArrayField<
    * @param value New item value.
    */
   function update(index: number, value: InferInput<TItemSchema>) {
+    // No key or state remap: the item's identity and position are unchanged,
+    // only its own value differs.
     getOrCreateArrayValue()[index] = value
   }
 
@@ -227,6 +259,9 @@ export function useNotArrayField<
   function swap(indexA: number, indexB: number) {
     const array = getOrCreateArrayValue();
 
+    // Array-destructuring swap keeps the value and its key changing in
+    // lockstep — doing this with temp variables risks the two arrays
+    // (`array` and `itemKeys.value`) drifting out of sync if edited separately.
     // eslint-disable-next-line unicorn/no-unreadable-array-destructuring
     [array[indexA], array[indexB]] = [array[indexB], array[indexA]];
 
@@ -242,6 +277,7 @@ export function useNotArrayField<
         return indexA
       }
 
+      // Every other index is untouched by a swap — nothing else moved.
       return previousIndex
     })
   }
@@ -256,17 +292,25 @@ export function useNotArrayField<
     moveArrayItem(getOrCreateArrayValue(), fromIndex, toIndex)
     moveArrayItem(itemKeys.value, fromIndex, toIndex)
 
+    // Unlike `swap`, a move shifts every item *between* the two positions
+    // by one — not just the two endpoints — because `splice` closes the gap
+    // left behind and opens one at the destination.
     remapArrayFieldState(form, props.path, (previousIndex) => {
       if (previousIndex === fromIndex) {
         return toIndex
       }
 
       if (fromIndex < toIndex) {
+        // Moving forward (e.g. 1 → 4): everything strictly after the old
+        // position and up to (inclusive) the new one slides back by one to
+        // fill the gap the moved item left behind.
         return previousIndex > fromIndex && previousIndex <= toIndex
           ? previousIndex - 1
           : previousIndex
       }
 
+      // Moving backward (e.g. 4 → 1): everything from the new position up
+      // to (exclusive) the old one slides forward by one to make room.
       return previousIndex >= toIndex && previousIndex < fromIndex
         ? previousIndex + 1
         : previousIndex
@@ -280,6 +324,11 @@ export function useNotArrayField<
   watch(
     () => arrayValue.value.length,
     (arrayLength) => {
+      // Guards against redundant work: every mutation helper above already
+      // keeps `itemKeys` in sync directly, so by the time this watcher runs
+      // the lengths usually already match — this only actually does
+      // anything for an *external* change (e.g. `form.setValue` swapping in
+      // a whole new array) that bypassed those helpers.
       if (itemKeys.value.length === arrayLength) {
         return
       }

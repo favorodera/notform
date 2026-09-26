@@ -9,7 +9,13 @@ export type ValidationTrigger = 'onBlur' | 'onChange' | 'onInput' | 'onMount'
  * @template TData Source data type.
  */
 export type DeepPartial<TData> = PartialDeep<TData, {
+  // Without this, an array item can only be omitted at its own slot, not
+  // set to `undefined` in place — needed since a partial array field's
+  // baseline (e.g. reset values) may legitimately have holes.
   allowUndefinedInNonTupleArrays: true
+  // Without this, `PartialDeep` stops at the array boundary and leaves
+  // array element types untouched — array items need to be partial too
+  // (e.g. a partial object inside a `tags: Group[]` baseline).
   recurseIntoArrays: true
 }>
 

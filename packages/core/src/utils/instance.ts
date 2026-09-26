@@ -7,6 +7,10 @@ import type { ObjectSchema } from '../types/shared'
  * Injection key for the full {@linkcode NotFormInstance}.
  * @internal
  */
+// Untyped `any` here (rather than a schema-generic key) since a single
+// injection key is shared across every `<NotForm>` regardless of its
+// schema — the real per-call type safety comes from the generic on
+// `provide`/`inject` at each call site, not from this key itself.
 export const NOT_FORM_INSTANCE_KEY: InjectionKey<NotFormInstance<any>> = Symbol('notform:instance')
 
 /**
@@ -28,8 +32,14 @@ export function provideNotFormInstance<TSchema extends ObjectSchema>(instance: N
  * @param form Public API or full instance.
  * @returns The full instance.
  */
+// Two overloads (required in, required out / optional in, optional out) so
+// callers passing a definite `form` don't get an `| undefined` forced on
+// them, while `useNotFormInstance`'s optional `explicitInstance` still works.
 export function toNotFormInstance<TSchema extends ObjectSchema>(form: NotFormAPI<TSchema> | NotFormInstance<TSchema>): NotFormInstance<TSchema>
 export function toNotFormInstance<TSchema extends ObjectSchema>(form?: NotFormAPI<TSchema> | NotFormInstance<TSchema>): NotFormInstance<TSchema> | undefined
 export function toNotFormInstance<TSchema extends ObjectSchema>(form?: NotFormAPI<TSchema> | NotFormInstance<TSchema>): NotFormInstance<TSchema> | undefined {
+  // No actual conversion at runtime: `NotFormAPI` is just a `Pick` view over
+  // `NotFormInstance`, and the object `useNotForm` hands out is always the
+  // full instance underneath — the cast only satisfies the type checker.
   return form as unknown as NotFormInstance<TSchema> | undefined
 }
