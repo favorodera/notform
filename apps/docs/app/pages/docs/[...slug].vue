@@ -40,6 +40,12 @@ const tocFooterLinks = computed<PageLink[]>(() => [
     to: 'https://github.com/favorodera/notform',
   },
   {
+    icon: 'tabler:history',
+    label: 'Changelog',
+    target: '_blank',
+    to: 'https://github.com/favorodera/notform/releases',
+  },
+  {
     class: 'font-semibold text-pink-400 hover:text-pink-500',
     icon: 'tabler:heart',
     label: 'Sponsor this project',

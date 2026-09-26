@@ -22,12 +22,6 @@ const navigationMenuItems = [
     label: 'Playground',
     to: '/playground',
   },
-  // {
-  //   active: route.path.startsWith('/changelog'),
-  //   icon: 'tabler:history',
-  //   label: 'Changelog',
-  //   to: '/changelog',
-  // },
 ]
 </script>
 
