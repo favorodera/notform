@@ -20,8 +20,16 @@ const code = computed(() => {
     return `> **Error**: File \`${props.file}\` not found.`
   }
 
-  // Wrap in markdown code block for highlighting
-  return `\`\`\`vue \n${content.trim()}\n\`\`\``
+  // Wrap in markdown code block for highlighting, with a disclaimer
+  // about demo-only dependencies that aren't part of NotForm itself.
+  return `::note{class="rounded-none border-muted"}
+This demo uses [Nuxt UI](https://ui.nuxt.com) components (\`Button\`, \`Switch\`, \`useToast\`) and \`data-demo-*\` attributes for this documentation site's own styling and interactions. Neither is required by NotForm — copy the \`NotForm\`/\`NotField\`/\`NotArrayField\`/\`NotMessage\` usage and replace the rest with your own markup and components.
+::
+
+\`\`\`vue
+${content.trim()}
+\`\`\`
+`
 })
 </script>
 

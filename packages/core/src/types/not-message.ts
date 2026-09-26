@@ -1,30 +1,31 @@
 import type { Component } from 'vue'
-import type { NotFormInstance } from './not-form'
+import type { NotFormAPI } from './not-form-api'
+import type { ObjectSchema, Paths } from './shared'
 
-/** Props for the `NotMessage` component. */
-export interface NotMessageProps {
+/**
+ * Props for `<NotMessage>`.
+ * @template TSchema The form schema.
+ */
+export interface NotMessageProps<TSchema extends ObjectSchema> {
   /**
-   * HTML Tag or component to render as
-   * @default span
+   * Root element or component. When a component is given, the message is
+   * passed to it as **default slot content**, not as a prop — a component
+   * expecting a `message` prop instead will render with no visible text.
+   * @default 'span'
    */
   as?: Component | string
 
-  /** The name/path of the field whose error message should be displayed */
-  path: string
+  /** Field path whose first error message is shown. */
+  path: Paths<TSchema>
 
-  /**
-   * Explicit form instance override.
-   * Takes priority over the instance provided by a `NotForm` ancestor.
-   * Required when using `NotMessage` outside of a `NotForm`.
-   */
-  form?: NotFormInstance<any>
+  /** Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`. */
+  form?: NotFormAPI<TSchema>
 }
 
-/** Slots for the `NotMessage` component. */
+/** Slot props for `<NotMessage>`. */
 export interface NotMessageSlots {
-  /** The default slot receives the error message context for custom rendering */
   default?: (props: {
-    /** The first active validation error message for the specified field */
+    /** First active error message for `path`. */
     message?: string
-  }) => any
+  }) => void
 }

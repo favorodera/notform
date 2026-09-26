@@ -4,7 +4,6 @@
     "dbaeumer.vscode-eslint",
     "streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries",
     "usernamehw.errorlens",
-    "Vue.volar",
-    "Nuxt.mdc"
+    "Vue.volar"
   ]
 }

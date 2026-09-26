@@ -1,106 +1,63 @@
-import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { NotFormInstance } from './not-form'
-import type { ObjectSchema, ValidationTrigger } from './shared'
+import type { ExcludeStrict } from 'type-fest'
+import type { NotFormAPI } from './not-form-api'
+import type { Issue, ObjectSchema, Paths, ValidationTrigger } from './shared'
 
-/** Props for the `NotField` component. */
-export interface NotFieldProps {
-  /** Dot-separated path to this field within the form values. */
-  path: string
+/**
+ * Props for `<NotField>`.
+ * @template TSchema The form schema.
+ */
+export interface NotFieldProps<TSchema extends ObjectSchema> {
+  /** Dot path of this field. */
+  path: Paths<TSchema>
+
+  /** Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`. */
+  form?: NotFormAPI<TSchema>
 
   /**
-   * Explicit form instance override.
-   * Takes priority over the instance provided by a `NotForm` ancestor.
-   * Required when using `NotField` outside of a `NotForm`.
-   */
-  form?: NotFormInstance<any>
-
-  /**
-   * Per-field validation trigger overrides.
-   * Merged over the form-wide `validateOn` — only the keys you specify are overridden.
+   * Validation triggers merged over `{ onBlur: true, onChange: true }`.
+   *
+   * `onMount` is also a valid trigger here, even though it has no matching
+   * entry in `events` slot prop — there's no DOM event to bind for "the field
+   * just appeared," so it runs automatically, once, when the field mounts.
+   * @default { onBlur: true, onChange: true }
    */
   validateOn?: Partial<Record<ValidationTrigger, boolean>>
 
   /**
-   * Debounce delay in milliseconds for input- and change-triggered validation.
-   *
-   * When set, validation is deferred until the user stops typing for the given
-   * duration. Only the final call within the window runs — earlier ones are
-   * cancelled. Useful for async validators (e.g. username availability checks)
-   * where firing on every keystroke would cause excessive requests.
-   *
-   * Blur- and submit-triggered validation always runs immediately, regardless
-   * of this setting, so the field never feels unresponsive when the user leaves.
-   *
-   * Omit or set to `0` to disable debouncing (default behaviour).
+   * `lazy` — blur/submit only. `eager` — also revalidate on change/input while invalid.
+   * @default 'eager'
    */
+  validationMode?: 'eager' | 'lazy'
+
+  /** Debounce in ms for input/change validation. Blur always runs immediately. */
   debounce?: number
 }
 
-/**
- * Slots for the `NotField` component.
- * @template TSchema The form schema.
- */
-export interface NotFieldSlots<TSchema extends ObjectSchema> {
-  /** The default slot receives the full field state and event handlers. */
+/** Slot props for `<NotField>`. */
+export interface NotFieldSlots {
   default?: (props: {
-    /** The dot-separated path to this field. */
-    path: string
+    /** Issues for this field path. */
+    errors: Array<Issue>
 
     /**
-     * The current value of this field — read-only snapshot for display purposes.
-     * Do not mutate directly or use with `v-model`.
-     * For two-way binding use `v-model="form.values.fieldName"` instead.
+     * Handlers to bind to the input. `onMount` is deliberately excluded —
+     * see the note on `validateOn` prop for why.
      */
-    value: any
+    events: Record<ExcludeStrict<ValidationTrigger, 'onMount'>, () => void>
 
-    /** All validation issues for this field from the last validation run. */
-    errors: Array<StandardSchemaV1.Issue>
-
-    /** Whether this field currently has no validation errors. */
-    isValid: boolean
-
-    /** Whether the user has interacted with this field, or the form has been submitted. */
-    isTouched: boolean
-
-    /** Whether this field's current value differs from its initial value. */
+    /** Whether the value differs from the baseline. */
     isDirty: boolean
 
-    /** Whether an async validator is currently running for this field. */
+    /** Whether the user has interacted with this field. */
+    isTouched: boolean
+
+    /** Whether this field has no issues. */
+    isValid: boolean
+
+    /** Whether this field is currently validating. */
     isValidating: boolean
 
-    /**
-     * Manually triggers validation for this field.
-     * Useful for custom inputs that manage their own interaction events.
-     * @returns A promise that resolves to the result of the validation.
-     */
-    validate: () => ReturnType<NotFormInstance<TSchema>['validateField']>
-
-    /**
-     * Native DOM event handlers exposed by a field.
-     * Spread onto a native input or bind individually to custom components.
-     * @example
-     * ```vue
-     * <template>
-     *   <!-- spread -->
-     *   <input v-bind="events" />
-     *
-     *   <!-- individual -->
-     *   <CustomCombobox v-on:focusout="events.onBlur" v-on:pick="events.onChange" />
-     * </template>
-     * ```
-     */
-    events: {
-      /** Triggered when the field loses focus. */
-      onBlur: () => void
-
-      /** Triggered on every keystroke or value change. */
-      onInput: () => void
-
-      /** Triggered when the field value is committed. */
-      onChange: () => void
-
-      /** Triggered when the field gains focus. */
-      onFocus: () => void
-    }
-  }) => any
+    /** Dot path of this field. */
+    path: string
+  }) => void
 }

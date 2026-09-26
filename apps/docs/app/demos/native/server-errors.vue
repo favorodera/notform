@@ -4,7 +4,6 @@ import { z } from 'zod'
 const toast = useToast()
 
 const form = useNotForm({
-  initialValues: { email: '' },
   onSubmit: async (values) => {
     // Simulate a server 409 — email taken
     await new Promise((resolve) => {
@@ -67,7 +66,7 @@ const form = useNotForm({
     >
       <Button
         type="reset"
-        :disabled="form.isSubmitting.value"
+        :disabled="form.isSubmitting"
         block
         variant="soft"
         label="Reset"
@@ -76,9 +75,9 @@ const form = useNotForm({
       <Button
         type="submit"
         block
-        :disabled="form.isSubmitting.value"
-        :loading="form.isSubmitting.value"
-        :label="form.isSubmitting.value ? 'Submitting...' : 'Submit'"
+        :disabled="form.isSubmitting"
+        :loading="form.isSubmitting"
+        :label="form.isSubmitting ? 'Submitting...' : 'Submit'"
       />
     </div>
   </NotForm>

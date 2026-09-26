@@ -9,10 +9,6 @@ contact_links:
     url: https://github.com/favorodera/notform/discussions
     about: Ask questions and discuss ideas
 
-  - name: Core Playground
-    url: https://stackblitz.com/edit/notform
-    about: Experiment with NotForm Core in an interactive playground
-
-  - name: Nuxt Module Playground
-    url: https://stackblitz.com/edit/notform-nuxt
-    about: Experiment with the NotForm Nuxt Module in an interactive playground
+  - name: Playground
+    url: https://notformdocs.vercel.app/playground
+    about: Build, reproduce, and share Vue 3 NotForm examples in the browser

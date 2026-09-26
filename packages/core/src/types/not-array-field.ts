@@ -1,134 +1,146 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { NotFormInstance } from './not-form'
-import type { ObjectSchema, ValidationTrigger } from './shared'
+import type { NotFormAPI } from './not-form-api'
+import type { InferInput, Issue, ObjectSchema, Paths } from './shared'
 
 /**
- * Props for the `NotArrayField` component.
- * @template TItemSchema The schema for a single array item.
+ * One array item from `<NotArrayField>`'s default slot.
+ * @template TSchema The form schema.
  */
-export interface NotArrayFieldProps<TItemSchema extends StandardSchemaV1 = StandardSchemaV1> {
-  /** Dot-separated path to the array within the form values. */
-  path: string
+export interface NotArrayFieldItem<TSchema extends ObjectSchema> {
+  /** Stable identity for `v-for` `:key`. Independent of the current index. */
+  key: string
+
+  /** Dot path of this item at its **current** index. */
+  path: Paths<TSchema>
+
+  /** Current position in the array. */
+  index: number
+}
+
+/**
+ * Props for `<NotArrayField>`.
+ * @template TSchema The form schema.
+ * @template TItemSchema Item schema used only to type mutation helpers.
+ */
+export interface NotArrayFieldProps<TSchema extends ObjectSchema, TItemSchema extends StandardSchemaV1 = StandardSchemaV1> {
+  /** Dot path of the array field. */
+  path: Paths<TSchema>
 
   /**
-   * Schema for a single array item — used purely for type inference.
-   * Enables typed `append`, `prepend`, `insert`, and `update` methods in the slot.
+   * Item schema for type inference only; never read at runtime. Does not
+   * validate items — array items are still validated through the form's
+   * own schema, the same as any other field.
    */
   itemSchema?: TItemSchema
 
-  /**
-   * Explicit form instance override.
-   * Takes priority over the instance provided by a `NotForm` ancestor.
-   * Required when using `NotArrayField` outside of a `NotForm`.
-   */
-
-  form?: NotFormInstance<any>
-
-  /**
-   * Per-field validation trigger overrides applied to the array as a whole.
-   * Merged over the form-wide `validateOn` — only the keys you specify are overridden.
-   */
-  validateOn?: Partial<Record<Extract<ValidationTrigger, 'onChange' | 'onMount'>, boolean>>
-}
-
-/** Represents a single item in the array field. */
-export interface NotArrayFieldItem {
-  /** Stable key used for looping — does not change when items are reordered. */
-  key: string
-
-  /** Current index of this item in the array. */
-  index: number
-
-  /** Full dot-separated path to this item — pass directly to `NotField`. */
-  path: string
+  /** Form instance. Overrides `<NotForm>` inject. Required outside `<NotForm>`. */
+  form?: NotFormAPI<TSchema>
 }
 
 /**
- * Slots for the `NotArrayField` component.
+ * Slot props for `<NotArrayField>`.
  * @template TSchema The form schema.
- * @template TItem An array field item.
+ * @template TItemSchema Item schema used only to type mutation helpers.
  */
-export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItem = any> {
-  /** The default slot receives the full array state and manipulation methods. */
-  default: (props: {
-  /** The dot-separated path to this array field. */
+export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItemSchema extends StandardSchemaV1 = StandardSchemaV1> {
+  default?: (props: {
+    /** Dot path of the array field. */
     path: string
 
-    /** The array items with stable keys and paths. */
-    items: Array<NotArrayFieldItem>
+    /** Current items, each with a stable key and current path. */
+    items: Array<NotArrayFieldItem<TSchema>>
 
-    /** All validation issues for this array field from the last validation run. */
-    errors: Array<StandardSchemaV1.Issue>
+    /**
+     * Issues reported exactly at the array field's own path — not issues
+     * from individual items.
+     *
+     * The same exact-match behavior as `<NotField>`'s `errors`.
+     *
+     * See {@linkcode isValid} for the aggregate that also accounts for item-level issues.
+     */
+    errors: Array<Issue>
 
-    /** Whether this array field currently has no validation errors. */
+    /**
+     * Whether the array field's own path, and every path nested underneath
+     * it, have no issues — an item's own value, a field inside an object
+     * item, or an item inside a nested array, at any depth.
+     *
+     * Unlike {@linkcode errors}, this recurses.
+     */
     isValid: boolean
 
     /**
-     * Whether any item in this array has been touched.
-     * Derived from the form's `touchedFields` set.
+     * Whether the array field's own path, or any path nested underneath it, has been touched.
+     *
+     * Recurses the same way as {@linkcode isValid}.
      */
     isTouched: boolean
 
     /**
-     * Whether any item in this array differs from its initial value.
-     * Derived from the form's `dirtyFields` set.
+     * Whether the array field's own path, or any path nested underneath it, differs from the baseline.
+     *
+     * Recurses the same way as {@linkcode isValid}.
      */
     isDirty: boolean
 
-    /** Whether validation is currently running for this array field. */
+    /**
+     * Whether the array field's own path, or any path nested underneath it, is currently validating.
+     *
+     * Recurses the same way as {@linkcode isValid}.
+     */
     isValidating: boolean
 
     /**
-     * Manually triggers validation for this array field.
-     * Useful when mutations are performed programmatically outside of the normal flow.
-     * @returns A promise that resolves to the result of the validation.
+     * Appends a value at the end.
+     * @param value Value to append.
      */
-    validate: () => ReturnType<NotFormInstance<TSchema>['validateField']>
+    append: (value: InferInput<TItemSchema>) => void
 
     /**
-     * Appends a new item to the end of the array.
-     * @param value The value to append.
+     * Inserts a value at the start. Shifts every existing item's own
+     * state — at any depth underneath it — forward by one position along
+     * with it.
+     * @param value Value to prepend.
      */
-    append: (value: TItem) => void
+    prepend: (value: InferInput<TItemSchema>) => void
 
     /**
-     * Prepends a new item to the beginning of the array.
-     * @param value The value to prepend.
+     * Inserts a value at `index`, shifting later items — and their own
+     * state, at any depth underneath them — back by one position.
+     * @param index Insertion index.
+     * @param value Value to insert.
      */
-    prepend: (value: TItem) => void
+    insert: (index: number, value: InferInput<TItemSchema>) => void
 
     /**
-     * Removes the item at the given index.
-     * @param index The index of the item to remove.
+     * Removes the item at `index`. That item's own state — at any depth
+     * underneath it — is discarded along with it; every later item's state
+     * shifts back by one position to follow it to its new index.
+     * @param index Index to remove.
      */
     remove: (index: number) => void
 
     /**
-     * Inserts a new item at the given index, shifting subsequent items forward.
-     * @param index The index to insert the item at.
-     * @param value The value to insert.
+     * Replaces the value at `index` without changing its key.
+     * @param index Index to update.
+     * @param value New value.
      */
-    insert: (index: number, value: TItem) => void
+    update: (index: number, value: InferInput<TItemSchema>) => void
 
     /**
-     * Replaces the value at the given index.
-     * @param index The index of the item to replace.
-     * @param value The value to replace with.
-     */
-    update: (index: number, value: TItem) => void
-
-    /**
-     * Swaps the positions of two items in the array.
-     * @param indexA The index of the first item.
-     * @param indexB The index of the second item.
+     * Swaps two items, moving keys and form state — at any depth
+     * underneath each item — with them.
+     * @param indexA First index.
+     * @param indexB Second index.
      */
     swap: (indexA: number, indexB: number) => void
 
     /**
-     * Moves an item from one index to another, shifting items between them.
-     * @param from The current index of the item.
-     * @param to The target index.
+     * Moves an item from `from` to `to`, moving keys and form state — at
+     * any depth underneath it — with it.
+     * @param from Current index.
+     * @param to Destination index.
      */
     move: (from: number, to: number) => void
-  }) => any
+  }) => void
 }

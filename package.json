@@ -22,7 +22,7 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "pnpm lint:root && turbo lint",
-    "lint:root": "eslint . --fix --ignore-pattern 'packages/*' --ignore-pattern 'playgrounds/*' --ignore-pattern 'apps/*'",
+    "lint:root": "eslint . --fix --ignore-pattern 'packages/*' --ignore-pattern 'apps/*'",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "test:watch": "turbo test:watch",
@@ -32,11 +32,11 @@
     "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "devDependencies": {
-    "@favorodera/eslint-config": "catalog:tools",
-    "@types/node": "catalog:tools",
-    "eslint": "catalog:tools",
-    "relizy": "catalog:tools",
-    "turbo": "catalog:tools",
-    "typescript": "catalog:tools"
+    "@favorodera/eslint-config": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "relizy": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
   }
 }

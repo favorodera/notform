@@ -52,17 +52,17 @@
   },
   "peerDependencies": {
     "notform": "workspace:*",
-    "nuxt": "catalog:peer"
+    "nuxt": "^4.5.0"
   },
   "dependencies": {
-    "@nuxt/kit": "catalog:vendor",
+    "@nuxt/kit": "catalog:",
     "notform": "workspace:*"
   },
   "devDependencies": {
-    "@favorodera/eslint-config": "catalog:tools",
-    "@nuxt/module-builder": "catalog:tools",
-    "@nuxt/schema": "catalog:tools",
-    "nuxt": "catalog:peer",
-    "vue-tsc": "catalog:tools"
+    "@favorodera/eslint-config": "catalog:",
+    "@nuxt/module-builder": "catalog:",
+    "@nuxt/schema": "catalog:",
+    "nuxt": "catalog:",
+    "vue-tsc": "catalog:"
   }
 }

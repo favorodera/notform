@@ -1,26 +1,12 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import type { PartialDeep, Paths as TypeFestPaths } from 'type-fest'
 
-/**
- * The validation mode determines when validation occurs.
- * - `lazy`: Validates on blur or submission.
- * - `eager`: Validates on blur, then on every change if an error exists.
- */
-export type ValidationMode = 'eager' | 'lazy'
+/** Events that can trigger field validation. */
+export type ValidationTrigger = 'onBlur' | 'onChange' | 'onInput' | 'onMount'
 
 /**
- * Interaction events that can trigger a validation check for a field.
- * - onBlur: Trigger validation when the field loses focus.
- * - onChange: Trigger validation when the field value is committed.
- * - onInput: Trigger validation on every keystroke.
- * - onMount: Trigger validation when the field is mounted.
- * - onFocus: Trigger validation when the field gains focus.
- */
-export type ValidationTrigger = 'onBlur' | 'onChange' | 'onFocus' | 'onInput' | 'onMount'
-
-/**
- * Constructs a type where all properties of the input type are optional recursively.
- * @template TData The base data structure to transform.
+ * Recursively optional version of `TData`, including array items.
+ * @template TData Source data type.
  */
 export type DeepPartial<TData> = PartialDeep<TData, {
   allowUndefinedInNonTupleArrays: true
@@ -28,14 +14,40 @@ export type DeepPartial<TData> = PartialDeep<TData, {
 }>
 
 /**
- * Constructs a type representing all possible dot-separated paths within an object.
- * @template TReference The object type for which to generate paths.
+ * Input type accepted by a Standard Schema.
+ * @template TSchema Validation schema.
  */
-export type Paths<TReference> = Extract<TypeFestPaths<TReference, { maxRecursionDepth: 10 }>, string> | (string & {})
+export type InferInput<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferInput<TSchema>
 
 /**
- * Represents a validation schema for object-based data structures.
- * Complies with the Standard Schema specification.
+ * Output type produced by a Standard Schema.
+ * @template TSchema Validation schema.
+ */
+export type InferOutput<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferOutput<TSchema>
+
+/** One issue from a Standard Schema validation run. */
+export type Issue = StandardSchemaV1.Issue
+
+/**
+ * Dot-notated field paths derived from a schema's input type.
+ *
+ * The `| (string & {})` union member is deliberate: it keeps editor
+ * autocomplete suggesting the schema's real paths, while still letting any
+ * arbitrary string through the type checker — needed because a dynamically
+ * built path (e.g. `` `${item.path}.name` ``) can't always be proven to match
+ * the literal union `TypeFestPaths` computes.
+ * @template TSchema Validation schema.
+ */
+export type Paths<TSchema extends StandardSchemaV1> = Extract<TypeFestPaths<InferInput<TSchema>, { maxRecursionDepth: 10 }>, string> | (string & {})
+
+/**
+ * Standard Schema constrained to object input.
+ *
+ * The `~standard.types.input` check exists purely at the type level, so that
+ * `useNotForm`'s `TSchema` is only inferred when the schema's input type is
+ * actually an `object` — this is what makes passing a non-object schema
+ * (e.g. `z.string()`) a compile-time error rather than a runtime surprise.
+ * @see {@linkcode https://github.com/standard-schema/standard-schema Standard Schema spec}
  */
 export type ObjectSchema = StandardSchemaV1 & {
   '~standard': StandardSchemaV1['~standard'] & {
@@ -46,20 +58,20 @@ export type ObjectSchema = StandardSchemaV1 & {
 }
 
 /**
- * Represents a segment of a validation path.
- * It can be either a string (for object properties) or a number (for array indices).
+ * One segment of a validation issue path: a property key or `{ key }`.
  */
-export type Segment = PropertyKey | StandardSchemaV1.PathSegment
+export type PathSegment = PropertyKey | StandardSchemaV1.PathSegment
 
 /**
- * Maps the index an array item occupied before a mutation to the index it
- * occupies after that mutation, or to `undefined` when the mutation removed the
- * item entirely.
- *
- * Each array mutation in `NotArrayField` (`prepend`, `remove`, `insert`,
- * `swap`, `move`) builds one of these to describe exactly how it reshuffles
- * indices, then passes it to `remapArrayFieldState`.
- * @param previousIndex The index the item occupied before the mutation.
- * @returns The index the item occupies after the mutation, or `undefined` if the item was removed.
+ * Maps a previous array item index to its new index, or `undefined` if removed.
+ * @internal
+ * @param previousIndex Index before the mutation.
+ * @returns Index after the mutation, or `undefined` if the item was removed.
  */
 export type ArrayItemIndexMap = (previousIndex: number) => number | undefined
+
+/**
+ * Path segment accepted by `dot-prop` (`parsePath` / `stringifyPath`).
+ * @internal
+ */
+export type DotPropPathSegment = number | string
