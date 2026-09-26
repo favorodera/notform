@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'playground',
+})
+
 const appConfig = useAppConfig()
 const route = useRoute()
 
@@ -17,7 +21,13 @@ defineOgImage('Image.takumi', { ...seo })
 </script>
 
 <template>
-  <div class="py-2 block-[95%] inline-full">
+  <Main>
+    <h1
+      class="sr-only"
+    >
+      NotForm Playground
+    </h1>
+
     <ClientOnly>
       <PlaygroundEditor />
 
@@ -40,5 +50,5 @@ defineOgImage('Image.takumi', { ...seo })
         </div>
       </template>
     </ClientOnly>
-  </div>
+  </Main>
 </template>

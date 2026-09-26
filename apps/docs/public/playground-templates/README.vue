@@ -9,7 +9,7 @@
  * Supports:
  * - Vue 3 SFCs with TypeScript
  * - Monaco editor with Vue language tooling
- * - Live preview with Tailwind CSS
+ * - Live preview with Tailwind CSS and shadcn-vue color tokens
  * - NotForm core: useNotForm, NotForm, NotField, NotArrayField, NotMessage
  * - Zod via the built-in import map
  * - Editable import maps for browser/CDN dependencies

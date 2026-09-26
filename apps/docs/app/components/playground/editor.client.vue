@@ -1,5 +1,5 @@
 <script lang="ts">
-import defaultVue from '../../../public/playground-templates/default.vue?raw'
+import appVue from '../../../public/playground-templates/app.vue?raw'
 import readmeVue from '../../../public/playground-templates/README.vue?raw'
 import tailwindCSS from '../../../public/playground-templates/tailwind.css?raw'
 </script>
@@ -7,12 +7,17 @@ import tailwindCSS from '../../../public/playground-templates/tailwind.css?raw'
 <!-- eslint-disable no-useless-escape -->
 <script setup lang="ts">
 import type * as monaco from 'monaco-editor-core'
-import { Repl, type SFCOptions, useStore, useVueImportMap } from '@vue/repl'
+import { Repl, useStore, useVueImportMap } from '@vue/repl'
 import MonacoEditor from '@vue/repl/monaco-editor'
 import '@vue/repl/style.css'
-import { breakpointsTailwind, useBreakpoints, useClipboard, useLocalStorage } from '@vueuse/core'
+import { breakpointsTailwind, useBreakpoints, useClipboard, useLocalStorage, useShare } from '@vueuse/core'
 
-const savedRouteHash = useLocalStorage('notform-playground-route-hash', '')
+const savedRouteHash = useLocalStorage(
+  'notform-playground-route-hash',
+  '',
+)
+
+const initialRouteHash = location.hash || savedRouteHash.value || ''
 
 const colorMode = useColorMode()
 const theme = computed(() => (colorMode.value === 'dark' ? 'dark' : 'light'))
@@ -20,21 +25,15 @@ const theme = computed(() => (colorMode.value === 'dark' ? 'dark' : 'light'))
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const replLayout = computed(() => (breakpoints.smaller('lg').value ? 'vertical' : 'horizontal'))
 
-// If the URL has a hash (e.g. an explicitly shared link), it takes priority.
-// Otherwise fall back to the last saved local session.
-const initialRouteHash = location.hash || (savedRouteHash.value
-  ? `#${savedRouteHash.value.replace(/^#/, '')}`
-  : '')
-
-// If we loaded from a URL hash, make sure localStorage reflects it right away,
-// so a later plain visit (no hash) restores this rather than a stale save.
-if (location.hash) {
-  savedRouteHash.value = location.hash
-}
-
 const clipboard = useClipboard({
   legacy: true,
   source: () => location.href,
+})
+
+const share = useShare({
+  text: 'Check out this form with validation implementation with NotForm!',
+  title: 'NotForm Playground',
+  url: location.href,
 })
 
 const vueImportMap = useVueImportMap({
@@ -56,30 +55,13 @@ const previewOptions = {
     '<script>window.__VUE_PROD_DEVTOOLS__=false<\/script>',
     '<link rel="preconnect" href="https://fonts.googleapis.com">',
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
-    '<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&family=Geist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">',
+    '<link href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">',
     '<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>',
     `<style type="text/tailwindcss">${tailwindCSS}</style>`,
     '<style>body { font-family: var(--font-sans); }</style>',
     '<style>#app { isolation: isolate; }</style>',
   ].join(''),
 }
-
-const sfcOptions = computed<SFCOptions>(() => ({
-  script: {
-    inlineTemplate: vueImportMap.productionMode.value,
-    isProd: vueImportMap.productionMode.value,
-    propsDestructure: true,
-  },
-  style: {
-    isProd: vueImportMap.productionMode.value,
-  },
-  template: {
-    compilerOptions: {
-      isCustomElement: (tag: string) => tag === 'mjx-container' || tag.startsWith('custom-'),
-    },
-    isProd: vueImportMap.productionMode.value,
-  },
-}))
 
 const monacoOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   automaticLayout: true,
@@ -90,113 +72,82 @@ const monacoOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   tabSize: 2,
 }
 
-const replStore = useStore({
-  builtinImportMap,
-  outputMode: ref('preview'),
-  sfcOptions,
-  showOutput: ref(false),
-  typescriptVersion: ref('6.0.3'),
-  vueVersion: vueImportMap.vueVersion,
-}, initialRouteHash)
-
-/**
- * Resets the playground to its default state.
- * Clears the URL hash and saved localStorage state to prevent restoring
- * the code from either source.
- */
-function resetToDefault() {
-  replStore.setFiles({ 'README.vue': readmeVue, 'src/App.vue': defaultVue }, 'src/App.vue')
-
-  savedRouteHash.value = ''
-
-  if (location.hash) {
-    history.replaceState({}, '', location.pathname)
-  }
+const defaultFiles = {
+  'README.vue': readmeVue,
+  'src/App.vue': appVue,
 }
 
-const hasInitialRouteHash = !!initialRouteHash
+const replStore = useStore(
+  {
+    builtinImportMap,
+    outputMode: ref('preview'),
+    showOutput: ref(false),
+    typescriptVersion: ref('6.0.3'),
+    vueVersion: vueImportMap.vueVersion,
+  },
+  initialRouteHash,
+)
 
-if (!hasInitialRouteHash) {
-  replStore.setFiles({ 'README.vue': readmeVue, 'src/App.vue': defaultVue }, 'src/App.vue')
+if (!initialRouteHash) {
+  replStore.setFiles(defaultFiles, 'src/App.vue')
 }
-
-const areThereChanges = ref(hasInitialRouteHash)
 
 watchEffect(() => {
-  const serializedStore = replStore.serialize()
-
-  const isDefaultStoreState = !hasInitialRouteHash && replStore.getFiles()['App.vue']?.trimEnd() === defaultVue.trimEnd()
-  areThereChanges.value = !isDefaultStoreState
-
-  if (isDefaultStoreState) {
-    if (location.hash) {
-      history.replaceState({}, '', location.pathname)
-    }
-
-    savedRouteHash.value = ''
-    return
-  }
-
-  history.replaceState({}, '', serializedStore)
-  savedRouteHash.value = serializedStore
+  savedRouteHash.value = replStore.serialize()
 })
 </script>
 
 <template>
   <div
     class="
-      flex flex-col overflow-hidden rounded-xl border border-default bg-default
-      shadow-xs shadow-neutral-800 block-full inline-full
+      grid grid-cols-1 grid-rows-[auto_1fr] overflow-hidden block-full
+      inline-full
     "
   >
     <div
       class="
-        flex shrink-0 items-center justify-between gap-2 border-be
-        border-default bg-muted/30 px-4 py-2
+        flex shrink-0 items-center justify-end gap-1 overflow-x-auto border-be
+        border-default px-2 block-10
+
+        md:px-3
       "
     >
-      <h1
-        class="text-xs font-semibold tracking-wider text-highlighted uppercase"
-      >
-        NotForm Playground
-      </h1>
+      <Button
+        icon="tabler:rotate"
+        variant="ghost"
+        label="Reset"
+        size="sm"
+        @click="replStore.setFiles(defaultFiles, 'src/App.vue')"
+      />
 
-      <div class="flex items-center gap-2">
-        <Button
-          icon="tabler:rotate"
-          label="Reset"
-          variant="outline"
-          size="sm"
-          @click="resetToDefault"
-        />
-
-        <Button
-          :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:share'"
-          :label="clipboard.copied.value ? 'Copied!' : 'Share'"
-          variant="outline"
-          size="sm"
-          @click="clipboard.copy()"
-        />
-      </div>
-    </div>
-
-    <div class="relative flex flex-1 flex-col inline-full min-block-0">
-      <Repl
-        :store="replStore"
-        :editor="MonacoEditor"
-        :theme="theme"
-        :layout="replLayout"
-        :show-compile-output="false"
-        :show-ts-config="false"
-        :show-import-map="true"
-        :clear-console="false"
-        :auto-resize="true"
-        :editor-options="{ monacoOptions, autoSaveText: false,showErrorText:false }"
-        :preview-options="previewOptions"
-        preview-theme
-        class="flex-1! block-full! inline-full!"
+      <Button
+        :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:link'"
+        :label="clipboard.copied.value ? 'Copied' : 'Share'"
+        variant="ghost"
+        size="sm"
+        @click="clipboard.copy()"
       />
     </div>
+
+    <Repl
+      :store="replStore"
+      :editor="MonacoEditor"
+      :theme="theme"
+      :layout="replLayout"
+      :show-compile-output="false"
+      :show-ts-config="false"
+      :show-import-map="true"
+      :clear-console="false"
+      :auto-resize="true"
+      :editor-options="{
+        monacoOptions,
+        autoSaveText: false,
+        showErrorText: false,
+      }"
+      :preview-options="previewOptions"
+      preview-theme
+      class="block-full! inline-full!"
+    />
   </div>
 </template>
 

@@ -40,11 +40,9 @@ defineOgImage('Image.takumi', {
       duration:4000
     }"
   >
-    <div>
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
-    </div>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
 
     <ClientOnly>
       <LazyContentSearch

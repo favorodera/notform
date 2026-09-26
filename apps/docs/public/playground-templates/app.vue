@@ -23,7 +23,7 @@ const form = useNotForm({
     tags: [''],
   },
   onSubmit: async (values) => {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 2000)
     })
 
@@ -47,12 +47,16 @@ const form = useNotForm({
       path="name"
     >
       <div data-field>
-        <label :for="path"> Full Name </label>
+        <label
+          data-label
+          :for="path"
+        > Full Name </label>
 
         <input
           v-bind="events"
           :id="path"
           v-model="form.values.name"
+          data-input
           type="text"
           placeholder="e.g. John Doe"
         >
@@ -109,10 +113,10 @@ const form = useNotForm({
             >
               <input
                 v-bind="events"
+                :id="path"
                 v-model="form.values.tags[index]"
                 type="text"
                 placeholder="Tag name"
-                :id="path"
               >
 
               <div
