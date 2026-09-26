@@ -160,7 +160,7 @@
   "[mdc]": {
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
-    "editor.detectIndentation": false,
+    "editor.detectIndentation": false
   },
   "cSpell.words": [
     "arktype",
