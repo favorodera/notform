@@ -3,7 +3,7 @@ const appConfig = useAppConfig()
 const route = useRoute()
 
 const seo = {
-  description: 'Interactive Vue 3 playground for NotForm. Test headless form state, and Standard Schema validation live in your browser.',
+  description: 'Interactive Vue 3 form playground for NotForm. Edit forms, test schema validation and dynamic fields, and share reproducible examples in your browser.',
   title: 'Playground',
 }
 
@@ -22,9 +22,22 @@ defineOgImage('Image.takumi', { ...seo })
       <PlaygroundEditor />
 
       <template #fallback>
-        <PlaygroundSpinner>
-          Loading playground
-        </PlaygroundSpinner>
+        <div
+          class="
+            flex flex-col items-center justify-center gap-4 text-sm text-muted
+            block-full inline-full
+          "
+        >
+          <div
+            class="
+              animate-spin rounded-full border-2 border-default
+              border-bs-primary block-8 inline-8
+            "
+            aria-hidden
+          />
+
+          <span>Loading playground</span>
+        </div>
       </template>
     </ClientOnly>
   </div>

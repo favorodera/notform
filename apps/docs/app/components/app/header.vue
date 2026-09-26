@@ -12,7 +12,7 @@ const appConfig = useAppConfig()
 const navigationMenuItems = [
   {
     active: route.path.startsWith('/docs'),
-    icon: 'tabler:book',
+    icon: 'tabler:book-2',
     label: 'Documentation',
     to: '/docs',
   },

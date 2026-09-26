@@ -69,6 +69,9 @@ export default defineAppConfig({
       warning: 'tabler:alert-triangle',
     },
     prose: {
+      a: {
+        base: 'border-[inherit]',
+      },
       codePreview: {
         slots: {
           code: '[&_pre]:rounded-t-none [&>div]:my-0 [&>div]:rounded-t-0 [&>div>div]:my-0',

@@ -1,5 +1,6 @@
 <script lang="ts">
 import defaultVue from '../../../public/playground-templates/default.vue?raw'
+import readmeVue from '../../../public/playground-templates/README.vue?raw'
 import tailwindCSS from '../../../public/playground-templates/tailwind.css?raw'
 </script>
 
@@ -104,7 +105,7 @@ const replStore = useStore({
  * the code from either source.
  */
 function resetToDefault() {
-  replStore.setFiles({ 'src/App.vue': defaultVue }, 'src/App.vue')
+  replStore.setFiles({ 'README.vue': readmeVue, 'src/App.vue': defaultVue }, 'src/App.vue')
 
   savedRouteHash.value = ''
 
@@ -116,7 +117,7 @@ function resetToDefault() {
 const hasInitialRouteHash = !!initialRouteHash
 
 if (!hasInitialRouteHash) {
-  replStore.setFiles({ 'src/App.vue': defaultVue }, 'src/App.vue')
+  replStore.setFiles({ 'README.vue': readmeVue, 'src/App.vue': defaultVue }, 'src/App.vue')
 }
 
 const areThereChanges = ref(hasInitialRouteHash)
