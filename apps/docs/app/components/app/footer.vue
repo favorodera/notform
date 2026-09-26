@@ -22,7 +22,12 @@ const navigationMenuitems = [
 </script>
 
 <template>
-  <Footer class="border-bs border-default">
+  <Footer
+    class="border-bs border-default"
+    :ui="{
+      container:'h-(--ui-header-height) py-0 lg:py-0'
+    }"
+  >
     <template #left>
       <p class="text-sm font-light text-muted">
         Published under <NuxtLink
