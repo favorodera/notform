@@ -1,6 +1,6 @@
+:::writing{variant="document" id="41726" title="Playground.vue"}
 <script lang="ts">
 import appVue from '../../../public/playground-templates/app.vue?raw'
-import readmeVue from '../../../public/playground-templates/README.vue?raw'
 import tailwindCSS from '../../../public/playground-templates/tailwind.css?raw'
 </script>
 
@@ -10,14 +10,17 @@ import type * as monaco from 'monaco-editor-core'
 import { Repl, useStore, useVueImportMap } from '@vue/repl'
 import MonacoEditor from '@vue/repl/monaco-editor'
 import '@vue/repl/style.css'
-import { breakpointsTailwind, useBreakpoints, useClipboard, useLocalStorage, useShare } from '@vueuse/core'
+import {
+  breakpointsTailwind,
+  useBreakpoints,
+  useClipboard,
+  useLocalStorage,
+} from '@vueuse/core'
 
-const savedRouteHash = useLocalStorage(
-  'notform-playground-route-hash',
-  '',
-)
+const savedRouteHash = useLocalStorage('notform-playground-route-hash', '')
+const previousRouteHash = useLocalStorage('notform-playground-previous-hash', '')
 
-const initialRouteHash = location.hash || savedRouteHash.value || ''
+const initialRouteHash = location.hash || savedRouteHash.value
 
 const colorMode = useColorMode()
 const theme = computed(() => (colorMode.value === 'dark' ? 'dark' : 'light'))
@@ -30,12 +33,6 @@ const clipboard = useClipboard({
   source: () => location.href,
 })
 
-const share = useShare({
-  text: 'Check out this form with validation implementation with NotForm!',
-  title: 'NotForm Playground',
-  url: location.href,
-})
-
 const vueImportMap = useVueImportMap({
   runtimeDev: 'https://esm.sh/vue@3.5/dist/vue.esm-browser.js',
   runtimeProd: 'https://esm.sh/vue@3.5/dist/vue.esm-browser.prod.js',
@@ -46,7 +43,7 @@ const builtinImportMap = computed(() => ({
   imports: {
     ...vueImportMap.importMap.value.imports,
     notform: 'https://esm.sh/notform?external=vue',
-    zod: 'https://esm.sh/zod@4?external=vue',
+    zod: 'https://esm.sh/zod?external=vue',
   },
 }))
 
@@ -73,7 +70,6 @@ const monacoOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
 }
 
 const defaultFiles = {
-  'README.vue': readmeVue,
   'src/App.vue': appVue,
 }
 
@@ -92,8 +88,25 @@ if (!initialRouteHash) {
   replStore.setFiles(defaultFiles, 'src/App.vue')
 }
 
+/** Resets the REPL to its default state, saving the current state to the previousRouteHash.value */
+function resetToDefault() {
+  previousRouteHash.value = replStore.serialize()
+  replStore.setFiles(defaultFiles, 'src/App.vue')
+}
+
+/** Restores the REPL to the previous state, clearing the previousRouteHash.value */
+function restorePrevious() {
+  if (!previousRouteHash.value) return
+
+  replStore.deserialize(previousRouteHash.value)
+  previousRouteHash.value = ''
+}
+
 watchEffect(() => {
-  savedRouteHash.value = replStore.serialize()
+  const serializedStore = replStore.serialize()
+
+  savedRouteHash.value = serializedStore
+  history.replaceState({}, '', serializedStore)
 })
 </script>
 
@@ -106,27 +119,38 @@ watchEffect(() => {
   >
     <div
       class="
-        flex shrink-0 items-center justify-end gap-1 overflow-x-auto border-be
-        border-default px-2 block-10
+        flex shrink-0 items-center justify-between gap-1 overflow-x-auto
+        border-be border-default px-2 block-10
 
         md:px-3
       "
     >
       <Button
-        icon="tabler:rotate"
+        v-if="previousRouteHash"
+        icon="tabler:rotate-clockwise-2"
         variant="ghost"
-        label="Reset"
+        label="Restore"
         size="sm"
-        @click="replStore.setFiles(defaultFiles, 'src/App.vue')"
+        @click="restorePrevious"
       />
 
-      <Button
-        :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:link'"
-        :label="clipboard.copied.value ? 'Copied' : 'Share'"
-        variant="ghost"
-        size="sm"
-        @click="clipboard.copy()"
-      />
+      <div class="ms-auto flex items-center gap-1">
+        <Button
+          icon="tabler:rotate"
+          variant="ghost"
+          label="Reset"
+          size="sm"
+          @click="resetToDefault"
+        />
+
+        <Button
+          :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:link'"
+          :label="clipboard.copied.value ? 'Copied' : 'Share'"
+          variant="ghost"
+          size="sm"
+          @click="clipboard.copy()"
+        />
+      </div>
     </div>
 
     <Repl

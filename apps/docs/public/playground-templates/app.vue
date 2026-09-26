@@ -1,5 +1,3 @@
-<!-- eslint-disable node/no-extraneous-import -->
-<!-- eslint-disable no-alert -->
 <script setup lang="ts">
 import {
   NotArrayField,

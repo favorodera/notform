@@ -20,5 +20,5 @@ export default defineNuxtPlugin(() => {
   }
 
   // eslint-disable-next-line unicorn/no-global-object-property-assignment
-  globalThis.Worker = ReplWorker 
+  globalThis.Worker = ReplWorker
 })

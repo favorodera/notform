@@ -11,4 +11,16 @@ export default withNuxt(factory({
     rules: {
       'ts/no-explicit-any': 'off',
     },
+  })
+  .override('favorodera/javascript/rules', {
+    files: ['public/playground-templates/**/*.vue'],
+    rules: {
+      'no-alert': 'off',
+    },
+  })
+  .override('favorodera/node/rules', {
+    files: ['public/playground-templates/**/*.vue'],
+    rules: {
+      'node/no-extraneous-import': 'off',
+    },
   }))
