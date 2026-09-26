@@ -42,7 +42,7 @@ catalogs:
       version: 10.10.0
     happy-dom:
       specifier: ^20.14.0
-      version: 20.14.0
+      version: 20.14.5
     nuxtseo-layer-devtools:
       specifier: ^5.3.14
       version: 5.3.14
@@ -192,13 +192,13 @@ importers:
         version: 1.2.77
       '@nuxt/content':
         specifier: catalog:vendor
-        version: 3.16.0(@valibot/to-json-schema@1.7.1(valibot@1.4.2(typescript@6.0.3)))(better-sqlite3@13.0.3)(esbuild@0.28.1)(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(rollup@4.62.2)(supports-color@10.2.2)(valibot@1.4.2(typescript@6.0.3))(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+        version: 3.16.0(@valibot/to-json-schema@1.7.1(valibot@1.4.2(typescript@6.0.3)))(better-sqlite3@13.0.3)(esbuild@0.28.1)(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.3)(rollup@4.62.2)(supports-color@10.2.2)(valibot@1.4.2(typescript@6.0.3))(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
       '@nuxt/image':
         specifier: catalog:vendor
         version: 2.1.0(@types/node@26.5.0)(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.2)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))(unstorage@1.17.5(db0@0.3.4(better-sqlite3@13.0.3))(ioredis@5.11.1(supports-color@10.2.2)))
       '@nuxt/ui':
         specifier: catalog:vendor
-        version: 4.11.1(c64f27b7e7f8b20ee75ea052c98df725)
+        version: 4.11.1(bec592bd8840f88cdc116edd2eb91758)
       '@nuxtjs/mdc':
         specifier: catalog:vendor
         version: 0.23.1(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(supports-color@10.2.2)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.2)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))
@@ -265,7 +265,7 @@ importers:
         version: 26.5.0
       nuxtseo-layer-devtools:
         specifier: catalog:tools
-        version: 5.3.14(e5aae92a85a108caf10402ffe89d297d)
+        version: 5.3.14(a6076999020ba9455585d7cca4407c4f)
       typescript:
         specifier: catalog:tools
         version: 6.0.3
@@ -305,7 +305,7 @@ importers:
         version: 2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@6.0.3))
       happy-dom:
         specifier: catalog:tools
-        version: 20.14.0
+        version: 20.14.5
       tsdown:
         specifier: catalog:tools
         version: 0.22.14(@volar/typescript@2.4.28(typescript@6.0.3))(typescript@6.0.3)(vue-tsc@3.3.11(typescript@6.0.3))
@@ -317,7 +317,7 @@ importers:
         version: 8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)
       vitest:
         specifier: catalog:tools
-        version: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.0)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+        version: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.5)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
       vue:
         specifier: catalog:peer
         version: 3.5.42(typescript@6.0.3)
@@ -5660,8 +5660,8 @@ packages:
       crossws:
         optional: true
 
-  happy-dom@20.14.0:
-    resolution: {integrity: sha512-4bRh1KzRvKDnFNTlLhzT1RZTpkKhQbQDl9j+7GXszWsvuspYdo29k6OHRf4PwiM6oLb8r/pMWeYiJjkfod5AvQ==}
+  happy-dom@20.14.5:
+    resolution: {integrity: sha512-x/RzkpWO40bTjIoT30iQtt64FLLmH/iRcUCN2X//bLx7H3ifkdfPXyqsro/OYtqzIAhiLMMA7mmiOR9C3NOKjQ==}
     engines: {node: '>=20.0.0'}
 
   has-flag@4.0.0:
@@ -10340,7 +10340,7 @@ snapshots:
       - magicast
       - supports-color
 
-  '@nuxt/content@3.16.0(@valibot/to-json-schema@1.7.1(valibot@1.4.2(typescript@6.0.3)))(better-sqlite3@13.0.3)(esbuild@0.28.1)(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(rollup@4.62.2)(supports-color@10.2.2)(valibot@1.4.2(typescript@6.0.3))(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))':
+  '@nuxt/content@3.16.0(@valibot/to-json-schema@1.7.1(valibot@1.4.2(typescript@6.0.3)))(better-sqlite3@13.0.3)(esbuild@0.28.1)(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.3)(rollup@4.62.2)(supports-color@10.2.2)(valibot@1.4.2(typescript@6.0.3))(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))':
     dependencies:
       '@nuxt/kit': 4.5.2(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.2)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))
       '@nuxtjs/mdc': 0.23.1(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(supports-color@10.2.2)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.2)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))
@@ -11268,7 +11268,7 @@ snapshots:
       rc9: 3.0.1
       std-env: 4.1.0
 
-  '@nuxt/ui@4.11.1(c64f27b7e7f8b20ee75ea052c98df725)':
+  '@nuxt/ui@4.11.1(bec592bd8840f88cdc116edd2eb91758)':
     dependencies:
       '@floating-ui/dom': 1.8.0
       '@iconify/vue': 5.0.1(vue@3.5.42(typescript@6.0.3))
@@ -11337,7 +11337,7 @@ snapshots:
     optionalDependencies:
       '@internationalized/date': 3.12.2
       '@internationalized/number': 3.6.7
-      '@nuxt/content': 3.16.0(@valibot/to-json-schema@1.7.1(valibot@1.4.2(typescript@6.0.3)))(better-sqlite3@13.0.3)(esbuild@0.28.1)(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(rollup@4.62.2)(supports-color@10.2.2)(valibot@1.4.2(typescript@6.0.3))(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      '@nuxt/content': 3.16.0(@valibot/to-json-schema@1.7.1(valibot@1.4.2(typescript@6.0.3)))(better-sqlite3@13.0.3)(esbuild@0.28.1)(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.3)(rollup@4.62.2)(supports-color@10.2.2)(valibot@1.4.2(typescript@6.0.3))(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
       ai: 6.0.264(zod@4.5.4)
       valibot: 1.4.2(typescript@6.0.3)
       vue-router: 5.3.1(@vue/compiler-sfc@3.5.42)(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.2)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))(vue@3.5.42(typescript@6.0.3))
@@ -11631,7 +11631,7 @@ snapshots:
       '@nuxtjs/sitemap': 8.3.4(88c91d8cf4922ca3793adf29a2bc4351)
       nuxt: 4.5.2(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7(supports-color@10.2.2)))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7(supports-color@10.2.2)))(@oxc-project/types@0.144.0)(@parcel/watcher@2.5.6)(@types/node@26.5.0)(@vue/compiler-sfc@3.5.42)(better-sqlite3@13.0.3)(cac@7.0.0)(commander@15.0.0)(db0@0.3.4(better-sqlite3@13.0.3))(esbuild@0.28.1)(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(ioredis@5.11.1(supports-color@10.2.2))(lightningcss@1.33.0)(magicast@0.5.4)(optionator@0.9.4)(oxc-parser@0.143.0)(rolldown@1.2.3)(rollup-plugin-visualizer@7.0.1(rolldown@1.2.4)(rollup@4.62.2))(rollup@4.62.2)(srvx@0.11.22)(supports-color@10.2.2)(terser@5.48.0)(typescript@6.0.3)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))(vue-tsc@3.3.11(typescript@6.0.3))(yaml@2.9.0)
       nuxt-link-checker: 5.3.0(5b4401ec23ef2637927210d1139934e1)
-      nuxt-og-image: 6.7.8(63387b8d416b280348729ce79fd2cd68)
+      nuxt-og-image: 6.7.8(f294e29162fec76ca9ce3579c0ddf312)
       nuxt-schema-org: 6.3.1(ccda7962b04593399f42915710dc846f)
       nuxt-seo-utils: 8.4.2(c4046b097328fe27467cfedff6ca3a05)
       nuxt-site-config: 4.2.3(88c91d8cf4922ca3793adf29a2bc4351)
@@ -13190,7 +13190,7 @@ snapshots:
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.69.0(@typescript-eslint/parser@8.66.0(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       typescript: 6.0.3
-      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.0)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.5)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
     transitivePeerDependencies:
       - supports-color
 
@@ -13202,7 +13202,7 @@ snapshots:
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.69.0(@typescript-eslint/parser@8.69.0(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       typescript: 6.0.3
-      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.0)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.5)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
     transitivePeerDependencies:
       - supports-color
 
@@ -13250,7 +13250,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.0)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.5)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
 
   '@vitest/utils@4.1.11':
     dependencies:
@@ -15245,7 +15245,7 @@ snapshots:
     optionalDependencies:
       crossws: 0.4.10(srvx@0.11.22)
 
-  happy-dom@20.14.0:
+  happy-dom@20.14.5:
     dependencies:
       '@types/node': 26.5.0
       '@types/whatwg-mimetype': 3.0.2
@@ -16931,7 +16931,7 @@ snapshots:
       - rolldown
       - unplugin
 
-  nuxt-og-image@6.7.8(63387b8d416b280348729ce79fd2cd68):
+  nuxt-og-image@6.7.8(f294e29162fec76ca9ce3579c0ddf312):
     dependencies:
       '@clack/prompts': 1.7.0
       '@nuxt/kit': 4.5.2(magic-string@1.1.1)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.2)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))
@@ -17488,12 +17488,12 @@ snapshots:
       - xml2js
       - yaml
 
-  nuxtseo-layer-devtools@5.3.14(e5aae92a85a108caf10402ffe89d297d):
+  nuxtseo-layer-devtools@5.3.14(a6076999020ba9455585d7cca4407c4f):
     dependencies:
       '@iconify-json/carbon': 1.2.25
       '@nuxt/devtools-kit': 4.0.0-alpha.7(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.2)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
       '@nuxt/kit': 4.5.2(magic-string@1.1.0)(magicast@0.5.4)(oxc-parser@0.143.0)(rolldown@1.2.4)(unplugin@3.3.0(esbuild@0.28.1)(rolldown@1.2.3)(rollup@4.62.2)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)))
-      '@nuxt/ui': 4.11.1(c64f27b7e7f8b20ee75ea052c98df725)
+      '@nuxt/ui': 4.11.1(bec592bd8840f88cdc116edd2eb91758)
       '@shikijs/langs': 4.4.3
       '@shikijs/themes': 4.4.3
       '@vueuse/core': 14.4.0(vue@3.5.42(typescript@6.0.3))
@@ -20043,7 +20043,7 @@ snapshots:
       terser: 5.48.0
       yaml: 2.9.0
 
-  vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.0)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)):
+  vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@26.5.0)(@vitest/ui@4.1.11)(happy-dom@20.14.5)(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.11
       '@vitest/mocker': 4.1.11(vite@8.2.2(@types/node@26.5.0)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
@@ -20069,7 +20069,7 @@ snapshots:
       '@opentelemetry/api': 1.9.1
       '@types/node': 26.5.0
       '@vitest/ui': 4.1.11(vitest@4.1.11)
-      happy-dom: 20.14.0
+      happy-dom: 20.14.5
     transitivePeerDependencies:
       - msw
 
