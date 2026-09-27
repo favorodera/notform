@@ -17,16 +17,21 @@
       "outputs": []
     },
     "lint": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "sync-repl-workers": {
       "outputs": ["public/repl-workers/**"]
     },
     "test": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "dev": {
-      "dependsOn": ["^build", "sync-repl-workers"],
+      "dependsOn": [
+        "^build",
+        "sync-repl-workers"
+      ],
       "persistent": true,
       "cache": false
     },
