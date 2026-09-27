@@ -49,3 +49,6 @@ coverage/
 .cache/
 temp/
 tmp/
+
+# Workers
+apps/docs/public/repl-workers/
