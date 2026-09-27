@@ -3,8 +3,7 @@
  * under stable filenames. Ensures the Worker constructor patch in
  * app/plugins/monaco-worker-patch.client.ts always up to date.
  *
- * Runs by default via a "postinstall" script in package.json so it
- * self-heals whenever `@vue/repl` is updated.
+ * Runs on postinstall to self-heal whenever `@vue/repl` is updated.
  */
 
 import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'node:fs'
