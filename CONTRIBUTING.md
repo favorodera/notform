@@ -84,61 +84,99 @@ When adding new features or fixing bugs, please include tests as this helps us v
 
 ## Playground
 
-  Interactive StackBlitz playgrounds are also available for experimenting with the packages without setting up the repository locally.
+  The [NotForm Playground](https://notformdocs.vercel.app/playground) is the fastest way to build a small Vue 3 example without creating a local project. It is useful for learning the API, reproducing issues, manually checking browser behavior, and testing pull-request builds.
 
-  -  [Core Playground](https://stackblitz.com/edit/notform)
-  -  [Nuxt Module Playground](https://stackblitz.com/edit/notform-nuxt)
+### What it supports
 
-  These playgrounds are useful for quickly trying NotForm, reproducing issues, or experimenting with changes. When testing a pull request, you can also use the preview package published by `pkg.pr.new` in a playground to try the changes before they are merged.
+  The default playground includes:
 
-  The playgrounds are intended for experimentation and are not a replacement for running the project's full test suite locally.
+  - Vue 3 SFCs with TypeScript and the Monaco editor
+  - `notform` and `zod` through the built-in browser import map
+  - NotForm's core components and `useNotForm` composable
+  - Tailwind CSS in the live preview
+  - Editable import maps
+  - URL-based sharing and local-session restoration
+
+  The playground is intentionally a browser-level environment. It is not a replacement for Vitest, typechecking, linting, builds, or a full local Nuxt environment.
+
+### Reproduce an issue
+
+  For a bug that can be demonstrated with a small Vue example:
+
+  1. Open the [Playground](https://notformdocs.vercel.app/playground).
+  2. Reduce the example to the smallest reproduction you can.
+  3. Click **Share** and copy the generated URL.
+  4. Paste the URL into the issue or pull request.
+
+  Keep examples free of credentials, private endpoints, and production data.
+
+### Test a pull request with `pkg.pr.new`
+
+  Pull requests publish preview packages through `pkg.pr.new`. The CI workflow in `.github/workflows/ci.yml` publishes the workspace packages after the regular validation job, so a PR can be exercised in the browser before it is merged.
+
+  When a preview is available:
+
+  1. Open the pull request and copy the `pkg.pr.new` URL from its preview comment. A compact core-package URL looks like `https://pkg.pr.new/notform@81`.
+  2. Open the [NotForm Playground](https://notformdocs.vercel.app/playground).
+  3. Open the **Import Map** and replace the `notform` entry with the corresponding esm.sh PR URL:
+
+```text
+https://esm.sh/pr/notform@81?external=vue
+```
+
+  4. Leave the playground's `vue` entry unchanged so the PR build resolves Vue from the same runtime as the application.
+  5. Reproduce the behavior, then use **Share** and paste the playground URL back into the PR.
+
+  `pkg.pr.new` exposes npm-compatible preview packages for commits and pull requests, while esm.sh supports those packages through its `/pr/` URL form. The `external=vue` parameter keeps Vue as an external bare import so the playground's existing Vue import-map entry can resolve it.
+
+  This is useful for validating a PR's browser-facing behavior and creating a focused example for review. Repository tests and CI remain the authoritative checks for correctness.
 
 ---
 
 ## Pull Request Process
 
-  1. Ensure your code follows the project's coding standards
-  2. Update documentation if you're changing functionality
-  3. Add or update tests as appropriate
-  4. Run the full validation suite:
+1. Ensure your code follows the project's coding standards
+2. Update documentation if you're changing functionality
+3. Add or update tests as appropriate
+4. Run the full validation suite:
 
 ```bash
 pnpm ready
 ```
 
-  This command runs the complete pipeline: install → lint → typecheck → test → build.
+This command runs the complete pipeline: install → lint → typecheck → test → build.
 
-  5. Commit using Conventional Commits and open a Pull Request.
-  6. Push your branch and open a Pull Request.
+5. Commit using Conventional Commits and open a Pull Request.
+6. Push your branch and open a Pull Request.
 
 ---
 
 ## Reporting Bugs
 
-Before filing a report, check existing issues. When you do file one, include:
+  Before filing a report, check existing issues. When you do file one, include:
 
-- A clear, descriptive title
-- Steps to reproduce
-- Expected vs. actual behaviour
-- Your environment (OS, Node.js version, pnpm version)
+  - A clear, descriptive title
+  - Steps to reproduce
+  - Expected vs. actual behavior
+  - Your environment (OS, Node.js version, pnpm version)
 
 ---
 
 ## Suggesting Features
 
-  We welcome feature suggestions! Please open an issue describing:
+We welcome feature suggestions! Please open an issue describing:
 
-  - The problem you're trying to solve
-  - Your proposed solution
-  - Any alternatives you've considered
+- The problem you're trying to solve
+- Your proposed solution
+- Any alternatives you've considered
 
 ---
 
 ## Questions?
 
-If you have questions, feel free to:
+  If you have questions, feel free to:
 
-- Open a [Discussion](https://github.com/favorodera/notform/discussions)
-- Check the [Documentation](https://notformdocs.vercel.app/)
+  - Open a [Discussion](https://github.com/favorodera/notform/discussions)
+  - Check the [Documentation](https://notformdocs.vercel.app/)
 
-Thank you for contributing! 🎉
+  Thank you for contributing! 🎉

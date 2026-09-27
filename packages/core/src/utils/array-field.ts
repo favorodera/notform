@@ -1,128 +1,209 @@
-import { parsePath } from 'dot-prop'
-import type { NotFormInstance } from '../types/not-form'
-import type { ArrayItemIndexMap, Segment } from '../types/shared'
-import { arePathSegmentsEqual, normalizeSegment } from './form'
+import { parsePath, stringifyPath } from 'dot-prop'
+import type { NotFormInstance } from '../types/not-form-instance'
+import type {
+  ArrayItemIndexMap,
+  DotPropPathSegment,
+  Issue,
+  ObjectSchema,
+  Paths,
+  PathSegment,
+} from '../types/shared'
+import { isPathWithinScope, toPropertyKey } from './segments'
+
+interface ArrayPathLocation<TPathSegment extends PathSegment> {
+  index: number
+  remainingPathSegments: ReadonlyArray<TPathSegment>
+}
 
 /**
- * Finds where a path sits inside an array field, if at all.
- * @param pathSegments The full path segments to test, e.g. the parsed segments of `"tags.1.label"`.
- * @param arrayFieldPathSegments The parsed path segments of the array field itself, e.g. the segments of `"tags"`.
- * @returns The item's index and any trailing segments, or undefined if the path isn't inside this array.
+ * Locates a field path inside an array field, e.g. `users.1.email` under
+ * `users`, or `users.1.addresses.0.city` under `users` — `remainingPathSegments`
+ * holds whatever comes after the index, however many segments deep that is.
+ * @template TPathSegment Segment type of the candidate path.
+ * @template TArraySegment Segment type of the array field path.
+ * @internal
+ * @param pathSegments Candidate path, already split.
+ * @param arrayFieldPathSegments Array field path, already split.
+ * @returns Item index and leftover segments, or `undefined` when the path is not inside the array.
  */
-function getArrayItemLocation(pathSegments: ReadonlyArray<Segment>, arrayFieldPathSegments: ReadonlyArray<Segment>) {
-  // Needs at least one segment more than the array path itself — that extra segment is the index.
-  if (pathSegments.length <= arrayFieldPathSegments.length) return
-
-  // Segment-by-segment match, not string prefix, so a sibling like "tagsBackup.0" can't match "tags".
-  for (const [
-    segmentIndex,
-    arrayFieldPathSegment,
-  ] of arrayFieldPathSegments.entries()) {
-    if (!arePathSegmentsEqual(pathSegments[segmentIndex], arrayFieldPathSegment)) return
+export function locatePathInArrayField<
+  TPathSegment extends PathSegment,
+  TArraySegment extends PathSegment,
+>(
+  pathSegments: ReadonlyArray<TPathSegment>,
+  arrayFieldPathSegments: ReadonlyArray<TArraySegment>,
+): ArrayPathLocation<TPathSegment> | undefined {
+  // `<=` (not `<`) rules out the array's own path too: a path must have at
+  // least one segment past the array path — the item index — to be "inside" it.
+  if (pathSegments.length <= arrayFieldPathSegments.length || !isPathWithinScope(pathSegments, arrayFieldPathSegments)) {
+    return undefined
   }
 
-  const itemIndex = Number(pathSegments[arrayFieldPathSegments.length])
-  if (Number.isNaN(itemIndex)) return
+  // The segment right after the array path should be the item index.
+  const itemIndexSegment = toPropertyKey(pathSegments[arrayFieldPathSegments.length])
+
+  // An object key (not number/string) here means this isn't actually an
+  // array index position — bail rather than force a bad match.
+  if (typeof itemIndexSegment !== 'number' && typeof itemIndexSegment !== 'string') {
+    return undefined
+  }
+
+  const itemIndex = Number(itemIndexSegment)
+
+  // Guards against non-numeric-looking string keys (e.g. an object field
+  // that happens to share the array's path prefix) and negative/fractional
+  // values that can't be a real array index.
+  if (!Number.isSafeInteger(itemIndex) || itemIndex < 0) {
+    return undefined
+  }
 
   return {
-    itemIndex,
-    remainingSegments: pathSegments.slice(arrayFieldPathSegments.length + 1),
+    index: itemIndex,
+    // Everything past the index, at any depth — lets callers relocate state
+    // nested arbitrarily deep inside the item, not just the item's own path.
+    remainingPathSegments: pathSegments.slice(arrayFieldPathSegments.length + 1),
   }
 }
 
 /**
- * Rebuilds a dot-separated path from an array field's path, an item index, and any trailing segments.
- * @param arrayFieldPath The array field's dot-separated path, e.g. `"tags"`.
- * @param itemIndex The item's index within the array.
- * @param remainingSegments Segments after the index, e.g. `['label']` for a nested field.
- * @returns The reconstructed path, e.g. `"tags.0.label"`.
+ * Rewrites paths in a set after an array mutation. Paths outside the array are left as-is.
+ * @template TSchema The form schema.
+ * @internal
+ * @param paths Touched or dirty path set.
+ * @param arraySegments Split array field path.
+ * @param remapIndex Previous item index → next index, or `undefined` if removed.
  */
-function buildArrayItemPath(arrayFieldPath: string, itemIndex: number, remainingSegments: ReadonlyArray<Segment>) {
-  return [
-    arrayFieldPath,
-    itemIndex,
-    ...remainingSegments,
-  ].join('.')
-}
+function remapPathSet<TSchema extends ObjectSchema>(
+  paths: Set<Paths<TSchema>>,
+  arraySegments: ReadonlyArray<DotPropPathSegment>,
+  remapIndex: ArrayItemIndexMap,
+) {
+  // Mutating `paths` mid-iteration would be unsafe, so collect changes first
+  // and apply them in a separate pass below.
+  const pathsToRemove: Array<Paths<TSchema>> = []
+  const pathsToAdd: Array<Paths<TSchema>> = []
 
-/**
- * Relocates or drops `form.errors` entries that belong to an item that moved or was removed.
- * Errors on the array field itself (no index segment) are left untouched.
- * @param form The form instance whose errors should be remapped.
- * @param arrayFieldPathSegments The parsed path segments of the array field.
- * @param arrayItemIndexMap Maps each previous item index to its new index, or undefined if removed.
- */
-function remapArrayFieldErrors(form: NotFormInstance<any>, arrayFieldPathSegments: ReadonlyArray<Segment>, arrayItemIndexMap: ArrayItemIndexMap) {
-  // Walk backward so splicing an entry never shifts the index of one still to be visited.
-  for (let errorIndex = form.errors.length - 1; errorIndex >= 0; errorIndex--) {
-    const issue = form.errors[errorIndex]
+  for (const path of paths) {
+    const parsedPath = parsePath(path)
 
-    if (issue.path) {
-      const normalizedIssuePathSegments = issue.path.map(segment => normalizeSegment(segment))
-      const itemLocation = getArrayItemLocation(normalizedIssuePathSegments, arrayFieldPathSegments)
+    const location = locatePathInArrayField(
+      parsedPath,
+      arraySegments,
+    )
 
-      if (itemLocation) {
-        const newItemIndex = arrayItemIndexMap(itemLocation.itemIndex)
-
-        // typeof, not truthiness — 0 is a valid index and must not read as "removed".
-        if (typeof newItemIndex === 'number') {
-          form.errors[errorIndex] = {
-            ...issue,
-            path: [
-              ...arrayFieldPathSegments,
-              newItemIndex,
-              ...itemLocation.remainingSegments,
-            ],
-          }
-        } else {
-          form.errors.splice(errorIndex, 1)
-        }
-      }
+    // Path isn't inside this array field at all — leave it untouched.
+    if (!location) {
+      continue
     }
-  }
-}
 
-/**
- * Relocates or drops entries in a `touchedFields`/`dirtyFields` set that belong to an item that moved or was removed.
- * @param fieldPathSet The reactive set of field paths to remap.
- * @param arrayFieldPath The dot-separated path of the array field.
- * @param arrayFieldPathSegments The parsed path segments of the array field.
- * @param arrayItemIndexMap Maps each previous item index to its new index, or undefined if removed.
- */
-function remapArrayFieldPathSet(fieldPathSet: Set<string>, arrayFieldPath: string, arrayFieldPathSegments: ReadonlyArray<Segment>, arrayItemIndexMap: ArrayItemIndexMap) {
-  const pathsToRemove: Array<string> = []
-  const pathsToAdd: Array<string> = []
+    // Every path inside the array is removed unconditionally: it either
+    // gets re-added at its new index below, or was on a removed item and
+    // is dropped for good.
+    pathsToRemove.push(path)
 
-  for (const fieldPath of fieldPathSet) {
-    const itemLocation = getArrayItemLocation(parsePath(fieldPath), arrayFieldPathSegments)
-    if (itemLocation) {
-      pathsToRemove.push(fieldPath)
+    const nextIndex = remapIndex(location.index)
 
-      const newItemIndex = arrayItemIndexMap(itemLocation.itemIndex)
-
-      // typeof, not truthiness — 0 is a valid index and must not read as "removed".
-      if (typeof newItemIndex === 'number') {
-        pathsToAdd.push(buildArrayItemPath(arrayFieldPath, newItemIndex, itemLocation.remainingSegments))
-      }
+    // `undefined` means this item was removed — its state goes with it.
+    if (nextIndex === undefined) {
+      continue
     }
+
+    // Rebuild the full path at the item's new index, keeping whatever was
+    // nested underneath it (e.g. `.name`, `.tags.0`) unchanged.
+    const nextPath = stringifyPath([
+      ...arraySegments,
+      nextIndex,
+      ...location.remainingPathSegments,
+    ], {
+      preferDotForIndices: true,
+    })
+
+    pathsToAdd.push(nextPath as Paths<TSchema>)
   }
 
-  for (const fieldPath of pathsToRemove) fieldPathSet.delete(fieldPath)
-  for (const fieldPath of pathsToAdd) fieldPathSet.add(fieldPath)
+  for (const path of pathsToRemove) {
+    paths.delete(path)
+  }
+
+  for (const path of pathsToAdd) {
+    paths.add(path)
+  }
 }
 
 /**
- * Keeps an array field's errors, touched paths, and dirty paths attached to the item they
- * describe, rather than the array slot that item happened to occupy. Call before applying
- * the mutation to `form.values`.
- * @param form The form instance whose error, touched, and dirty state should be remapped.
- * @param arrayFieldPath The dot-separated path of the array field being mutated, e.g. `"tags"`.
- * @param arrayItemIndexMap Maps each previous item index to its new index, or undefined if removed.
+ * Moves touched, dirty, and error state with array items after a structural
+ * mutation. Because {@linkcode locatePathInArrayField} keeps whatever follows the
+ * item's index as `remainingPathSegments`, this already handles state nested
+ * arbitrarily deep inside an item — a field on an object item, or an item
+ * inside a nested array of its own — not just the item's own top-level path.
+ *
+ * Validating state is not remapped; generation tracking already drops stale results.
+ * @template TSchema The form schema.
+ * @internal
+ * @param form Full form instance.
+ * @param arrayPath Dot path of the array field.
+ * @param remapIndex Previous item index → next index, or `undefined` if removed.
  */
-export function remapArrayFieldState(form: NotFormInstance<any>, arrayFieldPath: string, arrayItemIndexMap: ArrayItemIndexMap) {
-  const arrayFieldPathSegments = parsePath(arrayFieldPath)
+export function remapArrayFieldState<TSchema extends ObjectSchema>(
+  form: NotFormInstance<TSchema>,
+  arrayPath: Paths<TSchema>,
+  remapIndex: ArrayItemIndexMap,
+) {
+  const arraySegments = parsePath(arrayPath)
 
-  remapArrayFieldErrors(form, arrayFieldPathSegments, arrayItemIndexMap)
-  remapArrayFieldPathSet(form.touchedFields, arrayFieldPath, arrayFieldPathSegments, arrayItemIndexMap)
-  remapArrayFieldPathSet(form.dirtyFields, arrayFieldPath, arrayFieldPathSegments, arrayItemIndexMap)
+  remapPathSet(
+    form.touchedFields,
+    arraySegments,
+    remapIndex,
+  )
+
+  remapPathSet(
+    form.dirtyFields,
+    arraySegments,
+    remapIndex,
+  )
+
+  // Errors aren't a plain path Set (they're Issue objects with a path plus
+  // a message), so they're remapped by hand rather than via `remapPathSet`.
+  const remappedErrors: Array<Issue> = []
+
+  for (const issue of form.errors) {
+    // Form-level issues (no path) are never scoped to a field — always kept.
+    if (!issue.path) {
+      remappedErrors.push(issue)
+      continue
+    }
+
+    const location = locatePathInArrayField(
+      issue.path,
+      arraySegments,
+    )
+
+    // Issue belongs to some other field entirely — pass it through unchanged.
+    if (!location) {
+      remappedErrors.push(issue)
+      continue
+    }
+
+    const nextIndex = remapIndex(location.index)
+
+    // Item was removed — its issue is discarded along with it, rather than
+    // being pushed to `remappedErrors`.
+    if (nextIndex === undefined) {
+      continue
+    }
+
+    remappedErrors.push({
+      ...issue,
+      path: [
+        ...arraySegments,
+        nextIndex,
+        ...location.remainingPathSegments,
+      ],
+    })
+  }
+
+  // Whole-array replace rather than in-place edits, since indices shifted
+  // and the array's length/order may itself have changed.
+  form.replaceErrors(remappedErrors)
 }

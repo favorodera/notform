@@ -29,6 +29,12 @@
 - [ ] New and existing unit tests pass locally with my changes
 - [ ] I have updated the documentation accordingly
 
+## Playground / Browser Verification
+
+<!-- For browser-facing changes, add a shared NotForm Playground or preview site URL. -->
+
+- Playground / reproduction URL: <!-- https://notformdocs.vercel.app/playground#..., https://stackblitz.com/... , ... -->
+
 ## Screenshots / Recordings
 
 <!-- If applicable, add screenshots or recordings to help explain your changes -->

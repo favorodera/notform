@@ -48,8 +48,8 @@ body:
     id: reproduction-link
     attributes:
       label: Reproduction Link
-      description: Link to a minimal reproduction (StackBlitz, CodeSandbox, GitHub repo)
-      placeholder: 'https://stackblitz.com/edit/...'
+      description: Link to a minimal reproduction (Docs Playground, StackBlitz, CodeSandbox, GitHub repo)
+      placeholder: 'https://notformdocs.vercel.app/playground#... or https://stackblitz.com/edit/...'
     validations:
       required: false
 

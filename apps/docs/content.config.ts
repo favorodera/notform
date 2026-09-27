@@ -8,10 +8,7 @@ export default defineContentConfig({
     }),
 
     docs: defineCollection({
-      source: {
-        exclude: ['index.md'],
-        include: '**',
-      },
+      source: 'docs/**',
       type: 'page',
     }),
   },

@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import { defineSoftwareApp } from 'nuxt-schema-org/schema'
+import packageJson from '../../package.json'
 
 const fontWeights = [100, 200, 300, 400, 500, 600, 700, 800, 900]
 
@@ -10,65 +11,18 @@ export default defineNuxtConfig({
         lang: 'en',
       },
       link: [
-        {
-          href: '/favicon.ico',
-          rel: 'icon',
-          sizes: '48x48',
-        },
-        {
-          href: '/favicon.svg',
-          rel: 'icon',
-          sizes: 'any',
-          type: 'image/svg+xml',
-        },
-        {
-          href: '/icon-32x32.png',
-          rel: 'icon',
-          sizes: '32x32',
-          type: 'image/png',
-        },
-        {
-          href: '/icon-192x192.png',
-          rel: 'icon',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          href: '/icon-512x512.png',
-          rel: 'icon',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-        {
-          href: '/icon-16x16.png',
-          rel: 'icon',
-          sizes: '16x16',
-          type: 'image/png',
-        },
-        {
-          href: '/icon.svg',
-          rel: 'icon',
-          sizes: 'any',
-          type: 'image/svg+xml',
-        },
-        {
-          href: '/apple-touch-icon.png',
-          rel: 'apple-touch-icon',
-          sizes: '180x180',
-        },
+        { href: '/favicon.ico', rel: 'icon', sizes: '48x48' },
+        { href: '/favicon.svg', rel: 'icon', sizes: 'any', type: 'image/svg+xml' },
+        { href: '/icon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png' },
+        { href: '/icon-192x192.png', rel: 'icon', sizes: '192x192', type: 'image/png' },
+        { href: '/icon-512x512.png', rel: 'icon', sizes: '512x512', type: 'image/png' },
+        { href: '/icon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png' },
+        { href: '/icon.svg', rel: 'icon', sizes: 'any', type: 'image/svg+xml' },
+        { href: '/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180' },
       ],
       meta: [
-        {
-          content: 'width=device-width, initial-scale=1',
-          name: 'viewport',
-        },
-        {
-          charset: 'utf8',
-        },
-        {
-          content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM',
-          name: 'google-site-verification',
-        },
+        { charset: 'utf8' },
+        { content: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM', name: 'google-site-verification' },
       ],
     },
     layoutTransition: {
@@ -136,23 +90,18 @@ export default defineNuxtConfig({
     sections: [
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/getting-started%' }],
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/getting-started%' }],
         title: 'Getting Started',
       },
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/components%' }],
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/components%' }],
         title: 'Components',
       },
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/building-forms%' }],
-        title: 'Building Forms',
-      },
-      {
-        contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/advanced%' }],
-        title: 'Advanced',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/composables%' }],
+        title: 'Composables',
       },
     ],
     title: 'NotForm',
@@ -178,9 +127,20 @@ export default defineNuxtConfig({
         '/robots.txt',
       ],
     },
+    routeRules: {
+      '/docs': { redirect: '/docs/getting-started' },
+    },
   },
   ogImage: {
     zeroRuntime: true,
+  },
+  routeRules: {
+    '/docs': { redirect: '/docs/getting-started' },
+  },
+  runtimeConfig: {
+    public: {
+      version: packageJson.version,
+    },
   },
   schemaOrg: {
     identity: defineSoftwareApp({
@@ -237,12 +197,17 @@ export default defineNuxtConfig({
   sitemap: {
     zeroRuntime: true,
   },
+  typescript: {
+    nodeTsConfig: {
+      include: ['./scripts/**/*'],
+    },
+  },
   ui: {
-    content: true,
     prefix: '',
   },
   vite: {
     optimizeDeps: {
+      exclude: ['@vue/repl'],
       include: [
         'zod',
         '@vueuse/core',

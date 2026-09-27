@@ -1,7 +1,7 @@
 {
   "name": "notform-nuxt",
   "type": "module",
-  "version": "2.2.5",
+  "version": "3.0.0-alpha.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -35,10 +35,14 @@
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
-      ".": ["./dist/types.d.mts"]
+      ".": [
+        "./dist/types.d.mts"
+      ]
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=24.0.0",
     "pnpm": ">=11.0.0"
@@ -52,17 +56,17 @@
   },
   "peerDependencies": {
     "notform": "workspace:*",
-    "nuxt": "catalog:peer"
+    "nuxt": "^4.5.0"
   },
   "dependencies": {
-    "@nuxt/kit": "catalog:vendor",
+    "@nuxt/kit": "catalog:",
     "notform": "workspace:*"
   },
   "devDependencies": {
-    "@favorodera/eslint-config": "catalog:tools",
-    "@nuxt/module-builder": "catalog:tools",
-    "@nuxt/schema": "catalog:tools",
-    "nuxt": "catalog:peer",
-    "vue-tsc": "catalog:tools"
+    "@favorodera/eslint-config": "catalog:",
+    "@nuxt/module-builder": "catalog:",
+    "@nuxt/schema": "catalog:",
+    "nuxt": "catalog:",
+    "vue-tsc": "catalog:"
   }
 }

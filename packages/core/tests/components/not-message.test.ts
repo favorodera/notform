@@ -1,12 +1,9 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { NotField, NotForm, NotMessage, useNotForm, type UseNotFormConfig } from '../../src'
-import { object, string } from '../test-utils/not-validator'
+import { nameEmailSchema, object, string } from '../helpers/not-validator'
 
-const schema = object({
-  email: string(5, 100),
-  name: string(2, 50),
-})
+const schema = nameEmailSchema
 
 const baseConfig: UseNotFormConfig<typeof schema> = { schema }
 
@@ -62,7 +59,7 @@ const priorityTemplate = `
 `
 
 const pTagTemplate = `
- <NotForm :form="form" @submit="form.submit">
+  <NotForm :form="form" @submit="form.submit">
     <NotField path="name" v-slot="{ events, path }">
       <input :id="path" v-model="form.values.name" v-bind="events" />
       <NotMessage :path v-slot="{ message }" as="p" />
@@ -71,12 +68,9 @@ const pTagTemplate = `
 `
 
 /**
- * Mounts a form with a `name` field, its input, and a NotMessage.
- *
- * The template and components can be overridden to cover multi-field,
- * custom rendering, and singleton (no NotForm ancestor) scenarios.
- * @param template Template string for the form.
- * @returns An object containing the form instance and the wrapper.
+ * Mounts a NotForm with the given template.
+ * @param template Optional template to render.
+ * @returns Object containing the form and wrapper.
  */
 function mountForm(template?: string) {
   const form = useNotForm(baseConfig)
@@ -101,7 +95,6 @@ describe('error message display', () => {
     const { wrapper } = mountForm()
 
     await wrapper.find('#name').setValue('H')
-
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
@@ -161,7 +154,6 @@ describe('default slot', () => {
     const { wrapper } = mountForm(customRenderTemplate)
 
     await wrapper.find('#name').setValue('H')
-
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
@@ -174,7 +166,6 @@ describe('singleton', () => {
     const { wrapper } = mountForm(singletonTemplate)
 
     await wrapper.find('#name').setValue('H')
-
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
@@ -183,8 +174,12 @@ describe('singleton', () => {
   })
 
   it(':form prop takes priority over NotForm ancestor', async () => {
-    const primaryForm = useNotForm(baseConfig)
-    const secondaryForm = useNotForm(baseConfig)
+    const primaryForm = useNotForm({
+      schema: object({ name: string(10, 50) }),
+    })
+    const secondaryForm = useNotForm({
+      schema: object({ name: string(2, 50) }),
+    })
 
     const wrapper = mount({
       components: { NotField, NotForm, NotMessage },
@@ -192,10 +187,18 @@ describe('singleton', () => {
       template: priorityTemplate,
     })
 
+    await wrapper.find('#name').setValue('Jo')
     await wrapper.find('#name').trigger('blur')
     await flushPromises()
 
-    expect(wrapper.find('span').exists()).toBe(true)
-    expect(primaryForm.touchedFields.has('name')).toBe(false)
+    expect(wrapper.find('span').exists()).toBe(false)
+    expect(secondaryForm.getFieldErrors('name')).toHaveLength(0)
+    expect(primaryForm.getFieldErrors('name')).toHaveLength(0)
+
+    primaryForm.setError({ message: 'wrong form error', path: ['name'] })
+    await flushPromises()
+
+    expect(wrapper.find('span').exists()).toBe(false)
+    expect(primaryForm.getFieldErrors('name')).toHaveLength(1)
   })
 })

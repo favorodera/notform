@@ -1,9 +1,15 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TSchema extends ObjectSchema">
 import { computed } from 'vue'
 import type { NotMessageProps, NotMessageSlots } from '../types/not-message'
-import { useNotFormInstance } from '../utils/instance'
+import type { ObjectSchema } from '../types/shared'
+import { useNotFormInstance } from '../composables/use-not-form-instance'
 
-// Setup
+// #region Setup
+
+// Unlike the other three components, this one is NOT renderless — it
+// renders a real element (see the template below). inheritAttrs is disabled
+// and $attrs is bound manually onto that element, which is what lets a
+// consumer pass class/id/data-* straight through to whatever `as` resolves to.
 
 defineOptions({
   inheritAttrs: false,
@@ -11,25 +17,29 @@ defineOptions({
 
 defineSlots<NotMessageSlots>()
 
-const props = withDefaults(defineProps<NotMessageProps>(), {
+const props = withDefaults(defineProps<NotMessageProps<TSchema>>(), {
   as: 'span',
 })
 
-const form = useNotFormInstance(props.form)
+const form = useNotFormInstance<TSchema>(props.form)
 
-// Public Computed
+// #endregion
 
-const message = computed(() => form.errorsMap.value[props.path])
+// #region State
+
+const message = computed(() => form.getFieldErrors(props.path)[0]?.message)
+
+// #endregion
 </script>
 
-<!-- eslint-disable vue/no-root-v-if -->
+<!-- eslint-disable-next-line vue/no-root-v-if -->
 <template>
   <component
     :is="as"
     v-if="message"
     v-bind="$attrs"
   >
-    <slot :message>
+    <slot :message="message">
       {{ message }}
     </slot>
   </component>

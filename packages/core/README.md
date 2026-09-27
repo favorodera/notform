@@ -1,12 +1,12 @@
-<div align="center">
-<h1><code>notform</code></h1>
-<p><strong>Headless form management for Vue 3</strong></p>
-<p>
-<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/v/notform.svg?style=plastic&label=Version" alt="Version"></a>
-<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/dm/notform.svg?style=plastic&label=Downloads&color=blue" alt="Downloads"></a>
-<a href="https://npmx.dev/package/notform"><img src="https://img.shields.io/npm/unpacked-size/notform?style=plastic&label=Unpacked%20Size" alt="Unpacked Size"></a>
+<p align="center">
+<img alt="header" src="https://shieldcn.dev/header/surface.svg?title=NotForm%28Core%29&amp;subtitle=Headless%2C+schema-agnostic+form+management+for+Vue+3&amp;logo=https%3A%2F%2Fnotformdocs.vercel.app%2Ffavicon.svg&amp;size=wide&amp;mode=dark&amp;font=fira-code" />
 </p>
-</div>
+
+<p align="center">
+<a href="https://www.npmjs.com/package/notform"><img alt="version" src="https://shieldcn.dev/npm/notform.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Version" /></a>
+<a href="https://www.npmjs.com/package/notform"><img alt="downloads" src="https://shieldcn.dev/npm/dm/notform.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Downloads" /></a>
+<a href="https://www.npmjs.com/package/notform"><img alt="Custom badge" src="https://shieldcn.dev/bundlephobia/min/notform.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Unpacked+Size" /></a>
+</p>
 
 `notform` is the core NotForm package for Vue 3.
 
@@ -25,6 +25,8 @@ pnpm add zod
 ```
 
 ## Basic Usage
+
+### Single Fields
 
 ```vue
 <script setup lang="ts">
@@ -51,7 +53,7 @@ const form = useNotForm({
 <template>
   <NotForm
     :form="form"
-    @submit.prevent="form.submit"
+    @submit="form.submit"
     @reset="form.reset()"
   >
     <NotField
@@ -105,74 +107,88 @@ const form = useNotForm({
 </template>
 ```
 
-## API
-
-The core package exports:
-
-- `useNotForm`
-- `NotForm`
-- `NotField`
-- `NotMessage`
-- `NotArrayField`
-
-The form instance manages values, errors, touched and dirty state, validation, submission state, and reset behavior.
-
-## Array Fields
+### Array Fields
 
 `NotArrayField` provides renderless operations for dynamic arrays while preserving stable item keys during reordering.
 
 ```vue
-<NotArrayField
-  path="tags"
-  v-slot="{ items, append, remove }"
->
-  <div
-    v-for="(item, index) in items"
-    :key="item.key"
+<script setup lang="ts">
+import { NotArrayField, NotField, NotForm, NotMessage, useNotForm } from 'notform'
+import { z } from 'zod'
+
+const tagSchema = z.string()
+
+const schema = z.object({
+  tags: z.array(tagSchema).optional(),
+})
+
+const form = useNotForm({
+  initialValues: {
+    tags: [''],
+  },
+  onSubmit(values) {
+    console.log('Submitted:', values)
+  },
+  schema,
+})
+</script>
+
+<template>
+  <NotForm
+    :form="form"
+    @submit="form.submit"
+    @reset="form.reset()"
   >
-    <NotField :path="item.path" v-slot="{ events, path }">
-      <label :for="path">Tag {{ index + 1 }}</label>
-      <input
-        :id="path"
-        v-model="form.values.tags[index]"
-        v-bind="events"
-        :name="path"
-        type="text"
+    <NotArrayField
+      v-slot="{ items, append, remove }"
+      path="tags"
+      :item-schema="tagSchema"
+    >
+      <div
+        v-for="(item, index) in items"
+        :key="item.key"
       >
-      <NotMessage :path="path" />
-    </NotField>
+        <NotField
+          v-slot="{ events, path }"
+          :path="item.path"
+        >
+          <label :for="path">Tag {{ index + 1 }}</label>
 
-    <button type="button" @click="remove(index)">
-      Remove
-    </button>
-  </div>
+          <input
+            :id="path"
+            v-model="form.values.tags[index]"
+            v-bind="events"
+            :name="path"
+            type="text"
+          >
 
-  <button type="button" @click="append('')">
-    Add tag
-  </button>
-</NotArrayField>
+          <NotMessage :path="path" />
+        </NotField>
+
+        <button
+          type="button"
+          @click="remove(index)"
+        >
+          Remove
+        </button>
+      </div>
+
+      <button
+        type="button"
+        @click="append('')"
+      >
+        Add tag
+      </button>
+    </NotArrayField>
+  </NotForm>
+</template>
 ```
-
-## Type Safety
-
-Field paths and related APIs are inferred from your schema, including nested paths.
 
 ## Requirements
 
 - Vue 3
 - Node.js 24 or later for development in this repository
 - A Standard Schema-compatible validator
-
-## Development
-
-From the repository root:
-
-```bash
-pnpm install
-pnpm --filter notform test
-pnpm --filter notform typecheck
-pnpm --filter notform build
-```
 
 ## License
 

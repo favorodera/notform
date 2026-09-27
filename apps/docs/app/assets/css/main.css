@@ -10,21 +10,27 @@
   --font-mono: 'Geist Mono', monospace;
 }
 
-:root {
-  --ui-container: var(--container-8xl);
-  --ui-header-height: 3rem;
-  --ui-radius: 0.5rem;
-  --ui-primary: black;
-}
-
-:root, .light {
+:root,
+.light {
+  --ui-bg: var(--ui-color-neutral-50);
   --ui-bg-muted: var(--ui-color-neutral-100);
   --ui-bg-elevated: var(--ui-color-neutral-100);
   --ui-bg-accented: var(--ui-color-neutral-200);
+
   --ui-text: var(--ui-color-neutral-900);
   --ui-text-highlighted: var(--ui-color-neutral-950);
-  --ui-bg: var(--ui-color-neutral-50);
   --ui-text-inverted: var(--ui-color-neutral-50);
+
+  --ui-primary: black;
+
+  --ui-container: var(--container-8xl);
+
+  --ui-header-height: 3rem;
+  --ui-footer-height: 3rem;
+
+  --ui-radius: 0.5rem;
+
+  @apply scroll-smooth;
 }
 
 .dark {
@@ -32,12 +38,15 @@
   --ui-bg-muted: var(--ui-color-neutral-900);
   --ui-bg-elevated: var(--ui-color-neutral-900);
   --ui-bg-accented: var(--ui-color-neutral-800);
+  --ui-bg-inverted: var(--ui-color-neutral-50);
+
   --ui-text: var(--ui-color-neutral-100);
   --ui-text-highlighted: var(--ui-color-neutral-50);
-  --ui-primary: white;
-  --ui-bg-inverted: var(--ui-color-neutral-50);
-  --ui-border-inverted: var(--ui-color-neutral-50);
   --ui-text-inverted: var(--ui-color-neutral-900);
+
+  --ui-primary: white;
+
+  --ui-border-inverted: var(--ui-color-neutral-50);
 }
 
 @layer components {
@@ -48,16 +57,17 @@
   [data-demo-field] {
     @apply flex flex-col w-full gap-y-2 gap-x-4;
 
-    > label, [data-demo-label] {
+    >label,
+    [data-demo-label] {
       @apply text-sm font-medium;
     }
 
-    > input {
+    >input {
       @apply block rounded-md border border-default px-3 py-1.5;
       @apply bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-primary;
     }
 
-    > [data-demo-message] {
+    >[data-demo-message] {
       @apply block text-sm text-error;
     }
   }
