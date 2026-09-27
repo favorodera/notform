@@ -219,25 +219,6 @@ export function delayedByCall<TSchema extends StandardSchemaV1>(schema: TSchema,
   } as TSchema
 }
 
-export const nameEmailSchema = object({
-  email: string(5, 100),
-  name: string(2, 50),
-})
-
-export const tagsSchema = object({
-  tags: array(string(1, 20), 2, 5),
-})
-
-export const groupSchema = object({
-  name: string(1, 50),
-  tags: array(string(1, 20), 2, 5),
-})
-
-export const emailGroupsSchema = object({
-  email: string(5, 100),
-  groups: array(groupSchema, 1, 3),
-})
-
 /**
  * Schema whose first `validate` waits on `gate` and fails; later calls succeed with `{ value }`.
  * @param gate Promise the first call awaits.
@@ -288,3 +269,63 @@ export function createGatedCallSchema(
     },
   }
 }
+
+/**
+ * Wraps `schema` so every issue path segment it reports is re-shaped as a
+ * Standard Schema `{ key }` object instead of a plain key. The spec allows
+ * either shape (`PropertyKey | { key: PropertyKey }`), and real validators
+ * are free to emit `{ key }` wrappers — this exercises
+ * `toPropertyKey`/`areSegmentsEqual` against that shape without needing a
+ * second copy of `object`/`array` for every schema under test.
+ * @template TSchema Inner schema.
+ * @param schema Schema whose issue paths get re-wrapped.
+ * @returns Schema with identical types and validation behavior, `{ key }`-wrapped paths.
+ */
+export function withKeySegments<TSchema extends StandardSchemaV1>(schema: TSchema): TSchema {
+  return {
+    ...schema,
+    '~standard': {
+      ...schema['~standard'],
+      async validate(value) {
+        const result = await schema['~standard'].validate(value)
+
+        if (!('issues' in result) || !result.issues) {
+          return result
+        }
+
+        return {
+          issues: result.issues.map(issue => ({
+            ...issue,
+            path: issue.path?.map(segment => ({
+              key: typeof segment === 'object' && segment !== null && 'key' in segment ? segment.key : segment,
+            })),
+          })),
+        }
+      },
+      ...vendorVersion,
+    },
+  } as TSchema
+}
+
+export const nameEmailSchema = object({
+  email: string(5, 100),
+  name: string(2, 50),
+})
+
+export const tagsSchema = object({
+  tags: array(string(1, 20), 2, 5),
+})
+
+export const groupSchema = object({
+  name: string(1, 50),
+  tags: array(string(1, 20), 2, 5),
+})
+
+export const emailGroupsSchema = object({
+  email: string(5, 100),
+  groups: array(groupSchema, 1, 3),
+})
+
+export const nameEmailSchemaWithKeySegments = withKeySegments(nameEmailSchema)
+
+export const emailGroupsSchemaWithKeySegments = withKeySegments(emailGroupsSchema)
