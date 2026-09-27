@@ -17,7 +17,7 @@ catalogs:
       version: 1.2.38
     '@iconify-json/vscode-icons':
       specifier: ^1.2.78
-      version: 1.2.78
+      version: 1.2.82
     '@nuxt/content':
       specifier: ^3.16.0
       version: 3.16.0
@@ -193,7 +193,7 @@ importers:
         version: 1.2.38
       '@iconify-json/vscode-icons':
         specifier: 'catalog:'
-        version: 1.2.78
+        version: 1.2.82
       '@nuxt/content':
         specifier: 'catalog:'
         version: 3.16.0(@oxc-project/types@0.150.0)(@valibot/to-json-schema@1.7.1(valibot@1.4.2(typescript@6.0.3)))(better-sqlite3@13.0.3)(esbuild@0.28.1)(magic-string@1.4.1)(magicast@0.5.5)(oxc-parser@0.149.0)(rolldown@1.2.9)(rollup@4.62.2)(supports-color@10.2.2)(valibot@1.4.2(typescript@6.0.3))(vite@8.3.0(@types/node@26.6.1)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(tsx@4.23.15)(yaml@2.9.0))
@@ -1185,8 +1185,8 @@ packages:
   '@iconify-json/tabler@1.2.38':
     resolution: {integrity: sha512-9v6ooRU/bKOK/Whv4w2aiK5gBnfCV9Ei+uD1iDDeLu2b+EnF3G3ZKkRKWEOOLG8bJyfKn6XEia6gUQ9oO7cF+Q==}
 
-  '@iconify-json/vscode-icons@1.2.78':
-    resolution: {integrity: sha512-IGRmD43uJjD3H7wa9BgY5XVIgh2LZiuSxATvTfhmVEoIC44qEwuXmMSY3RDmKXwLfG69zOd13pyiCqTwQN/5JQ==}
+  '@iconify-json/vscode-icons@1.2.82':
+    resolution: {integrity: sha512-J4TIauES5jhw7Ij38qhH5JoE/6MciTWz2Wz6KPiVj5kgP07mI4ai9MYpl+bn991LiqC3uW6YqNrIk0jlabT3ug==}
 
   '@iconify/collections@1.0.727':
     resolution: {integrity: sha512-n+ipAqz5A6TWExnndwdT6qVX7KfXiw5GNDSxO2otXs6rxFWdHqizHTW1WvmWmT6m2BqQ8lhzUyWSJvm4M3nMAg==}
@@ -9234,7 +9234,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/vscode-icons@1.2.78':
+  '@iconify-json/vscode-icons@1.2.82':
     dependencies:
       '@iconify/types': 2.0.0
 
