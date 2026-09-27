@@ -1,5 +1,53 @@
 # Changelog
 
+## v2.2.5...v3.0.0
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0)
+
+### Added
+
+- **core:** Add NotArrayField component and state ([72fbffe](https://github.com/favorodera/notform/commit/72fbffe))
+
+  - add NotArrayField and useNotArrayField composable
+  - support stable keys and array state mutations
+  - split engine test suite into focused unit tests
+  - update documentation and workspace dependencies
+
+- **docs:** Self-host repl web workers ([39e62b7](https://github.com/favorodera/notform/commit/39e62b7))
+
+  - sync repl workers to public assets on install
+  - route worker requests to local bundled scripts
+  - simplify catalog definitions in pnpm workspace
+  - rename playground default template file
+
+
+### Refactors
+
+- **playground:** Replace local apps with online links ([11078b7](https://github.com/favorodera/notform/commit/11078b7))
+
+  - Remove local vue and nuxt playground packages
+  - Add StackBlitz links to issue templates and docs
+  - Add playground menu button to documentation header
+  - Update contributing guide with playground details
+
+
+### Documentation
+
+- **readme:** Update code examples and badges ([39ee348](https://github.com/favorodera/notform/commit/39ee348))
+
+  - Update submit handler and array field examples
+  - Refresh badge URLs across documentation READMEs
+
+- Improve branding and clean up demos ([27bfdcd](https://github.com/favorodera/notform/commit/27bfdcd))
+
+  - Capitalize package titles in README headers
+  - Remove redundant key display in array demo
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.5...v3.0.0-alpha.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0-alpha.0)

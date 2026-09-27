@@ -1,5 +1,206 @@
 # Changelog
 
+## v2.2.5...v3.0.0
+
+[compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0)
+
+### Added
+
+- **core:** Add NotMessage component ([3153679](https://github.com/favorodera/notform/commit/3153679))
+
+  - Add NotMessage to render field validation errors
+  - Introduce helper to cast public API to instance
+  - Support passing public API directly to components
+
+- **core:** Introduce NotField component ([7cd110f](https://github.com/favorodera/notform/commit/7cd110f))
+
+  - Add NotField component for scoped field state
+  - Expose syncDirtyState on form instance
+  - Update docs demos to use unwrapped state and NotField
+
+- **core:** Add types for NotArrayField component ([317ca55](https://github.com/favorodera/notform/commit/317ca55))
+
+  - Add NotArrayField props, slots, and item types
+  - Broaden schema helper bounds to StandardSchemaV1
+
+- **core:** Export NotArrayField component and types ([1275627](https://github.com/favorodera/notform/commit/1275627))
+
+  - Expose array field component from core entry point
+  - Allow consumers to use array field definitions
+
+- **core:** Add NotArrayField component and state ([72fbffe](https://github.com/favorodera/notform/commit/72fbffe))
+
+  - add NotArrayField and useNotArrayField composable
+  - support stable keys and array state mutations
+  - split engine test suite into focused unit tests
+  - update documentation and workspace dependencies
+
+- **core:** Support deep nested array field states ([c3882a5](https://github.com/favorodera/notform/commit/c3882a5))
+
+  - recurse isValid, isTouched, and isDirty in arrays
+  - remap state at any nesting depth on array mutation
+  - update docs and comments for nested array behaviors
+
+- **docs:** Self-host repl web workers ([39e62b7](https://github.com/favorodera/notform/commit/39e62b7))
+
+  - sync repl workers to public assets on install
+  - route worker requests to local bundled scripts
+  - simplify catalog definitions in pnpm workspace
+  - rename playground default template file
+
+- **playground:** Enhance editor with restore functionality ([5657e4f](https://github.com/favorodera/notform/commit/5657e4f))
+
+  - Adds a "Restore" button to the playground editor.
+  - Implements logic to save and restore previous REPL states.
+  - Removes the static `README.vue` from the playground.
+  - Updates ESLint rules for playground templates.
+  - Refactors `useLocalStorage` usage in the editor.
+
+
+### Fixed
+
+- **core:** Ref-count validating fields and reset baseline ([46d63be](https://github.com/favorodera/notform/commit/46d63be))
+
+  - Add ref-counting for concurrent field validation
+  - Wipe initialValues clean on reset with nextValues
+  - Add comprehensive tests for form instance engine
+
+- **core:** Isolate array errors from item errors ([80279df](https://github.com/favorodera/notform/commit/80279df))
+
+  - Exclude item errors from array field errors
+  - Keep isValid checking both array and item errors
+  - Document NotArrayField slot properties
+
+- **core:** Normalize validation function outputs ([f71edcf](https://github.com/favorodera/notform/commit/f71edcf))
+
+  - Standardize result format for validation methods
+  - Ensure validateField returns only targeted issues
+  - Add tests for field-specific validation cases
+
+
+### Refactors
+
+- **playground:** Replace local apps with online links ([11078b7](https://github.com/favorodera/notform/commit/11078b7))
+
+  - Remove local vue and nuxt playground packages
+  - Add StackBlitz links to issue templates and docs
+  - Add playground menu button to documentation header
+  - Update contributing guide with playground details
+
+- **core:** Simplify architecture and core API ([d659f31](https://github.com/favorodera/notform/commit/d659f31))
+
+  - Remove redundant components and utility files
+  - Split form instance creation into composables
+  - Modularize internal types and public API
+
+- **core:** Relax NotFormAPI type constraints ([0ea85c7](https://github.com/favorodera/notform/commit/0ea85c7))
+
+  - Remove strict exact property requirement
+  - Prevent overly restrictive type matching
+
+- **core:** Extract useNotField composable ([0d876cc](https://github.com/favorodera/notform/commit/0d876cc))
+
+  - extract field logic from component to composable
+  - improve type inference across field components
+
+- **core:** Refine internal API and update docs ([2f72562](https://github.com/favorodera/notform/commit/2f72562))
+
+  - expose syncAllDirtyStates in instance
+  - omit internal methods from public NotFormAPI
+  - update documentation snippets and types description
+
+- **core:** Align field events with slot type ([9e3b84f](https://github.com/favorodera/notform/commit/9e3b84f))
+
+  - Align event bindings directly with slot types
+  - Remove unused onMount from field events payload
+
+- **core:** Derive NotFormAPI using Pick ([6b9cf8c](https://github.com/favorodera/notform/commit/6b9cf8c))
+
+  - Simplify public API type by allowlisting members
+  - Remove type-fest Except dependency
+  - Clean up unnecessary type assertions
+
+- **core:** Reorganize instance factories and tests ([cd26ab4](https://github.com/favorodera/notform/commit/cd26ab4))
+
+  - Move createNotFormInstance to factories
+  - Move form instance injection key and provider to utils
+  - Extract test helpers and split unit test suites
+  - Decouple composable tests from component mounting
+
+
+### Documentation
+
+- **readme:** Update code examples and badges ([39ee348](https://github.com/favorodera/notform/commit/39ee348))
+
+  - Update submit handler and array field examples
+  - Refresh badge URLs across documentation READMEs
+
+- Improve branding and clean up demos ([27bfdcd](https://github.com/favorodera/notform/commit/27bfdcd))
+
+  - Capitalize package titles in README headers
+  - Remove redundant key display in array demo
+
+- **content:** Restructure and enrich component docs ([b7246e2](https://github.com/favorodera/notform/commit/b7246e2))
+
+  - update markdown formatting and inline code types
+  - convert component tables to field-group layouts
+  - align not-field slot types and default props
+
+- **components:** Standardize docs and API structure ([92a0267](https://github.com/favorodera/notform/commit/92a0267))
+
+  - Align NotMessage docs with field-group API style
+  - Add template wrappers to component examples
+  - Standardize usage sections across components
+
+- **not-array-field:** Restructure docs and api ([8c224aa](https://github.com/favorodera/notform/commit/8c224aa))
+
+  - Update component documentation to field-group format
+  - Streamline props documentation and inline types
+  - Normalize JSDoc comments in type definitions
+
+- **array-field:** Clarify array field slot properties ([cb05f75](https://github.com/favorodera/notform/commit/cb05f75))
+
+  - Add `lang="ts-type"` to boolean values
+  - Clarify `isTouched` and `isDirty` descriptions
+  - Update `isValidating` example for better context
+
+- **not-array-field:** Add caution on using array index as key ([4ec0d02](https://github.com/favorodera/notform/commit/4ec0d02))
+
+  - Explain why using array index as key is problematic
+  - Remove redundant example for itemSchema prop
+  - Clarify `NotArrayFieldItem` key property
+
+- **use-not-form:** Refactor documentation for clarity and brevity ([2727ce3](https://github.com/favorodera/notform/commit/2727ce3))
+
+  - Improve `useNotForm` composable documentation
+  - Use Vue Type hints for better readability
+  - Restructure API section to be more concise
+  - Remove verbose examples and descriptions
+
+- **use-not-form:** Document setValue and submit ([a0a2de5](https://github.com/favorodera/notform/commit/a0a2de5))
+
+  - Document setValue and submit form methods
+  - Clarify behavior around validation and dirty state
+  - Refine JSDoc description for setValue in core types
+
+- **core:** Improve TSDoc formatting and links ([f1bccff](https://github.com/favorodera/notform/commit/f1bccff))
+
+  - Use linkcode tags for symbol references
+  - Format multi-line doc comments for readability
+  - Clarify prop and slot descriptions
+
+- **core:** Add explanatory inline code comments ([b80aac9](https://github.com/favorodera/notform/commit/b80aac9))
+
+  - Clarify rationale behind array field mutation logic
+  - Document validation lifecycle timing and guards
+  - Explain reactivity preservation and staleness checks
+  - Detail path matching and normalization behavior
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.5...v3.0.0-alpha.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0-alpha.0)

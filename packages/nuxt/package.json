@@ -1,7 +1,7 @@
 {
   "name": "notform-nuxt",
   "type": "module",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0",
   "private": false,
   "publishConfig": {
     "access": "public"
