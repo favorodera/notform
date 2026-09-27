@@ -21,8 +21,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare && pnpm sync:repl-workers",
-    "sync:repl-workers": "tsx scripts/sync-repl-workers.ts",
+    "sync-repl-workers": "tsx scripts/sync-repl-workers.ts",
     "typecheck": "nuxt prepare && nuxt typecheck",
     "lint": "nuxt prepare && eslint . --fix"
   },
