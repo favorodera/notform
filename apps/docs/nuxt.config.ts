@@ -95,6 +95,11 @@ export default defineNuxtConfig({
       },
       {
         contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/working-with-ai%' }],
+        title: 'Working with AI',
+      },
+      {
+        contentCollection: 'docs',
         contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/components%' }],
         title: 'Components',
       },
