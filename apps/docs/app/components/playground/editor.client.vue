@@ -163,11 +163,7 @@ watchEffect(() => {
       :show-import-map="true"
       :clear-console="false"
       :auto-resize="true"
-      :editor-options="{
-        monacoOptions,
-        autoSaveText: false,
-        showErrorText: false,
-      }"
+      :editor-options="{ monacoOptions }"
       :preview-options="previewOptions"
       preview-theme
       class="block-full! inline-full!"

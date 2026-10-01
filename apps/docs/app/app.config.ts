@@ -70,7 +70,7 @@ export default defineAppConfig({
     },
     prose: {
       a: {
-        base: 'border-[inherit]',
+        base: 'border-[inherit] rounded-none hover:border-muted hover:text-muted has-[>code]:border-none',
       },
       codePreview: {
         slots: {
