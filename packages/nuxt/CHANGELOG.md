@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.0.0...v3.0.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v3.0.0...v3.0.1)
+
+No relevant changes for this release
+
+
 ## v2.2.5...v3.0.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0)

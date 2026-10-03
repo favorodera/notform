@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.0.0...v3.0.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v3.0.0...v3.0.1)
+
+### Fixed
+
+- **core:** Forward attrs to form element ([9d29d23](https://github.com/favorodera/notform/commit/9d29d23))
+
+  - Forward undeclared attributes to native form
+  - Update logical properties in docs styles
+  - Clarify component rendering documentation
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.5...v3.0.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0)

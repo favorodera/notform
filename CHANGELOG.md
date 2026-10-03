@@ -1,5 +1,89 @@
 # Changelog
 
+## v3.0.0...v3.0.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v3.0.0...v3.0.1)
+
+### Fixed
+
+- **core:** Forward attrs to form element ([9d29d23](https://github.com/favorodera/notform/commit/9d29d23))
+
+  - Forward undeclared attributes to native form
+  - Update logical properties in docs styles
+  - Clarify component rendering documentation
+
+- **docs:** Update SVG favicon path to logo.svg ([f43ab3e](https://github.com/favorodera/notform/commit/f43ab3e))
+
+### Refactors
+
+- **skills:** Consolidate NotForm agent skills ([388374c](https://github.com/favorodera/notform/commit/388374c))
+
+  - Merge individual NotForm skills into a single skill
+  - Reroute references to dedicated markdown files
+  - Update main README to reflect new skill structure
+  - Adjust docs for `skills add` command to `favorodera/notform`
+
+- **skills:** Consolidate NotForm agent skills ([#102](https://github.com/favorodera/notform/pull/102))
+
+### Documentation
+
+- **repl:** Clarify sync script comment ([e58cd1a](https://github.com/favorodera/notform/commit/e58cd1a))
+
+  - Simplify postinstall explanation for repl sync
+
+- **repl:** Clarify sync script comment ([a31564c](https://github.com/favorodera/notform/commit/a31564c))
+
+  - Simplify postinstall explanation for repl sync
+
+- **agents:** Add agent skills documentation ([bf6f46c](https://github.com/favorodera/notform/commit/bf6f46c))
+
+  - Add skills.sh definitions for NotForm
+  - Guide agents on composables, components, and Nuxt
+  - Include troubleshooting and canonical doc routing
+
+- **docs:** Expand working with ai docs section ([ccf0a45](https://github.com/favorodera/notform/commit/ccf0a45))
+
+  - Move AI guide to dedicated documentation section
+  - Add agent skills page and update llms.txt guide
+  - Adjust prose link styles and editor options
+
+- **agent-skills:** Simplify installation guide ([fe87f39](https://github.com/favorodera/notform/commit/fe87f39))
+
+  - Remove redundant agent and global flag examples
+  - Streamline setup instructions for skills CLI
+
+- **ai:** Consolidate agent skills into a single page ([1250d6d](https://github.com/favorodera/notform/commit/1250d6d))
+
+  - Simplify AI agent skill documentation
+  - Merge multiple skill descriptions into one comprehensive guide
+  - Improve clarity and ease of use for AI coding assistants
+
+- **ai:** Use relative links for llms documentation ([44f450d](https://github.com/favorodera/notform/commit/44f450d))
+
+  - Replace absolute documentation URLs with relative paths
+  - Ensure links work across different host environments
+
+- **ai:** Rename llms.txt doc slug and link ([263117e](https://github.com/favorodera/notform/commit/263117e))
+
+  - Rename file to avoid route collision with dot
+  - Update internal documentation link to new slug
+  - Capitalize page title for consistency
+
+- **ai:** Mark raw and external links explicitly ([f37e96f](https://github.com/favorodera/notform/commit/f37e96f))
+
+  - Add external attributes to raw doc links
+  - Ensure files and external sites open properly
+
+- **agent-skill:** Update link label to llms-txt ([a88b270](https://github.com/favorodera/notform/commit/a88b270))
+
+  - Clarify target document path in agent skill tip
+
+### ❤️ Contributors
+
+- Favour Emeka <favorodera@gmail.com>
+- Favour  Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v2.2.5...v3.0.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0)
