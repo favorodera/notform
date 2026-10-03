@@ -6,11 +6,10 @@ import { useNotFormInstance } from '../composables/use-not-form-instance'
 
 // #region Setup
 
-// Unlike the other three components, this one is NOT renderless — it
-// renders a real element (see the template below). inheritAttrs is disabled
-// and $attrs is bound manually onto that element, which is what lets a
-// consumer pass class/id/data-* straight through to whatever `as` resolves to.
-
+// Not renderless: when the field has an error, renders its first message using
+// the element selected by `as` (a <span> by default). The slot receives the
+// message, or it is rendered as text. Binding $attrs explicitly forwards
+// attributes not declared as props to the rendered element.
 defineOptions({
   inheritAttrs: false,
 })
