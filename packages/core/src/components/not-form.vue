@@ -5,6 +5,13 @@ import { provideNotFormInstance } from '../utils/instance'
 
 // #region Setup
 
+// Not renderless: renders a native <form> around the default slot and provides
+// the form instance to its descendants. Binding $attrs explicitly forwards
+// attributes not declared as props to the form element.
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineSlots<NotFormSlots>()
 
 const props = defineProps<NotFormProps<TSchema>>()
@@ -24,7 +31,10 @@ provideNotFormInstance<TSchema>(props.form)
     itself when it runs, which only happens if the consumer binds @submit to it
     (e.g. `@submit="form.submit"`) — see the NotForm docs for why this matters.
   -->
-  <form @reset.prevent>
+  <form
+    v-bind="$attrs"
+    @reset.prevent
+  >
     <slot />
   </form>
 </template>

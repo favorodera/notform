@@ -51,11 +51,11 @@
 
 @layer components {
   [data-demo-form] {
-    @apply flex flex-col gap-4 mx-auto w-full max-w-md;
+    @apply flex flex-col gap-4 mx-auto inline-full max-inline-md;
   }
 
   [data-demo-field] {
-    @apply flex flex-col w-full gap-y-2 gap-x-4;
+    @apply flex flex-col inline-full gap-y-2 gap-x-4;
 
     >label,
     [data-demo-label] {
