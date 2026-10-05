@@ -9,11 +9,7 @@ import type { PathSegment } from '../types/shared'
 export function toPropertyKey(segment: PathSegment): PropertyKey {
   // Standard Schema issue paths can use `{ key }` objects instead of raw
   // keys (e.g. to carry extra metadata) — unwrap to the raw key either way.
-  if (typeof segment === 'object' && segment !== null && 'key' in segment) {
-    return segment.key
-  }
-
-  return segment
+  return typeof segment === 'object' && segment !== null && 'key' in segment ? segment.key : segment
 }
 
 /**

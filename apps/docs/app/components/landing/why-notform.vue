@@ -65,7 +65,7 @@ const whys = [
             id="home:why-notform:title"
             class="
               text-3xl font-semibold tracking-tight text-highlighted
-              max-inline-sm
+              max-inline-lg
             "
           >
             Built for how you actually write Vue.

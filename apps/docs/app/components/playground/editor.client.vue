@@ -1,10 +1,9 @@
-:::writing{variant="document" id="41726" title="Playground.vue"}
 <script lang="ts">
 import appVue from '../../../public/playground-templates/app.vue?raw'
 import tailwindCSS from '../../../public/playground-templates/tailwind.css?raw'
 </script>
 
-<!-- eslint-disable no-useless-escape -->
+<!-- eslint-disable no-useless-escape-->
 <script setup lang="ts">
 import type * as monaco from 'monaco-editor-core'
 import { Repl, useStore, useVueImportMap } from '@vue/repl'
@@ -172,6 +171,7 @@ watchEffect(() => {
 </template>
 
 <style lang="css">
+/* eslint-disable css/no-important */
 @reference "../../assets/css/main.css";
 
 .iframe-container iframe {
@@ -192,13 +192,15 @@ watchEffect(() => {
   --text-light: var(--ui-text-muted);
   --color-branding: var(--ui-primary);
   --color-branding-dark: var(--ui-primary);
+}
 
+.vue-repl{
   & .file-selector {
     @apply px-4;
   }
 
   & .output-container {
-    @apply h-full;
+    @apply block-full;
   }
 
   & .tab-buttons {

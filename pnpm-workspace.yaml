@@ -1,7 +1,3 @@
-minimumReleaseAgeExclude:
-  - '@favorodera/eslint-config@1.2.0'
-shamefullyHoist: true
-
 shellEmulator: true
 
 trustPolicy: no-downgrade
@@ -26,7 +22,7 @@ allowBuilds:
   vue-demi: true
 
 catalog:
-  '@favorodera/eslint-config': ^1.2.0
+  '@favorodera/eslint-config': ^2.0.1
   '@iconify-json/simple-icons': ^1.2.96
   '@iconify-json/tabler': ^1.2.38
   '@iconify-json/vscode-icons': ^1.2.78

@@ -27,11 +27,7 @@ export function string(min?: number, max?: number): StandardSchemaV1<string> {
           return { issues: [{ message: `Must be at least ${min} characters` }] }
         }
 
-        if (max && value.length > max) {
-          return { issues: [{ message: `Must be at most ${max} characters` }] }
-        }
-
-        return { value }
+        return max && value.length > max ? { issues: [{ message: `Must be at most ${max} characters` }] } : { value }
       },
       ...vendorVersion,
     },
@@ -60,11 +56,7 @@ export function number(min?: number, max?: number): StandardSchemaV1<number> {
           return { issues: [{ message: `Must be at least ${min}` }] }
         }
 
-        if (max !== undefined && value > max) {
-          return { issues: [{ message: `Must be at most ${max}` }] }
-        }
-
-        return { value }
+        return max !== undefined && value > max ? { issues: [{ message: `Must be at most ${max}` }] } : { value }
       },
       ...vendorVersion,
     },
