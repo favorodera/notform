@@ -31,7 +31,9 @@ provide('githubStars', githubStars.data)
 <template>
   <App>
     <AppHeader />
+
     <Error :error="error" />
+
     <AppFooter />
 
     <ClientOnly>

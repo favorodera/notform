@@ -51,11 +51,11 @@
 
 @layer components {
   [data-demo-form] {
-    @apply flex flex-col gap-4 mx-auto inline-full max-inline-md;
+    @apply mx-auto flex flex-col gap-4 inline-full max-inline-md;
   }
 
   [data-demo-field] {
-    @apply flex flex-col inline-full gap-y-2 gap-x-4;
+    @apply flex flex-col gap-x-4 gap-y-2 inline-full;
 
     >label,
     [data-demo-label] {
@@ -63,8 +63,12 @@
     }
 
     >input {
-      @apply block rounded-md border border-default px-3 py-1.5;
-      @apply bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-primary;
+      @apply
+        block rounded-md border border-default bg-transparent px-3 py-2
+        outline-none
+
+        focus-visible:ring-2 focus-visible:ring-primary
+      ;
     }
 
     >[data-demo-message] {

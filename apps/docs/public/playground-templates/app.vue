@@ -190,6 +190,7 @@ const form = useNotForm({
         :disabled="form.isSubmitting"
       >
         <span v-if="form.isSubmitting"> Submitting... </span>
+
         <span v-else> Submit </span>
       </button>
     </div>

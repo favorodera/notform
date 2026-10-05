@@ -47,20 +47,6 @@ const item = {
           lg:py-36
         "
       >
-        <!-- badge -->
-        <Motion
-          as="div"
-          :variants="item"
-        >
-          <Badge
-            variant="subtle"
-            color="primary"
-            class="mbe-6 font-mono"
-          >
-            Not another form library
-          </Badge>
-        </Motion>
-
         <!-- title -->
         <Motion
           id="landing:hero:title"
@@ -75,19 +61,9 @@ const item = {
             lg:text-[2.5rem]
           "
         >
-          <span
-            class="inline-block border-be border-primary/20 text-primary"
-          >
-            Vue
-          </span>
-
-          Forms<br>
-
-          <span
-            class="inline-block border-be border-primary/20 text-primary"
-          >
-            without
-          </span> the friction.
+          Vue Forms
+          <br>
+          without the friction.
         </Motion>
 
         <!-- description -->

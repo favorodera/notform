@@ -69,8 +69,9 @@ const itemVariants = {
             lg:text-4xl
           "
         >
-          Your schema. Your UI.<br>
-          <span class="text-primary">Your form.</span>
+          Your schema, Your UI,
+          <br>
+          Your form.
         </Motion>
 
         <!-- Subline -->
