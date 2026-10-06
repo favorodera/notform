@@ -94,6 +94,63 @@ describe('validation', () => {
     expect(form.isValidating).toBe(false)
   })
 
+  it('an invalidated run cannot clear validating state for a newer run', async () => {
+    const { promise: firstGate, resolve: resolveFirst } = Promise.withResolvers<void>()
+    const { promise: secondGate, resolve: resolveSecond } = Promise.withResolvers<void>()
+
+    const form = createNameEmailForm({
+      initialValues: { name: 'Jane' },
+      schema: createGatedCallSchema(
+        callNumber => (callNumber === 1 ? firstGate : secondGate),
+        (_callNumber, value) => ({ value }),
+      ) as typeof nameEmailSchema,
+    })
+
+    const first = form.validate()
+    await flushPromises()
+
+    form.setValue('name', 'John')
+
+    expect(form.isValidating).toBe(false)
+
+    const second = form.validate()
+    await flushPromises()
+
+    expect(form.isValidating).toBe(true)
+
+    resolveFirst()
+    await first
+    await flushPromises()
+
+    expect(form.isValidating).toBe(true)
+
+    resolveSecond()
+    await second
+
+    expect(form.isValidating).toBe(false)
+  })
+
+  it('invalidates in-flight validation when setValue changes a value', async () => {
+    const { promise: gate, resolve } = Promise.withResolvers<void>()
+    const form = createNameEmailForm({
+      initialValues: { name: 'Jane' },
+      schema: createFirstCallBlockingSchema(gate) as typeof nameEmailSchema,
+    })
+
+    const validationPromise = form.validate()
+
+    expect(form.isValidating).toBe(true)
+
+    form.setValue('name', 'John')
+
+    expect(form.isValidating).toBe(false)
+
+    resolve()
+    await validationPromise
+
+    expect(form.errors).toStrictEqual([])
+  })
+
   describe.for(['validate', 'validateField'] as const)('%s', (method) => {
     it('ignores a stale result once a newer call has started', async () => {
       const { promise: stalePromise, resolve: resolveStale } = Promise.withResolvers<void>()

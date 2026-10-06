@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
+import type { NavigationMenuItem } from '@nuxt/ui'
 
 const runtimeConfig = useRuntimeConfig()
-const route = useRoute()
 
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 const githubStars = inject<Ref<number>>('githubStars')
@@ -11,18 +11,21 @@ const appConfig = useAppConfig()
 
 const navigationMenuItems = [
   {
-    active: route.path.startsWith('/docs'),
-    icon: 'tabler:book-2',
-    label: 'Documentation',
-    to: '/docs',
+    external: true,
+    icon: 'simple-icons:github',
+    label: 'Github',
+    target: '_blank',
+    to: appConfig.github.repo.url,
   },
   {
-    active: route.path.startsWith('/playground'),
-    icon: 'tabler:player-play',
-    label: 'Playground',
-    to: '/playground',
+    class: ' text-pink-400 hover:text-pink-500 **:text-pink-400 **:hover:text-pink-500',
+    external: true,
+    icon: 'tabler:heart',
+    label: 'Become a Sponsor',
+    target: '_blank',
+    to: appConfig.github.sponsor.url,
   },
-]
+] satisfies NavigationMenuItem[]
 </script>
 
 <template>
@@ -30,7 +33,8 @@ const navigationMenuItems = [
     to="/"
     :ui="{
       center: 'flex-1',
-      title:'items-center'
+      title:'items-center',
+      root:'border-none'
     }"
     :toggle="{
       variant: 'soft',
@@ -42,24 +46,22 @@ const navigationMenuItems = [
 
       <Badge
         :label="`v${runtimeConfig.public.version}`"
-        variant="subtle"
+        variant="soft"
         size="sm"
       />
     </template>
 
-    <NavigationMenu
-      :items="navigationMenuItems"
-      variant="link"
-    />
-
     <template #right>
       <ContentSearchButton
         size="md"
+        :collapsed="false"
         variant="soft"
+        label="Search"
       />
 
       <ColorModeButton
         size="md"
+        class="max-lg:hidden"
         variant="soft"
       />
 
@@ -69,22 +71,27 @@ const navigationMenuItems = [
         target="_blank"
         variant="soft"
         size="md"
+        class="max-lg:hidden"
         :label="githubStars?.toString()"
       />
     </template>
 
     <template #body>
+      <ContentNavigation
+        highlight
+        :navigation="navigation"
+      />
+
+      <Separator class="my-4" />
+
       <NavigationMenu
         :items="navigationMenuItems"
         orientation="vertical"
       />
 
-      <Separator class="my-4" />
-
-      <ContentNavigation
-        highlight
-        :navigation="navigation"
-      />
+      <div class="grid grid-cols-1 place-items-center pbs-8 inline-full">
+        <ColorModeSelect />
+      </div>
     </template>
   </Header>
 </template>

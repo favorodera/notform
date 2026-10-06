@@ -29,7 +29,9 @@
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -43,8 +45,9 @@
     "test": "vitest",
     "test:watch": "vitest watch --ui",
     "typecheck": "vue-tsc --noEmit",
-    "lint": "eslint . --fix",
-    "prepublishOnly": "pnpm run build"
+    "lint": "eslint .",
+    "prepublishOnly": "pnpm run build",
+    "lint:fix": "eslint . --fix"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

@@ -23,7 +23,8 @@
     "preview": "nuxt preview",
     "sync-repl-workers": "tsx scripts/sync-repl-workers.ts",
     "typecheck": "nuxt prepare && nuxt typecheck",
-    "lint": "nuxt prepare && eslint . --fix"
+    "lint": "nuxt prepare && eslint .",
+    "lint:fix": "nuxt prepare && eslint . --fix"
   },
   "dependencies": {
     "@iconify-json/simple-icons": "catalog:",

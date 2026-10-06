@@ -59,6 +59,7 @@ catalog:
   nuxt-llms: ^0.2.0
   nuxt-schema-org: ^6.3.2
   nuxtseo-layer-devtools: ^5.3.16
+  pkg-pr-new: ^0.0.88
   relizy: ^1.4.9
   tailwindcss: ^4.3.3
   tsdown: ^0.23.0

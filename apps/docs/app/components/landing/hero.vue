@@ -1,106 +1,58 @@
-<script setup lang="ts">
-import { Motion } from 'motion-v'
-
-const container = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: 0.2,
-      staggerChildren: 0.12,
-    },
-  },
-}
-
-const item = {
-  hidden: {
-    opacity: 0,
-    y: 14,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.3,
-      ease: [0.25, 0.1, 0.25, 1] as const,
-    },
-    y: 0,
-  },
-}
-</script>
-
 <template>
-  <section
-    class="relative overflow-hidden border-be border-default"
-    aria-labelledby="landing:hero:title"
+  <Container
+    class="relative grid grid-cols-1 justify-items-center py-16 text-center"
+    as="section"
   >
-    <LandingGlow />
+    <h1
+      class="
+        relative overflow-hidden text-3xl/tight tracking-tight max-inline-4xl
 
-    <Motion
-      as-child
-      initial="hidden"
-      animate="visible"
-      :variants="container"
+        sm:text-3xl
+
+        lg:text-[2.5rem]
+      "
     >
-      <Container
-        class="
-          relative grid grid-cols-1 justify-items-center py-28 text-center
+      Vue Forms
+      <br>
+      without the friction.
+    </h1>
 
-          lg:py-36
-        "
+    <p
+      class="mbs-5 text-base/relaxed font-light text-muted max-inline-md"
+    >
+      Headless, composable Vue 3 forms. Bring your own schema —
+      Zod, Valibot, ArkType, or anything Standard Schema compliant.
+      You own every pixel of your UI.
+    </p>
+
+    <div
+      class="
+        mbs-6 flex flex-wrap items-center justify-center gap-3
+
+        sm:mbs-8 sm:gap-4
+
+        lg:mbs-12
+      "
+    >
+      <Button
+        to="/docs/getting-started"
+        size="lg"
+        icon="tabler:book"
+        color="primary"
+        variant="subtle"
       >
-        <!-- title -->
-        <Motion
-          id="landing:hero:title"
-          as="h1"
-          :variants="item"
-          class="
-            relative overflow-hidden text-3xl/tight tracking-tight
-            max-inline-4xl
+        Read Docs
+      </Button>
 
-            sm:text-3xl
-
-            lg:text-[2.5rem]
-          "
-        >
-          Vue Forms
-          <br>
-          without the friction.
-        </Motion>
-
-        <!-- description -->
-        <Motion
-          as="p"
-          :variants="item"
-          class="mbs-5 text-base/relaxed font-light text-muted max-inline-md"
-        >
-          Headless, composable Vue 3 forms. Bring your own schema —
-          Zod, Valibot, ArkType, or anything Standard Schema compliant.
-          You own every pixel of your UI.
-        </Motion>
-
-        <!-- ctas -->
-        <Motion
-          as="div"
-          :variants="item"
-          class="
-            mbs-6 flex flex-wrap items-center justify-center gap-3
-
-            sm:mbs-8 sm:gap-4
-
-            lg:mbs-12
-          "
-        >
-          <Button
-            to="/docs/getting-started"
-            size="lg"
-            color="primary"
-            variant="subtle"
-          >
-            Read Docs
-          </Button>
-
-          <LandingInstallCommand />
-        </Motion>
-      </Container>
-    </Motion>
-  </section>
+      <Button
+        to="/playground"
+        size="lg"
+        icon="tabler:play"
+        color="primary"
+        variant="subtle"
+      >
+        Playground
+      </Button>
+    </div>
+  </Container>
 </template>

@@ -8,6 +8,5 @@
       </Main>
     </Page>
 
-    <AppFooter />
   </div>
 </template>

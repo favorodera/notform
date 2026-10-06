@@ -3,23 +3,17 @@ import { getProperty, parsePath, setProperty } from 'dot-prop'
 import { computed, reactive, ref, watch } from 'vue'
 import type { NotArrayFieldItem, NotArrayFieldProps, NotArrayFieldSlots } from '../types/not-array-field'
 import type { InferInput, ObjectSchema, Paths } from '../types/shared'
-import { remapArrayFieldState } from '../utils/array-field'
+import { normalizeExistingIndex, normalizeInsertionIndex, normalizeMoveDestination, remapArrayFieldState } from '../utils/array-field'
 import { isPathWithinScope } from '../utils/segments'
 import { useNotFormInstance } from './use-not-form-instance'
 
 /**
- * Array-field state, stable item keys, and mutation helpers for `<NotArrayField>`.
+ * Provides state and mutation helpers for `<NotArrayField>`.
  *
- * `itemKeys` is the only source of `item.key`. Length-only external changes
- * pad or trim keys from the end; use the mutation helpers to keep identity
- * through insert, remove, swap, and move.
- *
- * `isValid`/`isTouched`/`isDirty`/`isValidating` are recursive: they reflect
- * the array field's own path plus every path nested underneath it, at any
- * depth — an item's own value, a field inside an object item, or an item
- * inside a nested array. `errors`, by contrast, is intentionally exact: it
- * only ever reflects issues reported at the array field's own path, the same
- * way `<NotField>`'s `errors` only reflects issues at that one field's path.
+ * Mutation helpers preserve item identity and move nested form state with
+ * each item. External length-only changes can only add or remove keys at the end.
+ * Aggregate status includes every descendant path; `errors` includes only
+ * issues reported at the array field's exact path.
  * @template TSchema The form schema.
  * @template TItemSchema Schema used only to type mutation values.
  * @internal
@@ -32,6 +26,7 @@ export function useNotArrayField<
 >(props: NotArrayFieldProps<TSchema, TItemSchema>): Parameters<NonNullable<NotArrayFieldSlots<TSchema, TItemSchema>['default']>>[0] {
   // #region Setup
 
+  /** Full instance resolved from the explicit prop or `<NotForm>`. */
   const form = useNotFormInstance<TSchema>(props.form)
 
   // #endregion
@@ -47,9 +42,7 @@ export function useNotArrayField<
   /** Live array at `props.path`, or `[]` when the path is missing or not an array. */
   const arrayValue = computed<Array<unknown>>(() => {
     const value = getProperty(form.values, props.path)
-    // Falls back to `[]` rather than throwing/returning `undefined` so the
-    // field renders safely (zero items) even before the array exists on the
-    // form, or if something else set that path to a non-array value.
+    // Keep rendering safe when the path is absent or has a non-array value.
     return Array.isArray(value) ? value : []
   })
 
@@ -68,17 +61,9 @@ export function useNotArrayField<
   /** Issues reported exactly at this array field's own path — never issues from items. */
   const errors = computed(() => form.getFieldErrors(props.path))
 
-  /**
-   * Whether the array field's own path, or any path nested under it — an
-   * item, a field inside an object item, or an item inside a nested array —
-   * has an active issue. Unlike `errors` above, this recurses to any depth.
-   * Issues without a `path` are never attributed to a specific field, so
-   * they don't affect this — only the top-level `form.isValid` reflects them.
-   */
+  /** Whether the array path and all descendant paths have no issues. */
   const isValid = computed(() => {
-    // "Valid" means *no* issue falls within scope — phrased as `.every`
-    // over a negation rather than `!.some(...)` for the same result, but
-    // reads as "every issue is either unrelated or pathless."
+    // Pathless issues belong to the form as a whole, not this field.
     return form.errors.every(issue => issue.path === undefined || !isPathWithinScope(issue.path, arrayPathSegments.value))
   })
 
@@ -106,9 +91,7 @@ export function useNotArrayField<
    * @returns A key that never repeats in this field instance.
    */
   function createItemKey() {
-    // A simple counter, not a random id or timestamp: uniqueness only needs
-    // to hold within this one field instance's lifetime, and a counter is
-    // deterministic and cheap.
+    // Keys only need to be unique within this field instance.
     return `notform-array-item-${nextItemKeyId++}`
   }
 
@@ -117,9 +100,7 @@ export function useNotArrayField<
    * @param targetLength Desired key count.
    */
   function syncItemKeysToLength(targetLength: number) {
-    // Only reached for *external* length changes (e.g. `form.setValue`
-    // replacing the whole array) — our own mutation helpers below keep
-    // `itemKeys` in sync directly and never rely on this padding/trimming.
+    // Mutation helpers sync keys directly; this handles external length changes.
     while (itemKeys.value.length < targetLength) {
       itemKeys.value.push(createItemKey())
     }
@@ -153,23 +134,19 @@ export function useNotArrayField<
   }
 
   /**
-   * Moves one element inside `target` from `fromIndex` to `toIndex`.
-   * @template TItem Element type.
-   * @param target Array to mutate in place.
-   * @param fromIndex Index of the element to move.
-   * @param toIndex Destination index, clamped to the array bounds.
+   * Moves one element inside `target`; indices must already be normalized.
+   * @template TItem Array item type.
+   * @param target Array to mutate.
+   * @param fromIndex Current index of the item.
+   * @param toIndex Destination index.
    */
   function moveArrayItem<TItem>(target: Array<TItem>, fromIndex: number, toIndex: number) {
-    if (fromIndex === toIndex || fromIndex < 0 || fromIndex >= target.length) {
+    if (fromIndex === toIndex) {
       return
     }
 
-    // Clamp rather than reject an out-of-range `toIndex` — moving "to the
-    // end" is a common caller intent and shouldn't require them to compute
-    // `length - 1` themselves.
-    const clampedToIndex = Math.max(0, Math.min(toIndex, target.length - 1))
     const [movedItem] = target.splice(fromIndex, 1)
-    target.splice(clampedToIndex, 0, movedItem)
+    target.splice(toIndex, 0, movedItem)
   }
 
   // #endregion
@@ -181,140 +158,171 @@ export function useNotArrayField<
    * @param value Item to append.
    */
   function append(value: InferInput<TItemSchema>) {
-    // No remap needed: every existing item keeps its index when adding to
-    // the end, so there's nothing for `remapArrayFieldState` to do here.
+    form.invalidateValidation()
     getOrCreateArrayValue().push(value)
     itemKeys.value.push(createItemKey())
+    form.syncDirtyState(props.path)
   }
 
   /**
-   * Inserts `value` at the start and remaps later item state — at any depth
-   * underneath each item — up by one.
+   * Inserts `value` at the start and remaps later item state.
    * @param value Item to prepend.
    */
   function prepend(value: InferInput<TItemSchema>) {
+    form.invalidateValidation()
     getOrCreateArrayValue().unshift(value)
     itemKeys.value.unshift(createItemKey())
-    // Every existing item shifted one position to the right — their
-    // touched/dirty/error state must move with them or it'll end up
-    // attached to the wrong item.
     remapArrayFieldState(form, props.path, previousIndex => previousIndex + 1)
+    form.syncDirtyState(props.path)
   }
 
   /**
-   * Inserts `value` at `index` and remaps later item state — at any depth
-   * underneath each item — up by one.
-   * @param index Insertion index.
+   * Inserts `value` at `index`, clamped to `[0, length]`. Invalid non-integer
+   * indices are ignored.
+   * @param index Insertion index, clamped to the valid range.
    * @param value Item to insert.
    */
   function insert(index: number, value: InferInput<TItemSchema>) {
-    getOrCreateArrayValue().splice(index, 0, value)
-    itemKeys.value.splice(index, 0, createItemKey())
-    // Only items at or after the insertion point shift forward — anything
-    // before `index` is unaffected and keeps its state as-is.
+    const existingArray = getProperty(form.values, props.path)
+    const currentLength = Array.isArray(existingArray) ? existingArray.length : 0
+    const insertionIndex = normalizeInsertionIndex(index, currentLength)
+    if (insertionIndex === undefined) {
+      return
+    }
+
+    const array = Array.isArray(existingArray) ? existingArray : getOrCreateArrayValue()
+
+    form.invalidateValidation()
+    array.splice(insertionIndex, 0, value)
+    itemKeys.value.splice(insertionIndex, 0, createItemKey())
     remapArrayFieldState(form, props.path, previousIndex => (
-      previousIndex >= index ? previousIndex + 1 : previousIndex
+      previousIndex >= insertionIndex ? previousIndex + 1 : previousIndex
     ))
+    form.syncDirtyState(props.path)
   }
 
   /**
-   * Removes the item at `index` and remaps later item state — at any depth
-   * underneath each item — down by one. State nested under the removed
-   * item's own path, at any depth, is discarded along with it.
-   * @param index Index to remove.
+   * Removes the item at `index`; invalid non-integer indices are ignored.
+   * @param index Index of the item to remove.
    */
   function remove(index: number) {
-    getOrCreateArrayValue().splice(index, 1)
-    itemKeys.value.splice(index, 1)
+    const existingArray = getProperty(form.values, props.path)
+    if (!Array.isArray(existingArray)) {
+      return
+    }
+
+    const normalizedIndex = normalizeExistingIndex(index, existingArray.length)
+    if (normalizedIndex === undefined) {
+      return
+    }
+
+    form.invalidateValidation()
+    existingArray.splice(normalizedIndex, 1)
+    itemKeys.value.splice(normalizedIndex, 1)
 
     remapArrayFieldState(form, props.path, (previousIndex) => {
-      // Returning `undefined` here (rather than an index) is the signal
-      // `remapArrayFieldState` uses to drop this item's state entirely —
-      // it no longer has anywhere to move to.
-      if (previousIndex === index) {
+      if (previousIndex === normalizedIndex) {
         return
       }
-
-      return previousIndex > index ? previousIndex - 1 : previousIndex
+      return previousIndex > normalizedIndex ? previousIndex - 1 : previousIndex
     })
+    form.syncDirtyState(props.path)
   }
 
   /**
    * Replaces the value at `index` without changing its key.
-   * @param index Index to update.
-   * @param value New item value.
+   * @param index Index of the item to replace.
+   * @param value Replacement item.
    */
   function update(index: number, value: InferInput<TItemSchema>) {
-    // No key or state remap: the item's identity and position are unchanged,
-    // only its own value differs.
-    getOrCreateArrayValue()[index] = value
+    const existingArray = getProperty(form.values, props.path)
+    if (!Array.isArray(existingArray)) {
+      return
+    }
+
+    const normalizedIndex = normalizeExistingIndex(index, existingArray.length)
+    if (normalizedIndex === undefined) {
+      return
+    }
+
+    form.invalidateValidation()
+    existingArray[normalizedIndex] = value
+    form.syncDirtyState(props.path)
   }
 
   /**
-   * Swaps two items, moving keys and form state — at any depth underneath
-   * each item — with them.
-   * @param indexA First index.
-   * @param indexB Second index.
+   * Swaps two items; invalid non-integer/out-of-range indices are ignored.
+   * @param indexA Index of the first item.
+   * @param indexB Index of the second item.
    */
   function swap(indexA: number, indexB: number) {
-    const array = getOrCreateArrayValue();
+    const existingArray = getProperty(form.values, props.path)
+    if (!Array.isArray(existingArray)) {
+      return
+    }
 
-    // Array-destructuring swap keeps the value and its key changing in
-    // lockstep — doing this with temp variables risks the two arrays
-    // (`array` and `itemKeys.value`) drifting out of sync if edited separately.
-    // eslint-disable-next-line unicorn/no-unreadable-array-destructuring
-    [array[indexA], array[indexB]] = [array[indexB], array[indexA]];
+    const normalizedA = normalizeExistingIndex(indexA, existingArray.length)
+    const normalizedB = normalizeExistingIndex(indexB, existingArray.length)
 
+    if (normalizedA === undefined || normalizedB === undefined || normalizedA === normalizedB) {
+      return
+    }
+
+    form.invalidateValidation();
     // eslint-disable-next-line unicorn/no-unreadable-array-destructuring
-    [itemKeys.value[indexA], itemKeys.value[indexB]] = [itemKeys.value[indexB], itemKeys.value[indexA]]
+    [existingArray[normalizedA], existingArray[normalizedB]] = [existingArray[normalizedB], existingArray[normalizedA]];
+    // eslint-disable-next-line unicorn/no-unreadable-array-destructuring
+    [itemKeys.value[normalizedA], itemKeys.value[normalizedB]] = [itemKeys.value[normalizedB], itemKeys.value[normalizedA]]
 
     remapArrayFieldState(form, props.path, (previousIndex) => {
-      if (previousIndex === indexA) {
-        return indexB
+      if (previousIndex === normalizedA) {
+        return normalizedB
       }
-
-      if (previousIndex === indexB) {
-        return indexA
+      if (previousIndex === normalizedB) {
+        return normalizedA
       }
-
-      // Every other index is untouched by a swap — nothing else moved.
       return previousIndex
     })
+    form.syncDirtyState(props.path)
   }
 
   /**
-   * Moves one item to `toIndex`, shifting neighbors and remapping form
-   * state — at any depth underneath each item.
-   * @param fromIndex Current index.
-   * @param toIndex Destination index.
+   * Moves one item to `toIndex`, clamping the destination to the array bounds.
+   * Invalid non-integer source/destination indices are ignored.
+   * @param fromIndex Index of the item to move.
+   * @param toIndex Destination index, clamped to the valid range.
    */
   function move(fromIndex: number, toIndex: number) {
-    moveArrayItem(getOrCreateArrayValue(), fromIndex, toIndex)
-    moveArrayItem(itemKeys.value, fromIndex, toIndex)
+    const existingArray = getProperty(form.values, props.path)
+    if (!Array.isArray(existingArray)) {
+      return
+    }
 
-    // Unlike `swap`, a move shifts every item *between* the two positions
-    // by one — not just the two endpoints — because `splice` closes the gap
-    // left behind and opens one at the destination.
+    const normalizedFrom = normalizeExistingIndex(fromIndex, existingArray.length)
+    const normalizedTo = normalizeMoveDestination(toIndex, existingArray.length)
+
+    if (normalizedFrom === undefined || normalizedTo === undefined || normalizedFrom === normalizedTo) {
+      return
+    }
+
+    form.invalidateValidation()
+    moveArrayItem(existingArray, normalizedFrom, normalizedTo)
+    moveArrayItem(itemKeys.value, normalizedFrom, normalizedTo)
+
     remapArrayFieldState(form, props.path, (previousIndex) => {
-      if (previousIndex === fromIndex) {
-        return toIndex
+      if (previousIndex === normalizedFrom) {
+        return normalizedTo
       }
-
-      if (fromIndex < toIndex) {
-        // Moving forward (e.g. 1 → 4): everything strictly after the old
-        // position and up to (inclusive) the new one slides back by one to
-        // fill the gap the moved item left behind.
-        return previousIndex > fromIndex && previousIndex <= toIndex
+      if (normalizedFrom < normalizedTo) {
+        return previousIndex > normalizedFrom && previousIndex <= normalizedTo
           ? previousIndex - 1
           : previousIndex
       }
-
-      // Moving backward (e.g. 4 → 1): everything from the new position up
-      // to (exclusive) the old one slides forward by one to make room.
-      return previousIndex >= toIndex && previousIndex < fromIndex
+      return previousIndex >= normalizedTo && previousIndex < normalizedFrom
         ? previousIndex + 1
         : previousIndex
     })
+    form.syncDirtyState(props.path)
   }
 
   // #endregion
@@ -324,11 +332,7 @@ export function useNotArrayField<
   watch(
     () => arrayValue.value.length,
     (arrayLength) => {
-      // Guards against redundant work: every mutation helper above already
-      // keeps `itemKeys` in sync directly, so by the time this watcher runs
-      // the lengths usually already match — this only actually does
-      // anything for an *external* change (e.g. `form.setValue` swapping in
-      // a whole new array) that bypassed those helpers.
+      // Helpers sync keys directly; this catches external array replacements.
       if (itemKeys.value.length === arrayLength) {
         return
       }

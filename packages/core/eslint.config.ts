@@ -9,3 +9,8 @@ export default factory({
       'ts/no-explicit-any': 'off',
     },
   })
+  .override('favorodera/unicorn/rules', {
+    rules: {
+      'unicorn/prefer-ternary': 'off',
+    },
+  })

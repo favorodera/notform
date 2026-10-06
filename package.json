@@ -22,7 +22,9 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "pnpm lint:root && turbo lint",
-    "lint:root": "eslint . --fix --ignore-pattern 'packages/*' --ignore-pattern 'apps/*'",
+    "lint:root": "eslint .",
+    "lint:root:fix": "eslint . --fix",
+    "lint:fix": "pnpm lint:root:fix && turbo lint:fix",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "test:watch": "turbo test:watch",
@@ -30,12 +32,13 @@
     "sync-repl-workers": "turbo sync-repl-workers",
     "preview": "turbo preview",
     "prepublishOnly": "turbo prepublishOnly",
-    "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+    "ready": "pnpm install && pnpm lint:fix && pnpm typecheck && pnpm test && pnpm build"
   },
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
+    "pkg-pr-new": "catalog:",
     "relizy": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:"

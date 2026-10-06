@@ -35,10 +35,14 @@
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
-      ".": ["./dist/types.d.mts"]
+      ".": [
+        "./dist/types.d.mts"
+      ]
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=24.0.0",
     "pnpm": ">=11.0.0"
@@ -48,7 +52,8 @@
     "dev": "nuxt prepare && nuxt-module-build build --stub",
     "build": "nuxt prepare && nuxt-module-build build",
     "typecheck": "nuxt prepare && nuxt typecheck",
-    "lint": "nuxt prepare && eslint . --fix"
+    "lint": "nuxt prepare && eslint .",
+    "lint:fix": "nuxt prepare && eslint . --fix"
   },
   "peerDependencies": {
     "notform": "workspace:*",

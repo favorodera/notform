@@ -28,10 +28,9 @@ const pageSurround = await useAsyncData(`${route.path}-surround`, () => {
 
 const tocFooterLinks = computed<PageLink[]>(() => [
   {
-    icon: 'tabler:edit',
-    label: 'Edit this page',
-    target: '_blank',
-    to: `https://github.com/favorodera/notform/edit/main/apps/docs/content/${page.data.value?.stem}.md`,
+    icon: 'tabler:play',
+    label: 'Playground',
+    to: `/playground`,
   },
   {
     icon: 'tabler:star',
@@ -48,7 +47,7 @@ const tocFooterLinks = computed<PageLink[]>(() => [
   {
     class: 'font-semibold text-pink-400 hover:text-pink-500',
     icon: 'tabler:heart',
-    label: 'Sponsor this project',
+    label: 'Become a sponsor',
     target: '_blank',
     to: 'https://github.com/sponsors/favorodera',
   },
@@ -104,10 +103,9 @@ defineOgImage('Image.takumi', { ...seo.value })
         <ContentToc
           :links="page.data.value?.body?.toc?.links"
           :ui="{
-            title:'text-sm text-muted font-normal',
+            title:'text-xs text-muted font-medium',
+            link:'text-[0.8rem]',
           }"
-          highlight
-          highlight-variant="circuit"
         >
           <template #bottom>
             <Separator />

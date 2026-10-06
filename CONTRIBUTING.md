@@ -14,7 +14,7 @@ Thank you for your interest in contributing to NotForm! We appreciate your time 
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v22 or later
+- [Node.js](https://nodejs.org/) v24 or later
 - [pnpm](https://pnpm.io/installation) v11 or later
 
 ### Setup

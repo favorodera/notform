@@ -9,7 +9,11 @@ import type { PathSegment } from '../types/shared'
 export function toPropertyKey(segment: PathSegment): PropertyKey {
   // Standard Schema issue paths can use `{ key }` objects instead of raw
   // keys (e.g. to carry extra metadata) — unwrap to the raw key either way.
-  return typeof segment === 'object' && segment !== null && 'key' in segment ? segment.key : segment
+  if (typeof segment === 'object' && segment !== null && 'key' in segment) {
+    return segment.key
+  }
+
+  return segment
 }
 
 /**
@@ -19,21 +23,18 @@ export function toPropertyKey(segment: PathSegment): PropertyKey {
  * @param segmentB Second segment.
  * @returns `true` when both refer to the same key.
  */
-export function areSegmentsEqual(
-  segmentA: PathSegment,
-  segmentB: PathSegment,
-): boolean {
+export function areSegmentsEqual(segmentA: PathSegment, segmentB: PathSegment) {
   const keyA = toPropertyKey(segmentA)
   const keyB = toPropertyKey(segmentB)
 
   // Array indices can arrive as a number (from our own code) or a string
   // (from dot-prop parsing a path like "tags.0") — normalize before comparing.
   if (typeof keyA === 'number' && typeof keyB === 'string') {
-    return Number.isSafeInteger(Number(keyB)) && keyA === Number(keyB)
+    return Number.isSafeInteger(keyA) && String(keyA) === keyB
   }
 
   if (typeof keyA === 'string' && typeof keyB === 'number') {
-    return Number.isSafeInteger(Number(keyA)) && Number(keyA) === keyB
+    return Number.isSafeInteger(keyB) && keyA === String(keyB)
   }
 
   // Same type on both sides (string-string, number-number, or symbol) —
@@ -42,17 +43,8 @@ export function areSegmentsEqual(
 }
 
 /**
- * Whether `pathSegments` names the same field as `scopeSegments`, or a field
- * nested underneath it, at any depth.
- *
- * This is the general **"at-or-under"** test: `isPathWithinScope(path, scope)`
- * is `true` when `path` equals `scope` exactly, or when `path` extends
- * `scope` with one or more extra trailing segments. It underlies both
- * {@linkcode locatePathInArrayField} (which additionally requires at least one
- * extra segment, since it locates a specific item) and the recursive
- * `isValid`/`isTouched`/`isDirty`/`isValidating` aggregates on
- * `<NotArrayField>`, which allow zero extra segments too, since the array's
- * own path should count toward its own aggregate.
+ * Whether a path equals or descends from a scope, at any depth.
+ * Used by array-path remapping and recursive `<NotArrayField>` status.
  * @template TPathSegment Segment type of the candidate path.
  * @template TScopeSegment Segment type of the scope path.
  * @internal
@@ -66,7 +58,7 @@ export function isPathWithinScope<
 >(
   pathSegments: ReadonlyArray<TPathSegment>,
   scopeSegments: ReadonlyArray<TScopeSegment>,
-): boolean {
+) {
   // A shorter path can never contain the scope path within it.
   if (pathSegments.length < scopeSegments.length) {
     return false

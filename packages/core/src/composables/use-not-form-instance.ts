@@ -13,10 +13,13 @@ import { NOT_FORM_INSTANCE_KEY, toNotFormInstance } from '../utils/instance'
  * @throws If neither prop nor inject is available.
  */
 export function useNotFormInstance<TSchema extends ObjectSchema>(explicitInstance?: NotFormAPI<TSchema> | NotFormInstance<TSchema>) {
+  /** Instance provided by the nearest `<NotForm>`, if present. */
   const injectedInstance = inject<NotFormInstance<TSchema> | undefined>(NOT_FORM_INSTANCE_KEY, undefined)
 
   // An explicit `:form` prop always wins over `<NotForm>` inject — this is
   // what lets a field opt out of its ancestor and target a different form.
+
+  /** Explicit prop instance, falling back to the nearest provider. */
   const resolvedInstance = toNotFormInstance(explicitInstance) ?? injectedInstance
 
   if (!resolvedInstance) {
