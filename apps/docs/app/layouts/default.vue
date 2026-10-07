@@ -7,6 +7,5 @@
         <slot />
       </Main>
     </Page>
-
   </div>
 </template>

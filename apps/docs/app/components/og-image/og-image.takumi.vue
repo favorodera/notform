@@ -20,11 +20,11 @@ const props = defineProps<{
       class="shrink-0 text-highlighted block-14 inline-14"
     />
 
-    <div class="text-5xl tracking-tight font-bold text-highlighted">
+    <div class="text-5xl font-bold tracking-tight text-highlighted">
       {{ props.title }}
     </div>
 
-    <div class="text-3xl tracking-wide text-muted font-medium">
+    <div class="text-3xl font-medium tracking-wide text-muted">
       {{ props.description }}
     </div>
   </div>

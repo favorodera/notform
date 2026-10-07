@@ -54,7 +54,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   /** Whether any validation run is active. */
   const isValidating = computed(() => validatingFields.size > 0)
 
-   /** Active validation run ids and the paths each run marked as validating. */
+  /** Active validation run ids and the paths each run marked as validating. */
   const activeValidationRuns = new Map<number, Array<Paths<TSchema>>>()
 
   /** Next id assigned to a validation run. */

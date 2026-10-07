@@ -102,9 +102,6 @@ catalogs:
     monaco-editor-core:
       specifier: ^0.57.0
       version: 0.57.0
-    motion-v:
-      specifier: ^2.4.4
-      version: 2.5.2
     nuxt:
       specifier: ^4.5.2
       version: 4.5.2
@@ -215,9 +212,6 @@ importers:
       '@nuxtjs/seo':
         specifier: 'catalog:'
         version: 5.3.16(b749fdcb4ecab684c203e76ffa2dd593)
-      '@tailwindcss/vite':
-        specifier: 'catalog:'
-        version: 4.3.3(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(tsx@4.23.15)(yaml@2.9.1))
       '@takumi-rs/core':
         specifier: 'catalog:'
         version: 2.14.0(csstype@3.2.3)
@@ -236,9 +230,6 @@ importers:
       minimark:
         specifier: 'catalog:'
         version: 1.0.0
-      motion-v:
-        specifier: 'catalog:'
-        version: 2.5.2(@vueuse/core@15.0.0(vue@3.5.43(typescript@6.0.3)))(vue@3.5.43(typescript@6.0.3))
       notform-nuxt:
         specifier: workspace:*
         version: link:../../packages/nuxt
@@ -251,9 +242,6 @@ importers:
       nuxt-schema-org:
         specifier: 'catalog:'
         version: 6.4.3(5bc19d4f14f7d63a463dc00dac6b86a2)
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.3.3
       ufo:
         specifier: 'catalog:'
         version: 1.6.4
@@ -273,6 +261,9 @@ importers:
       '@nuxt/eslint':
         specifier: 'catalog:'
         version: 1.17.0(@typescript-eslint/utils@8.69.0(eslint@10.11.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(@vue/compiler-sfc@3.5.43)(esbuild@0.28.1)(eslint@10.11.0(jiti@2.7.0)(supports-color@10.2.2))(magic-string@1.4.1)(magicast@0.5.5)(oxc-parser@0.149.0)(rolldown@1.2.9)(rollup@4.62.2)(srvx@0.11.22)(supports-color@10.2.2)(typescript@6.0.3)(unplugin@3.4.0(esbuild@0.28.1)(rolldown@1.2.9)(rollup@4.62.2)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@tailwindcss/vite':
+        specifier: 'catalog:'
+        version: 4.3.3(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.48.0)(tsx@4.23.15)(yaml@2.9.1))
       '@types/node':
         specifier: 'catalog:'
         version: 26.6.4
@@ -282,6 +273,9 @@ importers:
       nuxtseo-layer-devtools:
         specifier: 'catalog:'
         version: 5.3.16(9faf083ac352124e0a25e9390f8fad8f)
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.3.3
       tsx:
         specifier: 'catalog:'
         version: 4.23.15
@@ -15831,18 +15825,6 @@ snapshots:
   motion-v@2.5.2(@vueuse/core@14.4.0(vue@3.5.43(typescript@6.0.3)))(vue@3.5.43(typescript@6.0.3)):
     dependencies:
       '@vueuse/core': 14.4.0(vue@3.5.43(typescript@6.0.3))
-      framer-motion: 13.4.0
-      hey-listen: 1.0.8
-      motion-dom: 13.3.0
-      motion-utils: 13.3.0
-      vue: 3.5.43(typescript@6.0.3)
-    transitivePeerDependencies:
-      - react
-      - react-dom
-
-  motion-v@2.5.2(@vueuse/core@15.0.0(vue@3.5.43(typescript@6.0.3)))(vue@3.5.43(typescript@6.0.3)):
-    dependencies:
-      '@vueuse/core': 15.0.0(vue@3.5.43(typescript@6.0.3))
       framer-motion: 13.4.0
       hey-listen: 1.0.8
       motion-dom: 13.3.0

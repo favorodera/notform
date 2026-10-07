@@ -39,7 +39,7 @@ provide('githubStars', githubStars.data)
         :files="sectionsSearch.data.value"
         :navigation="resolvedNavigation"
         :color-mode="false"
-         placeholder="Search documentation..."
+        placeholder="Search documentation..."
       />
     </ClientOnly>
   </App>

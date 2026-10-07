@@ -54,7 +54,6 @@ catalog:
   klona: ^2.0.6
   minimark: ^1.0.0
   monaco-editor-core: ^0.57.0
-  motion-v: ^2.4.4
   nuxt: ^4.5.2
   nuxt-llms: ^0.2.0
   nuxt-schema-org: ^6.3.2
