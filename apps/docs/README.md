@@ -1,16 +1,10 @@
+<h1 align="center">
+  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notformdocs.vercel.app/favicon.svg">
+  </br>
+  NotForm (Documentation)
+</h1>
 <p align="center">
-<img alt="header" src="https://shieldcn.dev/header/transparent.svg?title=NotForm%28Documentation%29&amp;subtitle=Headless%2C+schema-agnostic+form+management+for+Vue+3&amp;logo=https%3A%2F%2Fnotformdocs.vercel.app%2Ffavicon.svg&amp;size=wide&amp;mode=dark&amp;font=fira-code" />
+  Headless, schema-agnostic form management for Vue 3 and Nuxt.
 </p>
 
-## Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start development in watch mode
-pnpm dev
-
-# Build all packages
-pnpm build
-```
+The [documentation site](https://notformdocs.vercel.app/) site for NotForm.
