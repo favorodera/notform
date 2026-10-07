@@ -4,11 +4,13 @@ import { NotArrayField, type UseNotFormConfig } from '../../src'
 import { createNotFormInstance } from '../../src/factories/create-not-form-instance'
 import { delayed, tagsSchema } from '../helpers/not-validator'
 
+/** Default form state for array mutation tests. */
 const baseConfig: UseNotFormConfig<typeof tagsSchema> = {
   initialValues: { tags: ['a', 'b', 'c'] },
   schema: tagsSchema,
 }
 
+/** Renders array items, aggregate state, and each mutation action. */
 const template = `
   <NotArrayField
     :form="form"
@@ -42,9 +44,9 @@ const template = `
 `
 
 /**
- * Helper function to mount an array field with a form
- * @param formConfig Optional configuration to override the base config
- * @returns The mounted form and wrapper
+ * Mounts the array-field fixture with optional form overrides.
+ * @param formConfig Overrides for the default form config.
+ * @returns The form instance and mounted wrapper.
  */
 function mountArrayField(formConfig?: Partial<UseNotFormConfig<typeof tagsSchema>>) {
   const form = createNotFormInstance({ ...baseConfig, ...formConfig })
@@ -59,17 +61,17 @@ function mountArrayField(formConfig?: Partial<UseNotFormConfig<typeof tagsSchema
 }
 
 /**
- * Helper function to get the rendered keys from the array field
- * @param wrapper The mounted form wrapper
- * @returns Array of rendered keys
+ * Reads rendered item keys in array order.
+ * @param wrapper Mounted array-field wrapper.
+ * @returns Rendered keys, including `undefined` for missing attributes.
  */
 function getRenderedKeys(wrapper: ReturnType<typeof mountArrayField>['wrapper']) {
   return wrapper.findAll('.item').map(item => item.attributes('data-key'))
 }
 
 /**
- * Helper function to expect defined unique keys
- * @param keys Array of keys to check
+ * Asserts that every key is defined and unique.
+ * @param keys Keys to check.
  */
 function expectDefinedUniqueKeys(keys: Array<string | undefined>) {
   expect(keys.every(Boolean)).toBe(true)

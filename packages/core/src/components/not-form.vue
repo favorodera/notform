@@ -5,15 +5,14 @@ import { provideNotFormInstance } from '../utils/instance'
 
 // #region Setup
 
-// Not renderless: renders a native <form> around the default slot and provides
-// the form instance to its descendants. Binding $attrs explicitly forwards
-// attributes not declared as props to the form element.
+// Renders a native form, provides its instance, and forwards undeclared attributes.
 defineOptions({
   inheritAttrs: false,
 })
 
 defineSlots<NotFormSlots>()
 
+/** Form instance provided to descendant fields. */
 const props = defineProps<NotFormProps<TSchema>>()
 
 provideNotFormInstance<TSchema>(props.form)
@@ -22,15 +21,7 @@ provideNotFormInstance<TSchema>(props.form)
 </script>
 
 <template>
-  <!--
-    Reset is always prevented here, regardless of what (if anything) the
-    consumer binds to @reset, since a native reset would otherwise clear
-    every input before `values` has a chance to react to it.
-
-    Submit is NOT prevented here. `form.submit()` calls `event.preventDefault()`
-    itself when it runs, which only happens if the consumer binds @submit to it
-    (e.g. `@submit="form.submit"`) — see the NotForm docs for why this matters.
-  -->
+  <!-- Prevent native reset so values stay reactive. Submit prevention belongs to form.submit(). -->
   <form
     v-bind="$attrs"
     @reset.prevent

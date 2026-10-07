@@ -1,5 +1,6 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 
+/** Standard Schema metadata shared by the test validators. */
 export const vendorVersion = {
   vendor: 'not-validator',
   version: 1,
@@ -27,7 +28,11 @@ export function string(min?: number, max?: number): StandardSchemaV1<string> {
           return { issues: [{ message: `Must be at least ${min} characters` }] }
         }
 
-        return max && value.length > max ? { issues: [{ message: `Must be at most ${max} characters` }] } : { value }
+        if (max && value.length > max) {
+          return { issues: [{ message: `Must be at most ${max} characters` }] }
+        }
+
+        return { value }
       },
       ...vendorVersion,
     },
@@ -56,7 +61,11 @@ export function number(min?: number, max?: number): StandardSchemaV1<number> {
           return { issues: [{ message: `Must be at least ${min}` }] }
         }
 
-        return max !== undefined && value > max ? { issues: [{ message: `Must be at most ${max}` }] } : { value }
+        if (max !== undefined && value > max) {
+          return { issues: [{ message: `Must be at most ${max}` }] }
+        }
+
+        return { value }
       },
       ...vendorVersion,
     },
@@ -192,10 +201,11 @@ export function delayed<TSchema extends StandardSchemaV1>(schema: TSchema, gate:
  * Wraps a schema so each `validate` waits on `nextGate(callNumber)`.
  * @template TSchema Inner schema.
  * @param schema Schema to run after each gate.
- * @param nextGate Promise for the 1-based call number.
+ * @param nextGate Gate promise for each 1-based call number.
  * @returns Gated schema with the same types.
  */
 export function delayedByCall<TSchema extends StandardSchemaV1>(schema: TSchema, nextGate: (callNumber: number) => Promise<void>): TSchema {
+  /** Number of validations started by this wrapper. */
   let callCount = 0
 
   return {
@@ -217,6 +227,7 @@ export function delayedByCall<TSchema extends StandardSchemaV1>(schema: TSchema,
  * @returns A Standard Schema used to race stale validations.
  */
 export function createFirstCallBlockingSchema(gate: Promise<void>) {
+  /** Number of validations started by this schema. */
   let callCount = 0
 
   return {
@@ -240,13 +251,14 @@ export function createFirstCallBlockingSchema(gate: Promise<void>) {
 /**
  * Schema whose `validate` waits on `nextGate(callNumber)` then returns `nextResult(callNumber)`.
  * @param nextGate Promise to await for this call.
- * @param nextResult Result after the gate resolves.
+ * @param nextResult Result factory called with the call number and input value after the gate resolves.
  * @returns A Standard Schema for overlapping-validation tests.
  */
 export function createGatedCallSchema(
   nextGate: (callNumber: number) => Promise<void>,
   nextResult: (callNumber: number, value: unknown) => Promise<StandardSchemaV1.Result<unknown>> | StandardSchemaV1.Result<unknown>,
 ) {
+  /** Number of validations started by this schema. */
   let callCount = 0
 
   return {
@@ -263,12 +275,8 @@ export function createGatedCallSchema(
 }
 
 /**
- * Wraps `schema` so every issue path segment it reports is re-shaped as a
- * Standard Schema `{ key }` object instead of a plain key. The spec allows
- * either shape (`PropertyKey | { key: PropertyKey }`), and real validators
- * are free to emit `{ key }` wrappers — this exercises
- * `toPropertyKey`/`areSegmentsEqual` against that shape without needing a
- * second copy of `object`/`array` for every schema under test.
+ * Wraps issue path segments in Standard Schema `{ key }` objects to exercise
+ * path normalization without duplicating the test schemas.
  * @template TSchema Inner schema.
  * @param schema Schema whose issue paths get re-wrapped.
  * @returns Schema with identical types and validation behavior, `{ key }`-wrapped paths.
@@ -299,25 +307,31 @@ export function withKeySegments<TSchema extends StandardSchemaV1>(schema: TSchem
   } as TSchema
 }
 
+/** Schema shared by name/email form tests. */
 export const nameEmailSchema = object({
   email: string(5, 100),
   name: string(2, 50),
 })
 
+/** Schema for array-field tests. */
 export const tagsSchema = object({
   tags: array(string(1, 20), 2, 5),
 })
 
+/** Nested group schema used by array remapping tests. */
 export const groupSchema = object({
   name: string(1, 50),
   tags: array(string(1, 20), 2, 5),
 })
 
+/** Schema with nested arrays used to test recursive paths. */
 export const emailGroupsSchema = object({
   email: string(5, 100),
   groups: array(groupSchema, 1, 3),
 })
 
+/** Name/email schema that emits `{ key }` issue path segments. */
 export const nameEmailSchemaWithKeySegments = withKeySegments(nameEmailSchema)
 
+/** Nested-array schema that emits `{ key }` issue path segments. */
 export const emailGroupsSchemaWithKeySegments = withKeySegments(emailGroupsSchema)

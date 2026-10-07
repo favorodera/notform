@@ -34,12 +34,12 @@ provide('githubStars', githubStars.data)
 
     <Error :error="error" />
 
-    <AppFooter />
-
     <ClientOnly>
       <LazyContentSearch
         :files="sectionsSearch.data.value"
         :navigation="resolvedNavigation"
+        :color-mode="false"
+        placeholder="Search documentation..."
       />
     </ClientOnly>
   </App>

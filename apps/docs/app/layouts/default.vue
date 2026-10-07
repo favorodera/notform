@@ -7,7 +7,5 @@
         <slot />
       </Main>
     </Page>
-
-    <AppFooter />
   </div>
 </template>

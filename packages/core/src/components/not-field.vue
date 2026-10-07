@@ -5,19 +5,18 @@ import { useNotField } from '../composables/use-not-field'
 
 // #region Setup
 
-// Fully renderless, like <NotArrayField>. validationMode defaults to 'eager'
-// here; useNotField applies the { onBlur: true, onChange: true } validateOn
-// defaults internally, merged with whatever is passed through the
-// validateOn prop.
+// Renderless wrapper; defaults to eager validation and delegates trigger merging to the composable.
 
 defineSlots<NotFieldSlots>()
 
+/** Field inputs with the component's default validation mode applied. */
 const props = withDefaults(defineProps<NotFieldProps<TSchema>>(), {
   debounce: undefined,
   validateOn: undefined,
   validationMode: 'eager',
 })
 
+/** State and event handlers exposed through the default slot. */
 const field = useNotField<TSchema>(props)
 
 // #endregion

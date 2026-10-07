@@ -13,8 +13,8 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
         <template #left>
           <PageAside>
             <ContentNavigation
-              highlight
               :navigation="navigation"
+              :collapsible="false"
             />
           </PageAside>
         </template>
@@ -24,7 +24,5 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
         </Main>
       </Page>
     </Container>
-
-    <AppFooter />
   </div>
 </template>

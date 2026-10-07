@@ -3,6 +3,10 @@ import { useNotArrayField } from '../../src/composables/use-not-array-field'
 import { createNotFormInstance } from '../../src/factories/create-not-form-instance'
 import { emailGroupsSchema, object, string } from '../helpers/not-validator'
 
+/**
+ * Creates the nested-array form used by recursive state tests.
+ * @returns A fresh form instance.
+ */
 const createForm = () => createNotFormInstance({
   initialValues: {
     email: '',
@@ -156,5 +160,127 @@ describe('mutation methods remap nested state at any depth (regression)', () => 
 
     expect(form.dirtyFields.has('groups.0.tags.0')).toBe(false)
     expect(form.dirtyFields.has('groups.1.tags.0')).toBe(true)
+    expect(groups.isDirty).toBe(true)
+  })
+})
+
+describe('array mutations keep dirty state and validation state consistent', () => {
+  it('marks the array dirty after append and clears it when the change is reverted', () => {
+    const form = createForm()
+    const groups = useNotArrayField({ form, path: 'groups' })
+
+    groups.append({ name: 'API', tags: ['api', 'http'] })
+
+    expect(groups.isDirty).toBe(true)
+
+    groups.remove(2)
+
+    expect(groups.isDirty).toBe(false)
+  })
+
+  it('marks update dirty even when no field event ran', () => {
+    const form = createForm()
+    const groups = useNotArrayField({ form, path: 'groups' })
+
+    groups.update(0, { name: 'Platform', tags: ['vue'] })
+
+    expect(groups.isDirty).toBe(true)
+  })
+
+  it('clamps move destinations before remapping nested state', () => {
+    const form = createForm()
+    const groups = useNotArrayField({ form, path: 'groups' })
+
+    form.markFieldAsTouched('groups.0.name')
+    groups.move(0, 99)
+
+    expect(form.values.groups[1]?.name).toBe('Frontend')
+    expect(form.touchedFields.has('groups.1.name')).toBe(true)
+    expect(form.touchedFields.has('groups.99.name')).toBe(false)
+  })
+
+  it('ignores invalid existing-item indices instead of mutating state', () => {
+    const form = createForm()
+    const groups = useNotArrayField({ form, path: 'groups' })
+    const before = [...form.values.groups]
+
+    groups.remove(-1)
+    groups.update(99, { name: 'Nope', tags: [] })
+    groups.swap(0, 99)
+    groups.move(99, 0)
+
+    expect(form.values.groups).toStrictEqual(before)
+  })
+
+  it('clamps negative insert indices to the start', () => {
+    const form = createForm()
+    const groups = useNotArrayField({ form, path: 'groups' })
+
+    form.markFieldAsTouched('groups.0.name')
+    groups.insert(-1, { name: 'New', tags: ['one'] })
+
+    expect(form.values.groups[0]?.name).toBe('New')
+    expect(form.touchedFields.has('groups.1.name')).toBe(true)
+    expect(form.touchedFields.has('groups.0.name')).toBe(false)
+  })
+
+  it('invalidates in-flight validation when an item is removed', async () => {
+    // eslint-disable-next-line ts/no-invalid-void-type
+    const { promise: gate, resolve } = Promise.withResolvers<void>()
+    let callCount = 0
+    const form = createNotFormInstance({
+      initialValues: {
+        email: '',
+        groups: [
+          { name: 'Frontend', tags: ['vue', 'forms'] },
+          { name: 'Backend', tags: ['node', 'api'] },
+        ],
+      },
+      schema: {
+        '~standard': {
+          types: {
+            input: {} as ReturnType<typeof createForm>['values'],
+            output: {} as ReturnType<typeof createForm>['values'],
+          },
+          async validate(value) {
+            callCount++
+            if (callCount === 1) {
+              await gate
+              return { issues: [{ message: 'Stale', path: ['groups', 0, 'name'] }] }
+            }
+            return { value }
+          },
+          vendor: 'test',
+          version: 1,
+        },
+      },
+    })
+    const groups = useNotArrayField({ form, path: 'groups' })
+
+    const validation = form.validateField('groups.0.name')
+
+    expect(form.isValidating).toBe(true)
+
+    groups.remove(0)
+
+    expect(form.isValidating).toBe(false)
+
+    resolve()
+    await validation
+
+    expect(form.errors).toStrictEqual([])
+  })
+})
+
+describe('validateField scopes errors to the requested path', () => {
+  it('includes descendant issues when validating an object or array scope', async () => {
+    const form = createForm()
+    form.setValue('groups.0.tags', ['', 'ok'])
+
+    const result = await form.validateField('groups')
+
+    expect(result.issues?.some(issue => issue.path?.join('.') === 'groups.0.tags.0')).toBe(true)
+    expect(form.getFieldErrors('email')).toHaveLength(0)
+    expect(form.isValid).toBe(false)
   })
 })

@@ -10,15 +10,20 @@ import type {
 } from '../types/shared'
 import { isPathWithinScope, toPropertyKey } from './segments'
 
+/**
+ * Parsed array-item path and its nested segments.
+ * @template TPathSegment Segment type of the candidate path.
+ */
 interface ArrayPathLocation<TPathSegment extends PathSegment> {
+  /** Normalized index of the array item. */
   index: number
+
+  /** Path segments below the item index. */
   remainingPathSegments: ReadonlyArray<TPathSegment>
 }
 
 /**
- * Locates a field path inside an array field, e.g. `users.1.email` under
- * `users`, or `users.1.addresses.0.city` under `users` — `remainingPathSegments`
- * holds whatever comes after the index, however many segments deep that is.
+ * Locates an item path and preserves every segment nested below its index.
  * @template TPathSegment Segment type of the candidate path.
  * @template TArraySegment Segment type of the array field path.
  * @internal
@@ -33,8 +38,7 @@ export function locatePathInArrayField<
   pathSegments: ReadonlyArray<TPathSegment>,
   arrayFieldPathSegments: ReadonlyArray<TArraySegment>,
 ): ArrayPathLocation<TPathSegment> | undefined {
-  // `<=` (not `<`) rules out the array's own path too: a path must have at
-  // least one segment past the array path — the item index — to be "inside" it.
+  // Require an item-index segment after the array path, not the array path itself.
   if (pathSegments.length <= arrayFieldPathSegments.length || !isPathWithinScope(pathSegments, arrayFieldPathSegments)) {
     return undefined
   }
@@ -42,36 +46,32 @@ export function locatePathInArrayField<
   // The segment right after the array path should be the item index.
   const itemIndexSegment = toPropertyKey(pathSegments[arrayFieldPathSegments.length])
 
-  // An object key (not number/string) here means this isn't actually an
-  // array index position — bail rather than force a bad match.
+  // Only numeric or numeric-string segments can identify an array item.
   if (typeof itemIndexSegment !== 'number' && typeof itemIndexSegment !== 'string') {
     return undefined
   }
 
   const itemIndex = Number(itemIndexSegment)
 
-  // Guards against non-numeric-looking string keys (e.g. an object field
-  // that happens to share the array's path prefix) and negative/fractional
-  // values that can't be a real array index.
+  // Reject non-numeric, negative, and fractional segments.
   if (!Number.isSafeInteger(itemIndex) || itemIndex < 0) {
     return undefined
   }
 
   return {
     index: itemIndex,
-    // Everything past the index, at any depth — lets callers relocate state
-    // nested arbitrarily deep inside the item, not just the item's own path.
+    // Preserve nested object and nested-array paths when the item moves.
     remainingPathSegments: pathSegments.slice(arrayFieldPathSegments.length + 1),
   }
 }
 
 /**
- * Rewrites paths in a set after an array mutation. Paths outside the array are left as-is.
+ * Remaps touched or dirty paths after an array mutation.
  * @template TSchema The form schema.
  * @internal
- * @param paths Touched or dirty path set.
- * @param arraySegments Split array field path.
- * @param remapIndex Previous item index → next index, or `undefined` if removed.
+ * @param paths Touched or dirty paths to remap.
+ * @param arraySegments Parsed array field path.
+ * @param remapIndex Maps an old item index to its new index, or `undefined` if removed.
  */
 function remapPathSet<TSchema extends ObjectSchema>(
   paths: Set<Paths<TSchema>>,
@@ -131,18 +131,14 @@ function remapPathSet<TSchema extends ObjectSchema>(
 }
 
 /**
- * Moves touched, dirty, and error state with array items after a structural
- * mutation. Because {@linkcode locatePathInArrayField} keeps whatever follows the
- * item's index as `remainingPathSegments`, this already handles state nested
- * arbitrarily deep inside an item — a field on an object item, or an item
- * inside a nested array of its own — not just the item's own top-level path.
+ * Moves touched, dirty, and error state with items, including nested paths.
  *
  * Validating state is not remapped; generation tracking already drops stale results.
  * @template TSchema The form schema.
  * @internal
  * @param form Full form instance.
  * @param arrayPath Dot path of the array field.
- * @param remapIndex Previous item index → next index, or `undefined` if removed.
+ * @param remapIndex Maps an old item index to its new index, or `undefined` if removed.
  */
 export function remapArrayFieldState<TSchema extends ObjectSchema>(
   form: NotFormInstance<TSchema>,
@@ -206,4 +202,44 @@ export function remapArrayFieldState<TSchema extends ObjectSchema>(
   // Whole-array replace rather than in-place edits, since indices shifted
   // and the array's length/order may itself have changed.
   form.replaceErrors(remappedErrors)
+}
+
+/**
+ * Returns an existing-item index or `undefined` for an invalid index.
+ * @param index Candidate item index.
+ * @param length Current array length.
+ * @returns The index when it identifies an existing item; otherwise `undefined`.
+ */
+export function normalizeExistingIndex(index: number, length: number) {
+  if (Number.isSafeInteger(index) && index >= 0 && index < length) {
+    return index
+  }
+}
+
+/**
+ * Clamps an insertion index to the valid half-open range `[0, length]`.
+ * @param index Candidate insertion index.
+ * @param length Current array length.
+ * @returns The clamped index, or `undefined` for a non-integer.
+ */
+export function normalizeInsertionIndex(index: number, length: number) {
+  if (!Number.isSafeInteger(index)) {
+    return
+  }
+
+  return Math.max(0, Math.min(index, length))
+}
+
+/**
+ * Clamps a move destination to the valid existing-item range.
+ * @param index Candidate destination index.
+ * @param length Current array length.
+ * @returns The clamped index, or `undefined` for an invalid index or empty array.
+ */
+export function normalizeMoveDestination(index: number, length: number) {
+  if (length === 0 || !Number.isSafeInteger(index)) {
+    return
+  }
+
+  return Math.max(0, Math.min(index, length - 1))
 }

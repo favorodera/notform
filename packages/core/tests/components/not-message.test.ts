@@ -3,10 +3,13 @@ import { describe, expect, it } from 'vitest'
 import { NotField, NotForm, NotMessage, useNotForm, type UseNotFormConfig } from '../../src'
 import { nameEmailSchema, object, string } from '../helpers/not-validator'
 
+/** Shared schema for message rendering tests. */
 const schema = nameEmailSchema
 
+/** Base form config; individual tests provide values as needed. */
 const baseConfig: UseNotFormConfig<typeof schema> = { schema }
 
+/** Renders a message beside one field. */
 const singleFieldTemplate = `
   <NotForm :form="form" @submit="form.submit">
     <NotField path="name" v-slot="{ events, path }">
@@ -16,6 +19,7 @@ const singleFieldTemplate = `
   </NotForm>
 `
 
+/** Renders messages for both name and email fields. */
 const multiFieldTemplate = `
   <NotForm :form="form" @submit="form.submit">
     <NotField path="name" v-slot="{ events, path }">
@@ -29,6 +33,7 @@ const multiFieldTemplate = `
   </NotForm>
 `
 
+/** Uses the message slot to customize the rendered content. */
 const customRenderTemplate = `
   <NotForm :form="form" @submit="form.submit">
     <NotField path="name" v-slot="{ events, path }">
@@ -40,6 +45,7 @@ const customRenderTemplate = `
   </NotForm>
 `
 
+/** Uses an explicit form without a `<NotForm>` ancestor. */
 const singletonTemplate = `
   <div>
     <NotField :form="form" path="name" v-slot="{ events, path }">
@@ -49,6 +55,7 @@ const singletonTemplate = `
   </div>
 `
 
+/** Proves an explicit message form overrides the ancestor form. */
 const priorityTemplate = `
   <NotForm :form="primaryForm" @submit="primaryForm.submit">
     <NotField :form="secondaryForm" path="name" v-slot="{ events, path }">
@@ -58,6 +65,7 @@ const priorityTemplate = `
   </NotForm>
 `
 
+/** Renders the message as a paragraph element. */
 const pTagTemplate = `
   <NotForm :form="form" @submit="form.submit">
     <NotField path="name" v-slot="{ events, path }">
@@ -68,9 +76,9 @@ const pTagTemplate = `
 `
 
 /**
- * Mounts a NotForm with the given template.
- * @param template Optional template to render.
- * @returns Object containing the form and wrapper.
+ * Mounts the message test form with an optional template override.
+ * @param template Template to render; defaults to the single-field fixture.
+ * @returns The form instance and mounted wrapper.
  */
 function mountForm(template?: string) {
   const form = useNotForm(baseConfig)

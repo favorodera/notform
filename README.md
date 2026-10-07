@@ -1,225 +1,27 @@
+<h1 align="center">
+  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notformdocs.vercel.app/favicon.svg">
+  </br>
+  NotForm
+</h1>
 <p align="center">
-<img alt="header" src="https://shieldcn.dev/header/surface.svg?title=NotForm&amp;subtitle=Headless%2C+schema-agnostic+form+management+for+Vue+3&amp;logo=https%3A%2F%2Fnotformdocs.vercel.app%2Ffavicon.svg&amp;size=wide&amp;mode=dark&amp;font=fira-code" />
+  Headless, schema-agnostic form management for Vue 3 and Nuxt.
+  <br/>
+  <a href="https://notformdocs.vercel.app/">Documentation</a>
 </p>
 
-<p align="center">
-<a href="https://github.com/favorodera/notform"><img alt="license" src="https://shieldcn.dev/github/favorodera/notform/license.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Licence" /></a>
-<a href="https://github.com/favorodera/notform"><img alt="stars" src="https://shieldcn.dev/github/favorodera/notform/stars.svg?variant=secondary&amp;size=xs&amp;font=fira-code&amp;label=Stars" /></a>
-<a href="https://notformdocs.vercel.app/"><img alt="Custom badge" src="https://shieldcn.dev/badge/Documentation.svg?variant=secondary&amp;size=xs&amp;font=fira-code" /></a>
-<a href="https://notformdocs.vercel.app/playground"><img alt="Playground badge" src="https://shieldcn.dev/badge/Playground.svg?variant=secondary&amp;size=xs&amp;font=fira-code" /></a>
-<a href="https://github.com/sponsors/favorodera"><img alt="badge" src="https://shieldcn.dev/badge/Sponsor%20this%20project-FF69B4.svg?variant=outline&amp;size=xs&amp;font=fira-code&amp;logo=false" /></a>
-</p>
-
-NotForm provides the form state, validation, field state, submission lifecycle, and dynamic array-field primitives for Vue 3 while you decide how the form looks and behaves. There are no opinionated inputs, styles, or UI components built into the core.
-
-Validation is schema-driven supporting any [Standard Schema](https://standardschema.dev/) compatible validator, state is reactive, and the API is designed for typed field paths and Vue's Composition API.
+NotForm gives you reactive form state, schema validation, field state, submission lifecycle, and dynamic arrays without imposing UI components or styles.
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
-| [`notform`](./packages/core) | Core Vue 3 form management and headless components |
-| [`notform-nuxt`](./packages/nuxt) | Official Nuxt integration with auto-imports |
-
-## Install
-
-### Vue 3
-
-```bash
-pnpm add notform
-```
-
-### Nuxt
-
-```bash
-npx nuxi module add notform
-```
-
-Then install a Standard Schema-compatible validator, for example:
-
-```bash
-pnpm add zod
-```
-
-## Basic Usage
-
-### Single Fields
-
-```vue
-<script setup lang="ts">
-import { NotField, NotForm, NotMessage, useNotForm } from 'notform'
-import { z } from 'zod'
-
-const schema = z.object({
-  email: z.email('Enter a valid email address'),
-  name: z.string('Enter a valid name'),
-})
-
-const form = useNotForm({
-  initialValues: {
-    email: '',
-    name: '',
-  },
-  onSubmit(values) {
-    console.log('Submitted:', values)
-  },
-  schema,
-})
-</script>
-
-<template>
-  <NotForm
-    :form="form"
-    @submit="form.submit"
-    @reset="form.reset()"
-  >
-    <NotField
-      v-slot="{ events, path }"
-      path="name"
-    >
-      <div>
-        <label :for="path">Name</label>
-
-        <input
-          :id="path"
-          v-model="form.values.name"
-          v-bind="events"
-          name="name"
-          type="text"
-          autocomplete="name"
-        >
-
-        <NotMessage :path="path" />
-      </div>
-    </NotField>
-
-    <NotField
-      v-slot="{ events, path }"
-      path="email"
-    >
-      <div>
-        <label :for="path">Email address</label>
-
-        <input
-          :id="path"
-          v-model="form.values.email"
-          v-bind="events"
-          name="email"
-          type="email"
-          autocomplete="email"
-        >
-
-        <NotMessage :path="path" />
-      </div>
-    </NotField>
-
-    <button type="submit">
-      Submit
-    </button>
-
-    <button type="reset">
-      Reset
-    </button>
-  </NotForm>
-</template>
-```
-
-### Array Fields
-
-`NotArrayField` provides renderless operations for dynamic arrays while preserving stable item keys during reordering.
-
-```vue
-<script setup lang="ts">
-import { NotArrayField, NotField, NotForm, NotMessage, useNotForm } from 'notform'
-import { z } from 'zod'
-
-const tagSchema = z.string()
-
-const schema = z.object({
-  tags: z.array(tagSchema).optional(),
-})
-
-const form = useNotForm({
-  initialValues: {
-    tags: [''],
-  },
-  onSubmit(values) {
-    console.log('Submitted:', values)
-  },
-  schema,
-})
-</script>
-
-<template>
-  <NotForm
-    :form="form"
-    @submit="form.submit"
-    @reset="form.reset()"
-  >
-    <NotArrayField
-      v-slot="{ items, append, remove }"
-      path="tags"
-      :item-schema="tagSchema"
-    >
-      <div
-        v-for="(item, index) in items"
-        :key="item.key"
-      >
-        <NotField
-          v-slot="{ events, path }"
-          :path="item.path"
-        >
-          <label :for="path">Tag {{ index + 1 }}</label>
-
-          <input
-            :id="path"
-            v-model="form.values.tags[index]"
-            v-bind="events"
-            :name="path"
-            type="text"
-          >
-
-          <NotMessage :path="path" />
-        </NotField>
-
-        <button
-          type="button"
-          @click="remove(index)"
-        >
-          Remove
-        </button>
-      </div>
-
-      <button
-        type="button"
-        @click="append('')"
-      >
-        Add tag
-      </button>
-    </NotArrayField>
-  </NotForm>
-</template>
-```
+| Package                           | Description                                                |
+| --------------------------------- | ---------------------------------------------------------- |
+| [`notform`](./packages/core)      | Core Vue 3 form state, validation, and headless components |
+| [`notform-nuxt`](./packages/nuxt) | Nuxt integration with auto-imports                         |
 
 ## Development
 
-This repository is a pnpm workspace managed with Turborepo.
-
-```bash
-pnpm install
-pnpm dev
-```
-
-Common checks:
-
-```bash
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm build
-pnpm ready
-```
+This repository is a pnpm workspace managed with Turborepo. See [CONTRIBUTING.md](./CONTRIBUTING.md) for development and contribution guidelines.
 
 ## License
 
-[MIT](./LICENSE) © [Favour Emeka](https://github.com/favorodera)
+MIT © [Favour Emeka](https://github.com/favorodera)
