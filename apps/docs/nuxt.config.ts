@@ -64,10 +64,10 @@ export default defineNuxtConfig({
     asyncContext: true,
   },
   fonts: {
-    families: [
-      { global: true, name: 'Geist', weights: fontWeights },
-      { global: true, name: 'Geist Mono', weights: fontWeights },
-    ],
+    defaults: {
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    },
+    families: [{ global: true, name: 'Outfit' }],
   },
   icon: {
     componentName: 'NIcon',

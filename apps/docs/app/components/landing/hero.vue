@@ -1,6 +1,6 @@
 <template>
   <Container
-    class="relative grid grid-cols-1 justify-items-center py-16 text-center"
+    class="relative grid grid-cols-1 justify-items-center py-8 text-center"
     as="section"
   >
     <h1
@@ -20,9 +20,9 @@
     <p
       class="mbs-5 text-base/relaxed font-light text-muted max-inline-md"
     >
-      Headless, composable Vue 3 forms. Bring your own schema —
-      Zod, Valibot, ArkType, or anything Standard Schema compliant.
-      You own every pixel of your UI.
+      Headless form state and validation library for Vue 3.
+      Bring your own schema, keep your own components, and stay in control
+      of every interaction.
     </p>
 
     <div
@@ -37,21 +37,21 @@
       <Button
         to="/docs/getting-started"
         size="lg"
-        icon="tabler:book"
+        icon="tabler:book-2"
         color="primary"
         variant="subtle"
       >
-        Read Docs
+        Read the Docs
       </Button>
 
       <Button
         to="/playground"
         size="lg"
-        icon="tabler:play"
+        icon="tabler:player-play"
         color="primary"
         variant="subtle"
       >
-        Playground
+        Try the Playground
       </Button>
     </div>
   </Container>

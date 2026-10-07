@@ -33,19 +33,35 @@ const tocFooterLinks = computed<PageLink[]>(() => [
     to: `/playground`,
   },
   {
-    icon: 'tabler:star',
-    label: 'Star on GitHub',
+    external: true,
+    icon: 'simple-icons:stackblitz',
+    label: 'Stackblitz(Vue 3)',
     target: '_blank',
-    to: 'https://github.com/favorodera/notform',
+    to: `https://stackblitz.com/edit/notform`,
+    ui: {
+      linkLeadingIcon: 'text-info',
+    },
   },
   {
+    external: true,
+    icon: 'simple-icons:stackblitz',
+    label: 'Stackblitz(Nuxt 4)',
+    target: '_blank',
+    to: `https://stackblitz.com/edit/notform-nuxt`,
+    ui: {
+      linkLeadingIcon: 'text-info',
+    },
+  },
+  {
+    external: true,
     icon: 'tabler:history',
-    label: 'Changelog',
+    label: 'Releases',
     target: '_blank',
     to: 'https://github.com/favorodera/notform/releases',
   },
   {
     class: 'font-semibold text-pink-400 hover:text-pink-500',
+    external: true,
     icon: 'tabler:heart',
     label: 'Become a sponsor',
     target: '_blank',
@@ -113,7 +129,8 @@ defineOgImage('Image.takumi', { ...seo.value })
             <PageLinks
               :links="tocFooterLinks"
               :ui="{
-                linkLabelExternalIcon: 'hidden',
+                linkLabelExternalIcon: 'relative',
+                linkLabel:'flex'
               }"
             />
           </template>

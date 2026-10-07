@@ -6,8 +6,7 @@
 @theme static {
   --container-8xl: 90rem;
 
-  --font-sans: 'Geist', sans-serif;
-  --font-mono: 'Geist Mono', monospace;
+  --font-sans: 'Outfit', sans-serif;
 }
 
 :root,

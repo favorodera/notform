@@ -11,6 +11,7 @@ const appConfig = useAppConfig()
 
 const navigationMenuItems = [
   {
+    class: 'w-fit',
     external: true,
     icon: 'simple-icons:github',
     label: 'Github',
@@ -18,7 +19,7 @@ const navigationMenuItems = [
     to: appConfig.github.repo.url,
   },
   {
-    class: ' text-pink-400 hover:text-pink-500 **:text-pink-400 **:hover:text-pink-500',
+    class: ' text-pink-400 hover:text-pink-500 **:text-pink-400 **:hover:text-pink-500 w-fit',
     external: true,
     icon: 'tabler:heart',
     label: 'Become a Sponsor',
@@ -78,8 +79,8 @@ const navigationMenuItems = [
 
     <template #body>
       <ContentNavigation
-        highlight
         :navigation="navigation"
+        :collapsible="false"
       />
 
       <Separator class="my-4" />

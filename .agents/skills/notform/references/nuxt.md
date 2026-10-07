@@ -1,33 +1,49 @@
 # NotForm with Nuxt
 
-Covers adding NotForm to Nuxt, configuring `notform-nuxt`, auto-imports, and SSR. The published Nuxt guide is authoritative. Don't duplicate its setup steps from memory.
+[Read the full raw Nuxt guide.](https://notformdocs.vercel.app/raw/docs/getting-started/nuxt.md)
 
-## Resource workflow
+## Install
 
-1. Fetch the [Nuxt module guide](https://notformdocs.vercel.app/raw/docs/getting-started/nuxt-module.md) for installation, manual registration, auto-imports, type safety, and SSR.
-2. Fetch [Installation](https://notformdocs.vercel.app/raw/docs/getting-started/installation.md) for package and validator setup.
-3. Fetch the [Quickstart](https://notformdocs.vercel.app/raw/docs/getting-started/quickstart.md) for form usage after installation.
-4. Start with the [LLM index](https://notformdocs.vercel.app/llms.txt) when the relevant page is unclear.
-5. Once Nuxt is configured, use [composables.md](composables.md) and [components.md](components.md) for the API.
+Recommended:
 
-## Focus keywords
+```bash
+npx nuxi module add notform
+```
 
-Search the Nuxt raw guide for `nuxi module add`, `notform-nuxt`, auto-imports, `useNotForm`, `NotForm`, `NotField`, `NotArrayField`, `NotMessage`, Nuxt 4, and SSR.
+Manual setup:
 
-## Guidance for answers
+```bash
+pnpm add notform-nuxt
+```
 
-- Explain that the module changes installation and imports, not form behavior. Every Quickstart example works the same with or without it, minus the `notform` import line.
-- The module registers `useNotForm`, `NotForm`, `NotField`, `NotArrayField`, and `NotMessage` as auto-imports. Types stay fully generic, so `form.values` and field `path` props are still typed from the schema.
-- The module does not install a validation library. The application still picks a Standard Schema-compatible validator (for example `zod`) and imports it manually.
-- Prefer the CLI installation the guide documents (`nuxi module add notform`). Mention manual setup (add `notform-nuxt` as a dependency and list it in `modules` in `nuxt.config.ts`) only when relevant, for example in a monorepo or a restricted environment.
-- `notform-nuxt` is Nuxt-only. For plain Vue or Vite, use the `notform` package and the Installation page.
-- Link the exact raw page you used so the user can inspect the full instructions.
+```ts
+export default defineNuxtConfig({
+  modules: [
+    'notform-nuxt',
+  ],
+})
+```
 
-## Canonical resources
+## Auto-imports
 
-- [LLM index](https://notformdocs.vercel.app/llms.txt)
-- [Full LLM bundle](https://notformdocs.vercel.app/llms-full.txt)
-- [Nuxt module](https://notformdocs.vercel.app/raw/docs/getting-started/nuxt-module.md)
-- [Installation](https://notformdocs.vercel.app/raw/docs/getting-started/installation.md)
-- [Quickstart](https://notformdocs.vercel.app/raw/docs/getting-started/quickstart.md)
-- [Nuxt](https://nuxt.com/)
+The module exposes:
+
+- `useNotForm`
+- `NotForm`
+- `NotField`
+- `NotArrayField`
+- `NotMessage`
+
+Import the validator normally. The module does not install or choose one.
+
+## Rules
+
+- Nuxt changes installation/import ergonomics, not form behavior.
+- The same components and composable work with or without the module.
+- Keep each form instance inside normal Vue setup code.
+- Do not reuse one form instance from module scope across requests.
+- For plain Vue/Vite, use `notform` instead of `notform-nuxt`.
+
+## When to load more
+
+After Nuxt setup, use [composables.md](composables.md), [components.md](components.md), and [concepts.md](concepts.md) for the form API and behavior.
