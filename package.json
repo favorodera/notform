@@ -32,7 +32,7 @@
     "sync-repl-workers": "turbo sync-repl-workers",
     "preview": "turbo preview",
     "prepublishOnly": "turbo prepublishOnly",
-    "ready": "pnpm install && pnpm lint:fix && pnpm typecheck && pnpm test && pnpm build"
+    "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:",
