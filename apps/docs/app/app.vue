@@ -48,6 +48,8 @@ defineOgImage('Image.takumi', {
       <LazyContentSearch
         :files="sectionsSearch.data.value"
         :navigation="resolvedNavigation"
+        :color-mode="false"
+        placeholder="Search documentation..."
       />
     </ClientOnly>
   </App>

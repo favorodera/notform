@@ -6,8 +6,7 @@
 @theme static {
   --container-8xl: 90rem;
 
-  --font-sans: 'Geist', sans-serif;
-  --font-mono: 'Geist Mono', monospace;
+  --font-sans: 'Outfit', sans-serif;
 }
 
 :root,
@@ -25,8 +24,7 @@
 
   --ui-container: var(--container-8xl);
 
-  --ui-header-height: 3rem;
-  --ui-footer-height: 3rem;
+  --ui-header-height: 3.5rem;
 
   --ui-radius: 0.5rem;
 

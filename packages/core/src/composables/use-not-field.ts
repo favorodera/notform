@@ -13,31 +13,36 @@ import { useNotFormInstance } from './use-not-form-instance'
 export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<TSchema>): Parameters<NonNullable<NotFieldSlots['default']>>[0] {
   // #region Setup
 
+  /** Full instance resolved from the `form` prop or ancestor provider. */
   const form = useNotFormInstance<TSchema>(props.form)
 
   // #endregion
 
   // #region State
 
+  /** Issues reported exactly at this field path. */
   const errors = computed(() => form.getFieldErrors(props.path))
 
+  /** Whether this field has no issues. */
   const isValid = computed(() => errors.value.length === 0)
 
+  /** Whether this field has been touched. */
   const isTouched = computed(() => form.touchedFields.has(props.path))
 
+  /** Whether this field differs from its baseline value. */
   const isDirty = computed(() => form.dirtyFields.has(props.path))
 
+  /** Whether this field currently has a validation run. */
   const isValidating = computed(() => form.validatingFields.has(props.path))
 
-  // Merged over the defaults rather than replacing them wholesale, so a
-  // caller passing `validateOn={{ onInput: true }}` still keeps blur/change
-  // validation instead of silently losing it.
+  /** Validation triggers, with blur/change enabled unless overridden. */
   const validateOn = computed<NotFieldProps<TSchema>['validateOn']>(() => ({
     onBlur: true,
     onChange: true,
     ...props.validateOn,
   }))
 
+  /** Pending input/change validation, if one is scheduled. */
   let debounceTimer: ReturnType<typeof setTimeout> | undefined
 
   // #endregion
@@ -60,15 +65,13 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
 
   /** Runs field validation immediately, or after `debounce` ms. */
   function scheduleValidation() {
-    // No debounce configured — validate right away rather than scheduling a
-    // zero-delay timer, which would still cost a tick for no reason.
+    // Validate synchronously when debouncing is disabled.
     if (!props.debounce) {
       form.validateField(props.path)
       return
     }
 
-    // Restart the timer on every call so only the last input in a burst
-    // actually triggers validation.
+    // Restart so only the last input in a burst triggers validation.
     clearDebounce()
     debounceTimer = setTimeout(() => {
       form.validateField(props.path)
@@ -81,9 +84,7 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
 
   /** Marks touched and validates on blur when enabled. */
   function onBlur() {
-    // Blur should validate immediately regardless of any pending debounce
-    // from a prior input/change — cancel it so it can't fire a stale,
-    // redundant validation right after this one.
+    // Blur validates immediately, so discard any pending debounced run.
     clearDebounce()
     form.markFieldAsTouched(props.path)
 
@@ -100,9 +101,7 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
       return
     }
 
-    // Eager mode only revalidates while the field is already invalid — a
-    // valid field doesn't re-run on every keystroke, only once it needs to
-    // recover from an error.
+    // Eager mode revalidates on input only while the field is invalid.
     if (props.validationMode === 'eager' && !isValid.value) {
       scheduleValidation()
     }
@@ -132,6 +131,7 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
     }
   }
 
+  /** Event handlers exposed for binding to the field input. */
   const events: Parameters<NonNullable<NotFieldSlots['default']>>[0]['events'] = {
     onBlur,
     onChange,
@@ -143,16 +143,13 @@ export function useNotField<TSchema extends ObjectSchema>(props: NotFieldProps<T
   // #region Lifecycle
 
   onMounted(async () => {
-    // Deferred a tick so `v-model`'s initial DOM sync has actually landed
-    // before validation reads the field's value — validating immediately on
-    // mount could otherwise run against a not-yet-settled value.
+    // Wait for initial `v-model` synchronization before validating.
     await nextTick()
     onMount()
   })
 
   onUnmounted(() => {
-    // Prevents a pending debounced validation from firing (and touching a
-    // form instance) after the field's own component is already gone.
+    // Do not validate against a form after this field unmounts.
     clearDebounce()
   })
 

@@ -7,13 +7,9 @@ import { createNameEmailForm } from '../helpers/create-form'
 import { withSetup } from '../helpers/with-setup'
 
 /**
- * Sets up a `name` field via `useNotField`, inside a real (but headless)
- * component instance so `onMounted`/`onUnmounted` behave correctly — see
- * {@link withSetup}. `overrides.validateOn`, if given, fully replaces the
- * base `{ onBlur: false, onChange: false }` rather than merging into it
- * (a plain object spread, matching how `useNotField` itself treats its
- * `validateOn` prop as a single value, not deep-merged per key by callers).
- * @param overrides Extra `useNotField` props merged over the base config.
+ * Creates a name field inside a headless component so lifecycle hooks run.
+ * `validateOn` overrides replace the base object rather than deep-merge.
+ * @param overrides Field props merged over the test defaults.
  * @returns The form instance and the field's slot state.
  */
 function setupNameField(overrides?: Partial<NotFieldProps<typeof nameEmailSchema>>) {

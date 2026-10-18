@@ -12,5 +12,6 @@ export interface NotFormProps<TSchema extends ObjectSchema> {
 
 /** Slot props for `<NotForm>`. */
 export interface NotFormSlots {
+  /** Default slot content rendered inside the native form. */
   default?: () => void
 }

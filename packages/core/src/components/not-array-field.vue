@@ -6,14 +6,14 @@ import { useNotArrayField } from '../composables/use-not-array-field'
 
 // #region Setup
 
-// Fully renderless: every prop is forwarded straight to useNotArrayField,
-// and everything it returns is forwarded straight back out through the
-// default slot below. This component owns no state of its own.
+// Renderless wrapper: forwards props to the composable and exposes its result through the slot.
 
 defineSlots<NotArrayFieldSlots<TSchema, TItemSchema>>()
 
+/** Inputs forwarded to the array-field composable. */
 const props = defineProps<NotArrayFieldProps<TSchema, TItemSchema>>()
 
+/** State and actions exposed through the default slot. */
 const arrayField = useNotArrayField<TSchema, TItemSchema>(props)
 
 // #endregion

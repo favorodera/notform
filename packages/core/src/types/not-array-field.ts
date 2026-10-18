@@ -47,97 +47,65 @@ export interface NotArrayFieldSlots<TSchema extends ObjectSchema, TItemSchema ex
     /** Dot path of the array field. */
     path: string
 
-    /** Current items, each with a stable key and current path. */
+    /** Items with stable keys and paths for their current indices. */
     items: Array<NotArrayFieldItem<TSchema>>
 
-    /**
-     * Issues reported exactly at the array field's own path — not issues
-     * from individual items.
-     *
-     * The same exact-match behavior as `<NotField>`'s `errors`.
-     *
-     * See {@linkcode isValid} for the aggregate that also accounts for item-level issues.
-     */
+    /** Issues reported at the array path only; see {@linkcode isValid} for descendants. */
     errors: Array<Issue>
 
-    /**
-     * Whether the array field's own path, and every path nested underneath
-     * it, have no issues — an item's own value, a field inside an object
-     * item, or an item inside a nested array, at any depth.
-     *
-     * Unlike {@linkcode errors}, this recurses.
-     */
+    /** Whether the array path and all descendants have no issues. */
     isValid: boolean
 
-    /**
-     * Whether the array field's own path, or any path nested underneath it, has been touched.
-     *
-     * Recurses the same way as {@linkcode isValid}.
-     */
+    /** Whether the array path or a descendant has been touched. */
     isTouched: boolean
 
-    /**
-     * Whether the array field's own path, or any path nested underneath it, differs from the baseline.
-     *
-     * Recurses the same way as {@linkcode isValid}.
-     */
+    /** Whether the array path or a descendant differs from baseline. */
     isDirty: boolean
 
-    /**
-     * Whether the array field's own path, or any path nested underneath it, is currently validating.
-     *
-     * Recurses the same way as {@linkcode isValid}.
-     */
+    /** Whether the array path or a descendant is validating. */
     isValidating: boolean
 
     /**
-     * Appends a value at the end.
-     * @param value Value to append.
+     * Appends a value and assigns it a new key.
+     * @param value Item to append.
      */
     append: (value: InferInput<TItemSchema>) => void
 
     /**
-     * Inserts a value at the start. Shifts every existing item's own
-     * state — at any depth underneath it — forward by one position along
-     * with it.
-     * @param value Value to prepend.
+     * Prepends a value and shifts existing item state.
+     * @param value Item to prepend.
      */
     prepend: (value: InferInput<TItemSchema>) => void
 
     /**
-     * Inserts a value at `index`, shifting later items — and their own
-     * state, at any depth underneath them — back by one position.
+     * Inserts at a clamped index and shifts later item state.
      * @param index Insertion index.
-     * @param value Value to insert.
+     * @param value Item to insert.
      */
     insert: (index: number, value: InferInput<TItemSchema>) => void
 
     /**
-     * Removes the item at `index`. That item's own state — at any depth
-     * underneath it — is discarded along with it; every later item's state
-     * shifts back by one position to follow it to its new index.
+     * Removes an item and its state; later items shift back.
      * @param index Index to remove.
      */
     remove: (index: number) => void
 
     /**
-     * Replaces the value at `index` without changing its key.
+     * Replaces an item without changing its key.
      * @param index Index to update.
-     * @param value New value.
+     * @param value Replacement item.
      */
     update: (index: number, value: InferInput<TItemSchema>) => void
 
     /**
-     * Swaps two items, moving keys and form state — at any depth
-     * underneath each item — with them.
+     * Swaps items, keys, and nested state.
      * @param indexA First index.
      * @param indexB Second index.
      */
     swap: (indexA: number, indexB: number) => void
 
     /**
-     * Moves an item from `from` to `to`, moving keys and form state — at
-     * any depth underneath it — with it.
+     * Moves an item and its state; clamps the destination.
      * @param from Current index.
      * @param to Destination index.
      */

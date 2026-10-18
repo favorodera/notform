@@ -29,6 +29,11 @@ describe('areSegmentsEqual', () => {
     expect(areSegmentsEqual(1, '1.5')).toBe(false)
   })
 
+  it('rejects non-canonical numeric strings', () => {
+    expect(areSegmentsEqual(1, '01')).toBe(false)
+    expect(areSegmentsEqual(1, ' 1 ')).toBe(false)
+  })
+
   it('rejects mismatched segments', () => {
     expect(areSegmentsEqual('email', 'name')).toBe(false)
   })

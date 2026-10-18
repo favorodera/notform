@@ -13,7 +13,7 @@
     "url": "https://github.com/favorodera/notform/issues"
   },
   "engines": {
-    "node": ">=22.0.0",
+    "node": ">=24.0.0",
     "pnpm": ">=11.0.0"
   },
   "scripts": {
@@ -23,7 +23,8 @@
     "preview": "nuxt preview",
     "sync-repl-workers": "tsx scripts/sync-repl-workers.ts",
     "typecheck": "nuxt prepare && nuxt typecheck",
-    "lint": "nuxt prepare && eslint . --fix"
+    "lint": "nuxt prepare && eslint .",
+    "lint:fix": "nuxt prepare && eslint . --fix"
   },
   "dependencies": {
     "@iconify-json/simple-icons": "catalog:",
@@ -34,19 +35,16 @@
     "@nuxt/ui": "catalog:",
     "@nuxtjs/mdc": "catalog:",
     "@nuxtjs/seo": "catalog:",
-    "@tailwindcss/vite": "catalog:",
     "@takumi-rs/core": "catalog:",
     "@vercel/analytics": "catalog:",
     "@vue/repl": "catalog:",
     "@vueuse/core": "catalog:",
     "better-sqlite3": "catalog:",
     "minimark": "catalog:",
-    "motion-v": "catalog:",
     "notform-nuxt": "workspace:*",
     "nuxt": "catalog:",
     "nuxt-llms": "catalog:",
     "nuxt-schema-org": "catalog:",
-    "tailwindcss": "catalog:",
     "ufo": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:",
@@ -55,9 +53,11 @@
   "devDependencies": {
     "@favorodera/eslint-config": "catalog:",
     "@nuxt/eslint": "catalog:",
+    "@tailwindcss/vite": "catalog:",
     "@types/node": "catalog:",
     "monaco-editor-core": "catalog:",
     "nuxtseo-layer-devtools": "catalog:",
+    "tailwindcss": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vue-tsc": "catalog:"

@@ -48,7 +48,8 @@
     "dev": "nuxt prepare && nuxt-module-build build --stub",
     "build": "nuxt prepare && nuxt-module-build build",
     "typecheck": "nuxt prepare && nuxt typecheck",
-    "lint": "nuxt prepare && eslint . --fix"
+    "lint": "nuxt prepare && eslint .",
+    "lint:fix": "nuxt prepare && eslint . --fix"
   },
   "peerDependencies": {
     "notform": "workspace:*",

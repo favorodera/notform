@@ -3,7 +3,7 @@ import type { Get } from 'type-fest'
 import type { DeepPartial, InferInput, InferOutput, Issue, ObjectSchema, Paths } from './shared'
 
 /**
- * Full form instance used by field components. `useNotForm` returns {@linkcode NotFormAPI}.
+ * Full form instance used by field components. `useNotForm` exposes {@linkcode NotFormAPI}.
  * @template TSchema The form schema.
  */
 export interface NotFormInstance<TSchema extends ObjectSchema> {
@@ -43,10 +43,7 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   markFieldAsTouched: (path: Paths<TSchema>) => void
 
   /**
-   * Marks every current leaf field as touched. "Current" matters for arrays:
-   * an empty array contributes no leaf paths, so an item appended afterward
-   * (e.g. via `<NotArrayField>`'s `append`) starts untouched even though
-   * this was already called.
+   * Marks every current leaf field as touched. Later-added array items remain untouched.
    * @internal
    */
   markAllFieldsAsTouched: () => void
@@ -85,8 +82,7 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   syncDirtyState: (path: Paths<TSchema>) => void
 
   /**
-   * Updates dirty state for every current leaf field. Subject to the same
-   * "current shape only" caveat as {@linkcode markAllFieldsAsTouched}.
+   * Updates dirty state for current leaf fields; later-added array items are not included.
    * @internal
    */
   syncAllDirtyStates: () => void
@@ -99,8 +95,7 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   markFieldAsDirty: (path: Paths<TSchema>) => void
 
   /**
-   * Forces every current leaf field dirty. Subject to the same
-   * "current shape only" caveat as {@linkcode markAllFieldsAsTouched}.
+   * Forces current leaf fields dirty; later-added array items are not included.
    * @internal
    */
   markAllFieldsAsDirty: () => void
@@ -168,6 +163,15 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   isValid: boolean
 
   /**
+   * Invalidates all in-flight validation runs without touching current errors.
+   *
+   * Used internally when values change or an array is structurally mutated so
+   * an older async result cannot be written against newer form state.
+   * @internal
+   */
+  invalidateValidation: () => void
+
+  /**
    * Paths currently validating.
    * @internal
    */
@@ -176,10 +180,8 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   /**
    * Validates the whole form and replaces all errors.
    *
-   * Concurrent calls are last-write-wins: each call still resolves with its
-   * own result, but only the most recently started call's result is written
-   * to `errors` — an older call that resolves later has its result silently
-   * discarded from shared state.
+   * Concurrent calls resolve with their own results, but only the newest
+   * call writes to `errors`.
    * @returns Standard Schema result.
    */
   validate: () => Promise<StandardSchemaV1.Result<InferOutput<TSchema>>>
@@ -187,13 +189,8 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   /**
    * Validates the form and writes issues only for `path`.
    *
-   * `path` can be any granularity — a leaf field, an entire array field, or
-   * a specific item inside one; `<NotField>` and `<NotArrayField>` both call
-   * this with their own `path` internally.
-   *
-   * Concurrent calls for the same `path` are last-write-wins, the same as
-   * {@linkcode validate}; a call started after this one, or a whole-form
-   * {@linkcode validate} call, supersedes it.
+   * `path` may identify a leaf, array, or array item. Concurrent calls are
+   * last-write-wins; a newer field or whole-form validation supersedes this one.
    * @param path Dot path.
    * @returns Standard Schema result.
    */
@@ -219,19 +216,9 @@ export interface NotFormInstance<TSchema extends ObjectSchema> {
   // #region Reset
 
   /**
-   * Restores values/errors to the baseline. Optional arguments become the
-   * new baseline, and reset to it immediately.
-   *
-   * `values`/`errors`, when given, fully replace the previous baseline —
-   * they are not merged with it. Any top-level key present in the old
-   * baseline but missing from `values` is simply gone afterward, the same
-   * way `initialValues`/`initialErrors` passed to `useNotForm` become the
-   * literal starting baseline rather than defaults merged with something
-   * else.
-   *
-   * Also bumps the internal validation generation, so any `validate()`/
-   * `validateField()` call already in flight when this runs will still
-   * resolve with its own result, but will not write its issues to `errors`.
+   * Restores values and errors, clears touched/dirty state, and invalidates
+   * active validation results. Optional arguments replace the baselines
+   * entirely (they are not merged) and apply immediately.
    * @param values New baseline values.
    * @param errors New baseline issues.
    */

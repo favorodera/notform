@@ -2,8 +2,6 @@
   <Main>
     <LandingHero />
 
-    <LandingWhyNotform />
-
-    <LandingCta />
+    <LandingFeatures />
   </Main>
 </template>

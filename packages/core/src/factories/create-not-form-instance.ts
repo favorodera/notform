@@ -7,6 +7,7 @@ import type { UseNotFormConfig } from '../types/not-form-config'
 import type { NotFormInstance } from '../types/not-form-instance'
 import type { DeepPartial, InferInput, Issue, ObjectSchema, Paths } from '../types/shared'
 import { areIssuePathsEqual } from '../utils/issues'
+import { isPathWithinScope } from '../utils/segments'
 
 /**
  * Builds the full reactive form instance used by `useNotForm` and field components.
@@ -20,13 +21,10 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   // #region State
 
-  /** Baseline values for reset. */
-  // Cloned so mutating `values` later can never leak back into this baseline.
+  /** Deep-cloned baseline values restored by reset. */
   const initialValues = klona(config.initialValues ?? {} as InferInput<TSchema>)
 
-  /** Live field values. */
-  // Cloned again from `initialValues` (not the same reference) so `values`
-  // and `initialValues` can diverge independently once fields change.
+  /** Reactive field values, independent from the reset baseline. */
   const values = reactive(klona(initialValues))
 
   /** Baseline issues for reset. */
@@ -38,20 +36,31 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   /** Paths the user has interacted with. */
   const touchedFields = reactive(new Set<Paths<TSchema>>())
 
+  /** Whether any field has been touched. */
   const isTouched = computed(() => touchedFields.size > 0)
 
   /** Paths whose value differs from the baseline. */
   const dirtyFields = reactive(new Set<Paths<TSchema>>())
 
+  /** Whether any field differs from its baseline. */
   const isDirty = computed(() => dirtyFields.size > 0)
 
   /** Paths with an in-flight validation. */
   const validatingFields = reactive(new Set<Paths<TSchema>>())
 
+  /** Whether validation has produced no issues. */
   const isValid = computed(() => errors.length === 0)
 
+  /** Whether any validation run is active. */
   const isValidating = computed(() => validatingFields.size > 0)
 
+  /** Active validation run ids and the paths each run marked as validating. */
+  const activeValidationRuns = new Map<number, Array<Paths<TSchema>>>()
+
+  /** Next id assigned to a validation run. */
+  let nextValidationRunId = 0
+
+  /** Whether the submit handler is currently running. */
   const isSubmitting = ref(false)
 
   /**
@@ -61,10 +70,10 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    */
   let generation = 0
 
-  /** Latest per-field validation cycle id, used to drop stale field results. */
+  /** Latest cycle per field, used to discard superseded field results. */
   const fieldValidationCycleMap = new Map<Paths<TSchema>, number>()
 
-  /** Active validation count per path so overlapping runs do not clear too early. */
+  /** Active run count per path, so overlapping runs do not clear early. */
   const validatingFieldCounts = new Map<Paths<TSchema>, number>()
 
   // #endregion
@@ -93,6 +102,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    * @param value Value to assign.
    */
   function setValue<TPath extends Paths<TSchema>>(path: TPath, value: Get<InferInput<TSchema>, TPath, { strict: false }>) {
+    invalidateValidation()
     setProperty(values, path, value)
     syncDirtyState(path)
   }
@@ -264,15 +274,61 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   // #region Validation
 
   /**
-   * Increments the in-flight validation count for each path.
+   * Starts one validation run and records its validating contribution.
    * @internal
-   * @param paths Field paths.
+   * @param paths Paths included in this run.
+   * @returns The id used to settle this run.
+   */
+  function beginValidation(paths: Iterable<Paths<TSchema>>) {
+    const runId = ++nextValidationRunId
+    const runPaths = [...paths]
+    activeValidationRuns.set(runId, runPaths)
+    markFieldsAsValidating(runPaths)
+    return runId
+  }
+
+  /**
+   * Settles a run; invalidation may already have removed its contribution.
+   * @internal
+   * @param runId Id returned by {@linkcode beginValidation}.
+   */
+  function settleValidation(runId: number) {
+    const paths = activeValidationRuns.get(runId)
+    if (!paths) {
+      return
+    }
+
+    activeValidationRuns.delete(runId)
+    unmarkFieldsAsValidating(paths)
+  }
+
+  /**
+   * Invalidates every currently active validation run without touching errors.
+   * Existing runs become stale, and their validating contributions are removed
+   * immediately. Their eventual finally blocks are harmless because the run
+   * records have already been removed.
+   * @internal
+   */
+  function invalidateValidation() {
+    generation++
+    fieldValidationCycleMap.clear()
+
+    const activeRuns = [...activeValidationRuns]
+    activeValidationRuns.clear()
+
+    for (const [, paths] of activeRuns) {
+      unmarkFieldsAsValidating(paths)
+    }
+  }
+
+  /**
+   * Increments validation counts and marks each path active.
+   * @internal
+   * @param paths Field paths covered by the run.
    */
   function markFieldsAsValidating(paths: Iterable<Paths<TSchema>>) {
     for (const path of paths) {
-      // A count, not a boolean flag: `validate()` and `validateField()` can
-      // both be running against the same path at once, and the path must
-      // stay "validating" until *every* overlapping run has finished.
+      // Overlapping runs keep the path validating until the last one settles.
       validatingFieldCounts.set(path, (validatingFieldCounts.get(path) ?? 0) + 1)
       validatingFields.add(path)
     }
@@ -287,8 +343,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     for (const path of paths) {
       const nextCount = (validatingFieldCounts.get(path) ?? 0) - 1
 
-      // Only clear once every overlapping run for this path has finished —
-      // an earlier finisher must not mark the path as done for a later one.
+      // Keep the flag set until every overlapping run for this path settles.
       if (nextCount <= 0) {
         validatingFieldCounts.delete(path)
         validatingFields.delete(path)
@@ -306,7 +361,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
   async function validate() {
     const cycle = ++generation
     const paths = [...deepKeys(values)] as Array<Paths<TSchema>>
-    markFieldsAsValidating(paths)
+    const runId = beginValidation(paths)
 
     try {
       const result = await executeSchemaValidation()
@@ -330,7 +385,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
       return { value: result.value }
     } finally {
-      unmarkFieldsAsValidating(paths)
+      settleValidation(runId)
     }
   }
 
@@ -347,8 +402,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
     fieldValidationCycleMap.set(path, cycle)
 
     const startGeneration = generation
-
-    markFieldsAsValidating([path])
+    const runId = beginValidation([path])
 
     try {
       const result = await executeSchemaValidation()
@@ -363,15 +417,18 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
       const targetPath = parsePath(path)
 
-      // Iterate backwards so splicing mid-loop doesn't skip the element
-      // that shifts into the current index.
+      // Remove the targeted path and every descendant before applying the
+      // fresh validation result. This is required for object/item/array scopes.
       for (let errorIndex = errors.length - 1; errorIndex >= 0; errorIndex--) {
-        if (areIssuePathsEqual(errors[errorIndex].path, targetPath)) {
+        const issuePath = errors[errorIndex].path
+        if (issuePath && isPathWithinScope(issuePath, targetPath)) {
           errors.splice(errorIndex, 1)
         }
       }
 
-      const fieldIssues = (result.issues ?? []).filter(issue => areIssuePathsEqual(issue.path, targetPath))
+      const fieldIssues = (result.issues ?? []).filter(issue => (
+        issue.path !== undefined && isPathWithinScope(issue.path, targetPath)
+      ))
       errors.push(...fieldIssues)
 
       if (fieldIssues.length > 0) {
@@ -384,7 +441,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
         value: getProperty(values, path),
       }
     } finally {
-      unmarkFieldsAsValidating([path])
+      settleValidation(runId)
     }
   }
 
@@ -412,7 +469,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
     const cycle = ++generation
     const paths = [...deepKeys(values)] as Array<Paths<TSchema>>
-    markFieldsAsValidating(paths)
+    const runId = beginValidation(paths)
     isSubmitting.value = true
 
     try {
@@ -432,7 +489,7 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
       clearErrors()
       await config.onSubmit?.(result.value)
     } finally {
-      unmarkFieldsAsValidating(paths)
+      settleValidation(runId)
       isSubmitting.value = false
     }
   }
@@ -449,13 +506,9 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
    * @param nextErrors New baseline issues.
    */
   function reset(nextValues?: DeepPartial<InferInput<TSchema>>, nextErrors?: Array<Issue>) {
-    // Bumping `generation` here (rather than just clearing the maps below)
-    // is what makes any `validate()`/`submit()` already in flight land as a
-    // no-op instead of overwriting what reset is about to set.
-    generation++
-    fieldValidationCycleMap.clear()
-    validatingFieldCounts.clear()
-    validatingFields.clear()
+    // Invalidate any `validate()`/`validateField()`/`submit()` already in
+    // flight so its eventual result cannot overwrite the reset state.
+    invalidateValidation()
 
     if (nextValues) {
       const freshValues = klona(nextValues)
@@ -492,11 +545,13 @@ export function createNotFormInstance<TSchema extends ObjectSchema>(config: UseN
 
   // #region Instance assembly
 
+  /** Full reactive form instance, including methods reserved for components. */
   const instance: Instance = reactive({
     clearErrors,
     dirtyFields,
     errors,
     getFieldErrors,
+    invalidateValidation,
     isDirty,
     isSubmitting,
     isTouched,

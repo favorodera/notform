@@ -23,6 +23,34 @@ export default defineAppConfig({
     colors: {
       neutral: 'zinc',
     },
+    contentNavigation: {
+      compoundVariants: [
+        {
+          active: true,
+          class: {
+            link: 'text-highlighted before:bg-accented',
+          },
+          variant: 'pill',
+        },
+      ],
+      slots: {
+        itemWithChildren: 'data-[state=open]:mb-6',
+        link: 'after:hidden w-fit',
+        listWithChildren: 'ms-0 border-s-0',
+        trigger: 'text-xs font-medium data-[state=open]:text-muted tracking-wide px-0',
+      },
+      variants: {
+        active: {
+          false: { link: 'text-muted' },
+        },
+        level: {
+          true: {
+            item: 'ps-0 ms-0',
+            itemWithChildren: 'ps-0 ms-0',
+          },
+        },
+      },
+    },
     icons: {
       arrowDown: 'tabler:arrow-down',
       arrowLeft: 'tabler:arrow-left',
@@ -74,7 +102,7 @@ export default defineAppConfig({
       },
       codePreview: {
         slots: {
-          code: '[&_pre]:rounded-t-none [&>div]:my-0 [&>div]:rounded-t-0 [&>div>div]:my-0',
+          code: '[&_pre]:rounded-t-none [&>div]:my-0 [&>div]:rounded-t-none [&>div>div]:my-0',
         },
       },
     },

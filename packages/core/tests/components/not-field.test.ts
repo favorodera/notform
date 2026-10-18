@@ -3,8 +3,10 @@ import { describe, expect, it } from 'vitest'
 import { NotField, type NotFieldProps, NotForm, useNotForm } from '../../src'
 import { nameEmailSchema, object, string } from '../helpers/not-validator'
 
+/** Shared schema for field component tests. */
 const schema = nameEmailSchema
 
+/** Template for a field with an explicit form and no `<NotForm>` ancestor. */
 const singletonTemplate = `
   <div>
     <NotField :form="form" v-bind="fieldProps" path="name" v-slot="{ events }">
@@ -13,6 +15,7 @@ const singletonTemplate = `
   </div>
 `
 
+/** Template proving an explicit field form overrides the ancestor form. */
 const priorityTemplate = `
   <NotForm :form="primaryForm" @submit="primaryForm.submit">
     <NotField :form="secondaryForm" path="name" v-slot="{ events }">

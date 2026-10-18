@@ -45,6 +45,10 @@ describe('locatePathInArrayField', () => {
   })
 })
 
+/**
+ * Creates the nested-array form used by remapping tests.
+ * @returns A fresh form instance.
+ */
 const createForm = () => createNotFormInstance({
   initialValues: {
     email: '',
@@ -65,7 +69,7 @@ describe('remapArrayFieldState', () => {
     form.markFieldAsDirty('groups.1.name')
     form.setError({ message: 'Required', path: ['groups', 1, 'tags', 0] })
 
-    // simulate removing index 0: index 0 drops out, index 1 becomes index 0
+    // Model removing item 0: later item indices shift left.
     remapArrayFieldState(form, 'groups', (previousIndex) => {
       if (previousIndex === 0) {
         return
