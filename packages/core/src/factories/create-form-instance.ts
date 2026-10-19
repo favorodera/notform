@@ -30,7 +30,7 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
 
   // #region Instance assembly
 
-  /** Full reactive form instance, including methods reserved for components. */
+  /** Full reactive form instance */
   const instance: Instance = reactive({
     errors,
     values,
