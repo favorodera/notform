@@ -2,26 +2,16 @@
   "files.autoSave": "afterDelay",
   "git.autofetch": true,
   "editor.tabSize": 2,
-  "vue.format.script.initialIndent": true,
-  "vue.format.style.initialIndent": true,
-  "editor.suggest.snippetsPreventQuickSuggestions": true,
-  "editor.quickSuggestions": {
-    "strings": "on",
-    "other": "on"
-  },
   "eslint.format.enable": true,
   "editor.detectIndentation": false,
   "editor.indentSize": "tabSize",
-  "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.validate": true,
   "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
   "tailwindCSS.includeLanguages": {
     "css": "tailwindcss"
   },
   "tailwindCSS.experimental.configFile": "apps/docs/app/assets/css/main.css",
-  "diffEditor.ignoreTrimWhitespace": false,
   "files.eol": "\n",
-  "workbench.iconTheme": "vscode-icons",
   "eslint.runtime": "node",
   "mdc.enableComponentMetadataCompletions": true,
   "mdc.enableFormatting": true,
@@ -39,65 +29,7 @@
       "'([^']+)'"
     ]
   ],
-  "editor.linkedEditing": true,
-  "git.replaceTagsWhenPull": true,
-  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-  "editor.wrapOnEscapedLineFeeds": true,
-  "eslint.rules.customizations": [
-    {
-      "rule": "style/*",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "format/*",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-indent",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-spacing",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-spaces",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-order",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-dangle",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-newline",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*quotes",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*semi",
-      "severity": "off",
-      "fixable": true
-    }
-  ],
   "npm.packageManager": "pnpm",
-  "editor.defaultColorDecorators": "always",
-  "editor.inlayHints.maximumLength": 10,
   "cSpell.ignorePaths": [
     "package-lock.json",
     "node_modules",
