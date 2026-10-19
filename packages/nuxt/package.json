@@ -1,12 +1,12 @@
 {
-  "name": "notform-nuxt",
+  "name": "@notform/nuxt",
   "type": "module",
   "version": "3.0.1",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
-  "description": "Official notform nuxt module - Vue Forms Without the Friction",
+  "description": "Official NotForm Nuxt module - Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/favorodera",
@@ -41,7 +41,7 @@
   "files": ["dist"],
   "engines": {
     "node": ">=24.0.0",
-    "pnpm": ">=11.0.0"
+    "pnpm": ">=12.0.0"
   },
   "scripts": {
     "prepack": "pnpm build",

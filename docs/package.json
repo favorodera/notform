@@ -41,7 +41,7 @@
     "@vueuse/core": "catalog:",
     "better-sqlite3": "catalog:",
     "minimark": "catalog:",
-    "notform-nuxt": "workspace:*",
+    "@notform/nuxt": "workspace:*",
     "nuxt": "catalog:",
     "nuxt-llms": "catalog:",
     "nuxt-schema-org": "catalog:",

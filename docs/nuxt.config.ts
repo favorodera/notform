@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import { defineSoftwareApp } from 'nuxt-schema-org/schema'
-import packageJson from '../../package.json'
+import packageJson from '../package.json'
 
 export default defineNuxtConfig({
   app: {

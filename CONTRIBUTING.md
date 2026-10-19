@@ -51,14 +51,6 @@ Documentation lives in `apps/docs`.
 
 When changing the public API, update the relevant documentation alongside the code.
 
-## Playground
-
-The [NotForm Playground](https://notformdocs.vercel.app/playground) is useful for small browser-level reproductions and manual checks.
-
-Use automated tests and the local development environment for correctness and integration testing.
-
-Pull requests may also receive preview packages through [`pkg.pr.new`](https://github.com/stackblitz-labs/pkg.pr.new), which can be used to test changes in the Playground before merging.
-
 ## Pull Requests
 
 Keep pull requests focused and easy to review.
@@ -75,8 +67,6 @@ Before submitting:
 Search existing issues before opening a new one.
 
 Include the expected behavior, actual behavior, reproduction steps, and relevant environment details.
-
-For small browser-level issues, a [Playground](https://notformdocs.vercel.app/playground) reproduction is helpful.
 
 ## Feature Requests
 

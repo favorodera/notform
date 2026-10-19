@@ -32,6 +32,7 @@
   "npm.packageManager": "pnpm",
   "cSpell.ignorePaths": [
     "package-lock.json",
+    ".gitignore",
     "node_modules",
     "vscode-extension",
     ".git/{info,lfs,logs,refs,objects}/**",

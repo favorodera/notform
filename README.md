@@ -13,10 +13,10 @@ NotForm gives you reactive form state, schema validation, field state, submissio
 
 ## Packages
 
-| Package                           | Description                                                |
-| --------------------------------- | ---------------------------------------------------------- |
-| [`notform`](./packages/core)      | Core Vue 3 form state, validation, and headless components |
-| [`notform-nuxt`](./packages/nuxt) | Nuxt integration with auto-imports                         |
+| Package                            | Description                                                |
+| ---------------------------------- | ---------------------------------------------------------- |
+| [`notform`](./packages/core)       | Core Vue 3 form state, validation, and headless components |
+| [`@notform/nuxt`](./packages/nuxt) | Nuxt integration with auto-imports                         |
 
 ## Development
 

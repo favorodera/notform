@@ -2,7 +2,7 @@
   "name": "notform-monorepo",
   "version": "3.0.1",
   "private": true,
-  "packageManager": "pnpm@11.28.5",
+  "packageManager": "pnpm@12.14.0",
   "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
@@ -16,14 +16,14 @@
   },
   "engines": {
     "node": ">=24.0.0",
-    "pnpm": ">=11.0.0"
+    "pnpm": ">=12.0.0"
   },
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "pnpm lint:root && turbo lint",
-    "lint:root": "eslint .",
-    "lint:root:fix": "eslint . --fix",
+    "lint:root": "eslint . --ignore-pattern 'packages/' ",
+    "lint:root:fix": "eslint . --ignore-pattern 'packages/' --fix",
     "lint:fix": "pnpm lint:root:fix && turbo lint:fix",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
