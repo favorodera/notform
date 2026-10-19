@@ -18,7 +18,7 @@ on:
           - premajor
 
       prerelease_id:
-        description: 'Prerelease identifier, such as alpha or beta'
+        description: "Prerelease identifier, such as alpha or beta"
         required: false
         type: string
         default: alpha
@@ -34,64 +34,62 @@ permissions:
   packages: write
 
 jobs:
-  validate:
-    name: Validate Inputs
+  resolve:
+    name: Resolve release choices
     runs-on: ubuntu-latest
     outputs:
       release_arguments: ${{ steps.build_release_arguments.outputs.arguments }}
     steps:
       - name: Validate Inputs
         id: validate_inputs
-        run: |
-          BUMP="${{ inputs.bump }}"
-          PRERELEASE_ID="${{ inputs.prerelease_id }}"
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { bump, prerelease_id } = context.payload.inputs
 
-          # Stable releases use a standard semantic version bump.
-          if [[ "$BUMP" =~ ^(patch|minor|major)$ ]]; then
-            echo "Valid stable release bump: $BUMP"
-            exit 0
-          fi
+            // Stable releases use a standard semantic version bump.
+            if (['patch', 'minor', 'major'].includes(bump)) {
+              core.info(`Valid stable release bump: ${bump}`)
+              return
+            }
 
-          # Prerelease releases require both a prerelease bump
-          # and an identifier such as alpha, beta, or rc.
-          if [[ "$BUMP" =~ ^(prerelease|prepatch|preminor|premajor)$ ]]; then
-            if [[ -z "$PRERELEASE_ID" ]]; then
-              echo "::error::A prerelease identifier is required for prerelease releases."
-              exit 1
-            fi
+            // Prerelease releases require both a prerelease bump and an identifier such as alpha or beta.
+            // Only lowercase letters are accepted, keeping the value safe to expand in the shell in the release job.
+            if (['prerelease', 'prepatch', 'preminor', 'premajor'].includes(bump)) {
+              if (!/^[a-z]+$/.test(prerelease_id ?? '')) {
+                core.setFailed('A lowercase prerelease identifier (e.g. alpha, beta) is required for prerelease releases.')
+                return
+              }
 
-            echo "Valid prerelease bump: $BUMP"
-            echo "Prerelease identifier: $PRERELEASE_ID"
-            exit 0
-          fi
+              core.info(`Valid prerelease bump: ${bump}`)
+              core.info(`Prerelease identifier: ${prerelease_id}`)
+              return
+            }
 
-          echo "::error::Invalid release bump type: $BUMP"
-          exit 1
+            core.setFailed(`Invalid release bump type: ${bump}`)
 
       - name: Build Release Arguments
         id: build_release_arguments
-        run: |
-          BUMP="${{ inputs.bump }}"
-          PRERELEASE_ID="${{ inputs.prerelease_id }}"
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { bump, prerelease_id } = context.payload.inputs
 
-          # Stable releases only need the version bump.
-          if [[ "$BUMP" =~ ^(patch|minor|major)$ ]]; then
-            RELEASE_ARGUMENTS="--$BUMP"
-          else
-            # Prerelease releases also specify the prerelease identifier
-            # and publish under the matching npm distribution tag.
-            RELEASE_ARGUMENTS="--$BUMP --preid $PRERELEASE_ID --tag $PRERELEASE_ID"
-          fi
+            // Stable releases only need the version bump. 
+            // Prerelease also specify the prerelease identifier and publish under the matching npm distribution tag.
+            const releaseArguments = ['patch', 'minor', 'major'].includes(bump)
+              ? `--${bump}`
+              : `--${bump} --preid ${prerelease_id} --tag ${prerelease_id}`
 
-          echo "arguments=$RELEASE_ARGUMENTS" >> "$GITHUB_OUTPUT"
-          echo "Release arguments: $RELEASE_ARGUMENTS"
+            core.setOutput('arguments', releaseArguments)
+            core.info(`Release arguments: ${releaseArguments}`)
 
   release:
     name: Release (${{ inputs.bump }})
     runs-on: ubuntu-latest
-    needs: validate
+    needs: resolve
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref_name }}
@@ -107,10 +105,10 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Packages
+      - name: Build packages
         run: pnpm build --filter='./packages/*'
 
       - name: Configure Git
@@ -118,8 +116,8 @@ jobs:
           git config --global user.name "favorodera"
           git config --global user.email "favorodera@gmail.com"
 
-      - name: Release with Relizy
-        run: pnpm relizy release ${{ needs.validate.outputs.release_arguments }} --yes --no-clean
+      - name: Release
+        run: pnpm relizy release ${{ needs.resolve.outputs.release_arguments }} --yes --no-clean
         env:
           RELIZY_GITHUB_TOKEN: ${{ secrets.PAT }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

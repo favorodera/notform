@@ -45,7 +45,7 @@ body:
     id: example-usage
     attributes:
       label: Example Usage
-      description: Optional example code showing how the feature might be used. Wrap it in a fenced code block with the appropriate language (e.g. ` ```js `, ` ```vue `, ` ```ts `).
+      description: Optional example code showing how the feature might be used.
     validations:
       required: false
 
