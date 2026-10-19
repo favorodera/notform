@@ -50,6 +50,7 @@ coverage/
 # Misc
 *.tsbuildinfo
 .cache/
+pnpm-*
 temp/
 tmp/
 

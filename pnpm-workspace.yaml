@@ -1,5 +1,4 @@
 shellEmulator: true
-
 trustPolicy: no-downgrade
 
 trustPolicyExclude:
@@ -29,9 +28,9 @@ catalog:
   '@nuxt/content': ^3.16.0
   '@nuxt/eslint': ^1.17.0
   '@nuxt/image': ^2.1.0
-  '@nuxt/kit': ^4.5.2
+  '@nuxt/kit': ^4.6.2
   '@nuxt/module-builder': ^1.0.3
-  '@nuxt/schema': ^4.5.2
+  '@nuxt/schema': ^4.6.2
   '@nuxt/ui': ^4.11.1
   '@nuxtjs/mdc': ^0.23.1
   '@nuxtjs/seo': ^6.0.1
@@ -54,7 +53,7 @@ catalog:
   klona: ^2.0.6
   minimark: ^1.0.0
   monaco-editor-core: ^0.57.0
-  nuxt: ^4.5.2
+  nuxt: ^4.6.2
   nuxt-llms: ^0.2.0
   nuxt-schema-org: ^7.0.1
   nuxtseo-layer-devtools: ^6.0.2
@@ -77,3 +76,10 @@ peerDependencyRules:
   allowedVersions:
     typescript: '6'
     vite: '8'
+permissions:
+  '@nuxtjs/seo':
+    skills: true
+  nuxt-schema-org:
+    skills: true
+  nuxtseo-layer-devtools:
+    skills: true

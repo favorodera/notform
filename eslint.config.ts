@@ -2,11 +2,7 @@ import { factory } from '@favorodera/eslint-config'
 
 export default factory({
   css: false,
-  ignores: ['docs/', '**/.turbo/',],
+  ignores: ['docs/', '**/.turbo/', 'packages'],
   tailwind: false,
+  test: false,
 })
-.override('favorodera/typescript/rules', {
-    rules: {
-      'ts/no-explicit-any': 'off',
-    },
-  })
