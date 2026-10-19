@@ -115,7 +115,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/seo',
     'motion-v/nuxt',
-    'notform-nuxt',
+    '@notform/nuxt',
     'nuxt-llms',
     '@vercel/analytics',
     '@nuxt/eslint',
