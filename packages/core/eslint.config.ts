@@ -4,8 +4,7 @@ export default factory({
   css: false,
   tailwind: false,
 })
-  .override('favorodera/typescript/rules', {
-    rules: {
-      'ts/no-explicit-any': 'off',
-    },
-  })
+  .overrideRules({
+  'ts/no-explicit-any': 'off',
+  'unicorn/prefer-ternary':'off'
+ })

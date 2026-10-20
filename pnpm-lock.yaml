@@ -195,7 +195,7 @@ catalogs:
       specifier: ^4.6.2
       version: 4.6.2
     '@nuxt/ui':
-      specifier: ^4.11.1
+      specifier: ^4.12.0
       version: 4.12.0
     '@nuxtjs/mdc':
       specifier: ^0.23.1

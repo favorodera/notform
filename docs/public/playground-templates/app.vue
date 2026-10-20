@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {
-  NotArrayField,
-  NotField,
-  NotForm,
-  NotMessage,
-  useNotForm,
+  ArrayField,
+  Field,
+  Form,
+  Error,
+  useForm,
 } from 'notform'
 import { z } from 'zod'
 
@@ -16,7 +16,7 @@ const schema = z.object({
   tags: z.array(tagSchema).min(1, 'At least one tag is required'),
 })
 
-const form = useNotForm({
+const form = useForm({
   initialValues: {
     tags: [''],
   },
@@ -34,13 +34,11 @@ const form = useNotForm({
 </script>
 
 <template>
-  <NotForm
+  <Form
     :form="form"
     data-form
-    @submit.prevent="form.submit"
-    @reset="form.reset()"
   >
-    <NotField
+    <Field
       v-slot="{ events, path }"
       path="name"
     >
@@ -59,14 +57,14 @@ const form = useNotForm({
           placeholder="e.g. John Doe"
         >
 
-        <NotMessage
+        <Error
           :path
           data-message
         />
       </div>
-    </NotField>
+    </Field>
 
-    <NotField
+    <Field
       v-slot="{ events, path }"
       path="email"
     >
@@ -81,24 +79,24 @@ const form = useNotForm({
           placeholder="e.g. john@example.com"
         >
 
-        <NotMessage
+        <Error
           :path
           data-message
         />
       </div>
-    </NotField>
+    </Field>
 
     <div data-field>
       <div data-label>
         interests
       </div>
 
-      <NotArrayField
+      <ArrayField
         v-slot="{ items, append, remove, move }"
         path="tags"
         :item-schema="tagSchema"
       >
-        <NotField
+        <Field
           v-for="(item, index) in items"
           v-slot="{ events,path }"
           :key="item.key"
@@ -149,12 +147,12 @@ const form = useNotForm({
               </div>
             </div>
 
-            <NotMessage
+            <Error
               :path="item.path"
               data-message
             />
           </div>
-        </NotField>
+        </Field>
 
         <button
           type="button"
@@ -163,11 +161,11 @@ const form = useNotForm({
           + Add New Tag
         </button>
 
-        <NotMessage
+        <Error
           path="tags"
           data-message
         />
-      </NotArrayField>
+      </ArrayField>
     </div>
 
     <div
@@ -194,5 +192,5 @@ const form = useNotForm({
         <span v-else> Submit </span>
       </button>
     </div>
-  </NotForm>
+  </Form>
 </template>

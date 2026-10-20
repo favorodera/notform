@@ -6,7 +6,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Official NotForm Nuxt module - Vue Forms Without the Friction",
+  "description": "Official Nuxt integration for Nuxt",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/favorodera",
@@ -52,7 +52,6 @@
     "lint:fix": "nuxt prepare && eslint . --fix"
   },
   "peerDependencies": {
-    "notform": "workspace:*",
     "nuxt": "^4.6.0"
   },
   "dependencies": {

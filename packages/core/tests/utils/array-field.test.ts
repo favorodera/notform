@@ -1,0 +1,96 @@
+import { describe, expect, it } from 'vitest'
+import { createFormInstance } from '../../src/factories/create-form-instance'
+import { locatePathInArrayField, remapArrayFieldState } from '../../src/helpers/array-field'
+import { emailGroupsSchema } from '../helpers/not-validator'
+
+describe('locatePathInArrayField', () => {
+  it('returns undefined for a path outside the array', () => {
+    expect(locatePathInArrayField(['tags', 0], ['groups'])).toBeUndefined()
+  })
+
+  it('returns undefined for the array path itself, with no item segment', () => {
+    expect(locatePathInArrayField(['groups'], ['groups'])).toBeUndefined()
+  })
+
+  it('returns undefined for a sibling field with an overlapping name prefix', () => {
+    expect(locatePathInArrayField(['groupsOther', 0], ['groups'])).toBeUndefined()
+  })
+
+  it('locates an item with no remaining segments', () => {
+    expect(locatePathInArrayField(['groups', 0], ['groups'])).toStrictEqual({
+      index: 0,
+      remainingPathSegments: [],
+    })
+  })
+
+  it('locates a field one level inside an object item', () => {
+    expect(locatePathInArrayField(['groups', 1, 'name'], ['groups'])).toStrictEqual({
+      index: 1,
+      remainingPathSegments: ['name'],
+    })
+  })
+
+  it('locates a field arbitrarily many levels inside an item', () => {
+    expect(locatePathInArrayField(['groups', 0, 'tags', 2], ['groups'])).toStrictEqual({
+      index: 0,
+      remainingPathSegments: ['tags', 2],
+    })
+  })
+
+  it('normalizes numeric and string index segments the same way as areSegmentsEqual', () => {
+    expect(locatePathInArrayField(['groups', '0', 'name'], ['groups'])).toStrictEqual({
+      index: 0,
+      remainingPathSegments: ['name'],
+    })
+  })
+
+  it.each(['01', ' 1 ', '0x1', ''])('rejects non-canonical numeric index %s', index => {
+    expect(locatePathInArrayField(['groups', index, 'name'], ['groups'])).toBeUndefined()
+  })
+})
+
+/**
+ * Creates the nested-array form used by remapping tests.
+ * @returns A fresh form instance.
+ */
+const createForm = () => createFormInstance({
+  initialValues: {
+    email: '',
+    groups: [
+      { name: 'Frontend', tags: ['vue'] },
+      { name: 'Backend', tags: ['node'] },
+    ],
+  },
+  schema: emailGroupsSchema,
+})
+
+describe('remapArrayFieldState', () => {
+  it('shifts touched and error state nested at any depth inside an item', () => {
+    const form = createForm()
+
+    form.markFieldAsTouched('groups.0.name')
+    form.markFieldAsTouched('groups.1.tags.0')
+    form.setError({ message: 'Required', path: ['groups', 1, 'tags', 0] })
+
+    // Model removing item 0: later item indices shift left.
+    remapArrayFieldState(form, 'groups', (previousIndex) => {
+      if (previousIndex === 0) {
+        return
+      }
+      return previousIndex - 1
+    })
+
+    expect(form.touchedFields.has('groups.0.name')).toBe(false)
+    expect(form.touchedFields.has('groups.0.tags.0')).toBe(true)
+    expect(form.getFieldErrors('groups.0.tags.0')).toHaveLength(1)
+  })
+
+  it('leaves paths outside the array untouched', () => {
+    const form = createForm()
+    form.markFieldAsTouched('email')
+
+    remapArrayFieldState(form, 'groups', previousIndex => previousIndex + 1)
+
+    expect(form.touchedFields.has('email')).toBe(true)
+  })
+})

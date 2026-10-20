@@ -1,11 +1,5 @@
-import type { FormInstance, FormInstanceSettings } from './form-instance'
+import type { FormInstance } from './instance'
 import type { ObjectSchema } from './shared'
-
-/**
- * Settings to configure the form instance.
- * @template TSchema Validation schema.
- */
-export type UseFormSettings<TSchema extends ObjectSchema> = FormInstanceSettings<TSchema>
 
 /**
  * Public API returned by `useForm()` omitting internal helpers used by field components
@@ -13,5 +7,20 @@ export type UseFormSettings<TSchema extends ObjectSchema> = FormInstanceSettings
  */
 export type UseFormReturn<TSchema extends ObjectSchema> = Pick<
   FormInstance<TSchema>,
-  'values'
+  'errors'
+  | 'getFieldErrors'
+  | 'isDirty'
+  | 'isSubmitted'
+  | 'isSubmitting'
+  | 'isTouched'
+  | 'isValid'
+  | 'isValidating'
+  | 'reset'
+  | 'setError'
+  | 'setValue'
+  | 'submit'
+  | 'submitCount'
+  | 'validate'
+  | 'validateField'
+  | 'values'
 >

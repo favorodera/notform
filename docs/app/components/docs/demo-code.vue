@@ -1,5 +1,5 @@
 <script lang="ts">
-const sources = import.meta.glob('../../demos/**/*', {
+const sources = import.meta.glob('../../demos/*', {
   eager: true,
   import: 'default',
   query: '?raw',
@@ -20,8 +20,6 @@ const code = computed(() => {
     return `> **Error**: File \`${props.file}\` not found.`
   }
 
-  // Wrap in markdown code block for highlighting, with a disclaimer
-  // about demo-only dependencies that aren't part of NotForm itself.
   return `
 \`\`\`vue
 ${content.trim()}

@@ -20,7 +20,9 @@ NotForm gives you reactive form state, schema validation, field state, submissio
 
 ## Development
 
-This repository is a pnpm workspace managed with Turborepo. See [CONTRIBUTING.md](./CONTRIBUTING.md) for development and contribution guidelines.
+This repository is a pnpm workspace managed with Turborepo.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development and contribution guidelines.
 
 ## License
 

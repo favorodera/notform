@@ -11,7 +11,7 @@ const schema = z.object({
   title: z.literal(['Mr', 'Mrs', 'Miss']),
 })
 
-const form = useNotForm({
+const form = useForm({
   initialValues: {
     name: {},
   },
@@ -31,17 +31,12 @@ const form = useNotForm({
 </script>
 
 <template>
-  <NotForm
-    :form="form"
-    data-demo-form
-    @submit="form.submit"
-    @reset="form.reset()"
-  >
-    <NotField
+  <Form :form="form">
+    <Field
       v-slot="{ events, path }"
       path="title"
     >
-      <div data-demo-field>
+      <div >
         <label :for="path">
           Title
         </label>
@@ -55,18 +50,15 @@ const form = useNotForm({
           autocomplete="honorific-prefix"
         >
 
-        <NotMessage
-          :path="path"
-          data-demo-message
-        />
+        <Error :path="path" />
       </div>
-    </NotField>
+    </Field>
 
-    <NotField
+    <Field
       v-slot="{ events, path }"
       path="name.first"
     >
-      <div data-demo-field>
+      <div >
         <label :for="path">First Name</label>
 
         <input
@@ -78,18 +70,15 @@ const form = useNotForm({
           autocomplete="first-name"
         >
 
-        <NotMessage
-          :path="path"
-          data-demo-message
-        />
+        <Error :path="path"/>
       </div>
-    </NotField>
+    </Field>
 
-    <NotField
+    <Field
       v-slot="{ events, path }"
       path="name.last"
     >
-      <div data-demo-field>
+      <div >
         <label :for="path">Last Name</label>
 
         <input
@@ -101,15 +90,13 @@ const form = useNotForm({
           autocomplete="family-name"
         >
 
-        <NotMessage
+        <Error
           :path="path"
-          data-demo-message
         />
       </div>
-    </NotField>
+    </Field>
 
     <div
-      data-demo-field
       class="flex-row"
     >
       <Button
@@ -128,5 +115,5 @@ const form = useNotForm({
         :label="form.isSubmitting ? 'Submitting...' : 'Submit'"
       />
     </div>
-  </NotForm>
+  </Form>
 </template>

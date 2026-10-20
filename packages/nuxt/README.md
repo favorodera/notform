@@ -17,8 +17,8 @@ The module integrates NotForm with Nuxt by auto-importing it components and comp
 
 ## Requirements
 
-- Nuxt 4
-- A [Standard Schema](https://standardschema.dev/schema#what-schema-libraries-implement-the-spec) compatible validator
+- Nuxt 4 or later
+- A Standard Schema-compatible validation library
 
 ## License
 

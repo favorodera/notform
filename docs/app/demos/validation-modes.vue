@@ -5,7 +5,7 @@ const schema = z.object({
   value: z.string().min(4, 'At least 4 characters'),
 })
 
-const form = useNotForm({
+const form = useForm({
   initialValues: { value: '' },
   schema,
 })
@@ -14,13 +14,13 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
 </script>
 
 <template>
-  <NotForm
+  <Form
     :form
     data-demo-form
     @submit="form.submit"
     @reset="form.reset()"
   >
-    <NotField
+    <Field
       v-slot="{ events, path }"
       path="value"
       :validation-mode="validationMode"
@@ -53,11 +53,11 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
           v-bind="events"
         >
 
-        <NotMessage
+        <Error
           :path="path"
           data-demo-message
         />
       </div>
-    </NotField>
-  </NotForm>
+    </Field>
+  </Form>
 </template>

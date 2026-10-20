@@ -47,11 +47,8 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/main.css'],
-  devServer: {
-    port: 3000,
-  },
   devtools: {
-    enabled: true,
+    enabled: false,
   },
   eslint: {
     config: {

@@ -3,67 +3,80 @@ import { z } from 'zod'
 
 const toast = useToast()
 
-const form = useNotForm({
-  onSubmit: async (values) => {
-    // Simulate a server 409 — email taken
+const schema = z.object({
+  email: z.email('Enter a valid email'),
+  name: z.string('Invalid input').min(1, 'Name is required'),
+})
+
+const form = useForm({
+  async onSubmit(data) {
     await new Promise((resolve) => {
       setTimeout(resolve, 500)
     })
 
-    if (values.email === 'taken@example.com') {
-      form.setError({
-        message: 'This email is already registered',
-        path: ['email'],
-      })
-      return
-    }
-
     toast.add({
       color: 'success',
-      title: `Account created successfully for: ${values.email}`,
+      description: h('pre', JSON.stringify(data, undefined, 2)),
+      title: 'Form submitted successfully',
     })
   },
-  schema: z.object({
-    email: z.email('Enter a valid email'),
-  }),
+  schema,
 })
 </script>
 
 <template>
-  <NotForm
+  <Form
     :form="form"
-    data-demo-form
     @submit="form.submit"
     @reset="form.reset()"
   >
-    <NotField
+    <Field
+      v-slot="{ events, path }"
+      path="name"
+    >
+      <div>
+        <label :for="path">Name</label>
+
+        <input
+          :id="path"
+          v-model="form.values.name"
+          type="text"
+          placeholder="Min. 8 characters"
+          v-bind="events"
+          autocomplete="name"
+        >
+
+        <Error
+          :path="path"
+        />
+      </div>
+    </Field>
+
+    <Field
       v-slot="{ events, path }"
       path="email"
     >
-      <div data-demo-field>
+      <div>
         <label :for="path">
-          Email Address
+          Email
         </label>
 
         <input
           :id="path"
           v-model="form.values.email"
           type="email"
-          placeholder="Try taken@example.com"
+          placeholder="jane@example.com"
           v-bind="events"
+          autocomplete="email"
         >
 
-        <NotMessage
+        <Error
           :path="path"
-          data-demo-message
         />
       </div>
-    </NotField>
+    </Field>
 
-    <div
-      data-demo-field
-      class="flex-row"
-    >
+    <div class="flex-row">
       <Button
         type="reset"
         :disabled="form.isSubmitting"
@@ -80,5 +93,5 @@ const form = useNotForm({
         :label="form.isSubmitting ? 'Submitting...' : 'Submit'"
       />
     </div>
-  </NotForm>
+  </Form>
 </template>

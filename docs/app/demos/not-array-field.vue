@@ -10,7 +10,7 @@ const groupItemSchema = z.object({
   tags: z.array(tagItemSchema).min(1, 'Add at least one tag'),
 })
 
-const form = useNotForm({
+const form = useForm({
   initialValues: {
     groups: [{ name: 'Frontend', tags: ['vue', 'typescript'] }],
   },
@@ -35,11 +35,9 @@ const form = useNotForm({
   <NotForm
     :form="form"
     data-demo-form
-    @submit="form.submit"
-    @reset="form.reset()"
   >
     <div data-demo-field>
-      <NotArrayField
+      <ArrayField
         v-slot="{ items: groups, append: appendGroup, remove: removeGroup, path: groupsPath }"
         path="groups"
         :item-schema="groupItemSchema"
@@ -61,7 +59,7 @@ const form = useNotForm({
               data-demo-field
               class="flex-row"
             >
-              <NotField
+              <Field
                 v-slot="{ events }"
                 :path="`${group.path}.name`"
               >
@@ -73,7 +71,7 @@ const form = useNotForm({
                   autocomplete="off"
                   class="flex-1"
                 >
-              </NotField>
+              </Field>
 
               <Button
                 icon="tabler:trash"
@@ -86,17 +84,17 @@ const form = useNotForm({
               />
             </div>
 
-            <NotMessage
+            <Error
               :path="`${group.path}.name`"
               data-demo-message
             />
 
-            <NotArrayField
+            <ArrayField
               v-slot="{ items: tags, append: appendTag, remove: removeTag, move: moveTag, path: tagsPath }"
               :path="`${group.path}.tags`"
               :item-schema="tagItemSchema"
             >
-              <NotField
+              <Field
                 v-for="tag in tags"
                 :key="tag.key"
                 v-slot="{ events }"
@@ -152,13 +150,13 @@ const form = useNotForm({
                   </div>
                 </div>
 
-                <NotMessage
+                <Error
                   :path="tag.path"
                   data-demo-message
                 />
-              </NotField>
+              </Field>
 
-              <NotMessage
+              <Error
                 :path="tagsPath"
                 data-demo-message
               />
@@ -172,11 +170,11 @@ const form = useNotForm({
                 class="mbs-2"
                 @click="appendTag('')"
               />
-            </NotArrayField>
+            </ArrayField>
           </div>
         </div>
 
-        <NotMessage
+        <Error
           :path="groupsPath"
           data-demo-message
         />
@@ -190,7 +188,7 @@ const form = useNotForm({
           class="mbs-6"
           @click="appendGroup({ name: '', tags: [''] })"
         />
-      </NotArrayField>
+      </ArrayField>
     </div>
 
     <div

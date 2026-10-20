@@ -10,6 +10,5 @@ export default defineConfig({
       include: ['src/**/*.{ts,vue}'],
     },
     environment: 'happy-dom',
-    passWithNoTests: true,
   },
 })

@@ -9,12 +9,12 @@
   <a href="https://notformdocs.vercel.app/">Documentation</a>
 </p>
 
-NotForm manages reactive values, schema validation, field state, submission, and dynamic arrays while leaving markup and styling to your application.
+NotForm manages reactive form values, validation, field state, submission, and dynamic arrays while leaving markup, styling, and layout to your application.
 
 ## Requirements
 
-- Vue 3
-- A [Standard Schema](https://standardschema.dev/schema#what-schema-libraries-implement-the-spec) compatible validator
+- Vue 3.5 or later
+- A Standard Schema-compatible validation library
 
 ## License
 
