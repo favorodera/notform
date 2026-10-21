@@ -56,8 +56,8 @@ const features = [
         v-for="feature, index in features"
         :key="index"
         class="
-          relative rounded-lg border border-default bg-default bg-clip-padding
-          p-4 shadow-xs shadow-neutral-800 block-full
+          relative block rounded-lg border border-default bg-default
+          bg-clip-padding p-4 shadow-xs shadow-neutral-800 block-full
         "
       >
         <p

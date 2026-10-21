@@ -39,7 +39,6 @@
         size="lg"
         icon="tabler:book-2"
         color="primary"
-        variant="subtle"
       >
         Read the Docs
       </Button>
@@ -49,7 +48,7 @@
         size="lg"
         icon="tabler:player-play"
         color="primary"
-        variant="subtle"
+        variant="soft"
       >
         Try the Playground
       </Button>
