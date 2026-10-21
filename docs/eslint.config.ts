@@ -3,8 +3,8 @@ import withNuxt from './.nuxt/eslint.config.mjs'
 
 const config = factory({
   ignores: [
-    'public/repl-workers/**', 
-    'public/playground-templates/**'
+    'public/repl-workers/**',
+    'public/playground-templates/**',
   ],
   tailwind: {
     entryPoint: 'app/assets/css/main.css',
