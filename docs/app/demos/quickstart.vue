@@ -5,7 +5,7 @@ const toast = useToast()
 
 const schema = z.object({
   email: z.email('Enter a valid email'),
-  name: z.string('Invalid input').min(1, 'Name is required'),
+  password: z.string('Invalid input').min(8, 'At least 8 characters'),
 })
 
 const form = useForm({
@@ -25,31 +25,7 @@ const form = useForm({
 </script>
 
 <template>
-  <Form
-    :form="form"
-  >
-    <Field
-      v-slot="{ events, path }"
-      path="name"
-    >
-      <div>
-        <label :for="path">Name</label>
-
-        <input
-          :id="path"
-          v-model="form.values.name"
-          type="text"
-          placeholder="Min. 8 characters"
-          v-bind="events"
-          autocomplete="name"
-        >
-
-        <Error
-          :path="path"
-        />
-      </div>
-    </Field>
-
+  <Form :form="form">
     <Field
       v-slot="{ events, path }"
       path="email"
@@ -68,9 +44,27 @@ const form = useForm({
           autocomplete="email"
         >
 
-        <Error
-          :path="path"
-        />
+        <Error :path="path" />
+      </div>
+    </Field>
+
+    <Field
+      v-slot="{ events, path }"
+      path="password"
+    >
+      <div>
+        <label :for="path">Password</label>
+
+        <input
+          :id="path"
+          v-model="form.values.password"
+          type="password"
+          placeholder="Min. 8 characters"
+          v-bind="events"
+          autocomplete="current-password"
+        >
+
+        <Error :path="path" />
       </div>
     </Field>
 

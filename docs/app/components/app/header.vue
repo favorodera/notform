@@ -54,14 +54,14 @@ const navigationMenuItems = [
 
     <template #right>
       <ContentSearchButton
-        size="md"
+        size="sm"
         :collapsed="false"
         variant="soft"
         label="Search"
       />
 
       <ColorModeButton
-        size="md"
+        size="sm"
         class="max-lg:hidden"
         variant="soft"
       />
@@ -71,7 +71,7 @@ const navigationMenuItems = [
         :icon="appConfig.github.repo.icon"
         target="_blank"
         variant="soft"
-        size="md"
+        size="sm"
         class="max-lg:hidden"
         :label="githubStars?.toString()"
       />

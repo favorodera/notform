@@ -32,9 +32,7 @@ const form = useForm({
 </script>
 
 <template>
-  <Form
-    :form="form"
-  >
+  <Form :form="form">
     <div>
       <ArrayField
         v-slot="{ items: groups, append: appendGroup, remove: removeGroup, path: groupsPath }"
@@ -51,10 +49,7 @@ const form = useForm({
               not-first:mbs-6 not-first:border-bs not-first:pbs-6
             "
           >
-            <div
-
-              class="flex-row"
-            >
+            <div class="flex-row">
               <Field
                 v-slot="{ events }"
                 :path="`${group.path}.name`"
@@ -80,9 +75,7 @@ const form = useForm({
               />
             </div>
 
-            <Error
-              :path="`${group.path}.name`"
-            />
+            <Error :path="`${group.path}.name`" />
 
             <ArrayField
               v-slot="{ items: tags, append: appendTag, remove: removeTag, move: moveTag, path: tagsPath }"
@@ -95,10 +88,7 @@ const form = useForm({
                 v-slot="{ events }"
                 :path="tag.path"
               >
-                <div
-
-                  class="flex-row"
-                >
+                <div class="flex-row">
                   <input
                     :id="tag.path"
                     v-model="form.values.groups[group.index]!.tags[tag.index]"
@@ -108,10 +98,7 @@ const form = useForm({
                     class="flex-1"
                   >
 
-                  <div
-
-                    class="flex-row gap-2 inline-fit"
-                  >
+                  <div class="flex-row gap-2 inline-fit">
                     <Button
                       icon="tabler:chevron-up"
                       type="button"
@@ -145,14 +132,10 @@ const form = useForm({
                   </div>
                 </div>
 
-                <Error
-                  :path="tag.path"
-                />
+                <Error :path="tag.path" />
               </Field>
 
-              <Error
-                :path="tagsPath"
-              />
+              <Error :path="tagsPath" />
 
               <Button
                 icon="tabler:plus"
@@ -167,9 +150,7 @@ const form = useForm({
           </div>
         </div>
 
-        <Error
-          :path="groupsPath"
-        />
+        <Error :path="groupsPath" />
 
         <Button
           icon="tabler:plus"
@@ -183,10 +164,7 @@ const form = useForm({
       </ArrayField>
     </div>
 
-    <div
-
-      class="flex-row"
-    >
+    <div class="flex-row">
       <Button
         type="reset"
         :disabled="form.isSubmitting"

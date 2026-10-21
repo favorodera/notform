@@ -14,9 +14,7 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
 </script>
 
 <template>
-  <Form
-    :form
-  >
+  <Form :form>
     <Field
       v-slot="{ events, path }"
       path="value"
@@ -25,8 +23,11 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
     >
       <div>
         <div
+          class="
+            flex-row justify-between
 
-          class="flex-row justify-between"
+            *:max-inline-fit
+          "
         >
           <label
             :for="path"
@@ -50,9 +51,7 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
           v-bind="events"
         >
 
-        <Error
-          :path="path"
-        />
+        <Error :path="path" />
       </div>
     </Field>
   </Form>

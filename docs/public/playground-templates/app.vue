@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {
   ArrayField,
+  Error,
   Field,
   Form,
-  Error,
   useForm,
 } from 'notform'
 import { z } from 'zod'
@@ -34,17 +34,15 @@ const form = useForm({
 </script>
 
 <template>
-  <Form
-    :form="form"
-  >
+  <Form :form="form">
     <Field
       v-slot="{ events, path }"
       path="name"
     >
-      <div >
-        <label
-          :for="path"
-        > Full Name </label>
+      <div>
+        <label :for="path">
+          Full Name
+        </label>
 
         <input
           v-bind="events"
@@ -55,9 +53,7 @@ const form = useForm({
           placeholder="e.g. John Doe"
         >
 
-        <Error
-          :path
-        />
+        <Error :path />
       </div>
     </Field>
 
@@ -65,7 +61,7 @@ const form = useForm({
       v-slot="{ events, path }"
       path="email"
     >
-      <div >
+      <div>
         <label :for="path"> Email Address </label>
 
         <input
@@ -76,13 +72,11 @@ const form = useForm({
           placeholder="e.g. john@example.com"
         >
 
-        <Error
-          :path
-        />
+        <Error :path />
       </div>
     </Field>
 
-    <div >
+    <div>
       <div class="text-sm font-medium">
         interests
       </div>
@@ -98,11 +92,8 @@ const form = useForm({
           :key="item.key"
           :path="item.path"
         >
-          <div >
-            <div
-              
-              class="flex-row"
-            >
+          <div>
+            <div class="flex-row">
               <input
                 v-bind="events"
                 :id="path"
@@ -111,10 +102,7 @@ const form = useForm({
                 placeholder="Tag name"
               >
 
-              <div
-                
-                class="flex-row gap-2 inline-fit"
-              >
+              <div class="flex-row gap-2 inline-fit">
                 <button
                   type="button"
                   title="Move Up"
@@ -143,9 +131,7 @@ const form = useForm({
               </div>
             </div>
 
-            <Error
-              :path="item.path"
-            />
+            <Error :path="item.path" />
           </div>
         </Field>
 
@@ -156,14 +142,11 @@ const form = useForm({
           + Add New Tag
         </button>
 
-        <Error
-          path="tags"
-        />
+        <Error path="tags" />
       </ArrayField>
     </div>
 
     <div
-      
       class="
         flex-row inline-full
 

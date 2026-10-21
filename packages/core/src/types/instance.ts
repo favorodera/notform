@@ -10,8 +10,8 @@ import type { DeepPartial, InferInput, InferOutput, Issue, ObjectSchema, Path, P
 export interface FormInstance<TSchema extends ObjectSchema> {
   // Values
 
-  /** Live form values. The form may intentionally hold a partial input before validation. */
-  values: DeepPartial<InferInput<TSchema>>
+  /** Live form values. */
+  values: InferInput<TSchema>
 
   /**
    * Sets a field value without triggering validation.

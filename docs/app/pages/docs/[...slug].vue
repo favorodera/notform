@@ -35,7 +35,7 @@ const tocFooterLinks = computed<PageLink[]>(() => [
   {
     external: true,
     icon: 'simple-icons:stackblitz',
-    label: 'Stackblitz(Vue 3)',
+    label: 'Stackblitz(Vue)',
     target: '_blank',
     to: `https://stackblitz.com/edit/notform`,
     ui: {
@@ -45,19 +45,12 @@ const tocFooterLinks = computed<PageLink[]>(() => [
   {
     external: true,
     icon: 'simple-icons:stackblitz',
-    label: 'Stackblitz(Nuxt 4)',
+    label: 'Stackblitz(Nuxt)',
     target: '_blank',
     to: `https://stackblitz.com/edit/notform-nuxt`,
     ui: {
       linkLeadingIcon: 'text-info',
     },
-  },
-  {
-    external: true,
-    icon: 'tabler:history',
-    label: 'Releases',
-    target: '_blank',
-    to: 'https://github.com/favorodera/notform/releases',
   },
   {
     class: 'font-semibold text-pink-400 hover:text-pink-500',
@@ -129,7 +122,7 @@ defineOgImage('Image.takumi', { ...seo.value })
             <PageLinks
               :links="tocFooterLinks"
               :ui="{
-                linkLabelExternalIcon: 'relative',
+                linkLabelExternalIcon: 'hidden',
                 linkLabel:'flex'
               }"
             />

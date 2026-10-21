@@ -69,7 +69,7 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   const initialValues = klona(settings.initialValues ?? {} as DeepPartial<InferInput<TSchema>>)
 
   /** Stable reactive object so existing v-model bindings survive reset(). */
-  const values = reactive(klona(initialValues)) as DeepPartial<InferInput<TSchema>>
+  const values = reactive(klona(initialValues)) as InferInput<TSchema>
 
   /** Plain baseline issues for reset(). */
   const initialErrors = klona(settings.initialErrors ?? [] as Array<Issue>)

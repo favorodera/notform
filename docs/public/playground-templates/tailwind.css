@@ -84,7 +84,10 @@
 
 @layer components {
   form {
-    @apply bg-card mx-auto flex flex-col gap-4 rounded-xl border p-4 inline-full max-inline-md;
+    @apply
+      bg-card mx-auto flex flex-col gap-4 rounded-xl border p-4 inline-full
+      max-inline-md
+    ;
 
     div {
       @apply flex flex-col gap-x-4 gap-y-2 inline-full;
@@ -97,7 +100,10 @@
     input,
     select,
     textarea {
-      @apply border-input block flex-1 rounded-md border bg-transparent px-3 py-1.5 block-8;
+      @apply
+        border-input block flex-1 rounded-md border bg-transparent px-3 py-1.5
+        block-8
+      ;
     }
 
     span {
@@ -105,7 +111,15 @@
     }
 
     button {
-      @apply text-secondary-foreground inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-secondary px-3 text-sm font-medium block-8 hover:bg-secondary/90 disabled:cursor-not-allowed disabled:opacity-70;
+      @apply
+        text-secondary-foreground inline-flex shrink-0 items-center
+        justify-center gap-2 rounded-lg bg-secondary px-3 text-sm font-medium
+        block-8
+
+        hover:bg-secondary/90
+
+        disabled:cursor-not-allowed disabled:opacity-70
+      ;
     }
   }
 }

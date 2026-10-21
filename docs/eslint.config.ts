@@ -2,7 +2,10 @@ import { factory } from '@favorodera/eslint-config'
 import withNuxt from './.nuxt/eslint.config.mjs'
 
 const config = factory({
-  ignores: ['public/repl-workers/**', 'public/playground-templates/**'],
+  ignores: [
+    'public/repl-workers/**', 
+    'public/playground-templates/**'
+  ],
   tailwind: {
     entryPoint: 'app/assets/css/main.css',
   },

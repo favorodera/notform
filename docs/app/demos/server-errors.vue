@@ -30,9 +30,7 @@ const form = useForm({
 </script>
 
 <template>
-  <Form
-    :form="form"
-  >
+  <Form :form="form">
     <Field
       v-slot="{ events, path }"
       path="email"
@@ -50,15 +48,11 @@ const form = useForm({
           v-bind="events"
         >
 
-        <Error
-          :path="path"
-        />
+        <Error :path="path" />
       </div>
     </Field>
 
-    <div
-      class="flex-row"
-    >
+    <div class="flex-row">
       <Button
         type="reset"
         :disabled="form.isSubmitting"
