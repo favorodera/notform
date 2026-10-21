@@ -5,11 +5,11 @@
 </h1>
 <p align="center">
   Headless, schema-agnostic form management for Vue 3 and Nuxt.
-  <br/>
-  <a href="https://notformdocs.vercel.app/">Documentation</a>
 </p>
 
 NotForm gives you reactive form state, schema validation, field state, submission lifecycle, and dynamic arrays without imposing UI components or styles.
+
+Read [Documentation](https://notformdocs.vercel.app/) on how to get started.
 
 ## Packages
 
