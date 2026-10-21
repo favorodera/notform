@@ -2,7 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { shallowRef } from 'vue'
 import { createNameEmailForm } from '../helpers/create-form'
-import { createGatedCallSchema, type nameEmailSchema } from '../helpers/not-validator'
+import { createGatedCallSchema, type nameEmailSchema } from '../helpers/schema-fixtures'
 
 describe('submission', () => {
   const onSubmit = vi.fn()
@@ -11,7 +11,6 @@ describe('submission', () => {
     preventDefault: vi.fn(),
   } as unknown as SubmitEvent
 
-  // eslint-disable-next-line test/no-hooks
   beforeEach(() => {
     onSubmit.mockClear()
     vi.mocked(submitEvent.preventDefault).mockClear()

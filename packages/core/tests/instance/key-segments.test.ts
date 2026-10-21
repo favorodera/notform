@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { useArrayField } from '../../src/composables/use-array-field'
 import { createFormInstance } from '../../src/factories/create-form-instance'
-import { emailGroupsSchemaWithKeySegments, nameEmailSchemaWithKeySegments } from '../helpers/not-validator'
+import { emailGroupsSchemaWithKeySegments, nameEmailSchemaWithKeySegments } from '../helpers/schema-fixtures'
 
 describe('{ key } path segments from validate/validateField', () => {
   it('getFieldErrors matches a { key }-segmented issue against a plain-string path', async () => {
@@ -23,7 +23,6 @@ describe('{ key } path segments from validate/validateField', () => {
 })
 
 describe('{ key } path segments in array fields', () => {
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const createForm = () => createFormInstance({
     initialValues: {
       email: '',

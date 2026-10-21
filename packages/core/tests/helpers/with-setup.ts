@@ -10,6 +10,7 @@ export function withSetup<TResult>(composable: () => TResult): { app: ReturnType
   let result!: TResult
 
   const app = createApp({
+    // Runs the callback inside the component's setup lifecycle.
     setup() {
       result = composable()
     },

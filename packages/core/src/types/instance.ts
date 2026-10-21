@@ -4,127 +4,174 @@ import type { MaybeRefOrGetter } from 'vue'
 import type { DeepPartial, InferInput, InferOutput, Issue, ObjectSchema, Path, Paths } from './shared'
 
 /**
- * The full form instance provided by the instance factory
- * @template TSchema The form schema.
+ * Reactive state and actions for a schema-backed form.
+ * @template TSchema Object schema that defines the allowed field paths and values.
  */
 export interface FormInstance<TSchema extends ObjectSchema> {
-
-  // #region Values
+  // Values
 
   /** Live form values. The form may intentionally hold a partial input before validation. */
   values: DeepPartial<InferInput<TSchema>>
 
-  /** Sets a schema-typed field value by path. Does not validate. */
+  /**
+   * Sets a field value without triggering validation.
+   * @template TPath Exact path within the schema input.
+   * @param path Field path to update.
+   * @param value Value to store at that path.
+   */
   setValue: <TPath extends Paths<TSchema>>(path: TPath, value: Get<InferInput<TSchema>, TPath, { strict: false }>) => void
 
-  // #endregion
-
-  // #region Touch
+  // Interaction state
 
   /** Whether the form has been touched, submitted, or both. */
   isTouched: boolean
 
-  /** Explicitly touched paths, retained so dynamic array items can move with their state. */
+  /** Explicitly touched paths, kept so array items can preserve their local state when reordered. */
   touchedFields: Set<Path<TSchema>>
 
-  /** Marks one field as touched. */
+  /**
+   * Marks a field path as touched.
+   * @param path Path to mark as visited.
+   */
   markFieldAsTouched: (path: Path<TSchema>) => void
 
-  /** Clears touched state for one field. */
+  /**
+   * Removes a touched marker from a single field path.
+   * @param path Path to clear.
+   */
   unmarkFieldAsTouched: (path: Path<TSchema>) => void
 
-  /** Clears all touched state. */
+  /** Clears every touched marker on the form. */
   unmarkAllFieldsAsTouched: () => void
 
-  /** Whether `path` is touched or the form has been submitted. */
+  /**
+   * Checks whether a field path has been touched or the form has been submitted.
+   * @param path Path whose touched state should be checked.
+   * @returns `true` when the field is considered interacted with.
+   */
   isPathTouched: (path: Path<TSchema>) => boolean
 
-  /** Whether `path` or one of its descendants is touched. */
+  /**
+   * Checks whether a field or one of its descendants has been touched.
+   * @param path Path or subtree to inspect.
+   * @returns `true` when the path overlaps a touched field.
+   */
   isPathTouchedWithin: (path: Path<TSchema>) => boolean
 
-  // #endregion
+  // Change tracking
 
-  // #region Dirty
-
-  /** Whether the entire form differs from its reset baseline. */
+  /** Whether the current form values differ from the reset baseline. */
   isDirty: boolean
 
-  /** Whether the value at `path` differs from the reset baseline. */
+  /**
+   * Checks whether a field path differs from the reset baseline.
+   * @param path Path to compare.
+   * @returns `true` when the field value has changed since reset.
+   */
   isPathDirty: (path: Path<TSchema>) => boolean
 
-  // #endregion
+  // Validation errors
 
-  // #region Errors
-
-  /** Issues from the most recent validation that wrote errors. */
+  /** Current validation issues returned by the latest schema run. */
   errors: Array<Issue>
 
-  /** Adds or replaces one issue at the same normalized path. */
+  /**
+   * Adds an issue or replaces an issue that shares the same normalized path.
+   * @param error Issue to write into the active error list.
+   */
   setError: (error: Issue) => void
 
-  /** Replaces the entire error list. */
+  /**
+   * Replaces the entire error list.
+   * @param errors Fresh issue collection to apply.
+   */
   replaceErrors: (errors: Array<Issue>) => void
 
-  /** Removes every issue.  */
+  /** Removes every current issue without resetting the form state. */
   clearErrors: () => void
 
-  /** Returns issues whose path exactly matches `path`. */
+  /**
+   * Returns the issues whose path matches a specific field path.
+   * @param path Field path to inspect.
+   * @returns Matching issues in their current order.
+   */
   getFieldErrors: (path: Path<TSchema>) => Array<Issue>
 
-  // #endregion
+  // Validation
 
-  // #region Validation
-
-  /** Whether any validation run is currently active. */
+  /** Whether at least one validation run is currently active. */
   isValidating: boolean
 
-  /** Whether there are no current issues. */
+  /** Whether there are no active validation issues. */
   isValid: boolean
 
-  /** Cancels current validation runs without clearing errors.  */
+  /** Cancels active validation runs without discarding the current issue list. */
   invalidateValidation: () => void
 
-  /** Whether `path` overlaps an active validation scope.  */
+  /**
+   * Checks whether a field path overlaps an in-flight validation scope.
+   * @param path Path to inspect.
+   * @returns `true` while the path is still being validated.
+   */
   isPathValidating: (path: Path<TSchema>) => boolean
 
-  /** Validates the whole form. */
+  /**
+   * Validates the whole form against the current schema.
+   * @returns The schema result returned by the validator.
+   */
   validate: () => Promise<StandardSchemaV1.Result<InferOutput<TSchema>>>
 
-  /** Validates the whole schema but only updates issues within `path`. */
+  /**
+   * Validates a field or subtree and updates only the issues that overlap that path.
+   * @param path Field or subtree path to validate.
+   * @returns The full schema result for the current values.
+   */
   validateField: (path: Path<TSchema>) => Promise<StandardSchemaV1.Result<InferOutput<TSchema>>>
 
-  // #endregion
+  // Submission
 
-  // #region Submit
-
-  /** Whether a submit attempt is currently running. */
+  /** Whether a submit attempt is currently in progress. */
   isSubmitting: boolean
 
   /** Number of accepted submit attempts since the last reset. */
   submitCount: number
 
-  /** Whether at least one submit attempt has been accepted since reset. */
+  /** Whether a submit attempt has been accepted at least once since reset. */
   isSubmitted: boolean
 
-  /** Validates, then calls `onSubmit` when the latest values are valid. */
+  /**
+   * Validates the current form values and calls `onSubmit` when they are valid.
+   * @param event Optional native submit event to prevent default behavior.
+   * @returns Resolves when the submit cycle finishes.
+   */
   submit: (event?: SubmitEvent) => Promise<void>
 
-  // #endregion
+  // Reset
 
-  // #region Reset
-
-  /** Restores values/errors to the current baseline and clears interaction state. */
+  /** Restores the form to a baseline and clears touch, submit, and issue state. */
   reset: {
+    /**
+     * Resets the form to its current baseline, optionally replacing the baseline values and errors before resetting.
+     * @param values Optional replacement baseline values.
+     * @param errors Optional replacement baseline issues.
+     * @returns Nothing.
+     */
     (values?: DeepPartial<InferInput<TSchema>>, errors?: Array<Issue>): void
+
+    /**
+     * Resets the form when called as a native event handler.
+     *
+     * The event is ignored, and the existing baseline is restored.
+     * @param event Native reset event.
+     * @returns Nothing.
+     */
     (event: Event): void
   }
-
-  // #endregion
 }
 
 /**
- * Settings to configure the form instance.
- * @template TSchema Validation schema.
+ * Options used to create a form instance.
+ * @template TSchema Object schema used to infer form input and output.
  */
 export interface FormInstanceSettings<TSchema extends ObjectSchema> {
   /** Schema used to parse and validate values. */
@@ -139,6 +186,7 @@ export interface FormInstanceSettings<TSchema extends ObjectSchema> {
   /**
    * Called after a successful submit validation.
    * @param data Validated output.
+   * @returns Resolves when submission work completes.
    */
   onSubmit?: (data: InferOutput<TSchema>) => Promise<void> | void
 }

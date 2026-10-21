@@ -3,8 +3,6 @@ import type { FieldProps, FieldSlots } from '../types/field'
 import type { ObjectSchema } from '../types/shared'
 import { useField } from '../composables/use-field'
 
-// #region Setup
-
 // Renderless wrapper; defaults to eager validation and delegates trigger merging to the composable.
 
 defineSlots<FieldSlots>()
@@ -18,8 +16,6 @@ const props = withDefaults(defineProps<FieldProps<TSchema>>(), {
 
 /** State and event handlers exposed through the default slot. */
 const field = useField<TSchema>(props)
-
-// #endregion
 </script>
 
 <template>

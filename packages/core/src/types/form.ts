@@ -10,8 +10,11 @@ export interface FormProps<TSchema extends ObjectSchema> {
   form: UseFormReturn<TSchema>
 }
 
-/** Slot props for `<Form>`. */
+/** Slots rendered by `<Form>`. */
 export interface FormSlots {
-  /** Default slot content rendered inside the native form. */
+  /**
+   * Renders child content inside the native form element.
+   * @returns Nothing; Vue renders the slot template.
+   */
   default?: () => void
 }

@@ -16,9 +16,6 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
 <template>
   <Form
     :form
-    data-demo-form
-    @submit="form.submit"
-    @reset="form.reset()"
   >
     <Field
       v-slot="{ events, path }"
@@ -26,9 +23,9 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
       :validation-mode="validationMode"
       :validate-on="{ onInput: true }"
     >
-      <div data-demo-field>
+      <div>
         <div
-          data-demo-field
+
           class="flex-row justify-between"
         >
           <label
@@ -55,7 +52,6 @@ const validationMode = ref<'eager' | 'lazy'>('eager')
 
         <Error
           :path="path"
-          data-demo-message
         />
       </div>
     </Field>

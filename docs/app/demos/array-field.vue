@@ -32,19 +32,16 @@ const form = useForm({
 </script>
 
 <template>
-  <NotForm
+  <Form
     :form="form"
-    data-demo-form
   >
-    <div data-demo-field>
+    <div>
       <ArrayField
         v-slot="{ items: groups, append: appendGroup, remove: removeGroup, path: groupsPath }"
         path="groups"
         :item-schema="groupItemSchema"
       >
-        <div
-          data-demo-field
-        >
+        <div>
           <div
             v-for="group in groups"
             :key="group.key"
@@ -53,10 +50,9 @@ const form = useForm({
 
               not-first:mbs-6 not-first:border-bs not-first:pbs-6
             "
-            data-demo-field
           >
             <div
-              data-demo-field
+
               class="flex-row"
             >
               <Field
@@ -86,7 +82,6 @@ const form = useForm({
 
             <Error
               :path="`${group.path}.name`"
-              data-demo-message
             />
 
             <ArrayField
@@ -101,7 +96,7 @@ const form = useForm({
                 :path="tag.path"
               >
                 <div
-                  data-demo-field
+
                   class="flex-row"
                 >
                   <input
@@ -114,7 +109,7 @@ const form = useForm({
                   >
 
                   <div
-                    data-demo-field
+
                     class="flex-row gap-2 inline-fit"
                   >
                     <Button
@@ -152,13 +147,11 @@ const form = useForm({
 
                 <Error
                   :path="tag.path"
-                  data-demo-message
                 />
               </Field>
 
               <Error
                 :path="tagsPath"
-                data-demo-message
               />
 
               <Button
@@ -176,7 +169,6 @@ const form = useForm({
 
         <Error
           :path="groupsPath"
-          data-demo-message
         />
 
         <Button
@@ -192,7 +184,7 @@ const form = useForm({
     </div>
 
     <div
-      data-demo-field
+
       class="flex-row"
     >
       <Button
@@ -211,5 +203,5 @@ const form = useForm({
         :label="form.isSubmitting ? 'Submitting...' : 'Submit'"
       />
     </div>
-  </NotForm>
+  </Form>
 </template>

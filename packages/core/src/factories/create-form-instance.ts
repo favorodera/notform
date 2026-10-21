@@ -11,31 +11,59 @@ import { isPathWithinScope } from '../helpers/segments'
 
 /** A validation scope is either the whole form or one path subtree. */
 type ValidationScope
-  = | { kind: 'form' }
-    | { kind: 'path', segments: ReadonlyArray<number | string> }
+  = | {
+    /** Path-subtree validation scope. */
+    kind: 'path'
 
+    /** Parsed path used to compare overlapping scopes. */
+    segments: ReadonlyArray<number | string>
+  }
+  | {
+    /** Whole-form validation scope. */
+    kind: 'form'
+  }
+
+/** Operation that started a validation run. */
 type ValidationKind = 'field' | 'submit' | 'validate'
 
+/** Tracks a validation run and whether newer state has invalidated it. */
 interface ValidationRun {
+  /** Monotonic identifier used to remove this run. */
   id: number
-  kind: ValidationKind
-  scope: ValidationScope
-  stale: boolean
-}
 
-interface ValidationExecution<TOutput> {
-  result: StandardSchemaV1.Result<TOutput>
+  /** Operation that started the run. */
+  kind: ValidationKind
+
+  /** Form or field subtree covered by the run. */
+  scope: ValidationScope
+
+  /** Set when newer values, schema, or validation supersede this result. */
   stale: boolean
 }
 
 /**
- * Builds the reactive form instance used by `useNotForm` and field components.
- * @param settings
+ * Result returned by a validation run together with its freshness state.
+ * @template TOutput Parsed schema output type.
+ */
+interface ValidationExecution<TOutput> {
+  /** Parsed output or validation issues returned by the schema. */
+  result: StandardSchemaV1.Result<TOutput>
+
+  /** Whether the run was invalidated before it completed. */
+  stale: boolean
+}
+
+/**
+ * Creates the reactive form state and all form operations.
+ * @template TSchema Object schema used to infer form input and output.
+ * @param settings Schema, initial values, initial issues, and submit callback.
+ * @returns The full reactive form instance.
  */
 export function createFormInstance<TSchema extends ObjectSchema>(settings: FormInstanceSettings<TSchema>): FormInstance<TSchema> {
+  /** Concrete instance shape returned after reactive wrapping. */
   type Instance = FormInstance<TSchema>
 
-  // #region State
+  // State
 
   /** Plain reset baseline. May intentionally be a partial schema input. */
   const initialValues = klona(settings.initialValues ?? {} as DeepPartial<InferInput<TSchema>>)
@@ -54,6 +82,8 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
 
   /** Number of submit attempts since the last reset. */
   const submitCount = ref(0)
+
+  /** Submission state derives from the accepted attempt count. */
   const isSubmitted = computed(() => submitCount.value > 0)
 
   /** Dirty state is derived from values and the reset baseline; no path bookkeeping. */
@@ -67,6 +97,8 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
 
   /** Active validation runs. Each run owns one scoped contribution to this set. */
   const activeValidationRuns = reactive(new Map<number, ValidationRun>())
+
+  /** Monotonic id used to distinguish overlapping validation runs. */
   let nextValidationRunId = 0
 
   /** True while the submit transaction is running. */
@@ -78,19 +110,21 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   /** Avoids repeated validation cancellation while reset replaces multiple keys. */
   let isSuppressValueInvalidation = false
 
-  // #endregion
-
-  // #region Paths / state helpers
+  // Paths / state helpers
 
   /**
-   * @param path
+   * Normalizes equivalent path notation to a stable dot path.
+   * @param path Path string to normalize.
+   * @returns Canonical path with dot-separated array indices.
    */
   function canonicalizePath(path: string): Path<TSchema> {
     return stringifyPath(parsePath(path), { preferDotForIndices: true }) as Path<TSchema>
   }
 
   /**
-   * @param path
+   * Converts an optional field path into a form or subtree validation scope.
+   * @param path Field path; omitted for whole-form validation.
+   * @returns The validation scope for this operation.
    */
   function getScope(path?: Path<TSchema>): ValidationScope {
     return path === undefined
@@ -99,10 +133,12 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param left
-   * @param right
+   * Checks whether two validation scopes can affect the same field.
+   * @param left First validation scope.
+   * @param right Second validation scope.
+   * @returns `true` when either scope contains or overlaps the other.
    */
-  function scopesOverlap(left: ValidationScope, right: ValidationScope) {
+  function didScopesOverlap(left: ValidationScope, right: ValidationScope): boolean {
     if (left.kind === 'form' || right.kind === 'form') {
       return true
     }
@@ -114,10 +150,12 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   /**
    * Starts a run. New validation wins over older overlapping validation, except
    * that a normal field/form validation never cancels an already-running submit.
-   * @param kind
-   * @param path
+   * @param kind Operation starting the run.
+   * @param path Optional field path for scoped validation.
+   * @returns The new run record, registered as active.
    */
-  function beginValidation(kind: ValidationKind, path?: Path<TSchema>) {
+  function beginValidation(kind: ValidationKind, path?: Path<TSchema>): ValidationRun {
+    /** New run owns one validation scope until it settles or becomes stale. */
     const run: ValidationRun = {
       id: ++nextValidationRunId,
       kind,
@@ -126,9 +164,10 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
     }
 
     for (const [id, previous] of activeValidationRuns) {
-      const isSubmitIsProtected = previous.kind === 'submit' && kind !== 'submit'
+      // Field and manual validation must not cancel an accepted submit run.
+      const isSubmitProtected = previous.kind === 'submit' && kind !== 'submit'
 
-      if (isSubmitIsProtected || !scopesOverlap(previous.scope, run.scope)) {
+      if (isSubmitProtected || !didScopesOverlap(previous.scope, run.scope)) {
         continue
       }
 
@@ -141,9 +180,10 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param run
+   * Removes a completed run from the active validation set.
+   * @param run Run to settle.
    */
-  function settleValidation(run: ValidationRun) {
+  function settleValidation(run: ValidationRun): void {
     activeValidationRuns.delete(run.id)
   }
 
@@ -156,14 +196,20 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param path
+   * Checks whether a validation run overlaps the supplied path.
+   * @param path Field path to inspect.
+   * @returns `true` while the path overlaps an active validation scope.
    */
-  function isPathValidating(path: Path<TSchema>) {
+  function isPathValidating(path: Path<TSchema>): boolean {
+    /** Parsed once so every active scope can be checked against the same path. */
     const target = parsePath(path)
 
     for (const run of activeValidationRuns.values()) {
-      if ((run.scope.kind === 'form') || isPathWithinScope(target, run.scope.segments)
-        || isPathWithinScope(run.scope.segments, target)) {
+      if (
+        run.scope.kind === 'form'
+        || isPathWithinScope(target, run.scope.segments)
+        || isPathWithinScope(run.scope.segments, target)
+      ) {
         return true
       }
     }
@@ -172,9 +218,11 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param path
+   * Checks whether a field was touched or the form was submitted.
+   * @param path Field path to inspect.
+   * @returns Whether the path is considered touched.
    */
-  function isPathTouched(path: Path<TSchema>) {
+  function isPathTouched(path: Path<TSchema>): boolean {
     if (isSubmitted.value) {
       return true
     }
@@ -183,13 +231,16 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param path
+   * Checks whether a path or any ancestor/descendant has been touched.
+   * @param path Field or subtree path to inspect.
+   * @returns Whether the path overlaps explicit touched state.
    */
-  function isPathTouchedWithin(path: Path<TSchema>) {
+  function isPathTouchedWithin(path: Path<TSchema>): boolean {
     if (isSubmitted.value) {
       return true
     }
 
+    /** Parsed path used to include both touched ancestors and descendants. */
     const scope = parsePath(path)
 
     return [...touchedFields].some(touchedPath => (
@@ -199,30 +250,37 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param path
+   * Compares a field value with its reset baseline.
+   * @param path Field path to compare.
+   * @returns Whether the current and baseline values differ.
    */
-  function isPathDirty(path: Path<TSchema>) {
+  function isPathDirty(path: Path<TSchema>): boolean {
+    /** Current value at the requested path. */
     const currentValue = getProperty(values, path)
+
+    /** Value at the same path in the reset baseline. */
     const baselineValue = getProperty(initialValues, path)
     return !dequal(currentValue, baselineValue)
   }
 
-  // #endregion
-
-  // #region Schema execution
+  // Schema execution
 
   /**
-   *
+   * Validates a detached snapshot with the currently resolved schema.
+   * @returns The Standard Schema validation result.
    */
   function executeSchemaValidation() {
     const schema = toValue(settings.schema)
+    // Clone raw values so validators cannot mutate the reactive form state.
     const snapshot = klona(toRaw(values)) as InferInput<TSchema>
     return schema['~standard'].validate(snapshot)
   }
 
   /**
-   * @param error
-   * @param path
+   * Converts a thrown validator error into a displayable issue.
+   * @param error Value thrown by the schema validator.
+   * @param path Optional field path associated with this validation.
+   * @returns A normalized issue with a message and optional path.
    */
   function validationErrorToIssue(error: unknown, path?: Path<TSchema>): Issue {
     if (error instanceof Error) {
@@ -237,13 +295,16 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param kind
-   * @param path
+   * Runs schema validation and reports whether the result became stale.
+   * @param kind Operation starting the validation.
+   * @param path Optional field path for a scoped operation.
+   * @returns Parsed output or issues, plus the run's freshness state.
    */
   async function executeValidation(kind: ValidationKind, path?: Path<TSchema>): Promise<ValidationExecution<InferOutput<TSchema>>> {
     const run = beginValidation(kind, path)
 
     try {
+      /** Keep the validator result separate from freshness tracking. */
       let result: StandardSchemaV1.Result<InferOutput<TSchema>>
 
       try {
@@ -261,15 +322,15 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
     }
   }
 
-  // #endregion
-
-  // #region Values
+  // Values
 
   /**
-   * @param path
-   * @param value
+   * Updates a field value without triggering validation directly.
+   * @template TPath Exact path within the schema input.
+   * @param path Field path to update.
+   * @param value Input value accepted at that path.
    */
-  function setValue<TPath extends Paths<TSchema>>(path: TPath, value: Get<InferInput<TSchema>, TPath, { strict: false }>) {
+  function setValue<TPath extends Paths<TSchema>>(path: TPath, value: Get<InferInput<TSchema>, TPath, { strict: false }>): void {
     setProperty(values, path, value)
   }
 
@@ -293,14 +354,14 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
     { flush: 'sync' },
   )
 
-  // #endregion
-
-  // #region Errors
+  // Validation issues
 
   /**
-   * @param error
+   * Adds an issue or replaces the issue with the same normalized path.
+   * @param error Issue to add or replace.
    */
-  function setError(error: Issue) {
+  function setError(error: Issue): void {
+    /** Replace the existing issue for this path instead of duplicating it. */
     const existingIndex = errors.findIndex((existing: Issue) => areIssuePathsEqual(existing.path, error.path))
 
     if (existingIndex === -1) {
@@ -311,60 +372,58 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param nextErrors
+   * Replaces the existing issue list without replacing its reactive array.
+   * @param nextErrors Complete issue list to apply.
    */
-  function replaceErrors(nextErrors: Array<Issue>) {
+  function replaceErrors(nextErrors: Array<Issue>): void {
     errors.splice(0, errors.length, ...nextErrors)
   }
 
-  /**
-   *
-   */
-  function clearErrors() {
+  /** Removes all current issues while preserving the reactive array. */
+  function clearErrors(): void {
     errors.length = 0
   }
 
   /**
-   * @param path
+   * Returns issues whose normalized path exactly matches a field path.
+   * @param path Field path to match.
+   * @returns Matching issues in their current order.
    */
-  function getFieldErrors(path: Path<TSchema>) {
+  function getFieldErrors(path: Path<TSchema>): Array<Issue> {
     const targetPath = parsePath(path)
     return errors.filter((error: Issue) => areIssuePathsEqual(error.path, targetPath))
   }
 
-  // #endregion
-
-  // #region Touch
+  // Touched state
 
   /**
-   * @param path
+   * Marks a normalized field path as touched.
+   * @param path Field path to mark.
    */
-  function markFieldAsTouched(path: Path<TSchema>) {
+  function markFieldAsTouched(path: Path<TSchema>): void {
     touchedFields.add(canonicalizePath(path))
   }
 
   /**
-   * @param path
+   * Clears touched state for a normalized field path.
+   * @param path Field path to clear.
    */
-  function unmarkFieldAsTouched(path: Path<TSchema>) {
+  function unmarkFieldAsTouched(path: Path<TSchema>): void {
     touchedFields.delete(canonicalizePath(path))
   }
 
-  /**
-   *
-   */
-  function unmarkAllFieldsAsTouched() {
+  /** Clears all explicitly touched paths. */
+  function unmarkAllFieldsAsTouched(): void {
     touchedFields.clear()
   }
 
-  // #endregion
-
-  // #region Validation
+  // Validation
 
   /**
-   *
+   * Validates the entire form and replaces all current issues.
+   * @returns The Standard Schema result for the current values.
    */
-  async function validate() {
+  async function validate(): Promise<StandardSchemaV1.Result<InferOutput<TSchema>>> {
     const { result, stale } = await executeValidation('validate')
 
     if (stale) {
@@ -376,18 +435,22 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   }
 
   /**
-   * @param path
+   * Validates the schema and updates only issues inside a field path.
+   * @param path Field or subtree path whose issues should be updated.
+   * @returns The full Standard Schema result for the current values.
    */
-  async function validateField(path: Path<TSchema>) {
+  async function validateField(path: Path<TSchema>): Promise<StandardSchemaV1.Result<InferOutput<TSchema>>> {
     const { result, stale } = await executeValidation('field', path)
 
     if (stale) {
       return result
     }
 
+    /** Only issues inside this field subtree are replaced. */
     const targetPath = parsePath(path)
 
     for (let errorIndex = errors.length - 1; errorIndex >= 0; errorIndex--) {
+      /** Pathless issues belong to the form and must remain untouched. */
       const issuePath = errors[errorIndex]?.path
 
       if (issuePath !== undefined && isPathWithinScope(issuePath, targetPath)) {
@@ -395,6 +458,7 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
       }
     }
 
+    /** Keep only issues covered by this field validation. */
     const fieldIssues = (result.issues ?? []).filter(issue => (
       issue.path !== undefined && isPathWithinScope(issue.path, targetPath)
     ))
@@ -403,14 +467,13 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
     return result
   }
 
-  // #endregion
-
-  // #region Submit
+  // Submission
 
   /**
-   * @param event
+   * Validates current values and calls `onSubmit` once they are valid.
+   * @param event Optional native submit event; its default is prevented.
    */
-  async function submit(event?: SubmitEvent) {
+  async function submit(event?: SubmitEvent): Promise<void> {
     // A DOM `reset`/`submit` listener may pass an Event-shaped object. The
     // public submit contract is intentionally event-tolerant at runtime.
     event?.preventDefault()
@@ -421,6 +484,8 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
 
     isSubmitting.value = true
     submitCount.value++
+
+    /** A reset or newer transaction changes this token and cancels this loop. */
     const submissionVersion = ++submitCancellationVersion
 
     try {
@@ -454,21 +519,30 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
     }
   }
 
-  // #endregion
-
-  // #region Reset
+  // Reset
 
   /**
-   * @param nextValues
-   * @param nextErrors
+   * Restores the form to a baseline and cancels active validation/submission.
+   * @param nextValues Optional replacement baseline values.
+   * @param nextErrors Optional replacement baseline issues.
    */
-  function reset(nextValues?: DeepPartial<InferInput<TSchema>>, nextErrors?: Array<Issue>) {
-    // Event objects are not valid reset baselines. This also makes
-    // `@reset="form.reset"` safe even when used directly as a listener.
+  function reset(nextValues?: DeepPartial<InferInput<TSchema>>, nextErrors?: Array<Issue>): void
+
+  /**
+   * Resets the form when called as a native event handler.
+   *
+   * The event is ignored, and the existing baseline is restored.
+   * @param event Native reset event.
+   */
+  function reset(event: Event): void
+  function reset(nextValues?: DeepPartial<InferInput<TSchema>> | Event, nextErrors?: Array<Issue>): void {
+    // Event objects are not valid reset baselines.
+    // This makes `@reset="form.reset"` safe even when used directly as a listener.
     if (typeof Event !== 'undefined' && nextValues instanceof Event) {
       nextValues = undefined
     }
 
+    // Version changes cancel the old submit loop; invalidation stops old results committing.
     invalidateValidation()
     submitCancellationVersion++
 
@@ -479,6 +553,7 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
 
     try {
       if (nextValues !== undefined) {
+        /** Clone caller input so later external mutation cannot change the baseline. */
         const freshValues = klona(nextValues)
 
         for (const key of Object.keys(initialValues)) {
@@ -504,8 +579,6 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
       isSuppressValueInvalidation = false
     }
   }
-
-  // #endregion
 
   const instance: Instance = reactive({
     clearErrors,

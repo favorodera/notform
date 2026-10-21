@@ -1,19 +1,16 @@
 import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 import packageJson from '../package.json'
 
-const components = [
-  'Form',
-  'Field',
-  'ArrayField',
-  'Error',
-] as const
+/** Core component exports registered by the Nuxt module. */
+const componentNames = ['Form', 'Field', 'ArrayField', 'Error'] as const
 
-const composable = 'useForm' as const
+/** Core composable name registered by the Nuxt module. */
+const formComposableName = 'useForm' as const
 
-/** Module Options for the `@notform/nuxt`. */
+/** Configuration for the Nuxt integration. */
 export interface ModuleOptions {
-  /** Override the auto-imported name of any component or composable. */
-  aliases?: Partial<Record<typeof components[number] | typeof composable, string>>
+  /** Optional alias map, for example `{ Form: 'AppForm' }` to rename the auto-imported exports. */
+  aliases?: Partial<Record<typeof componentNames[number] | typeof formComposableName, string>>
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -24,31 +21,35 @@ export default defineNuxtModule<ModuleOptions>({
     version: packageJson.version,
   },
 
-  async setup(resolvedOptions) {
+  /**
+   * Registers the core components and composable, applying any configured aliases.
+   * @param options Resolved module options.
+   * @returns Resolves after the auto-imports are registered.
+   */
+  async setup(options) {
     const { resolvePath } = createResolver(import.meta.url)
 
-    // Resolve the core package entry point
-    const notformPath = await resolvePath('notform')
+    const corePackagePath = await resolvePath('notform')
 
-    // Register components respecting with optional consumer-side aliasing
-    for (const originalName of components) {
-      const nameToRegister = resolvedOptions.aliases?.[originalName] ?? originalName
+    // Register each component under its default name or configured alias.
+    for (const componentExportName of componentNames) {
+      const registeredComponentName = options.aliases?.[componentExportName] ?? componentExportName
 
       addComponent({
-        export: originalName, // Actual export from `notform` package
-        filePath: notformPath,
-        name: nameToRegister, // The name Nuxt will register for auto imports, e.g. `<MyForm>`.
+        export: componentExportName,
+        filePath: corePackagePath,
+        name: registeredComponentName,
         priority: 1,
       })
     }
 
-    // Register composable respecting with optional consumer-side aliasing
-    const composableNameToRegister = resolvedOptions.aliases?.[composable] ?? composable
+    // Register the composable under its default name or configured alias.
+    const registeredComposableName = options.aliases?.[formComposableName] ?? formComposableName
 
     addImports({
-      as: composableNameToRegister, // The name Nuxt will register for auto imports, e.g. `useMyForm()`.
-      from: notformPath,
-      name: composable, // Actual export from `notform` package
+      as: registeredComposableName,
+      from: corePackagePath,
+      name: formComposableName,
       priority: 1,
     })
   },

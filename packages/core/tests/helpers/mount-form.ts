@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import type { nameEmailSchema } from './not-validator'
+import type { nameEmailSchema } from './schema-fixtures'
 import { Field, Form, type FormInstanceSettings } from '../../src'
 import { createNameEmailForm } from './create-form'
 

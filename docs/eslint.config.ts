@@ -7,8 +7,9 @@ const config = factory({
     entryPoint: 'app/assets/css/main.css',
   },
 })
-  .override('favorodera/typescript/rules', {
+  .append({
     rules: {
+      'node/no-unsupported-features/node-builtins': 'off',
       'ts/no-explicit-any': 'off',
     },
   })

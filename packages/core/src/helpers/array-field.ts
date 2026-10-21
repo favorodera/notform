@@ -3,14 +3,25 @@ import type { FormInstance } from '../types/instance'
 import type { ArrayItemIndexMap, DotPropPathSegment, Issue, ObjectSchema, Path, PathSegment } from '../types/shared'
 import { isPathWithinScope, toPropertyKey } from './segments'
 
+/**
+ * Result of resolving an array-item path within a parent array field.
+ * @template TPathSegment Remaining path segments under the array item.
+ */
 interface ArrayPathLocation<TPathSegment extends PathSegment> {
+  /** Item index within the array. */
   index: number
+
+  /** Remaining nested segments after the item index. */
   remainingPathSegments: ReadonlyArray<TPathSegment>
 }
 
 /**
- * @param pathSegments
- * @param arrayFieldPathSegments
+ * Finds the item index and remaining path for a nested path inside an array field.
+ * @template TPathSegment Segment type of the candidate path.
+ * @template TArraySegment Segment type of the array-field path.
+ * @param pathSegments Fully parsed candidate path.
+ * @param arrayFieldPathSegments Fully parsed array field path.
+ * @returns The item location when the path is nested under an array item, otherwise `undefined`.
  */
 export function locatePathInArrayField<
   TPathSegment extends PathSegment,
@@ -46,18 +57,21 @@ export function locatePathInArrayField<
 }
 
 /**
- * @param paths
- * @param arraySegments
- * @param remapIndex
+ * Updates touched field paths after an array mutation.
+ * @template TSchema Schema that defines the paths being remapped.
+ * @param paths Set of touched field paths to update.
+ * @param arraySegments Parsed path to the array field.
+ * @param remapIndex Function that maps each old item index to its new index or removes it.
  */
 function remapPathSet<TSchema extends ObjectSchema>(
   paths: Set<Path<TSchema>>,
   arraySegments: ReadonlyArray<DotPropPathSegment>,
   remapIndex: ArrayItemIndexMap,
-) {
+): void {
   const pathsToRemove: Array<Path<TSchema>> = []
   const pathsToAdd: Array<Path<TSchema>> = []
 
+  // Collect removals and additions separately to avoid mutating the set while iterating.
   for (const path of paths) {
     const location = locatePathInArrayField(parsePath(path), arraySegments)
 
@@ -89,10 +103,11 @@ function remapPathSet<TSchema extends ObjectSchema>(
 }
 
 /**
- * Moves touched paths and validation issues with array items.
- * @param form
- * @param arrayPath
- * @param remapIndex
+ * Moves field-level touched state and validation issues with array items after a reorder or removal.
+ * @template TSchema Object schema that owns the array field.
+ * @param form Form instance whose state will be updated.
+ * @param arrayPath Path to the mutated array.
+ * @param remapIndex Maps each previous item index to a replacement index, or returns `undefined` to remove an item.
  */
 export function remapArrayFieldState<TSchema extends ObjectSchema>(
   form: FormInstance<TSchema>,
@@ -106,6 +121,7 @@ export function remapArrayFieldState<TSchema extends ObjectSchema>(
   const remappedErrors: Array<Issue> = []
 
   for (const issue of form.errors) {
+    // Form-level issues have no field path and must survive array mutations.
     if (!issue.path) {
       remappedErrors.push(issue)
       continue
@@ -119,6 +135,7 @@ export function remapArrayFieldState<TSchema extends ObjectSchema>(
 
     const nextIndex = remapIndex(location.index)
     if (nextIndex === undefined) {
+      // Drop errors belonging to an item that was removed.
       continue
     }
 
@@ -136,20 +153,24 @@ export function remapArrayFieldState<TSchema extends ObjectSchema>(
 }
 
 /**
- * @param index
- * @param length
+ * Validates an index against the current array length.
+ * @param index Requested item index.
+ * @param length Current array length.
+ * @returns The input index when it is within bounds, otherwise `undefined`.
  */
-export function normalizeExistingIndex(index: number, length: number) {
+export function normalizeExistingIndex(index: number, length: number): number | undefined {
   if (Number.isSafeInteger(index) && index >= 0 && index < length) {
     return index
   }
 }
 
 /**
- * @param index
- * @param length
+ * Clamps an insertion index into the valid array bounds.
+ * @param index Requested insertion index.
+ * @param length Current array length.
+ * @returns A safe insertion index in the `0..length` range, or `undefined` when the input is not an integer.
  */
-export function normalizeInsertionIndex(index: number, length: number) {
+export function normalizeInsertionIndex(index: number, length: number): number | undefined {
   if (!Number.isSafeInteger(index)) {
     return
   }
@@ -158,10 +179,12 @@ export function normalizeInsertionIndex(index: number, length: number) {
 }
 
 /**
- * @param index
- * @param length
+ * Clamps a move destination to the nearest valid item index.
+ * @param index Requested destination index.
+ * @param length Current array length.
+ * @returns A valid destination index, or `undefined` when the array is empty or the input is not an integer.
  */
-export function normalizeMoveDestination(index: number, length: number) {
+export function normalizeMoveDestination(index: number, length: number): number | undefined {
   if (length === 0 || !Number.isSafeInteger(index)) {
     return
   }

@@ -36,15 +36,13 @@ const form = useForm({
 <template>
   <Form
     :form="form"
-    data-form
   >
     <Field
       v-slot="{ events, path }"
       path="name"
     >
-      <div data-field>
+      <div >
         <label
-          data-label
           :for="path"
         > Full Name </label>
 
@@ -59,7 +57,6 @@ const form = useForm({
 
         <Error
           :path
-          data-message
         />
       </div>
     </Field>
@@ -68,7 +65,7 @@ const form = useForm({
       v-slot="{ events, path }"
       path="email"
     >
-      <div data-field>
+      <div >
         <label :for="path"> Email Address </label>
 
         <input
@@ -81,13 +78,12 @@ const form = useForm({
 
         <Error
           :path
-          data-message
         />
       </div>
     </Field>
 
-    <div data-field>
-      <div data-label>
+    <div >
+      <div class="text-sm font-medium">
         interests
       </div>
 
@@ -102,9 +98,9 @@ const form = useForm({
           :key="item.key"
           :path="item.path"
         >
-          <div data-field>
+          <div >
             <div
-              data-field
+              
               class="flex-row"
             >
               <input
@@ -116,7 +112,7 @@ const form = useForm({
               >
 
               <div
-                data-field
+                
                 class="flex-row gap-2 inline-fit"
               >
                 <button
@@ -149,7 +145,6 @@ const form = useForm({
 
             <Error
               :path="item.path"
-              data-message
             />
           </div>
         </Field>
@@ -163,13 +158,12 @@ const form = useForm({
 
         <Error
           path="tags"
-          data-message
         />
       </ArrayField>
     </div>
 
     <div
-      data-field
+      
       class="
         flex-row inline-full
 

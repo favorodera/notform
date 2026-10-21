@@ -1,7 +1,7 @@
 import { flushPromises } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { FieldProps } from '../../src/types/field'
-import type { nameEmailSchema } from '../helpers/not-validator'
+import type { nameEmailSchema } from '../helpers/schema-fixtures'
 import { useField } from '../../src/composables/use-field'
 import { createNameEmailForm } from '../helpers/create-form'
 import { withSetup } from '../helpers/with-setup'
@@ -64,7 +64,7 @@ describe('onMount', () => {
   })
 })
 
-describe.each(['onInput', 'onChange'] as const)('%s', trigger => {
+describe.for(['onInput', 'onChange'] as const)('%s', (trigger) => {
   it(`performs the first validation when ${trigger} is enabled`, async () => {
     const { field, form } = setupNameField({
       validateOn: { onBlur: false, [trigger]: true },
@@ -91,7 +91,7 @@ describe.each(['onInput', 'onChange'] as const)('%s', trigger => {
 describe('lazy mode', () => {
   it.for(['onInput', 'onChange'] as const)(
     'does not validate %s in lazy mode',
-    async trigger => {
+    async (trigger) => {
       const { field, form } = setupNameField({
         validateOn: { onBlur: false, [trigger]: true },
         validationMode: 'lazy',
@@ -113,12 +113,10 @@ describe('debounce', () => {
     validateOn: { onBlur: true, onChange: false, onInput: true },
   }
 
-  // eslint-disable-next-line test/no-hooks
   beforeEach(() => {
     vi.useFakeTimers()
   })
 
-  // eslint-disable-next-line test/no-hooks
   afterEach(() => {
     vi.useRealTimers()
   })

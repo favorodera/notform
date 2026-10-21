@@ -1,6 +1,6 @@
 import type { FormInstanceSettings } from '../../src'
 import { createFormInstance } from '../../src/factories/create-form-instance'
-import { nameEmailSchema } from './not-validator'
+import { nameEmailSchema } from './schema-fixtures'
 
 /** Default config for tests using the name/email schema. */
 export const nameEmailFormConfig: FormInstanceSettings<typeof nameEmailSchema> = {

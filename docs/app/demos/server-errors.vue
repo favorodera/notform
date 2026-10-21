@@ -32,15 +32,12 @@ const form = useForm({
 <template>
   <Form
     :form="form"
-    data-demo-form
-    @submit="form.submit"
-    @reset="form.reset()"
   >
     <Field
       v-slot="{ events, path }"
       path="email"
     >
-      <div data-demo-field>
+      <div>
         <label :for="path">
           Email Address
         </label>
@@ -55,13 +52,11 @@ const form = useForm({
 
         <Error
           :path="path"
-          data-demo-message
         />
       </div>
     </Field>
 
     <div
-      data-demo-field
       class="flex-row"
     >
       <Button

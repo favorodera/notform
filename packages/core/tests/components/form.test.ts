@@ -1,4 +1,3 @@
-/* eslint-disable test/max-expects, ts/no-invalid-void-type */
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import { Form } from '../../src'
@@ -36,7 +35,7 @@ describe('rendering', () => {
 })
 
 describe('context', () => {
-  it('provides the form instance to descendant NotField components without an explicit :form prop', async () => {
+  it('provides the form instance to descendant Field components without an explicit :form prop', async () => {
     const { form, wrapper } = mountNameEmailForm()
 
     await wrapper.get('#name').setValue('Jane')

@@ -27,8 +27,6 @@ const form = useForm({
 <template>
   <Form
     :form="form"
-    @submit="form.submit"
-    @reset="form.reset()"
   >
     <Field
       v-slot="{ events, path }"

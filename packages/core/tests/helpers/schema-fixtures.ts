@@ -1,8 +1,8 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 
-/** Standard Schema metadata shared by the test validators. */
+/** Standard Schema vendor metadata shared by every fixture validator. */
 export const vendorVersion = {
-  vendor: 'not-validator',
+  vendor: 'test-schema-fixtures',
   version: 1,
 } as const
 
@@ -75,6 +75,7 @@ export function number(min?: number, max?: number): StandardSchemaV1<number> {
 /**
  * Validates a plain object against a shape of field schemas.
  * Each field's issues are reported with the field key prepended to their path.
+ * @template TShape Map of field names to schemas.
  * @param shape A record mapping field names to their schemas.
  * @returns A schema object that validates an object value.
  */
@@ -90,6 +91,7 @@ export function object<TShape extends Record<string, StandardSchemaV1>>(shape: T
         output: {} as { [Key in keyof TShape]: StandardSchemaV1.InferOutput<TShape[Key]> },
       },
       ...vendorVersion,
+      // Validates each shaped field and prefixes issues with its field key.
       validate(value) {
         if (typeof value !== 'object' || value === null) {
           return { issues: [{ message: 'Must be an object' }] }
@@ -121,6 +123,7 @@ export function object<TShape extends Record<string, StandardSchemaV1>>(shape: T
 /**
  * Validates an array where every item must pass the provided item schema.
  * Each item's issues are reported with the item index prepended to their path.
+ * @template TItem Schema used to validate each array item.
  * @param itemSchema The schema every array item is validated against.
  * @param min Minimum number of items (inclusive).
  * @param max Maximum number of items (inclusive).
@@ -137,6 +140,7 @@ export function array<TItem extends StandardSchemaV1>(itemSchema: TItem, min?: n
         input: [] as Array<StandardSchemaV1.InferInput<TItem>>,
         output: [] as Array<StandardSchemaV1.InferOutput<TItem>>,
       },
+      // Validates each item and prefixes issues with the item index.
       validate(value) {
         if (!Array.isArray(value)) {
           return { issues: [{ message: 'Must be an array' }] }
@@ -189,6 +193,7 @@ export function delayed<TSchema extends StandardSchemaV1>(schema: TSchema, gate:
     ...schema,
     '~standard': {
       ...schema['~standard'],
+      // Waits for the gate before delegating validation to the wrapped schema.
       async validate(value) {
         await gate
         return schema['~standard'].validate(value)
@@ -212,6 +217,7 @@ export function delayedByCall<TSchema extends StandardSchemaV1>(schema: TSchema,
     ...schema,
     '~standard': {
       ...schema['~standard'],
+      // Waits for the gate selected by call number before validating.
       async validate(value) {
         callCount++
         await nextGate(callCount)
@@ -233,6 +239,7 @@ export function createFirstCallBlockingSchema(gate: Promise<void>) {
   return {
     '~standard': {
       types: { input: {} as Record<string, unknown>, output: {} as Record<string, unknown> },
+      // Blocks the first call so tests can complete a newer run first.
       async validate(value: unknown) {
         callCount++
 
@@ -264,6 +271,7 @@ export function createGatedCallSchema(
   return {
     '~standard': {
       types: { input: {} as Record<string, unknown>, output: {} as Record<string, unknown> },
+      // Waits for the call-specific gate, then returns its configured result.
       async validate(value: unknown) {
         const currentCall = ++callCount
         await nextGate(currentCall)
@@ -286,6 +294,7 @@ export function withKeySegments<TSchema extends StandardSchemaV1>(schema: TSchem
     ...schema,
     '~standard': {
       ...schema['~standard'],
+      // Re-wraps issue path segments while preserving the schema result.
       async validate(value) {
         const result = await schema['~standard'].validate(value)
 
@@ -307,31 +316,31 @@ export function withKeySegments<TSchema extends StandardSchemaV1>(schema: TSchem
   } as TSchema
 }
 
-/** Schema shared by name/email form tests. */
+/** Object schema for required name and email fields used in form tests. */
 export const nameEmailSchema = object({
   email: string(5, 100),
   name: string(2, 50),
 })
 
-/** Schema for array-field tests. */
+/** Schema requiring two to five tags, each between one and twenty characters. */
 export const tagsSchema = object({
   tags: array(string(1, 20), 2, 5),
 })
 
-/** Nested group schema used by array remapping tests. */
+/** Group item schema with a required name and two-to-five tags. */
 export const groupSchema = object({
   name: string(1, 50),
   tags: array(string(1, 20), 2, 5),
 })
 
-/** Schema with nested arrays used to test recursive paths. */
+/** Email form schema containing one to three nested group items. */
 export const emailGroupsSchema = object({
   email: string(5, 100),
   groups: array(groupSchema, 1, 3),
 })
 
-/** Name/email schema that emits `{ key }` issue path segments. */
+/** Name/email schema wrapper that reports issue path segments as `{ key }` objects. */
 export const nameEmailSchemaWithKeySegments = withKeySegments(nameEmailSchema)
 
-/** Nested-array schema that emits `{ key }` issue path segments. */
+/** Nested-array schema wrapper that reports issue path segments as `{ key }` objects. */
 export const emailGroupsSchemaWithKeySegments = withKeySegments(emailGroupsSchema)

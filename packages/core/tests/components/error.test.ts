@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { Error, Field, Form, type FormInstanceSettings, useForm } from '../../src'
-import { nameEmailSchema, object, string } from '../helpers/not-validator'
+import { nameEmailSchema, object, string } from '../helpers/schema-fixtures'
 
 /** Shared schema for message rendering tests. */
 const schema = nameEmailSchema
@@ -93,7 +93,7 @@ function mountForm(template?: string) {
 }
 
 describe('error message display', () => {
-  it('renders hing when field has no error', () => {
+  it('renders nothing when the field has no error', () => {
     const { wrapper } = mountForm()
 
     expect(wrapper.find('span').exists()).toBe(false)

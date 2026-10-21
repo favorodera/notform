@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { createFormInstance } from '../../src/factories/create-form-instance'
 import { locatePathInArrayField, remapArrayFieldState } from '../../src/helpers/array-field'
-import { emailGroupsSchema } from '../helpers/not-validator'
+import { emailGroupsSchema } from '../helpers/schema-fixtures'
 
 describe('locatePathInArrayField', () => {
   it('returns undefined for a path outside the array', () => {
@@ -44,7 +44,7 @@ describe('locatePathInArrayField', () => {
     })
   })
 
-  it.each(['01', ' 1 ', '0x1', ''])('rejects non-canonical numeric index %s', index => {
+  it.for(['01', ' 1 ', '0x1', ''])('rejects non-canonical numeric index %s', (index) => {
     expect(locatePathInArrayField(['groups', index, 'name'], ['groups'])).toBeUndefined()
   })
 })

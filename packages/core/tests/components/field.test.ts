@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { Field, type FieldProps, Form, useForm } from '../../src'
-import { nameEmailSchema, object, string } from '../helpers/not-validator'
+import { nameEmailSchema, object, string } from '../helpers/schema-fixtures'
 
 /** Shared schema for field component tests. */
 const schema = nameEmailSchema

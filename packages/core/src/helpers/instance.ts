@@ -3,17 +3,14 @@ import type { FormInstance } from '../types/instance'
 import type { ObjectSchema } from '../types/shared'
 import type { UseFormReturn } from '../types/use-form'
 
-/**
- * Injection key for the full {@linkcode FormInstance}.
- */
-export const FORM_INSTANCE_KEY: InjectionKey<FormInstance<any>> = Symbol('notform:instance')
+/** Shared injection key used to resolve the nearest active form instance. */
+export const FORM_INSTANCE_KEY: InjectionKey<FormInstance<ObjectSchema>> = Symbol('form:instance')
 
 /**
- * Provides the full form instance to descendants.
- * @template TSchema The form schema.
- * @internal
- * @param instance Public API or full instance.
+ * Provides a form instance to nested components through Vue's dependency injection.
+ * @template TSchema Object schema owned by the form.
+ * @param instance Form instance or public form API to expose to descendants.
  */
-export function provideFormInstance<TSchema extends ObjectSchema>(instance: FormInstance<TSchema> | UseFormReturn<TSchema>) {
+export function provideFormInstance<TSchema extends ObjectSchema>(instance: FormInstance<TSchema> | UseFormReturn<TSchema>): void {
   provide<FormInstance<TSchema>>(FORM_INSTANCE_KEY, instance as FormInstance<TSchema>)
 }

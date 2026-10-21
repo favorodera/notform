@@ -1,9 +1,8 @@
-/* eslint-disable ts/no-invalid-void-type */
 import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { createFormInstance } from '../../src/factories/create-form-instance'
 import { createNameEmailForm } from '../helpers/create-form'
-import { createFirstCallBlockingSchema, createGatedCallSchema, type nameEmailSchema } from '../helpers/not-validator'
+import { createFirstCallBlockingSchema, createGatedCallSchema, type nameEmailSchema } from '../helpers/schema-fixtures'
 
 describe('validation', () => {
   it('validate resolves with issues when values are invalid', async () => {
@@ -42,6 +41,8 @@ describe('validation', () => {
           input: {} as { name: string },
           output: {} as { name: string, normalized: boolean },
         },
+
+        // Trims the name and returns a transformed output value.
         validate(value: unknown) {
           const input = value as { name?: unknown }
           return {

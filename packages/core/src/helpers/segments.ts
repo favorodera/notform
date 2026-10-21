@@ -2,8 +2,7 @@ import type { PathSegment } from '../types/shared'
 
 /**
  * Unwraps a Standard Schema path segment to a property key.
- * @internal
- * @param segment Plain key or `{ key }`.
+ * @param segment Plain key or `{ key }` segment.
  * @returns The underlying property key.
  */
 export function toPropertyKey(segment: PathSegment): PropertyKey {
@@ -17,13 +16,12 @@ export function toPropertyKey(segment: PathSegment): PropertyKey {
 }
 
 /**
- * Whether two path segments name the same property. `0` and `"0"` are equal.
- * @internal
- * @param segmentA First segment.
- * @param segmentB Second segment.
- * @returns `true` when both refer to the same key.
+ * Checks whether two path segments name the same property; `0` equals `"0"`.
+ * @param segmentA First path segment.
+ * @param segmentB Second path segment.
+ * @returns `true` when both normalized keys match.
  */
-export function areSegmentsEqual(segmentA: PathSegment, segmentB: PathSegment) {
+export function areSegmentsEqual(segmentA: PathSegment, segmentB: PathSegment): boolean {
   const keyA = toPropertyKey(segmentA)
   const keyB = toPropertyKey(segmentB)
 
@@ -43,16 +41,13 @@ export function areSegmentsEqual(segmentA: PathSegment, segmentB: PathSegment) {
 }
 
 /**
- * Whether a path equals or descends from a scope, at any depth.
- * Used by array-path remapping and recursive `<NotArrayField>` status.
- * @param pathSegments Candidate path, already split.
- * @param scopeSegments Scope path, already split.
- * @returns `true` when `pathSegments` is `scopeSegments` or a descendant of it.
+ * Checks whether a path equals or descends from a scope.
+ * Used by array-state remapping and nested validation status.
+ * @param pathSegments Candidate path, already parsed.
+ * @param scopeSegments Scope path, already parsed.
+ * @returns `true` when the candidate path is the scope or one of its descendants.
  */
-export function isPathWithinScope(
-  pathSegments: ReadonlyArray<PathSegment>,
-  scopeSegments: ReadonlyArray<PathSegment>,
-) {
+export function isPathWithinScope(pathSegments: ReadonlyArray<PathSegment>, scopeSegments: ReadonlyArray<PathSegment>): boolean {
   // A shorter path can never contain the scope path within it.
   if (pathSegments.length < scopeSegments.length) {
     return false

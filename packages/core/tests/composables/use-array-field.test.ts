@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { useArrayField } from '../../src/composables/use-array-field'
-import { createFormInstance, } from '../../src/factories/create-form-instance'
-import { emailGroupsSchema, object, string } from '../helpers/not-validator'
+import { createFormInstance } from '../../src/factories/create-form-instance'
+import { emailGroupsSchema, object, string } from '../helpers/schema-fixtures'
 
 /**
  * Creates the nested-array form used by recursive state tests.
@@ -92,7 +92,7 @@ describe('isValid/isTouched/isDirty/isValidating recurse to any depth', () => {
     expect(groups.isDirty).toBe(true)
   })
 
-  it('a nested NotArrayField and its ancestor both see the same nested issue', () => {
+  it('a nested ArrayField and its ancestor both see the same nested issue', () => {
     const form = createForm()
     const groups = useArrayField({ form, path: 'groups' })
     const firstGroupTags = useArrayField({ form, path: 'groups.0.tags' })
@@ -225,7 +225,6 @@ describe('array mutations keep dirty state and validation state consistent', () 
   })
 
   it('invalidates in-flight validation when an item is removed', async () => {
-    // eslint-disable-next-line ts/no-invalid-void-type
     const { promise: gate, resolve } = Promise.withResolvers<void>()
     let callCount = 0
     const form = createFormInstance({
@@ -242,6 +241,8 @@ describe('array mutations keep dirty state and validation state consistent', () 
             input: {} as ReturnType<typeof createForm>['values'],
             output: {} as ReturnType<typeof createForm>['values'],
           },
+
+          // Delays the first result so removal can invalidate it.
           async validate(value) {
             callCount++
             if (callCount === 1) {

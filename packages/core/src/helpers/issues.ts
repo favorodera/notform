@@ -2,13 +2,12 @@ import type { Issue } from '../types/shared'
 import { areSegmentsEqual } from './segments'
 
 /**
- * Whether two issue paths point at the same field after segment normalization.
- * @internal
- * @param issuePathA First path.
- * @param issuePathB Second path.
- * @returns `true` when both paths are defined, same length, and equal segment-wise.
+ * Checks whether two issue paths identify the same field.
+ * @param issuePathA First issue path.
+ * @param issuePathB Second issue path.
+ * @returns `true` when both paths exist and their normalized segments match.
  */
-export function areIssuePathsEqual(issuePathA: Issue['path'], issuePathB: Issue['path']) {
+export function areIssuePathsEqual(issuePathA: Issue['path'], issuePathB: Issue['path']): boolean {
   // A pathless issue (form-level, no `path`) never matches a specific field —
   // treat either side missing as an automatic mismatch, not a wildcard.
   if (!issuePathA || !issuePathB) {

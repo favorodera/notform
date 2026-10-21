@@ -4,31 +4,45 @@ import type { ObjectSchema } from '../types/shared'
 import { useFormInstance } from './use-form-instance'
 
 /**
- * Field state, validation, and event handlers for `<NotField>`.
- * @param props
+ * Creates reactive field state and validation event handlers.
+ * @template TSchema Schema that defines the field path.
+ * @param props Field path, validation options, and optional form instance.
+ * @returns Field state and event handlers for the `<Field>` slot.
  */
 export function useField<TSchema extends ObjectSchema>(props: FieldProps<TSchema>): Parameters<NonNullable<FieldSlots['default']>>[0] {
+  /** Form instance resolved from the prop or nearest `<Form>`. */
   const form = useFormInstance<TSchema>(props.form)
 
+  /** Current issues and derived field state. */
   const errors = computed(() => form.getFieldErrors(props.path))
+
+  /** Whether no current issue belongs to this field. */
   const isValid = computed(() => errors.value.length === 0)
+
+  /** Whether the form considers this path touched. */
   const isTouched = computed(() => form.isPathTouched(props.path))
+
+  /** Whether the field value differs from its reset baseline. */
   const isDirty = computed(() => form.isPathDirty(props.path))
+
+  /** Whether validation currently overlaps this field. */
   const isValidating = computed(() => form.isPathValidating(props.path))
 
+  /** Effective trigger settings, with blur and change enabled by default. */
   const validateOn = computed(() => ({
     onBlur: true,
     onChange: true,
     ...props.validateOn,
   }))
 
+  /** Pending delayed validation, if any. */
   let debounceTimer: ReturnType<typeof setTimeout> | undefined
+
+  /** Prevents validation before mount and after unmount. */
   let isMounted = false
 
-  /**
-   *
-   */
-  function clearDebounce() {
+  /** Cancels a queued validation and clears its timer handle. */
+  function clearDebounce(): void {
     if (debounceTimer === undefined) {
       return
     }
@@ -37,10 +51,8 @@ export function useField<TSchema extends ObjectSchema>(props: FieldProps<TSchema
     debounceTimer = undefined
   }
 
-  /**
-   *
-   */
-  function validateCurrentField() {
+  /** Validates the field only while its component is mounted. */
+  function validateCurrentField(): void {
     if (!isMounted) {
       return
     }
@@ -48,10 +60,8 @@ export function useField<TSchema extends ObjectSchema>(props: FieldProps<TSchema
     void form.validateField(props.path)
   }
 
-  /**
-   *
-   */
-  function scheduleValidation() {
+  /** Runs validation immediately or after the configured debounce delay. */
+  function scheduleValidation(): void {
     clearDebounce()
 
     if (!props.debounce || props.debounce <= 0) {
@@ -65,10 +75,8 @@ export function useField<TSchema extends ObjectSchema>(props: FieldProps<TSchema
     }, props.debounce)
   }
 
-  /**
-   *
-   */
-  function onBlur() {
+  /** Marks the field touched and validates immediately when enabled. */
+  function onBlur(): void {
     form.markFieldAsTouched(props.path)
 
     if (!validateOn.value.onBlur) {
@@ -79,10 +87,8 @@ export function useField<TSchema extends ObjectSchema>(props: FieldProps<TSchema
     validateCurrentField()
   }
 
-  /**
-   *
-   */
-  function onInput() {
+  /** Schedules input validation unless the field uses lazy mode. */
+  function onInput(): void {
     if (!validateOn.value.onInput || props.validationMode === 'lazy') {
       return
     }
@@ -90,10 +96,8 @@ export function useField<TSchema extends ObjectSchema>(props: FieldProps<TSchema
     scheduleValidation()
   }
 
-  /**
-   *
-   */
-  function onChange() {
+  /** Schedules change validation unless the field uses lazy mode. */
+  function onChange(): void {
     if (!validateOn.value.onChange || props.validationMode === 'lazy') {
       return
     }
@@ -101,15 +105,14 @@ export function useField<TSchema extends ObjectSchema>(props: FieldProps<TSchema
     scheduleValidation()
   }
 
-  /**
-   *
-   */
-  function onMount() {
+  /** Runs the optional initial validation after the component mounts. */
+  function onMount(): void {
     if (validateOn.value.onMount) {
       validateCurrentField()
     }
   }
 
+  /** Event handlers exposed to input elements through the field slot. */
   const events: Parameters<NonNullable<FieldSlots['default']>>[0]['events'] = {
     onBlur,
     onChange,
@@ -127,6 +130,7 @@ export function useField<TSchema extends ObjectSchema>(props: FieldProps<TSchema
   })
 
   onUnmounted(() => {
+    // Cancel delayed work so an unmounted field cannot trigger validation.
     isMounted = false
     clearDebounce()
   })

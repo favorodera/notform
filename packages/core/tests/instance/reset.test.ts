@@ -1,8 +1,7 @@
-/* eslint-disable ts/no-invalid-void-type */
 import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { createNameEmailForm } from '../helpers/create-form'
-import { createFirstCallBlockingSchema, type nameEmailSchema } from '../helpers/not-validator'
+import { createFirstCallBlockingSchema, type nameEmailSchema } from '../helpers/schema-fixtures'
 
 describe('reset', () => {
   it('reset restores values to the current baseline', () => {

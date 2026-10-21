@@ -2,8 +2,8 @@ import type { FormInstance } from './instance'
 import type { ObjectSchema } from './shared'
 
 /**
- * Public API returned by `useForm()` omitting internal helpers used by field components
- * @template TSchema The form schema.
+ * Public API returned by `useForm()`, excluding component-only helpers.
+ * @template TSchema Object schema that defines form values and paths.
  */
 export type UseFormReturn<TSchema extends ObjectSchema> = Pick<
   FormInstance<TSchema>,

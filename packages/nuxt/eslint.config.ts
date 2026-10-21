@@ -4,5 +4,5 @@ export default factory({
   css: false,
   tailwind: false,
   test: false,
-  vue:false
+  vue: false,
 })

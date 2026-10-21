@@ -36,7 +36,7 @@ const form = useForm({
       v-slot="{ events, path }"
       path="title"
     >
-      <div >
+      <div>
         <label :for="path">
           Title
         </label>
@@ -58,7 +58,7 @@ const form = useForm({
       v-slot="{ events, path }"
       path="name.first"
     >
-      <div >
+      <div>
         <label :for="path">First Name</label>
 
         <input
@@ -70,7 +70,7 @@ const form = useForm({
           autocomplete="first-name"
         >
 
-        <Error :path="path"/>
+        <Error :path="path" />
       </div>
     </Field>
 
@@ -78,7 +78,7 @@ const form = useForm({
       v-slot="{ events, path }"
       path="name.last"
     >
-      <div >
+      <div>
         <label :for="path">Last Name</label>
 
         <input

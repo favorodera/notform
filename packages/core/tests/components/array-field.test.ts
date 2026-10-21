@@ -2,7 +2,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { ArrayField, type FormInstanceSettings } from '../../src'
 import { createFormInstance } from '../../src/factories/create-form-instance'
-import { delayed, tagsSchema } from '../helpers/not-validator'
+import { delayed, tagsSchema } from '../helpers/schema-fixtures'
 
 /** Default form state for array mutation tests. */
 const baseConfig: FormInstanceSettings<typeof tagsSchema> = {
@@ -157,7 +157,6 @@ describe('identity', () => {
     expect(keysAfter[2]).toBe(keysBefore[1])
     expect(keysAfter[3]).toBe(keysBefore[2])
     expect(keysAfter[1]).toBeDefined()
-    // eslint-disable-next-line test/max-expects
     expect(keysBefore).not.toContain(keysAfter[1])
   })
 
@@ -235,9 +234,7 @@ describe('identity', () => {
     const keysAfterSecondAppend = getRenderedKeys(wrapper)
 
     expect(keysAfterSecondAppend.slice(0, 3)).toStrictEqual(keysAfterRemove)
-    // eslint-disable-next-line test/max-expects
     expect(keysAfterSecondAppend[3]).toBeDefined()
-    // eslint-disable-next-line test/max-expects
     expect(keysAfterSecondAppend).not.toContain(keysOnMount[1])
 
     expectDefinedUniqueKeys(keysAfterSecondAppend)
@@ -329,7 +326,6 @@ describe('aggregated touch and dirty state', () => {
 
 describe('aggregated validating state', () => {
   it('isValidating is true while the array field is validating', async () => {
-    // eslint-disable-next-line ts/no-invalid-void-type
     const { promise, resolve } = Promise.withResolvers<void>()
 
     const { form, wrapper } = mountArrayField({

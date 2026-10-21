@@ -4,8 +4,6 @@ import type { ArrayFieldProps, ArrayFieldSlots } from '../types/array-field'
 import type { ObjectSchema } from '../types/shared'
 import { useArrayField } from '../composables/use-array-field'
 
-// #region Setup
-
 // Renderless wrapper: forwards props to the composable and exposes its result through the slot.
 
 defineSlots<ArrayFieldSlots<TSchema, TItemSchema>>()
@@ -15,8 +13,6 @@ const props = defineProps<ArrayFieldProps<TSchema, TItemSchema>>()
 
 /** State and actions exposed through the default slot. */
 const arrayField = useArrayField<TSchema, TItemSchema>(props)
-
-// #endregion
 </script>
 
 <template>

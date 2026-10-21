@@ -6,7 +6,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Official Nuxt integration for Nuxt",
+  "description": "Official Nuxt integration for NotForm",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/favorodera",
