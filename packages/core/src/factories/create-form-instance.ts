@@ -3,7 +3,7 @@ import type { Get } from 'type-fest'
 import { dequal } from 'dequal'
 import { getProperty, parsePath, setProperty, stringifyPath } from 'dot-prop'
 import { klona } from 'klona'
-import { computed, reactive, ref, toRaw, toValue, watch } from 'vue'
+import { computed, reactive, type Reactive, ref, toRaw, toValue, watch } from 'vue'
 import type { FormInstance, FormInstanceSettings } from '../types/instance'
 import type { DeepPartial, InferInput, InferOutput, Issue, ObjectSchema, Path, Paths } from '../types/shared'
 import { areIssuePathsEqual } from '../helpers/issues'
@@ -69,7 +69,7 @@ export function createFormInstance<TSchema extends ObjectSchema>(settings: FormI
   const initialValues = klona(settings.initialValues ?? {} as DeepPartial<InferInput<TSchema>>)
 
   /** Stable reactive object so existing v-model bindings survive reset(). */
-  const values = reactive(klona(initialValues)) as InferInput<TSchema>
+  const values = reactive(klona(initialValues)) as Reactive<InferInput<TSchema>>
 
   /** Plain baseline issues for reset(). */
   const initialErrors = klona(settings.initialErrors ?? [] as Array<Issue>)
