@@ -209,9 +209,24 @@ describe('validation', () => {
 
   it('a newer field validation supersedes an older validation for the same path', async () => {
     const { promise: staleGate, resolve: resolveStale } = Promise.withResolvers<void>()
+
+    const { promise: currentGate, resolve: resolveCurrent } = Promise.withResolvers<void>()
+
     const form = createNameEmailForm({
       initialValues: { name: 'Jane' },
-      schema: createFirstCallBlockingSchema(staleGate) as typeof nameEmailSchema,
+      schema: createGatedCallSchema(
+        callNumber => (callNumber === 1 ? staleGate : currentGate),
+        (callNumber, value) => (callNumber === 1
+          ? {
+              issues: [
+                {
+                  message: 'Stale validation failed',
+                  path: ['name'],
+                },
+              ],
+            }
+          : { value }),
+      ) as typeof nameEmailSchema,
     })
 
     const first = form.validateField('name')
@@ -220,12 +235,19 @@ describe('validation', () => {
     const second = form.validateField('name')
     await flushPromises()
 
+    // The newer validation is still pending.
     expect(form.isValidating).toBe(true)
 
     resolveStale()
     await first
+
+    // Completing the stale validation must not clear the newer run.
+    expect(form.isValidating).toBe(true)
+
+    resolveCurrent()
     await second
 
+    // The stale error must not overwrite the successful newer result.
     expect(form.getFieldErrors('name')).toHaveLength(0)
     expect(form.isValidating).toBe(false)
   })
