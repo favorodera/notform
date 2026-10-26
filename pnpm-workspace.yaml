@@ -56,7 +56,7 @@ catalog:
   monaco-editor-core: ^0.57.0
   motion-v: ^2.4.4
   nuxt: ^4.5.2
-  nuxt-llms: ^0.2.0
+  nuxt-llms: ^0.3.0
   nuxt-schema-org: ^6.3.2
   nuxtseo-layer-devtools: ^5.3.16
   relizy: ^1.4.9
