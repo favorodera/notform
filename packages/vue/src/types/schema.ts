@@ -20,4 +20,4 @@ export type Output<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferOut
 
 export type Path<TSchema extends StandardSchemaV1> = Extract<Paths<Input<TSchema>, { maxRecursionDepth: 10 }>, string>
 
-export type PathValue<TSchema extends StandardSchemaV1> = Get<Input<TSchema>, Path<TSchema>, { strict: false }>
+export type PathValue<TSchema extends StandardSchemaV1, TPath extends string> = Get<Input<TSchema>, TPath, { strict: false }>
