@@ -44,29 +44,20 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: reproduction-link
-    attributes:
-      label: Reproduction Link
-      description: Link to a minimal reproduction (Docs Playground, StackBlitz, CodeSandbox, GitHub repo)
-      placeholder: 'https://notformdocs.vercel.app/playground#... or https://stackblitz.com/edit/...'
-    validations:
-      required: false
-
   - type: textarea
-    id: code-snippet
+    id: reproduction
     attributes:
-      label: Code Snippet
-      description: If you don't have a live reproduction, paste a minimal code snippet here. Wrap it in a fenced code block with the appropriate language (e.g. ` ```js `, ` ```vue `, ` ```ts `).
+      label: Reproduction
+      description: Link to or code snippet of a minimal reproduction
     validations:
-      required: false
+      required: true
 
   - type: input
     id: package-version
     attributes:
       label: Package & Version
       description: Which package and version are you using?
-      placeholder: e.g. your-package-name@1.0.0
+      placeholder: e.g. notform@1.0.0
     validations:
       required: true
 

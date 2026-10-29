@@ -1,11 +1,22 @@
-import { factory } from '@favorodera/eslint-config'
+import { defineConfig } from '@favorodera/eslint-config'
 
-export default factory({
+export default defineConfig({
   css: false,
+  pnpm: {
+    pnpmWorkspace: false,
+  },
   tailwind: false,
-})
-  .override('favorodera/typescript/rules', {
-    rules: {
-      'ts/no-explicit-any': 'off',
+  typescript: {
+    overrides: {
+      'typescript/no-explicit-any': 'off',
     },
-  })
+  },
+  unicorn: {
+    overrides: {
+      'unicorn/prefer-ternary': 'off',
+    },
+  },
+  yaml: {
+    pnpmWorkspace: false,
+  },
+})

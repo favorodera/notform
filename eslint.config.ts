@@ -1,8 +1,14 @@
-import { factory } from '@favorodera/eslint-config'
+import { defineConfig } from '@favorodera/eslint-config'
 
-export default factory({
+export default defineConfig({
   css: false,
-  ignores: ['/packages/**', '/apps/**'],
+  perfectionist: {
+    settings: {
+      tsconfig: {
+        rootDir: '',
+      },
+    },
+  },
   tailwind: false,
-  test: false,
+  vitest: false,
 })

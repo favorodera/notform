@@ -19,31 +19,30 @@
     "notform",
     "vue",
     "form",
-    "vue form",
-    "validator",
-    "vue form validator"
+    "standard-schema"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
-  "types": "./dist/index.d.ts",
   "files": ["dist"],
-  "publishConfig": {
-    "access": "public"
-  },
   "engines": {
     "node": ">=24.0.0",
-    "pnpm": ">=11.0.0"
+    "pnpm": ">=12.0.0"
   },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
     "test": "vitest",
+    "play": "vite",
     "test:watch": "vitest watch --ui",
     "typecheck": "vue-tsc --noEmit",
-    "lint": "eslint . --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
@@ -68,6 +67,7 @@
     "vite": "catalog:",
     "vitest": "catalog:",
     "vue": "catalog:",
-    "vue-tsc": "catalog:"
+    "vue-tsc": "catalog:",
+    "zod": "catalog:"
   }
 }

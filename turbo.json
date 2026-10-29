@@ -20,6 +20,10 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "lint:fix": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
     "sync-repl-workers": {
       "outputs": ["public/repl-workers/**"]
     },
@@ -50,6 +54,10 @@
     },
     "prepublishOnly": {
       "outputs": []
+    },
+    "play": {
+      "persistent": true,
+      "cache": false
     }
   }
 }

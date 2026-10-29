@@ -1,54 +1,15 @@
 {
-  "files.autoSave": "afterDelay",
-  "git.autofetch": true,
   "editor.tabSize": 2,
-  "vue.format.script.initialIndent": true,
-  "vue.format.style.initialIndent": true,
-  "vue.hover.rich": true,
-  "vue.inlayHints.destructuredProps": true,
-  "vue.inlayHints.inlineHandlerLeading": true,
-  "vue.inlayHints.missingProps": true,
-  "vue.inlayHints.optionsWrapper": true,
-  "vue.inlayHints.vBindShorthand": true,
-  "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
-  "js/ts.inlayHints.parameterNames.enabled": "all",
-  "js/ts.inlayHints.parameterTypes.enabled": true,
-  "js/ts.inlayHints.variableTypes.enabled": true,
-  "js/ts.inlayHints.propertyDeclarationTypes.enabled": true,
-  "js/ts.updateImportsOnFileMove.enabled": "always",
-  "js/ts.inlayHints.enumMemberValues.enabled": true,
-  "editor.suggest.snippetsPreventQuickSuggestions": true,
-  "editor.quickSuggestions": {
-    "strings": "on",
-    "other": "on"
-  },
-  "editor.minimap.enabled": false,
-  "terminal.integrated.cursorStyle": "line",
-  "scm.compactFolders": false,
-  "explorer.compactFolders": false,
   "eslint.format.enable": true,
-  "css.lint.unknownAtRules": "ignore",
-  "editor.stickyScroll.enabled": false,
-  "workbench.tree.enableStickyScroll": false,
-  "terminal.integrated.stickyScroll.enabled": false,
-  "editor.wordWrap": "on",
   "editor.detectIndentation": false,
   "editor.indentSize": "tabSize",
-  "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.validate": true,
   "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
   "tailwindCSS.includeLanguages": {
     "css": "tailwindcss"
   },
-  "diffEditor.ignoreTrimWhitespace": false,
-  "editor.inlayHints.padding": true,
-  "editor.smoothScrolling": true,
-  "editor.stickyScroll.scrollWithEditor": false,
+  "tailwindCSS.experimental.configFile": "apps/docs/app/assets/css/main.css",
   "files.eol": "\n",
-  "css.lint.zeroUnits": "warning",
-  "css.lint.duplicateProperties": "error",
-  "editor.inlayHints.enabled": "on",
-  "workbench.iconTheme": "vscode-icons",
   "eslint.runtime": "node",
   "mdc.enableComponentMetadataCompletions": true,
   "mdc.enableFormatting": true,
@@ -66,74 +27,18 @@
       "'([^']+)'"
     ]
   ],
-  "editor.linkedEditing": true,
-  "git.replaceTagsWhenPull": true,
-  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-  "editor.wrapOnEscapedLineFeeds": true,
-  "eslint.rules.customizations": [
-    {
-      "rule": "style/*",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "format/*",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-indent",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-spacing",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-spaces",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-order",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-dangle",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*-newline",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*quotes",
-      "severity": "off",
-      "fixable": true
-    },
-    {
-      "rule": "*semi",
-      "severity": "off",
-      "fixable": true
-    }
-  ],
   "npm.packageManager": "pnpm",
-  "editor.defaultColorDecorators": "always",
-  "editor.inlayHints.maximumLength": 10,
   "cSpell.ignorePaths": [
     "package-lock.json",
+    ".gitignore",
     "node_modules",
     "vscode-extension",
     ".git/{info,lfs,logs,refs,objects}/**",
     ".git/{index,*refs,*HEAD}",
     ".vscode",
     ".vscode-insiders",
-    "pnpm-lock.yaml"
+    "pnpm-lock.yaml",
+    "CHANGELOG.md"
   ],
   "eslint.validate": [
     "javascript",
@@ -149,63 +54,21 @@
     "mdc",
     "css"
   ],
-  "workbench.navigationControl.enabled": false,
-  "telemetry.feedback.enabled": false,
-  "workbench.editor.enablePreview": false,
   "[mdc]": {
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "editor.detectIndentation": false
   },
   "cSpell.words": [
-    "arktype",
-    "bunx",
-    "demi",
     "dequal",
     "Emeka",
-    "enctype",
-    "esbuild",
     "favorodera",
-    "focusout",
-    "iconify",
-    "initialising",
-    "jsdom",
     "klona",
-    "llms",
-    "minimark",
-    "minlength",
-    "misrouted",
-    "noopener",
-    "noreferrer",
     "notform",
-    "novalidate",
-    "nums",
-    "nuxi",
-    "Nuxt",
-    "nuxtdotjs",
-    "nuxtjs",
-    "nuxtseo",
     "relizy",
-    "remint",
-    "renderless",
-    "Shadcn",
-    "slideover",
-    "stackblitz",
-    "Subline",
-    "tabler",
-    "takumi",
     "tsdown",
-    "tsup",
-    "Turborepo",
-    "Unmarks",
-    "unrs",
-    "Upserts",
-    "Valibot",
-    "vercel",
-    "Vite",
+    "vite",
     "vitejs",
-    "Vitest",
-    "vuedotjs",
-    "vueuse"
+    "vitest"
   ]
 }
