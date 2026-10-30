@@ -1,54 +1,88 @@
-import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { dequal } from 'dequal'
-import { getProperty, setProperty } from 'dot-prop'
 import { computed, reactive } from 'vue'
-import type { Field as CreateFieldReturn, FieldConfig } from '../types/field'
-import type { Form } from '../types/form'
-import type { Path, PathValue } from '../types/schema'
+import type { FieldConfig, FieldInstance } from '../types/field'
+import type { FormInstance } from '../types/form'
+import type { InputPath, InputPathValue } from '../types/path'
+import type { FormSchema } from '../types/schema'
+import { normalizeDebounce } from '../utils/debounce'
+import { getValueAtPath, setValueAtPath } from '../utils/path'
 
-export function createField<TSchema extends StandardSchemaV1, TPath extends Path<TSchema>>(form: Form<TSchema>, path: TPath, config?: FieldConfig) {
-  type Field = CreateFieldReturn<PathValue<TSchema, TPath>>
+/**
+ * Creates a field: a small reactive handle bound to one value inside a form.
+ *
+ * The field does not own any data. Its `model` reads and writes straight into
+ * `form.values` at `path`, so the form stays the single source of truth.
+ * @template TSchema - The schema describing the form's data.
+ * @template TPath - The dot-notation path this field points at.
+ * @param form The form the field belongs to.
+ * @param path Dot-notation path to the value, e.g. `'address.city'`.
+ * @param config Optional per-field behavior settings.
+ * @returns A reactive field. `field.model` and `field.isDirty` can be used without `.value`.
+ * @remarks Prefer `form.field(path)`, which calls this for you.
+ * @example
+ * const emailField = createField(form, 'email')
+ * emailField.model = 'a@b.com' // writes form.values.email
+ * emailField.isDirty // true if different from the initial email
+ */
+export function createField<TSchema extends FormSchema, TPath extends InputPath<TSchema>>(form: FormInstance<TSchema>, path: TPath, config?: FieldConfig) {
+  type BoundField = FieldInstance<InputPathValue<TSchema, TPath>>
 
-  const resolvedConfig = computed<FieldConfig>(() => {
+  /**
+   * ── Config (not used yet) ──────────────────────────────────────────
+   * @todo Wire these up: validate on `validateOn` events, honour `validationMode`, apply `debounce`.
+   */
+
+  /** The user's config merged with defaults (validate on blur and change; eager mode). */
+  const resolvedFieldConfig = computed<FieldConfig>(() => {
     return {
-      debounce: config?.debounce,
+      debounce: normalizeDebounce(config?.debounce),
       validateOn: {
-        onBlur: true,
-        onChange: true,
+        blur: true,
+        change: true,
         ...config?.validateOn,
       },
       validationMode: config?.validationMode || 'eager',
     }
   })
 
-  const id = Symbol('notform.field')
+  /** Unique identity of this field instance. */
+  const fieldId = Symbol('notform.field')
 
-  let debounceTimer: ReturnType<typeof setTimeout> | undefined
+  /** Timer for a delayed validation that has been scheduled but has not fired yet. */
+  let pendingDebounceTimer: ReturnType<typeof setTimeout> | undefined
 
-  const model = computed<Field['model']>({
-    get: () => {
-      return getProperty(form.values, path) as Field['model']
-    },
-    set: (value) => {
-      return setProperty(form.values as Record<string, any>, path, value) as Field['model']
-    },
-  })
-
-  const isDirty = computed(() => {
-    return !dequal(model.value, getProperty(form.initialValues, path))
-  })
-
-  function clearDebounceTimer(): void {
-    if (debounceTimer === undefined) {
+  /** Cancels the scheduled validation, if there is one. */
+  function cancelPendingDebounce(): void {
+    if (pendingDebounceTimer === undefined) {
       return
     }
 
-    clearTimeout(debounceTimer)
-    debounceTimer = undefined
+    clearTimeout(pendingDebounceTimer)
+    pendingDebounceTimer = undefined
   }
 
-  const field: Field = reactive({
-    id,
+  // ── Value ──────────────────────────────────────────────────────────
+
+  /** Two-way link to the form's value at `path`. */
+  const model = computed<BoundField['model']>({
+    get: () => {
+      return getValueAtPath(form.values, path) as BoundField['model']
+    },
+    set: (value) => {
+      setValueAtPath(form.values, path, value)
+    },
+  })
+
+  /** `true` when the current value differs (deep comparison) from the form's initial value at `path`. */
+  const isDirty = computed(() => {
+    return !dequal(model.value, getValueAtPath(form.initialValues, path))
+  })
+
+  // ── Assemble ───────────────────────────────────────────────────────
+
+  // `reactive()` unwraps the computed values, so consumers write `field.model`, not `field.model.value`
+  const field: BoundField = reactive({
+    id: fieldId,
     isDirty,
     model,
     path,

@@ -1,9 +1,37 @@
-import type { FormConfig, UseFormReturn } from '../types/form'
-import type { ObjectSchema } from '../types/schema'
+import type { FormConfig, FormInstance } from '../types/form'
+import type { FormSchema } from '../types/schema'
 import { createForm } from '../factories/create-form'
 
-export function useForm<TSchema extends ObjectSchema>(config: FormConfig<TSchema>) {
-  const form = createForm(config)
-
-  return form as UseFormReturn<TSchema>
+/**
+ * Creates a reactive, schema-validated form. Call it inside `setup()`.
+ * @template TSchema - A Standard Schema (Zod, Valibot, ArkType, ...) describing the form's data. Must be an object schema.
+ * @param config The schema, optional starting values/errors, and an optional submit handler.
+ * @returns The form. Pass it to `<Form :form>` and use `form.field(path)` to create fields.
+ * @example
+ * ```vue
+ * <script setup lang="ts">
+ * import { z } from 'zod'
+ * import { Field, Form, useForm } from 'notform'
+ *
+ * const form = useForm({
+ *   schema: z.object({ email: z.string().email() }),
+ *   initialValues: { email: '' },
+ *   onSubmit: async (data) => {
+ *     await api.signUp(data) // `data` is the validated output
+ *   },
+ * })
+ * </script>
+ *
+ * <template>
+ *   <Form :form="form">
+ *     <Field v-slot="{ field }" :field="form.field('email')">
+ *       <input v-model="field.model" type="email">
+ *     </Field>
+ *     <button type="submit" :disabled="form.isSubmitting">Sign up</button>
+ *   </Form>
+ * </template>
+ * ```
+ */
+export function useForm<TSchema extends FormSchema>(config: FormConfig<TSchema>): FormInstance<TSchema> {
+  return createForm(config)
 }

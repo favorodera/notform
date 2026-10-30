@@ -1,13 +1,12 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
-import type { Get, Paths, Writable } from 'type-fest'
 
-export type Input<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferInput<TSchema>
-
-export type Issue = StandardSchemaV1.Issue
-
-export type IssuePathKey = NonNullable<Writable<Issue['path']>>[number]
-
-export type ObjectSchema = StandardSchemaV1 & {
+/**
+ * A Standard Schema whose input AND output are objects.
+ *
+ * Forms require this because form values are always a keyed object, never a
+ * lone string or number.
+ */
+export type FormSchema = StandardSchemaV1 & {
   '~standard': StandardSchemaV1['~standard'] & {
     types?: {
       input: object
@@ -16,8 +15,20 @@ export type ObjectSchema = StandardSchemaV1 & {
   }
 }
 
-export type Output<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferOutput<TSchema>
+/**
+ * The data a schema *accepts*: what the user types into the form, before the
+ * schema parses, transforms, or fills in defaults. This is the shape of `form.values`.
+ * @template TSchema - Any Standard Schema compatible schema (Zod, Valibot, ArkType, ...).
+ * @example
+ * // A schema that turns the text '42' into the number 42:
+ * // SchemaInput  -> { age: string }
+ * // SchemaOutput -> { age: number }
+ */
+export type SchemaInput<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferInput<TSchema>
 
-export type Path<TSchema extends StandardSchemaV1> = Extract<Paths<Input<TSchema>, { maxRecursionDepth: 10 }>, string>
-
-export type PathValue<TSchema extends StandardSchemaV1, TPath extends string> = Get<Input<TSchema>, TPath, { strict: false }>
+/**
+ * The data a schema *produces* after a successful validation (parsed,
+ * transformed, defaults applied). This is the shape `onSubmit` receives.
+ * @template TSchema - Any Standard Schema compatible schema.
+ */
+export type SchemaOutput<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferOutput<TSchema>
