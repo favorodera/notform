@@ -18,13 +18,14 @@ const form = useForm({
   <Form :form>
     <Field
       v-slot="{field}"
-      :handler="form.field('name')"
+      :field="form.field('name')"
     >
       <input
         :id="field.path"
         v-model="field.model"
         type="text"
         :name="field.path"
+        v-bind="field.events"
       >
 
       <pre>{{ JSON.stringify(field,null,2) }}</pre>
@@ -32,13 +33,14 @@ const form = useForm({
 
     <Field
       v-slot="{field}"
-      :handler="form.field('dob')"
+      :field="form.field('dob')"
     >
       <input
         :id="field.path"
         v-model="field.model"
         type="date"
         :name="field.path"
+        v-bind="field.events"
       >
 
       <pre>{{ JSON.stringify(field,null,2) }}</pre>

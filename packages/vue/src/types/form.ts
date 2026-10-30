@@ -52,11 +52,15 @@ export type FormInstance<TSchema extends FormSchema> = {
   /** `true` when `values` differ (deep comparison) from `initialValues`. */
   isDirty: boolean
 
+  isFieldTouched: (id: symbol) => boolean
+
   /** `true` once the user has tried to submit at least once, even if validation failed. */
   isSubmitted: boolean
 
   /** `true` while a submit is running (validating, or waiting for `onSubmit`). Handy for disabling the submit button. */
   isSubmitting: boolean
+
+  isTouched: boolean
 
   /** `true` when there are no errors. Reflects the last validation run; reading it does not validate. */
   isValid: boolean
@@ -79,6 +83,9 @@ export type FormInstance<TSchema extends FormSchema> = {
 
   /** How many times submit has been attempted. */
   submitCount: number
+
+  touchField: (id: symbol) => void
+  unTouchField: (id: symbol) => void
 
   /**
    * Validates the whole form and replaces all errors with the outcome.

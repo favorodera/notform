@@ -33,23 +33,25 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
    */
 
   /** The user's config merged with defaults (validate on blur and change; eager mode). */
-  const resolvedFieldConfig = computed<FieldConfig>(() => {
-    return {
-      debounce: normalizeDebounce(config?.debounce),
-      validateOn: {
-        blur: true,
-        change: true,
-        ...config?.validateOn,
-      },
-      validationMode: config?.validationMode || 'eager',
-    }
-  })
+  const resolvedFieldConfig = reactive({
+    debounce: normalizeDebounce(config?.debounce),
+    validateOn: {
+      blur: true,
+      change: true,
+      input: false,
+      mount: false,
+      ...config?.validateOn,
+    },
+    validationMode: config?.validationMode || 'eager',
+  }) satisfies FieldConfig
 
   /** Unique identity of this field instance. */
   const fieldId = Symbol('notform.field')
 
   /** Timer for a delayed validation that has been scheduled but has not fired yet. */
   let pendingDebounceTimer: ReturnType<typeof setTimeout> | undefined
+
+  const isMounted = false
 
   /** Cancels the scheduled validation, if there is one. */
   function cancelPendingDebounce(): void {
@@ -59,6 +61,61 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
 
     clearTimeout(pendingDebounceTimer)
     pendingDebounceTimer = undefined
+  }
+
+  function validateThisField(): void {
+    if (!isMounted) {
+      return
+    }
+
+    form.validateField(path)
+  }
+
+  function scheduleThisFieldValidation(): void {
+    cancelPendingDebounce()
+
+    if (!resolvedFieldConfig.debounce || resolvedFieldConfig.debounce <= 0) {
+      validateThisField()
+      return
+    }
+
+    pendingDebounceTimer = setTimeout(() => {
+      pendingDebounceTimer = undefined
+      validateThisField()
+    }, resolvedFieldConfig.debounce)
+  }
+
+  function onBlur(): void {
+    form.touchField(fieldId)
+
+    if (!resolvedFieldConfig.validateOn.blur) {
+      return
+    }
+
+    scheduleThisFieldValidation()
+    validateThisField()
+  }
+
+  function onInput(): void {
+    if (!resolvedFieldConfig.validateOn.input || resolvedFieldConfig.validationMode === 'lazy') {
+      return
+    }
+
+    scheduleThisFieldValidation()
+  }
+
+  function onChange(): void {
+    if (!resolvedFieldConfig.validateOn.change || resolvedFieldConfig.validationMode === 'lazy') {
+      return
+    }
+
+    scheduleThisFieldValidation()
+  }
+
+  function onMount(): void {
+    if (resolvedFieldConfig.validateOn.mount) {
+      scheduleThisFieldValidation()
+    }
   }
 
   // ── Value ──────────────────────────────────────────────────────────
@@ -78,12 +135,23 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
     return !dequal(model.value, getValueAtPath(form.initialValues, path))
   })
 
+  const isTouched = computed(() => {
+    return form.isFieldTouched(fieldId)
+  })
+
   // ── Assemble ───────────────────────────────────────────────────────
 
   // `reactive()` unwraps the computed values, so consumers write `field.model`, not `field.model.value`
   const field: BoundField = reactive({
+    events: {
+      onBlur,
+      onChange,
+      onInput,
+      onMount,
+    },
     id: fieldId,
     isDirty,
+    isTouched,
     model,
     path,
   })

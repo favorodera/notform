@@ -30,11 +30,15 @@ export type FieldConfig = {
  * @template TValue - Type of the value this field holds (derived from the schema at `path`).
  */
 export type FieldInstance<TValue> = {
+  events: Record<`on${Capitalize<FieldValidationEvent>}`, () => void>
+
   /** Unique identity of this field instance. */
   id: symbol
 
   /** `true` when the field's value differs (deep comparison) from its initial value. */
   isDirty: boolean
+
+  isTouched: boolean
 
   /**
    * The field's current value. Read it to display the value; assign to it

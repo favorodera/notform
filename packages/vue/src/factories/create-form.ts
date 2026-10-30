@@ -1,7 +1,7 @@
 import type { Promisable } from 'type-fest'
 import { dequal } from 'dequal'
 import { klona } from 'klona'
-import { computed, reactive, ref, toRaw, toValue } from 'vue'
+import { computed, reactive, ref, shallowReactive, toRaw, toValue, watch } from 'vue'
 import type { FieldConfig } from '../types/field'
 import type { FormConfig, FormInstance } from '../types/form'
 import type { InputPath, InputPathValue, OutputPathValue } from '../types/path'
@@ -39,8 +39,12 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
   /** Live validation errors (a separate copy of `initialErrors`). */
   const errors = reactive(klona(initialErrors)) as ThisForm['errors']
 
+  const isSuppressValueInvalidation = false
+
   /** `true` while a submit is in progress (validating or running `onSubmit`). */
   const isSubmitting = ref(false)
+
+  const touchedFields = shallowReactive(new Set<symbol>())
 
   /** How many times submit has been attempted. */
   const submitCount = ref(0)
@@ -52,6 +56,10 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
     return submitCount.value > 0
   })
 
+  const isTouched = computed(() => {
+    return isSubmitted.value || touchedFields.size > 0
+  })
+
   /** `true` when `values` differ (deep comparison) from `initialValues`. */
   const isDirty = computed(() => {
     return !dequal(values, initialValues)
@@ -61,6 +69,26 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
   const isValid = computed(() => {
     return errors.length === 0
   })
+
+  function touchField(id: symbol): void {
+    touchedFields.add(id)
+  }
+
+  function unTouchField(id: symbol): void {
+    touchedFields.delete(id)
+  }
+
+  function unTouchAllFields(): void {
+    touchedFields.clear()
+  }
+
+  function isFieldTouched(id: symbol): boolean {
+    if (isSubmitted.value) {
+      return true
+    }
+
+    return touchedFields.has(id)
+  }
 
   // ── 4. Validation plumbing ─────────────────────────────────────────
 
@@ -182,6 +210,26 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
     }
   }
 
+  watch(
+    () => {
+      return toValue(config.schema)
+    },
+    () => {
+      return validationRuns.markAllRunsStale()
+    },
+    { flush: 'sync' },
+  )
+
+  watch(
+    values,
+    () => {
+      if (!isSuppressValueInvalidation) {
+        validationRuns.markAllRunsStale()
+      }
+    },
+    { deep: true, flush: 'sync' },
+  )
+
   /**
    * Validates the whole form and replaces all errors with the outcome.
    * @returns The schema result. If a newer validation replaced this one, errors are left untouched.
@@ -279,13 +327,18 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
     initialErrors,
     initialValues,
     isDirty,
+    isFieldTouched,
     isSubmitted,
     isSubmitting,
+    isTouched,
     isValid,
     replaceErrors,
     setValue,
     submit,
     submitCount,
+    touchField,
+    unTouchAllFields,
+    unTouchField,
     validate,
     validateField,
     values,
