@@ -3,9 +3,14 @@ import { z } from 'zod'
 import { Field, Form, useForm } from '../../src'
 
 const schema = z.object({
-  dob: z.iso.date().transform((value) => {
-    return Date.parse(value)
-  }),
+  dob: z.iso.date()
+    .transform(async (value) => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 2000)
+      })
+
+      return Date.parse(value)
+    }),
   name: z.string().min(1),
 })
 
@@ -18,7 +23,7 @@ const form = useForm({
   <Form :form>
     <Field
       v-slot="{field}"
-      :field="form.field('name')"
+      :field="form.field('name',)"
     >
       <input
         :id="field.path"
@@ -50,6 +55,13 @@ const form = useForm({
 
     <button type="submit">
       Submit
+    </button>
+
+    <button
+      type="button"
+      @click="form.validateField('dob')"
+    >
+      Field
     </button>
   </Form>
 </template>

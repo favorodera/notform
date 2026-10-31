@@ -51,8 +51,6 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
   /** Timer for a delayed validation that has been scheduled but has not fired yet. */
   let pendingDebounceTimer: ReturnType<typeof setTimeout> | undefined
 
-  const isMounted = false
-
   /** Cancels the scheduled validation, if there is one. */
   function cancelPendingDebounce(): void {
     if (pendingDebounceTimer === undefined) {
@@ -64,10 +62,6 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
   }
 
   function validateThisField(): void {
-    if (!isMounted) {
-      return
-    }
-
     form.validateField(path)
   }
 
@@ -139,20 +133,35 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
     return form.isFieldTouched(fieldId)
   })
 
+  const errors = computed(() => {
+    return form.getFieldErrors(path)
+  })
+
+  const isValid = computed(() => {
+    return errors.value.length === 0
+  })
+
+  const isValidating = computed(() => {
+    return form.isFieldValidating(path)
+  })
+
   // ── Assemble ───────────────────────────────────────────────────────
 
   // `reactive()` unwraps the computed values, so consumers write `field.model`, not `field.model.value`
   const field: BoundField = reactive({
+    errors,
     events: {
       onBlur,
       onChange,
       onInput,
-      onMount,
     },
     id: fieldId,
     isDirty,
     isTouched,
+    isValid,
+    isValidating,
     model,
+    onMount,
     path,
   })
 

@@ -43,6 +43,8 @@ export type FormInstance<TSchema extends FormSchema> = {
    */
   field: <TPath extends InputPath<TSchema>>(path: TPath, config?: FieldConfig) => FieldInstance<InputPathValue<TSchema, TPath>>
 
+  getFieldErrors: <TPath extends InputPath<TSchema>>(path: TPath) => ValidationIssue[]
+
   /** The errors the form started with (e.g. from the server). Never changes after creation. */
   initialErrors: ValidationIssue[]
 
@@ -53,6 +55,8 @@ export type FormInstance<TSchema extends FormSchema> = {
   isDirty: boolean
 
   isFieldTouched: (id: symbol) => boolean
+
+  isFieldValidating: <TPath extends InputPath<TSchema>>(path: TPath) => boolean
 
   /** `true` once the user has tried to submit at least once, even if validation failed. */
   isSubmitted: boolean
@@ -65,8 +69,12 @@ export type FormInstance<TSchema extends FormSchema> = {
   /** `true` when there are no errors. Reflects the last validation run; reading it does not validate. */
   isValid: boolean
 
+  isValidating: boolean
+
   /** Replaces all current errors with `nextErrors` (e.g. errors returned by the server). */
   replaceErrors: (nextErrors: ValidationIssue[]) => void
+
+  setError: (error: ValidationIssue) => void
 
   /**
    * Writes `value` into the form at `path`.

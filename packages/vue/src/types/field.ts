@@ -1,3 +1,5 @@
+import type { ValidationIssue } from './validation'
+
 /**
  * Per-field behavior settings, passed as the second argument of `form.field()`.
  * @remarks Not wired up yet: these options are resolved inside `createField`
@@ -30,6 +32,8 @@ export type FieldConfig = {
  * @template TValue - Type of the value this field holds (derived from the schema at `path`).
  */
 export type FieldInstance<TValue> = {
+  errors: ValidationIssue[]
+
   events: Record<`on${Capitalize<FieldValidationEvent>}`, () => void>
 
   /** Unique identity of this field instance. */
@@ -39,6 +43,10 @@ export type FieldInstance<TValue> = {
   isDirty: boolean
 
   isTouched: boolean
+
+  isValid: boolean
+
+  isValidating: boolean
 
   /**
    * The field's current value. Read it to display the value; assign to it
@@ -69,4 +77,4 @@ export type FieldSlots<TValue> = {
 }
 
 /** Events that can trigger a field's validation. See {@link FieldConfig.validateOn}. */
-export type FieldValidationEvent = 'blur' | 'change' | 'input' | 'mount'
+export type FieldValidationEvent = 'blur' | 'change' | 'input'

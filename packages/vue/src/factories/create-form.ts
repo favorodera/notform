@@ -7,7 +7,7 @@ import type { FormConfig, FormInstance } from '../types/form'
 import type { InputPath, InputPathValue, OutputPathValue } from '../types/path'
 import type { FormSchema, SchemaInput, SchemaOutput } from '../types/schema'
 import type { ValidationIssue, ValidationOrigin, ValidationOutcome, ValidationResult } from '../types/validation'
-import { getValueAtPath, isSamePath, setValueAtPath, splitPath } from '../utils/path'
+import { getValueAtPath, isPathInside, isSamePath, setValueAtPath, splitPath } from '../utils/path'
 import { createValidationIssueFromError } from '../utils/validation-issue'
 import { createField } from './create-field'
 import { createValidationRunRegistry } from './create-validation-run-registry'
@@ -167,6 +167,22 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
     errors.length = 0
   }
 
+  function isFieldValidating<TPath extends InputPath<TSchema>>(path: TPath) {
+    const fieldSegments = splitPath(path)
+
+    for (const activeRun of validationRuns.activeRuns.values()) {
+      if (activeRun.scope.type === 'form' || isPathInside(fieldSegments, activeRun.scope.segments) || isPathInside(activeRun.scope.segments, fieldSegments)) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  const isValidating = computed(() => {
+    return validationRuns.activeRuns.size > 0
+  })
+
   /**
    * Validates a single field and updates only that field's errors.
    * The whole form is checked against the schema, but only issues sitting
@@ -304,12 +320,32 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
     /* eslint-enable no-unmodified-loop-condition, no-await-in-loop, require-atomic-updates */
   }
 
+  function setError(error: ValidationIssue) {
+    const existingIndex = errors.findIndex((existing) => {
+      return isSamePath(existing.path, error.path)
+    })
+
+    if (existingIndex === -1) {
+      errors.push(error)
+    } else {
+      errors[existingIndex] = error
+    }
+  }
+
+  function getFieldErrors<TPath extends InputPath<TSchema>>(path: TPath) {
+    const targetPath = splitPath(path)
+
+    return errors.filter((error) => {
+      return isSamePath(error.path, targetPath)
+    })
+  }
+
   // ── 6. Fields ──────────────────────────────────────────────────────
 
   /**
    * Creates a field bound to this form (exposed as `form.field`).
    * @param path Dot-notation path to the value.
-   * @param fieldConfig Optional per-field behaviour settings.
+   * @param fieldConfig Optional per-field behavior settings.
    * @returns A reactive field.
    */
   function createFormField<TPath extends InputPath<TSchema>>(path: TPath, fieldConfig?: FieldConfig) {
@@ -324,15 +360,19 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
     clearErrors,
     errors,
     field: createFormField,
+    getFieldErrors,
     initialErrors,
     initialValues,
     isDirty,
     isFieldTouched,
+    isFieldValidating,
     isSubmitted,
     isSubmitting,
     isTouched,
     isValid,
+    isValidating,
     replaceErrors,
+    setError,
     setValue,
     submit,
     submitCount,

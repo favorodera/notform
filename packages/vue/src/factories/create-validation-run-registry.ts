@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, readonly } from 'vue'
 import type { ValidationOrigin, ValidationRun } from '../types/validation'
 import { doValidationScopesOverlap, getValidationScope } from '../utils/validation-scope'
 
@@ -84,6 +84,7 @@ export function createValidationRunRegistry() {
   }
 
   return {
+    activeRuns: readonly(activeRuns),
     finishRun,
     markAllRunsStale,
     startRun,
