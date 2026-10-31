@@ -2,6 +2,7 @@ import type { Promisable } from 'type-fest'
 import { dequal } from 'dequal'
 import { klona } from 'klona'
 import { computed, reactive, ref, shallowReactive, toRaw, toValue, watch } from 'vue'
+import type { DeepPartial } from '../types/deep-partial'
 import type { FieldConfig } from '../types/field'
 import type { FormConfig, FormInstance } from '../types/form'
 import type { InputPath, InputPathValue, OutputPathValue } from '../types/path'
@@ -39,7 +40,7 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
   /** Live validation errors (a separate copy of `initialErrors`). */
   const errors = reactive(klona(initialErrors)) as ThisForm['errors']
 
-  const isSuppressValueInvalidation = false
+  let isSuppressValueInvalidation = false
 
   /** `true` while a submit is in progress (validating or running `onSubmit`). */
   const isSubmitting = ref(false)
@@ -353,6 +354,50 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
     return createField<TSchema, TPath>(form, path, fieldConfig)
   }
 
+  /* eslint-disable no-param-reassign, typescript/no-dynamic-delete */
+  function reset(nextValues?: DeepPartial<SchemaInput<TSchema>>, nextErrors?: ValidationIssue[]): void
+  function reset(event: Event): void
+  function reset(nextValues?: DeepPartial<SchemaInput<TSchema>> | Event, nextErrors?: ValidationIssue[]): void {
+    if (typeof Event !== 'undefined' && nextValues instanceof Event) {
+      nextValues = undefined
+    }
+
+    validationRuns.markAllRunsStale()
+    latestSubmitAttemptId++
+
+    isSubmitting.value = false
+
+    isSuppressValueInvalidation = true
+
+    try {
+      if (nextValues !== undefined) {
+        const freshValues = klona(nextValues)
+
+        for (const key of Object.keys(initialValues)) {
+          delete initialValues[key as keyof typeof initialValues]
+        }
+
+        Object.assign(initialValues, freshValues)
+      }
+
+      if (nextErrors !== undefined) {
+        initialErrors.splice(0, initialErrors.length, ...klona(nextErrors))
+      }
+
+      for (const key of Object.keys(values)) {
+        delete values[key as keyof typeof values]
+      }
+      Object.assign(values, klona(initialValues))
+
+      replaceErrors(klona(initialErrors))
+      unTouchAllFields()
+      submitCount.value = 0
+    } finally {
+      isSuppressValueInvalidation = false
+    }
+  }
+  /* eslint-enable no-param-reassign, typescript/no-dynamic-delete */
+
   // ── 7. Assemble ────────────────────────────────────────────────────
 
   // `reactive()` unwraps refs and computed values, so consumers read `form.isDirty`, not `form.isDirty.value`
@@ -372,6 +417,7 @@ export function createForm<TSchema extends FormSchema>(config: FormConfig<TSchem
     isValid,
     isValidating,
     replaceErrors,
+    reset,
     setError,
     setValue,
     submit,

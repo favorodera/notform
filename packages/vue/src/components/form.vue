@@ -27,6 +27,7 @@ const props = defineProps<FormProps<TSchema>>()
     v-bind="$attrs"
     novalidate
     @submit="props.form.submit"
+    @reset.prevent="props.form.reset"
   >
     <slot />
   </form>

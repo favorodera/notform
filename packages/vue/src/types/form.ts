@@ -74,6 +74,11 @@ export type FormInstance<TSchema extends FormSchema> = {
   /** Replaces all current errors with `nextErrors` (e.g. errors returned by the server). */
   replaceErrors: (nextErrors: ValidationIssue[]) => void
 
+  reset: {
+    (nextValues?: DeepPartial<SchemaInput<TSchema>>, nextErrors?: ValidationIssue[]): void
+    (event: Event): void
+  }
+
   setError: (error: ValidationIssue) => void
 
   /**

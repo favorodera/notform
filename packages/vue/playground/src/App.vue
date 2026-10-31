@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
-import { Field, Form, useForm } from '../../src'
+import { Field, FieldError, Form, useForm } from '../../src'
 
 const schema = z.object({
   dob: z.iso.date()
@@ -33,6 +33,8 @@ const form = useForm({
         v-bind="field.events"
       >
 
+      <FieldError :errors="field" />
+
       <pre>{{ JSON.stringify(field,null,2) }}</pre>
     </Field>
 
@@ -48,6 +50,8 @@ const form = useForm({
         v-bind="field.events"
       >
 
+      <FieldError :errors="field" />
+
       <pre>{{ JSON.stringify(field,null,2) }}</pre>
     </Field>
 
@@ -58,10 +62,9 @@ const form = useForm({
     </button>
 
     <button
-      type="button"
-      @click="form.validateField('dob')"
+      type="reset"
     >
-      Field
+      Reset
     </button>
   </Form>
 </template>
