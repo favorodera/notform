@@ -39,7 +39,6 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
       blur: true,
       change: true,
       input: false,
-      mount: false,
       ...config?.validateOn,
     },
     validationMode: config?.validationMode || 'eager',
@@ -106,12 +105,6 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
     scheduleThisFieldValidation()
   }
 
-  function onMount(): void {
-    if (resolvedFieldConfig.validateOn.mount) {
-      scheduleThisFieldValidation()
-    }
-  }
-
   // ── Value ──────────────────────────────────────────────────────────
 
   /** Two-way link to the form's value at `path`. */
@@ -161,7 +154,6 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
     isValid,
     isValidating,
     model,
-    onMount,
     path,
   })
 
