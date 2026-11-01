@@ -43,7 +43,7 @@
     "pnpm": ">=12.0.0"
   },
   "scripts": {
-    "build": "nuxt-module-build build",
+    "build": "nuxt-module-build prepare && nuxt-module-build build",
     "dev": "nuxt-module-build prepare && nuxt-module-build build --stub",
     "lint": "nuxt-module-build prepare && eslint .",
     "lint:fix": "nuxt-module-build prepare && eslint . --fix",
