@@ -1,4 +1,4 @@
-import type { FormConfig, FormInstance } from '../types/form'
+import type { FormConfig, UseFormInstance } from '../types/form'
 import type { FormSchema } from '../types/schema'
 import { createForm } from '../factories/create-form'
 
@@ -33,6 +33,6 @@ import { createForm } from '../factories/create-form'
  * </template>
  * ```
  */
-export function useForm<TSchema extends FormSchema>(config: FormConfig<TSchema>): FormInstance<TSchema> {
-  return createForm(config)
+export function useForm<TSchema extends FormSchema>(config: FormConfig<TSchema>): UseFormInstance<TSchema> {
+  return createForm(config) as unknown as UseFormInstance<TSchema>
 }

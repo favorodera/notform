@@ -12,6 +12,7 @@ const submitted = ref<string>()
 
 const form = useForm({
   initialValues: {
+    age: 0,
     name: '',
   },
   onSubmit: (data) => {

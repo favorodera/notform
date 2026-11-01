@@ -26,7 +26,6 @@ export type FormConfig<TSchema extends FormSchema> = {
 
 /**
  * A reactive form: its values, errors, state flags, and the actions to change them.
- * This is what `useForm()` returns.
  * @template TSchema - The schema describing the form's data (must be an object schema).
  */
 export type FormInstance<TSchema extends FormSchema> = {
@@ -169,7 +168,7 @@ export type FormInstance<TSchema extends FormSchema> = {
  */
 export type FormProps<TSchema extends FormSchema> = {
   /** The form returned by `useForm()`. */
-  form: FormInstance<TSchema>
+  form: UseFormInstance<TSchema>
 }
 
 /** Slots of the `<Form>` component. */
@@ -177,3 +176,29 @@ export type FormSlots = {
   /** The form's contents (fields, buttons, ...). */
   default?: () => void
 }
+
+/**
+ * A subset of `FormInstance` that is safe to expose to consumers of `useForm()`.
+ * It omits internal methods that change the form's state, so they cannot be called from outside.
+ * @template TSchema - The schema describing the form's data.
+ */
+export type UseFormInstance<TSchema extends FormSchema> = Pick<
+  FormInstance<TSchema>,
+  'arrayField'
+  | 'errors'
+  | 'field'
+  | 'isDirty'
+  | 'isSubmitted'
+  | 'isSubmitting'
+  | 'isTouched'
+  | 'isValid'
+  | 'isValidating'
+  | 'reset'
+  | 'resetCount'
+  | 'setError'
+  | 'setValue'
+  | 'submit'
+  | 'submitCount'
+  | 'validate'
+  | 'values'
+>

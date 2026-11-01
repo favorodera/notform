@@ -254,12 +254,6 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
       arrayField: scope.arrayField,
       field: scope.field,
       index,
-      moveTo: (to: number): void => {
-        move(syncIds().indexOf(id), to)
-      },
-      remove: (): void => {
-        remove(syncIds().indexOf(id))
-      },
     }) as unknown as ArrayItemInstance<TItem>
 
     return {

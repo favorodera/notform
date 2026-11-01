@@ -108,13 +108,4 @@ export type ArrayItemInstance<TItem> = FieldInstance<TItem> & {
 
   /** Current position in the array. */
   index: number
-
-  /**
-   * Moves this item to another position. Ignored if `to` is out of range.
-   * @param to Index it should end up at.
-   */
-  moveTo: (to: number) => void
-
-  /** Removes this item from the array. */
-  remove: () => void
 }

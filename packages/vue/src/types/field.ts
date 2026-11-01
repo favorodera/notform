@@ -65,7 +65,7 @@ export type FieldInstance<TValue> = {
    * Validates this field now, skipping any pending debounce.
    * @returns `{ value }` with the current value, or `{ issues }` for this field.
    */
-  validate: () => Promise<ValidationResult<unknown>>
+  validate: () => Promise<ValidationResult<TValue>>
 }
 
 /**
