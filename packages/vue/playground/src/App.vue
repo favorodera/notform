@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { number, object, string } from '../../schemas'
 import { Field, FieldError, Form, useForm } from '../../src'
 
@@ -18,6 +18,11 @@ const form = useForm({
     submitted.value = JSON.stringify(data, undefined, 2)
   },
   schema,
+})
+
+const fieldsState = reactive({
+  name:form.field('name'),
+age:form.field('age')
 })
 </script>
 
@@ -81,9 +86,9 @@ const form = useForm({
 
       <pre>{{ JSON.stringify(form, null, 2) }}</pre>
 
-      <h2>Field state</h2>
+      <h2>Fields state</h2>
 
-      <pre>{{ JSON.stringify(form.field('name'), null, 2) }}</pre>
+      <pre>{{ JSON.stringify(fieldsState, null, 2) }}</pre>
 
       <h2>Submitted output</h2>
 
