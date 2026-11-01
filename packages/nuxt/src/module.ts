@@ -1,7 +1,7 @@
 import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 import packageJson from '../package.json'
 
-const componentNames = ['Form', 'Field', 'ArrayField', 'Error'] as const
+const componentNames = ['Form', 'Field', 'ArrayField', 'FieldError'] as const
 
 const composableName = 'useForm' as const
 

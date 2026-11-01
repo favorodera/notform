@@ -4,8 +4,7 @@ import type { FormSchema } from '../types/schema'
 
 /**
  * `<Form>`: renders a native `<form>` wired to a form created by `useForm()`.
- *
- * Submitting the form runs schema validation and then your `onSubmit`.
+ * Submitting runs schema validation, then your `onSubmit`; resetting calls `form.reset()`.
  * @example
  * <Form :form="form">
  *   <!-- fields and a submit button -->

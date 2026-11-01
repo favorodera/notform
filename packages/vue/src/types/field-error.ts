@@ -1,21 +1,20 @@
 import type { Component } from 'vue'
 import type { ValidationIssue } from './validation'
 
-/**
- * Props of the planned `<FieldError>` component.
- * @remarks Not implemented yet: `<FieldError>` is not exported from `index.ts`.
- */
+/** Props of the `<FieldError>` component. */
 export type FieldErrorProps = {
-  /** HTML tag name or Vue component used to render the message. */
+  /**
+   * HTML tag name or Vue component used to render the message.
+   * @default 'span'
+   */
   as?: Component | string
 
+  /** A list of issues, or anything that has one (a field, an array field, an array item). Only the first message is shown. */
   errors: ValidationIssue[] | { readonly errors: ValidationIssue[] }
 }
 
-/** Slots of the planned `<FieldError>` component. */
+/** Slots of the `<FieldError>` component. */
 export type FieldErrorSlots = {
-  /** Receives the error `message` to display. */
-  default?: (props: {
-    message?: string
-  }) => void
+  /** Receives the `message` to display. */
+  default?: (props: { message?: string }) => void
 }

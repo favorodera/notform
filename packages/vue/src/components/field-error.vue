@@ -2,6 +2,13 @@
 import { computed } from 'vue'
 import type { FieldErrorProps, FieldErrorSlots } from '../types/field-error'
 
+/**
+ * `<FieldError>`: shows the first error message of a field, an array field, an array item,
+ * or a plain list of issues. Renders nothing when there is no error.
+ * @example
+ * <FieldError :errors="field" />
+ */
+
 defineOptions({ inheritAttrs: false })
 
 defineSlots<FieldErrorSlots>()

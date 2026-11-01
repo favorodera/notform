@@ -1,35 +1,31 @@
+import type { PathSegments } from '../types/path'
 import type { ValidationScope } from '../types/validation'
-import { isPathInside, splitPath } from './path'
+import { isPathInside, isSamePath, splitPath } from './path'
 
 /**
- * Checks whether two validation runs cover any of the same part of the form.
+ * Checks whether a new run makes an older run pointless.
  *
- * - A whole-form scope overlaps with everything.
- * - Two field scopes overlap when one path is the same as, or nested inside,
- * the other (`'user'` and `'user.name'` overlap; `'user'` and `'team'` do not).
- * @param firstScope Scope of the first run.
- * @param secondScope Scope of the second run.
- * @returns `true` if the scopes overlap.
+ * A field run only writes the errors of its own path, so it only replaces an
+ * older run of that same path. A whole-form run writes everything, so it
+ * replaces any older run.
+ * @param coveringScope Scope of the new run.
+ * @param coveredScope Scope of the older run.
+ * @returns `true` if the older run's result would be overwritten anyway.
  */
-export function doValidationScopesOverlap(firstScope: ValidationScope, secondScope: ValidationScope): boolean {
-  if (firstScope.type === 'form' || secondScope.type === 'form') {
+export function doesScopeCover(coveringScope: ValidationScope, coveredScope: ValidationScope): boolean {
+  if (coveringScope.type === 'form') {
     return true
   }
 
-  // check both directions: either path may be the parent of the other
-  const isFirstInsideSecond = isPathInside(firstScope.segments, secondScope.segments)
-  const isSecondInsideFirst = isPathInside(secondScope.segments, firstScope.segments)
-
-  return isFirstInsideSecond || isSecondInsideFirst
+  return coveredScope.type === 'field' && isSamePath(coveringScope.segments, coveredScope.segments)
 }
 
 /**
- * Builds the scope for a validation run.
+ * Builds the scope of a validation run.
  * @param path Dot-notation field path. Leave out to cover the whole form.
  * @returns A field scope when `path` is given, otherwise a whole-form scope.
  * @example
- * getValidationScope() // { type: 'form' }
- * getValidationScope('tags.0') // { segments: ['tags', 0], type: 'field' }
+ * getValidationScope('tags.0') // { segments: ['tags', '0'], type: 'field' }
  */
 export function getValidationScope(path?: string): ValidationScope {
   if (path === undefined) {
@@ -37,4 +33,20 @@ export function getValidationScope(path?: string): ValidationScope {
   }
 
   return { segments: splitPath(path), type: 'field' }
+}
+
+/**
+ * Checks whether a running validation concerns a field, for `isValidating` flags.
+ * A field counts as validating while the whole form, the field itself, or any
+ * field nested inside it is being validated.
+ * @param runScope Scope of the running validation.
+ * @param fieldSegments Path of the field being asked about.
+ * @returns `true` if the run concerns the field.
+ */
+export function isFieldAffectedByScope(runScope: ValidationScope, fieldSegments: PathSegments): boolean {
+  if (runScope.type === 'form') {
+    return true
+  }
+
+  return isPathInside(runScope.segments, fieldSegments)
 }

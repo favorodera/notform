@@ -2,26 +2,27 @@
 import type { ArrayFieldProps, ArrayFieldSlots } from '../types/array-field'
 
 /**
- * `<Field>`: a headless wrapper that hands one form field to its slot.
- *
- * It renders no markup of its own; you decide what the input looks like.
+ * `<ArrayField>`: a headless wrapper that hands one array field to its slot. Renders no markup.
  * @example
- * <Field v-slot="{ field }" :field="form.field('email')">
- *   <input v-model="field.model">
- * </Field>
+ * <ArrayField v-slot="{ arrayField }" :array-field="form.arrayField('tags')">
+ *   <Field v-for="item in arrayField.items" :key="item.id" v-slot="{ field }" :field="item">
+ *     <input v-model="field.model" v-bind="field.events">
+ *     <button type="button" @click="item.remove()">Remove</button>
+ *   </Field>
+ *   <button type="button" @click="arrayField.append('')">Add</button>
+ * </ArrayField>
  */
 
-// no root element of its own, so attributes are forwarded to the slot instead of a DOM node
+// no root element, so attributes are forwarded to the slot instead of a DOM node
 defineOptions({ inheritAttrs: false })
 
 defineSlots<ArrayFieldSlots<TItem>>()
 
-/** `props.field` is the field created by `form.field('some.path')`. */
+/** `props.arrayField` is the field created by `form.arrayField('some.path')`. */
 const props = defineProps<ArrayFieldProps<TItem>>()
 </script>
 
 <template>
-  <!-- expose the field to the slot, plus any extra attributes as slot props -->
   <slot
     :array-field="props.arrayField"
     v-bind="$attrs"

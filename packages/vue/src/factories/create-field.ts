@@ -1,133 +1,77 @@
 import { dequal } from 'dequal'
 import { computed, reactive } from 'vue'
-import type { FieldConfig, FieldInstance } from '../types/field'
-import type { FormInstance } from '../types/form'
-import type { InputPath, InputPathValue } from '../types/path'
-import type { FormSchema } from '../types/schema'
+import type { FieldConfig, FieldEvents, FieldInstance } from '../types/field'
+import type { FieldHost, FieldNode, FieldOptions } from '../types/internal'
+import type { ValidationResult } from '../types/validation'
 import { normalizeDebounce } from '../utils/debounce'
-import { getValueAtPath, setValueAtPath } from '../utils/path'
+import { createFieldId } from '../utils/id'
 
 /**
  * Creates a field: a small reactive handle bound to one value inside a form.
- *
- * The field does not own any data. Its `model` reads and writes straight into
- * `form.values` at `path`, so the form stays the single source of truth.
- * @template TSchema - The schema describing the form's data.
- * @template TPath - The dot-notation path this field points at.
- * @param form The form the field belongs to.
- * @param path Dot-notation path to the value, e.g. `'address.city'`.
- * @param config Optional per-field behavior settings.
- * @returns A reactive field. `field.model` and `field.isDirty` can be used without `.value`.
- * @remarks Prefer `form.field(path)`, which calls this for you.
- * @example
- * const emailField = createField(form, 'email')
- * emailField.model = 'a@b.com' // writes form.values.email
- * emailField.isDirty // true if different from the initial email
+ * @template TValue - Type of the value the field holds.
+ * @param host The form the field belongs to.
+ * @param options Identity, path source and behavior.
+ * @returns The field instance and its teardown.
+ * @remarks Internal. Use `form.field(path)`, which caches the result.
  */
-export function createField<TSchema extends FormSchema, TPath extends InputPath<TSchema>>(form: FormInstance<TSchema>, path: TPath, config?: FieldConfig) {
-  type BoundField = FieldInstance<InputPathValue<TSchema, TPath>>
+export function createField<TValue>(host: FieldHost, options: FieldOptions): FieldNode<FieldInstance<TValue>> {
+  const { dispose, parts } = createFieldState<TValue>(host, options)
 
-  /**
-   * ── Config (not used yet) ──────────────────────────────────────────
-   * @todo Wire these up: validate on `validateOn` events, honour `validationMode`, apply `debounce`.
-   */
+  return {
+    dispose,
+    // `reactive()` unwraps the computed values, so consumers write `field.model`, not `field.model.value`
+    instance: reactive(parts) as unknown as FieldInstance<TValue>,
+  }
+}
 
-  /** The user's config merged with defaults (validate on blur and change; eager mode). */
-  const resolvedFieldConfig = reactive({
-    debounce: normalizeDebounce(config?.debounce),
-    validateOn: {
-      blur: true,
-      change: true,
-      input: false,
-      ...config?.validateOn,
-    },
-    validationMode: config?.validationMode || 'eager',
-  }) satisfies FieldConfig
+/**
+ * Builds the state every kind of field shares (plain field, array field, array item).
+ *
+ * The field owns no data: `model` reads and writes straight into the form's values,
+ * and the path is resolved on every read, so the field stays correct when it moves.
+ * @template TValue - Type of the value the field holds.
+ * @param host The form the field belongs to.
+ * @param options Identity, path source and behavior.
+ * @returns `parts`, the raw members (computed refs and functions) to wrap in `reactive()`, and `dispose`.
+ */
+export function createFieldState<TValue>(host: FieldHost, options: FieldOptions) {
+  const id = options.id ?? createFieldId('field')
+  const config = resolveFieldConfig(options.config)
 
-  /** Unique identity of this field instance. */
-  const fieldId = Symbol('notform.field')
+  let isDisposed = false
+  let lastKnownPath = ''
 
-  /** Timer for a delayed validation that has been scheduled but has not fired yet. */
-  let pendingDebounceTimer: ReturnType<typeof setTimeout> | undefined
-
-  /** Cancels the scheduled validation, if there is one. */
-  function cancelPendingDebounce(): void {
-    if (pendingDebounceTimer === undefined) {
-      return
+  /** Current path. Frozen at its last value once the field is disposed. */
+  const path = computed(() => {
+    if (!isDisposed) {
+      lastKnownPath = options.getPath()
     }
 
-    clearTimeout(pendingDebounceTimer)
-    pendingDebounceTimer = undefined
-  }
-
-  function validateThisField(): void {
-    form.validateField(path)
-  }
-
-  function scheduleThisFieldValidation(): void {
-    cancelPendingDebounce()
-
-    if (!resolvedFieldConfig.debounce || resolvedFieldConfig.debounce <= 0) {
-      validateThisField()
-      return
-    }
-
-    pendingDebounceTimer = setTimeout(() => {
-      pendingDebounceTimer = undefined
-      validateThisField()
-    }, resolvedFieldConfig.debounce)
-  }
-
-  function onBlur(): void {
-    form.touchField(fieldId)
-
-    if (!resolvedFieldConfig.validateOn.blur) {
-      return
-    }
-
-    scheduleThisFieldValidation()
-    validateThisField()
-  }
-
-  function onInput(): void {
-    if (!resolvedFieldConfig.validateOn.input || resolvedFieldConfig.validationMode === 'lazy') {
-      return
-    }
-
-    scheduleThisFieldValidation()
-  }
-
-  function onChange(): void {
-    if (!resolvedFieldConfig.validateOn.change || resolvedFieldConfig.validationMode === 'lazy') {
-      return
-    }
-
-    scheduleThisFieldValidation()
-  }
-
-  // ── Value ──────────────────────────────────────────────────────────
+    return lastKnownPath
+  })
 
   /** Two-way link to the form's value at `path`. */
-  const model = computed<BoundField['model']>({
+  const model = computed<TValue>({
     get: () => {
-      return getValueAtPath(form.values, path) as BoundField['model']
+      return host.getValue(path.value) as TValue
     },
     set: (value) => {
-      setValueAtPath(form.values, path, value)
+      if (!isDisposed) {
+        host.setValue(path.value, value)
+      }
     },
   })
 
-  /** `true` when the current value differs (deep comparison) from the form's initial value at `path`. */
   const isDirty = computed(() => {
-    return !dequal(model.value, getValueAtPath(form.initialValues, path))
+    return !dequal(model.value, host.getInitialValue(path.value))
   })
 
   const isTouched = computed(() => {
-    return form.isFieldTouched(fieldId)
+    return host.isFieldTouched(id)
   })
 
   const errors = computed(() => {
-    return form.getFieldErrors(path)
+    return host.getFieldErrors(path.value)
   })
 
   const isValid = computed(() => {
@@ -135,27 +79,103 @@ export function createField<TSchema extends FormSchema, TPath extends InputPath<
   })
 
   const isValidating = computed(() => {
-    return form.isFieldValidating(path)
+    return host.isFieldValidating(path.value)
   })
 
-  // ── Assemble ───────────────────────────────────────────────────────
+  function validate(): Promise<ValidationResult<unknown>> {
+    host.cancelFieldTask(id)
 
-  // `reactive()` unwraps the computed values, so consumers write `field.model`, not `field.model.value`
-  const field: BoundField = reactive({
-    errors,
-    events: {
-      onBlur,
-      onChange,
-      onInput,
+    return host.validateField(path.value)
+  }
+
+  /**
+   * Validates in response to `change` / `input`, honouring `validateOn`, the mode and the debounce.
+   * @param event The event that fired.
+   */
+  function validateOnEvent(event: 'change' | 'input'): void {
+    if (isDisposed) {
+      return
+    }
+
+    const isEnabled = config.validateOn[event] || (config.validationMode === 'eager' && errors.value.length > 0)
+
+    if (!isEnabled) {
+      return
+    }
+
+    if (config.debounce) {
+      host.scheduleFieldTask(id, config.debounce, () => {
+        void validate()
+      })
+
+      return
+    }
+
+    void validate()
+  }
+
+  function onBlur(): void {
+    if (isDisposed) {
+      return
+    }
+
+    host.touchField(id)
+
+    if (config.validateOn.blur) {
+      void validate()
+    }
+  }
+
+  function onChange(): void {
+    validateOnEvent('change')
+  }
+
+  function onInput(): void {
+    validateOnEvent('input')
+  }
+
+  function dispose(): void {
+    if (isDisposed) {
+      return
+    }
+
+    isDisposed = true
+    host.cancelFieldTask(id)
+    host.untouchField(id)
+  }
+
+  const events: FieldEvents = { onBlur, onChange, onInput }
+
+  return {
+    dispose,
+    parts: {
+      errors,
+      events,
+      id,
+      isDirty,
+      isTouched,
+      isValid,
+      isValidating,
+      model,
+      path,
+      validate,
     },
-    id: fieldId,
-    isDirty,
-    isTouched,
-    isValid,
-    isValidating,
-    model,
-    path,
-  })
+  }
+}
 
-  return field
+/**
+ * Merges the user's config over the defaults.
+ * @param config The config passed to `form.field()`.
+ * @returns A complete config (blur and change validate, input does not; eager mode).
+ */
+function resolveFieldConfig(config?: FieldConfig) {
+  return {
+    debounce: normalizeDebounce(config?.debounce),
+    validateOn: {
+      blur: config?.validateOn?.blur ?? true,
+      change: config?.validateOn?.change ?? true,
+      input: config?.validateOn?.input ?? false,
+    },
+    validationMode: config?.validationMode ?? 'eager',
+  }
 }

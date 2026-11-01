@@ -1,21 +1,39 @@
 import { getProperty, parsePath, setProperty } from 'dot-prop'
 import type { PathSegment, PathSegments } from '../types/path'
 
-/*
- * Everything in the library that reads, writes, splits or compares paths lives here,
- * so the rest of the code never touches the path library (dot-prop) directly.
+/**
+ * @file
+ * Everything that reads, writes, splits or compares paths lives here, so the
+ * rest of the code never touches the path library (dot-prop) directly.
  *
- *  - PATH      dot-notation text, e.g. 'address.city' or 'tags.0'
- *  - SEGMENTS  the same location split into steps, e.g. ['address', 'city'] or ['tags', 0]
+ * - PATH      dot-notation text, e.g. 'address.city' or 'tags.0'
+ * - SEGMENTS  the same location split into steps, e.g. ['address', 'city'] or ['tags', 0]
  */
 
 /**
- * Reads the actual key out of a path step, whether it is bare or wrapped.
+ * Reads a path step as an array index.
+ * @param segment A path step: `0`, `'0'`, `{ key: 0 }`, ...
+ * @returns The index, or `undefined` if the step is not a non-negative integer.
+ * @example
+ * getSegmentIndex('2') // 2
+ * getSegmentIndex('name') // undefined
+ */
+export function getSegmentIndex(segment: PathSegment): number | undefined {
+  const key = getSegmentKey(segment)
+
+  if (typeof key === 'number') {
+    return Number.isSafeInteger(key) && key >= 0 ? key : undefined
+  }
+
+  return typeof key === 'string' && (/^(?:0|[1-9]\d*)$/).test(key) ? Number(key) : undefined
+}
+
+/**
+ * Reads the key out of a path step, whether it is bare or wrapped.
  * @param segment A path step: `'email'`, `0`, or `{ key: 'email' }`.
- * @returns The plain key (`'email'` or `0`).
+ * @returns The plain key.
  * @example
  * getSegmentKey({ key: 'email' }) // 'email'
- * getSegmentKey('email') // 'email'
  */
 export function getSegmentKey(segment: PathSegment): PropertyKey {
   if (typeof segment === 'object' && segment !== null && 'key' in segment) {
@@ -26,85 +44,72 @@ export function getSegmentKey(segment: PathSegment): PropertyKey {
 }
 
 /**
- * Reads the value found at a dot-notation path.
+ * Reads the value at a dot-notation path.
  * @param source The object to read from.
- * @param path Dot-notation path, e.g. `'address.city'` or `'tags.0'`.
- * @returns The value, or `undefined` if any step along the way is missing.
- * @example
- * getValueAtPath({ tags: ['a', 'b'] }, 'tags.1') // 'b'
+ * @param path Dot-notation path, e.g. `'tags.0'`.
+ * @returns The value, or `undefined` if any step is missing.
  */
 export function getValueAtPath(source: unknown, path: string): unknown {
   return getProperty(source as Record<string, any>, path)
 }
 
 /**
- * Checks whether a path sits at, or somewhere below, a parent path.
+ * Checks whether a path sits at, or below, a parent path.
  * @param segments The path being tested.
  * @param parentSegments The path it should start with.
- * @returns `true` if `segments` equals `parentSegments` or is nested deeper inside it.
+ * @returns `true` if `segments` equals `parentSegments` or is nested deeper.
  * @example
- * isPathInside(['user', 'name'], ['user']) // true  (nested)
- * isPathInside(['user'], ['user']) // true  (same place)
- * isPathInside(['user'], ['user', 'name']) // false (shallower than the parent)
- * isPathInside(['team', 'name'], ['user']) // false (different branch)
+ * isPathInside(['user', 'name'], ['user']) // true
+ * isPathInside(['user'], ['user']) // true
+ * isPathInside(['user'], ['user', 'name']) // false
  */
 export function isPathInside(segments: PathSegments, parentSegments: PathSegments): boolean {
-  // a path shorter than its parent can never be inside it
   if (segments.length < parentSegments.length) {
     return false
   }
 
   return parentSegments.every((parentSegment, index) => {
-    return isSameSegment(segments[index], parentSegment)
+    return isSameSegment(segments[index] as PathSegment, parentSegment)
   })
 }
 
 /**
- * Checks whether two paths point at exactly the same location.
- * @param firstSegments The first path (for example an issue's `path`).
+ * Checks whether two paths point at exactly the same place.
+ * @param firstSegments The first path (e.g. an issue's `path`).
  * @param secondSegments The second path.
- * @returns `true` if both paths exist, have the same length, and every step matches.
- * @remarks A missing path means "the whole form", so it is never considered the
- * same as anything, not even another missing path.
+ * @returns `true` if both exist, have the same length, and every step matches.
+ * @remarks A missing path means "the whole form", so it never equals anything, not even another missing path.
  * @example
  * isSamePath(['tags', 0], ['tags', '0']) // true
- * isSamePath(['tags'], ['tags', 0]) // false (different depth)
  * isSamePath(undefined, undefined) // false
  */
 export function isSamePath(firstSegments: PathSegments | undefined, secondSegments: PathSegments | undefined): boolean {
-  if (!firstSegments || !secondSegments || (firstSegments.length !== secondSegments.length)) {
+  if (!firstSegments || !secondSegments || firstSegments.length !== secondSegments.length) {
     return false
   }
 
   return firstSegments.every((segment, index) => {
-    return isSameSegment(segment, secondSegments[index])
+    return isSameSegment(segment, secondSegments[index] as PathSegment)
   })
 }
 
 /**
- * Checks whether two path steps point at the same key.
+ * Checks whether two path steps are the same key.
  *
- * Numbers and numeric strings are treated as equal (`0` matches `'0'`),
- * because schema libraries disagree on whether array indexes are numbers or
- * strings. Wrapped keys (`{ key: 'email' }`) are unwrapped first.
- * @param firstSegment The first path step.
- * @param secondSegment The second path step.
+ * `0` equals `'0'` because schema libraries disagree on whether array indexes
+ * are numbers or strings. Wrapped keys (`{ key }`) are unwrapped first.
+ * @param firstSegment The first step.
+ * @param secondSegment The second step.
  * @returns `true` if both steps refer to the same key.
- * @example
- * isSameSegment(0, '0') // true
- * isSameSegment({ key: 'email' }, 'email') // true
- * isSameSegment('email', 'name') // false
  */
 export function isSameSegment(firstSegment: PathSegment, secondSegment: PathSegment): boolean {
   const firstKey = getSegmentKey(firstSegment)
   const secondKey = getSegmentKey(secondSegment)
 
-  // number vs string: only equal if the number is a safe integer whose text matches the string
   if (typeof firstKey === 'number' && typeof secondKey === 'string') {
     return Number.isSafeInteger(firstKey) && String(firstKey) === secondKey
   }
 
-  // string vs number: same rule, mirrored
   if (typeof firstKey === 'string' && typeof secondKey === 'number') {
     return Number.isSafeInteger(secondKey) && firstKey === String(secondKey)
   }
@@ -113,13 +118,23 @@ export function isSameSegment(firstSegment: PathSegment, secondSegment: PathSegm
 }
 
 /**
- * Writes a value at a dot-notation path, creating missing steps along the way.
- * @param target The object to write into (it is modified in place).
- * @param path Dot-notation path, e.g. `'address.city'` or `'tags.0'`.
- * @param value The value to write.
+ * Appends one step to a path.
+ * @param parentPath The parent path. An empty string means the form root.
+ * @param key The step to append (property name or array index).
+ * @returns The combined path.
  * @example
- * const values = { tags: ['a'] }
- * setValueAtPath(values, 'tags.1', 'b') // values.tags is now ['a', 'b']
+ * joinPath('tags', 1) // 'tags.1'
+ * joinPath('', 'name') // 'name'
+ */
+export function joinPath(parentPath: string, key: number | string): string {
+  return parentPath === '' ? String(key) : `${parentPath}.${key}`
+}
+
+/**
+ * Writes a value at a dot-notation path, creating missing steps.
+ * @param target The object to write into (modified in place).
+ * @param path Dot-notation path, e.g. `'address.city'`.
+ * @param value The value to write.
  */
 export function setValueAtPath(target: unknown, path: string, value: unknown): void {
   setProperty(target as Record<string, any>, path, value)
@@ -128,9 +143,7 @@ export function setValueAtPath(target: unknown, path: string, value: unknown): v
 /**
  * Splits a dot-notation path into its steps.
  * @param path Dot-notation path, e.g. `'tags.0.name'`.
- * @returns The steps, e.g. `['tags', 0, 'name']`.
- * @example
- * splitPath('address.city') // ['address', 'city']
+ * @returns The steps, e.g. `['tags', '0', 'name']` (indexes may be strings or numbers).
  */
 export function splitPath(path: string): PathSegments {
   return parsePath(path)

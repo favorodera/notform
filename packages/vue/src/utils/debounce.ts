@@ -5,9 +5,7 @@
  * `0` or more (negative, `NaN` and `Infinity` all become `0`).
  * @example
  * normalizeDebounce(undefined) // undefined
- * normalizeDebounce(300) // 300
  * normalizeDebounce(-50) // 0
- * normalizeDebounce(Number.NaN) // 0
  */
 export function normalizeDebounce(delayInMilliseconds?: number): number | undefined {
   if (delayInMilliseconds === undefined) {

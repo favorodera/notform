@@ -16,8 +16,8 @@ export type FormSchema = StandardSchemaV1 & {
 }
 
 /**
- * The data a schema *accepts*: what the user types into the form, before the
- * schema parses, transforms, or fills in defaults. This is the shape of `form.values`.
+ * The data a schema *accepts*: what the user types, before parsing,
+ * transforming or defaults. This is the shape of `form.values`.
  * @template TSchema - Any Standard Schema compatible schema (Zod, Valibot, ArkType, ...).
  * @example
  * // A schema that turns the text '42' into the number 42:
@@ -27,8 +27,7 @@ export type FormSchema = StandardSchemaV1 & {
 export type SchemaInput<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferInput<TSchema>
 
 /**
- * The data a schema *produces* after a successful validation (parsed,
- * transformed, defaults applied). This is the shape `onSubmit` receives.
+ * The data a schema *produces* after a successful validation. This is the shape `onSubmit` receives.
  * @template TSchema - Any Standard Schema compatible schema.
  */
 export type SchemaOutput<TSchema extends StandardSchemaV1> = StandardSchemaV1.InferOutput<TSchema>

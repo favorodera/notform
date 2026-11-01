@@ -69,6 +69,7 @@
     "Promisable",
     "relizy",
     "tsdown",
+    "untouch",
     "vite",
     "vitejs",
     "vitest"
