@@ -135,7 +135,7 @@ export type FormInstance<TSchema extends FormSchema> = {
   setValue: <TPath extends InputPath<TSchema>>(path: TPath, value: InputPathValue<TSchema, TPath>) => void
 
   /**
-   * Validates the whole form and, if valid, calls `onSubmit`. Safe to use as a `<form @submit>` handler.
+   * Validates the whole form and, if valid, calls `onSubmit`. Safe to use as a `<form v-on:submit>` handler.
    * Ignored while a submit is already running.
    * @param event The browser submit event; its default page reload is prevented.
    * @returns Resolves when the submit finished. Rejects with whatever `onSubmit` throws.

@@ -8,6 +8,7 @@ export default defineConfig({
   typescript: {
     overrides: {
       'typescript/no-explicit-any': 'off',
+      'typescript/no-invalid-void-type': 'off',
     },
   },
   unicorn: {

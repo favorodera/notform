@@ -61,10 +61,14 @@ const customRenderTemplate = `
 `
 
 function useMountedForm(...args: Partial<Parameters<typeof mountForm>>) {
-  const [config = { schema }, template = defaultTemplate, setup = {}] = args
+  const [userConfig = {}, template = defaultTemplate, setup = {}] = args
+
+  const config = {
+    schema,
+    ...userConfig,
+  }
 
   const form = mountForm(config, template, setup)
-
   return form
 }
 

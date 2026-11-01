@@ -21,10 +21,8 @@ const props = defineProps<FormProps<TSchema>>()
 </script>
 
 <template>
-  <!-- `novalidate` turns off the browser's built-in validation so the schema is the only validator -->
   <form
     v-bind="$attrs"
-    novalidate
     @submit="props.form.submit"
     @reset.prevent="props.form.reset"
   >
