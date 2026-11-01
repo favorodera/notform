@@ -248,9 +248,6 @@ catalogs:
     vue-tsc:
       specifier: ^3.3.13
       version: 3.3.13
-    zod:
-      specifier: ^4.6.7
-      version: 4.6.7
 
 importers:
 
@@ -360,9 +357,6 @@ importers:
       vue-tsc:
         specifier: 'catalog:'
         version: 3.3.13(typescript@6.0.3)
-      zod:
-        specifier: 'catalog:'
-        version: 4.6.7
 
 packages:
 

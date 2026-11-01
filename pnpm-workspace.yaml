@@ -40,7 +40,6 @@ catalog:
   vitest: ^5.0.5
   vue: ^3.5.44
   vue-tsc: ^3.3.13
-  zod: ^4.6.7
 
 allowBuilds:
   esbuild: true
