@@ -21,8 +21,8 @@ const form = useForm({
 })
 
 const fieldsState = reactive({
-  name:form.field('name'),
-age:form.field('age')
+  age: form.field('age'),
+  name: form.field('name'),
 })
 </script>
 
