@@ -25,6 +25,8 @@ import { createFieldState } from './create-field'
  * - Every mutation edits the array, `ids` and the form's errors together.
  * - If the array is changed behind our back, `ids` is reconciled by length the next
  * time it is read (new ids at the end, extra ids dropped). On form reset all ids are renewed.
+ * - Once the field is disposed (its item was removed) it is inert: mutations do nothing and
+ * `items` is empty, so a stale handle can never write into the item that took its place.
  * @template TItem - Type of one array item.
  * @param host The form the field belongs to.
  * @param options Path source, behavior and the scope factory for nested fields.
@@ -61,7 +63,7 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
   /**
    * Reads the array, creating an empty one if the value is missing.
    * @returns The reactive array.
-   * @throws If an array cannot be created at the path.
+   * @throws {TypeError} If an array cannot be created at the path.
    */
   function ensureArray(): unknown[] {
     const existing = readArray()
@@ -111,6 +113,10 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
    */
   function syncIds(): symbol[] {
     const list = ids.value
+
+    if (base.isDisposed()) {
+      return list
+    }
     const resetCount = host.getResetCount()
 
     if (resetCount !== seenResetCount) {
@@ -131,13 +137,19 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
     return list
   }
 
-  /** Announces a finished mutation: refreshes `items` and validates per the field's config. */
+  /**
+   * Announces a finished mutation: refreshes `items` and validates per the field's config.
+   */
   function commit(): void {
     triggerRef(ids)
     base.parts.events.onChange()
   }
 
   function insert(index: number, value: TItem): void {
+    if (base.isDisposed()) {
+      return
+    }
+
     const list = syncIds()
     const array = ensureArray()
     const at = clampIndex(index, list.length)
@@ -161,7 +173,7 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
   function remove(index: number): void {
     const list = syncIds()
 
-    if (!isIndexInRange(index, list.length)) {
+    if (base.isDisposed() || !isIndexInRange(index, list.length)) {
       return
     }
 
@@ -175,7 +187,7 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
   function move(from: number, to: number): void {
     const list = syncIds()
 
-    if (from === to || !isIndexInRange(from, list.length) || !isIndexInRange(to, list.length)) {
+    if (from === to || base.isDisposed() || !isIndexInRange(from, list.length) || !isIndexInRange(to, list.length)) {
       return
     }
 
@@ -189,7 +201,7 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
   function swap(indexA: number, indexB: number): void {
     const list = syncIds()
 
-    if (indexA === indexB || !isIndexInRange(indexA, list.length) || !isIndexInRange(indexB, list.length)) {
+    if (indexA === indexB || base.isDisposed() || !isIndexInRange(indexA, list.length) || !isIndexInRange(indexB, list.length)) {
       return
     }
 
@@ -201,7 +213,7 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
   }
 
   function update(index: number, value: TItem): void {
-    if (!isIndexInRange(index, syncIds().length)) {
+    if (base.isDisposed() || !isIndexInRange(index, syncIds().length)) {
       return
     }
 
@@ -276,9 +288,11 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
   }
 
   const items = computed(() => {
-    return syncIds().map((id) => {
-      return getItem(id)
-    })
+    return base.isDisposed()
+      ? []
+      : syncIds().map((id) => {
+          return getItem(id)
+        })
   })
 
   function dispose(): void {

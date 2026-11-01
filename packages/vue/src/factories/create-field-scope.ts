@@ -15,10 +15,12 @@ import { createField } from './create-field'
  * @param host The form the fields belong to.
  * @param getBasePath Returns the base path. The form root uses `() => ''`; an array item
  * uses its own current path, so nested fields follow the item when it moves.
- * @returns The scope.
+ * @returns The scope. After `dispose()`, fields it still hands out are inert.
  */
 export function createFieldScope(host: FieldHost, getBasePath: () => string): FieldScope {
   const nodes = new Map<string, FieldNode<unknown>>()
+
+  let isDisposed = false
 
   function field(path: string, config?: FieldConfig): FieldInstance<unknown> {
     const key = `field:${path}`
@@ -31,8 +33,12 @@ export function createFieldScope(host: FieldHost, getBasePath: () => string): Fi
           return joinPath(getBasePath(), path)
         },
       })
-
       nodes.set(key, node)
+
+      // a stale handle (e.g. a removed array item) must not get live fields
+      if (isDisposed) {
+        node.dispose()
+      }
     }
 
     return node.instance as FieldInstance<unknown>
@@ -52,14 +58,19 @@ export function createFieldScope(host: FieldHost, getBasePath: () => string): Fi
           return joinPath(getBasePath(), path)
         },
       })
-
       nodes.set(key, node)
+
+      if (isDisposed) {
+        node.dispose()
+      }
     }
 
     return node.instance as ArrayFieldInstance<unknown>
   }
 
   function dispose(): void {
+    isDisposed = true
+
     for (const node of nodes.values()) {
       node.dispose()
     }

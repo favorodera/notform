@@ -32,7 +32,8 @@ export function createField<TValue>(host: FieldHost, options: FieldOptions): Fie
  * @template TValue - Type of the value the field holds.
  * @param host The form the field belongs to.
  * @param options Identity, path source and behavior.
- * @returns `parts`, the raw members (computed refs and functions) to wrap in `reactive()`, and `dispose`.
+ * @returns `parts`, the raw members (computed refs and functions) to wrap in `reactive()`, `dispose`,
+ * and `isDisposed`. A disposed field is inert: events, writes and validation do nothing.
  */
 export function createFieldState<TValue>(host: FieldHost, options: FieldOptions) {
   const id = options.id ?? createFieldId('field')
@@ -83,6 +84,10 @@ export function createFieldState<TValue>(host: FieldHost, options: FieldOptions)
   })
 
   function validate(): Promise<ValidationResult<unknown>> {
+    if (isDisposed) {
+      return Promise.resolve({ value: undefined })
+    }
+
     host.cancelFieldTask(id)
 
     return host.validateField(path.value)
@@ -139,6 +144,11 @@ export function createFieldState<TValue>(host: FieldHost, options: FieldOptions)
       return
     }
 
+    // never read yet: resolve the path now, while it is still meaningful
+    if (lastKnownPath === '') {
+      lastKnownPath = options.getPath()
+    }
+
     isDisposed = true
     host.cancelFieldTask(id)
     host.untouchField(id)
@@ -148,6 +158,9 @@ export function createFieldState<TValue>(host: FieldHost, options: FieldOptions)
 
   return {
     dispose,
+    isDisposed: (): boolean => {
+      return isDisposed
+    },
     parts: {
       errors,
       events,
