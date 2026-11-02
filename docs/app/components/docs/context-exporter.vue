@@ -11,7 +11,7 @@ const routePath = computed(() => {
   return withoutTrailingSlash(route.path)
 })
 const mdPath = computed(() => {
-  return `${site.url}/raw${routePath.value}.md`
+  return `${site.url}${routePath.value}.md`
 })
 
 const items = [
@@ -30,7 +30,7 @@ const items = [
     icon: 'simple-icons:markdown',
     label: 'View as Markdown',
     target: '_blank',
-    to: `/raw${routePath.value}.md`,
+    to: `${routePath.value}.md`,
   },
   {
     icon: 'simple-icons:openai',
@@ -47,7 +47,7 @@ const items = [
 ]
 
 async function copyPage() {
-  const pageMarkdown = await $fetch<string>(`/raw${route.path}.md`)
+  const pageMarkdown = await $fetch<string>(`${routePath.value}.md`)
 
   clipboard.copy(pageMarkdown)
 }

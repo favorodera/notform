@@ -7,10 +7,7 @@ const config = defineConfig({
       'unused-imports/no-unused-vars': 'off',
     },
   },
-  ignores: [
-    'public/repl-workers/**',
-    'public/playground-templates/**',
-  ],
+  ignores: ['public/playground/'],
   node: {
     overrides: {
       'node/no-unsupported-features/es-syntax': 'off',
@@ -26,7 +23,6 @@ const config = defineConfig({
       'typescript/no-explicit-any': 'off',
     },
   },
-  ignores:['public/playground/']
 })
 
 export default withNuxt(config)

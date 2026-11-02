@@ -3,6 +3,11 @@ import { defineSoftwareApp } from 'nuxt-schema-org/schema'
 import packageJson from '../package.json'
 
 export default defineNuxtConfig({
+  aiReady: {
+    agentSkills: {
+      dir: '.agents/skills',
+    },
+  },
   app: {
     head: {
       htmlAttrs: {
@@ -26,10 +31,6 @@ export default defineNuxtConfig({
     pageTransition: {
       mode: 'out-in',
       name: 'fade-out-in',
-    },
-    rootAttrs: {
-      'class': 'bg-default',
-      'data-vaul-drawer-wrapper': '',
     },
   },
   compatibilityDate: '2026-06-21',
@@ -71,6 +72,9 @@ export default defineNuxtConfig({
     mode: 'svg',
     provider: 'iconify',
   },
+  linkChecker: {
+    failOnError: true,
+  },
   llms: {
     description: 'Vue forms without the friction.',
     domain: 'https://notformdocs.vercel.app',
@@ -81,8 +85,7 @@ export default defineNuxtConfig({
     sections: [
       {
         contentCollection: 'docs',
-        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/getting-started%' }],
-        title: 'Getting Started',
+        title: 'Documentation',
       },
     ],
     title: 'NotForm',
