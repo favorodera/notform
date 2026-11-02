@@ -1,0 +1,190 @@
+import tailwindcss from '@tailwindcss/vite'
+import { defineSoftwareApp } from 'nuxt-schema-org/schema'
+import packageJson from '../package.json'
+
+export default defineNuxtConfig({
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'en',
+      },
+      link: [
+        { href: '/favicon.ico', rel: 'icon', sizes: '48x48' },
+        { href: '/favicon.svg', rel: 'icon', sizes: 'any', type: 'image/svg+xml' },
+        { href: '/icon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png' },
+        { href: '/icon-192x192.png', rel: 'icon', sizes: '192x192', type: 'image/png' },
+        { href: '/icon-512x512.png', rel: 'icon', sizes: '512x512', type: 'image/png' },
+        { href: '/icon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png' },
+        { href: '/logo.svg', rel: 'icon', sizes: 'any', type: 'image/svg+xml' },
+        { href: '/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180' },
+      ],
+    },
+    layoutTransition: {
+      mode: 'out-in',
+      name: 'fade-out-in',
+    },
+    pageTransition: {
+      mode: 'out-in',
+      name: 'fade-out-in',
+    },
+    rootAttrs: {
+      'class': 'bg-default',
+      'data-vaul-drawer-wrapper': '',
+    },
+  },
+  compatibilityDate: '2026-06-21',
+  content: {
+    build: {
+      markdown: {
+        toc: {
+          searchDepth: 1,
+        },
+      },
+    },
+  },
+  css: ['~/assets/css/main.css'],
+  devtools: {
+    enabled: false,
+  },
+  eslint: {
+    config: {
+      standalone: false,
+    },
+  },
+  experimental: {
+    asyncContext: true,
+  },
+  fonts: {
+    defaults: {
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    },
+    families: [{ global: true, name: 'Outfit' }],
+  },
+  icon: {
+    componentName: 'NIcon',
+    customCollections: [
+      {
+        dir: './app/assets/icons',
+        prefix: 'custom',
+      },
+    ],
+    mode: 'svg',
+    provider: 'iconify',
+  },
+  llms: {
+    description: 'Vue forms without the friction.',
+    domain: 'https://notformdocs.vercel.app',
+    full: {
+      description: 'Vue forms without the friction.',
+      title: 'NotForm',
+    },
+    sections: [
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/getting-started%' }],
+        title: 'Getting Started',
+      },
+    ],
+    title: 'NotForm',
+  },
+  modules: [
+    '@nuxt/content',
+    '@nuxt/fonts',
+    '@nuxt/ui',
+    '@nuxtjs/seo',
+    'motion-v/nuxt',
+    '@notform/nuxt',
+    'nuxt-llms',
+    '@vercel/analytics',
+    '@nuxt/eslint',
+  ],
+  nitro: {
+    prerender: {
+      autoSubfolderIndex: false,
+      crawlLinks: true,
+      routes: [
+        '/',
+        '/sitemap.xml',
+        '/robots.txt',
+      ],
+    },
+  },
+  ogImage: {
+    zeroRuntime: true,
+  },
+  routeRules: {
+    '/docs': { redirect: '/docs/getting-started' },
+  },
+  runtimeConfig: {
+    public: {
+      version: packageJson.version,
+    },
+  },
+  schemaOrg: {
+    identity: defineSoftwareApp({
+      '@type': 'SoftwareApplication',
+      'aggregateRating': {
+        '@type': 'AggregateRating',
+        'bestRating': '5',
+        'ratingValue': '4.9',
+        'reviewCount': '13',
+        'worstRating': '1',
+      },
+      'applicationCategory': 'DeveloperApplication',
+      'author': {
+        '@type': 'Person',
+        'name': 'Favour Emeka',
+        'url': 'https://favorodera.vercel.app',
+      },
+      'description': 'Vue forms without the friction.',
+      'keywords': [
+        'Vue forms',
+        'Nuxt form validation',
+        'Vue 3 form library',
+        'TypeScript form validation',
+        'headless form components',
+      ],
+      'name': 'NotForm',
+      'offers': {
+        '@type': 'Offer',
+        'price': '0',
+        'priceCurrency': 'USD',
+      },
+      'operatingSystem': 'Web',
+      'sameAs': [
+        'https://www.npmjs.com/package/notform',
+        'https://www.npmjs.com/package/notform-nuxt',
+        'https://github.com/favorodera/notform',
+      ],
+      'url': 'https://notformdocs.vercel.app',
+    }),
+  },
+  site: {
+    defaultLocale: 'en',
+    description: 'Vue forms without the friction.',
+    indexable: true,
+    name: 'NotForm',
+    url: 'https://notformdocs.vercel.app',
+  },
+  sitemap: {
+    zeroRuntime: true,
+  },
+  typescript: {
+    nodeTsConfig: {
+      include: ['./scripts'],
+    },
+  },
+  ui: {
+    prefix: '',
+  },
+  vite: {
+    optimizeDeps: {
+      exclude: ['@vue/repl'],
+      include: [
+        'zod',
+        '@vueuse/core',
+      ],
+    },
+    plugins: [tailwindcss()],
+  },
+})

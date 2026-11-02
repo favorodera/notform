@@ -30,8 +30,7 @@
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "test:watch": "turbo test:watch",
-    "postinstall": "turbo postinstall",
-    "sync-repl-workers": "turbo run sync-repl-workers",
+    "docs:copy-repl-workers": "turbo run docs:copy-repl-workers",
     "preview": "turbo preview",
     "prepublishOnly": "turbo prepublishOnly",
     "ready": "pnpm install && pnpm lint && pnpm typecheck && pnpm test && pnpm build"

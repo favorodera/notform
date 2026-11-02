@@ -1,0 +1,64 @@
+{
+  "name": "docs",
+  "type": "module",
+  "private": true,
+  "author": "Favour Emeka <favorodera@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://notformdocs.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/favorodera/notform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/favorodera/notform/issues"
+  },
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=12.0.0"
+  },
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "docs:copy-repl-workers": "tsx scripts/copy-repl-workers.ts",
+    "typecheck": "nuxt prepare && nuxt typecheck",
+    "lint": "nuxt prepare && eslint .",
+    "lint:fix": "nuxt prepare && eslint . --fix"
+  },
+  "dependencies": {
+    "@iconify-json/simple-icons": "catalog:",
+    "@iconify-json/tabler": "catalog:",
+    "@iconify-json/vscode-icons": "catalog:",
+    "@notform/nuxt": "workspace:*",
+    "@nuxt/content": "catalog:",
+    "@nuxt/fonts": "catalog:",
+    "@nuxt/ui": "catalog:",
+    "@nuxtjs/mdc": "catalog:",
+    "@nuxtjs/seo": "catalog:",
+    "@takumi-rs/core": "catalog:",
+    "@vercel/analytics": "catalog:",
+    "@vue/repl": "catalog:",
+    "@vueuse/core": "catalog:",
+    "better-sqlite3": "catalog:",
+    "minimark": "catalog:",
+    "nuxt": "catalog:",
+    "nuxt-llms": "catalog:",
+    "nuxt-schema-org": "catalog:",
+    "ufo": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@favorodera/eslint-config": "catalog:",
+    "@nuxt/eslint": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@types/node": "catalog:",
+    "monaco-editor-core": "catalog:",
+    "nuxtseo-layer-devtools": "catalog:",
+    "tailwindcss": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

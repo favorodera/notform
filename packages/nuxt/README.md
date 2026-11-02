@@ -27,7 +27,7 @@ export default defineNuxtConfig({
 
 ## Auto-imports
 
-The module registers `Form`, `Field`, `ArrayField`, `Error`, and `useForm`. 
+The module registers `Form`, `Field`, `ArrayField`, `FieldError`, and `useForm`. 
 
 These APIs are otherwise identical to the core package.
 

@@ -4,7 +4,7 @@
     "build": {
       "dependsOn": [
         "^build",
-        "sync-repl-workers"
+        "docs:copy-repl-workers"
       ],
       "outputs": [
         "dist/**",
@@ -24,8 +24,9 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "sync-repl-workers": {
-      "outputs": ["public/repl-workers/**"]
+    "docs:copy-repl-workers": {
+      "dependsOn": ["^build"],
+      "outputs": ["public/playground/repl-workers/**"]
     },
     "test": {
       "dependsOn": ["^build"],
@@ -34,7 +35,7 @@
     "dev": {
       "dependsOn": [
         "^build",
-        "sync-repl-workers"
+        "docs:copy-repl-workers"
       ],
       "persistent": true,
       "cache": false
@@ -47,10 +48,6 @@
     "test:watch": {
       "persistent": true,
       "cache": false
-    },
-    "postinstall": {
-      "dependsOn": ["sync-repl-workers"],
-      "outputs": []
     },
     "prepublishOnly": {
       "outputs": []
