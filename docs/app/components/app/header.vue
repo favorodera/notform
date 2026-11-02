@@ -38,7 +38,7 @@ const navigationMenuItems = [
       root:'border-none'
     }"
     :toggle="{
-      variant: 'soft',
+      variant: 'subtle',
     }"
     mode="slideover"
   >
@@ -47,7 +47,7 @@ const navigationMenuItems = [
 
       <Badge
         :label="`v${runtimeConfig.public.version}`"
-        variant="soft"
+        variant="subtle"
         size="sm"
       />
     </template>

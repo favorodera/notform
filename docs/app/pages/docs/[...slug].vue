@@ -31,10 +31,10 @@ const pageSurround = await useAsyncData(`${route.path}-surround`, () => {
 const tocFooterLinks = computed<PageLink[]>(() => {
   return [
     {
-    icon: 'tabler:play',
-    label: 'Playground',
-    to: `/playground`,
-  },
+      icon: 'tabler:play',
+      label: 'Playground',
+      to: `/playground`,
+    },
     {
       external: true,
       icon: 'simple-icons:stackblitz',
