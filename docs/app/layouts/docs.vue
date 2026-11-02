@@ -24,5 +24,7 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
         </Main>
       </Page>
     </Container>
+
+    <AppFooter />
   </div>
 </template>

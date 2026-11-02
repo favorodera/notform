@@ -40,6 +40,8 @@ provide('githubStars', githubStars.data)
 
     <Error :error="error" />
 
+    <AppFooter />
+
     <ClientOnly>
       <LazyContentSearch
         :files="sectionsSearch.data.value"
