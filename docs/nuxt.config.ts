@@ -73,7 +73,7 @@ export default defineNuxtConfig({
     provider: 'iconify',
   },
   linkChecker: {
-    failOnError: false, // TODO: Remove this once the docs are fully migrated and all links are valid.
+    failOnError: true,
   },
   llms: {
     description: 'Vue forms without the friction.',
@@ -87,6 +87,7 @@ export default defineNuxtConfig({
         contentCollection: 'docs',
         title: 'Documentation',
       },
+      // TODO: Complete registration
     ],
     title: 'NotForm',
   },
