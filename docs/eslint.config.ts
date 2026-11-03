@@ -4,6 +4,7 @@ import withNuxt from './.nuxt/eslint.config.mjs'
 const config = defineConfig({
   codeInMarkdown: {
     overrides: {
+      'vue/no-mutating-props': 'off',
       'vue/no-root-v-if': 'off',
     },
   },
