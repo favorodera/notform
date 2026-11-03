@@ -4,7 +4,7 @@ import withNuxt from './.nuxt/eslint.config.mjs'
 const config = defineConfig({
   codeInMarkdown: {
     overrides: {
-      'unused-imports/no-unused-vars': 'off',
+      'vue/no-root-v-if': 'off',
     },
   },
   ignores: ['public/playground/'],
