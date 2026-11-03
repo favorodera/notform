@@ -55,22 +55,8 @@ const features = [
       <li
         v-for="feature, index in features"
         :key="index"
-        class="
-          relative block rounded-lg border border-default bg-default
-          bg-clip-padding p-4 shadow-xs shadow-neutral-800 block-full
-        "
       >
-        <p
-          class="mbe-2 text-sm font-medium text-highlighted"
-        >
-          {{ feature.title }}
-        </p>
-
-        <p class="text-sm/relaxed font-light text-muted">
-          <slot mdc-unwrap="p">
-            {{ feature.description }}
-          </slot>
-        </p>
+        <AppCard v-bind="feature" />
       </li>
     </Container>
   </section>

@@ -45,7 +45,7 @@ export default defineNuxtConfig({
 })
 ```
 
-See the [Nuxt guide](https://notformdocs.vercel.app/docs/getting-started/nuxt) for setup details.
+See the [Nuxt guide](https://notformdocs.vercel.app/docs/getting-started/nuxt-module) for setup details.
 
 ## License
 

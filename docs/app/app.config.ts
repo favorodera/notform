@@ -119,17 +119,6 @@ export default defineAppConfig({
           has-[>code]:border-none
         `,
       },
-      codePreview: {
-        slots: {
-          code: `
-            [&_pre]:rounded-t-none
-
-            [&>div]:my-0 [&>div]:rounded-t-none
-
-            [&>div>div]:my-0
-          `,
-        },
-      },
     },
   },
 })

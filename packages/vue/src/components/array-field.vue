@@ -7,7 +7,7 @@ import type { ArrayFieldProps, ArrayFieldSlots } from '../types/array-field'
  * <ArrayField v-slot="{ arrayField }" :array-field="form.arrayField('tags')">
  *   <Field v-for="item in arrayField.items" :key="item.id" v-slot="{ field }" :field="item">
  *     <input v-model="field.model" v-bind="field.events">
- *     <button type="button" @click="item.remove()">Remove</button>
+ *     <button type="button" @click="arrayField.remove(item.index)">Remove</button>
  *   </Field>
  *   <button type="button" @click="arrayField.append('')">Add</button>
  * </ArrayField>

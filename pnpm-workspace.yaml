@@ -1,3 +1,6 @@
+
+minimumReleaseAgeExclude:
+  - '@favorodera/eslint-config@3.2.0'
 shellEmulator: true
 
 trustPolicy: no-downgrade
@@ -14,7 +17,7 @@ nodeOptions: --max_old_space_size=4096
 
 catalog:
   '@ai-sdk/google': ^4.0.105
-  '@favorodera/eslint-config': ^3.1.0
+  '@favorodera/eslint-config': ^3.2.0
   '@iconify-json/simple-icons': ^1.2.96
   '@iconify-json/tabler': ^1.2.38
   '@iconify-json/vscode-icons': ^1.2.78
