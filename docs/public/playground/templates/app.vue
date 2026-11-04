@@ -129,7 +129,7 @@ const form = useForm({
               </div>
             </div>
 
-            <Error :path="item.path" />
+            <FieldError :errors="field" />
           </div>
         </Field>
 
@@ -140,7 +140,7 @@ const form = useForm({
           + Add New Tag
         </button>
 
-        <Error path="tags" />
+        <FieldError :errors="arrayField" />
       </ArrayField>
     </div>
 
@@ -162,9 +162,7 @@ const form = useForm({
         type="submit"
         :disabled="form.isSubmitting"
       >
-        <span v-if="form.isSubmitting"> Submitting... </span>
-
-        <span v-else> Submit </span>
+        {{ form.isSubmitting ? 'Submitting...': 'Submit' }} 
       </button>
     </div>
   </Form>
