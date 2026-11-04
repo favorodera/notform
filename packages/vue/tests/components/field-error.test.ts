@@ -1,5 +1,6 @@
 import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import { nextTick } from 'vue'
 import { object, string } from '../../schemas'
 import { mountForm } from '../helpers/mount-form'
 
@@ -59,6 +60,16 @@ const customRenderTemplate = `
     </Field>
   </Form>
 `
+
+const attrsTemplate = `
+  <Form :form>
+    <Field :field="form.field('name')" v-slot="{ field }">
+      <FieldError id="name-error" class="error" role="alert" :errors="field" />
+    </Field>
+  </Form>
+`
+
+const emptyListTemplate = '<FieldError :errors="[]" />'
 
 function useMountedForm(...args: Partial<Parameters<typeof mountForm>>) {
   const [userConfig = {}, template = defaultTemplate] = args
@@ -158,5 +169,37 @@ describe('rendering', () => {
     await flushPromises()
 
     expect(wrapper.find('#custom').text()).toBe('Must be at least 2 characters')
+  })
+})
+
+describe('states', () => {
+  it('shows only the first message when a field has several issues', async () => {
+    const { form, wrapper } = mountForm({ schema }, attrsTemplate)
+
+    form.replaceErrors([
+      { message: 'First', path: ['name'] },
+      { message: 'Second', path: ['name'] },
+    ])
+    await nextTick()
+
+    expect(wrapper.get('#name-error').text()).toBe('First')
+  })
+
+  it('forwards attributes to the rendered element', async () => {
+    const { form, wrapper } = mountForm({ schema }, attrsTemplate)
+
+    form.setError({ message: 'Bad', path: ['name'] })
+    await nextTick()
+
+    const error = wrapper.get('#name-error')
+
+    expect(error.classes()).toContain('error')
+    expect(error.attributes('role')).toBe('alert')
+  })
+
+  it('renders nothing for an empty list of issues', () => {
+    const { wrapper } = mountForm({ schema }, emptyListTemplate)
+
+    expect(wrapper.find('span').exists()).toBe(false)
   })
 })
