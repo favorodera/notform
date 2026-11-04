@@ -10,11 +10,6 @@ const config = defineConfig({
     },
   },
   ignores: ['public/playground/'],
-  node: {
-    overrides: {
-      'node/no-unsupported-features/es-syntax': 'off',
-    },
-  },
   tailwind: {
     settings: {
       entryPoint: 'app/assets/css/index.css',

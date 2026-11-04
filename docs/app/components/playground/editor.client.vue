@@ -178,7 +178,7 @@ watchEffect(() => {
 
 <style lang="css">
 /* eslint-disable css/no-important */
-  @reference "../../assets/css/main.css";
+  @reference "../../assets/css/index.css";
 
   .iframe-container iframe {
     @apply bg-default! p-2;

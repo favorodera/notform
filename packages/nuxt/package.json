@@ -39,11 +39,7 @@
   },
   "files": ["dist"],
   "engines": {
-    "runtime": {
-      "name": "node",
-      "version": ">=24.0.0",
-      "onFail": "download"
-    }
+    "node": ">=24.0.0"
   },
   "scripts": {
     "build": "nuxt-module-build prepare && nuxt-module-build build",

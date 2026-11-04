@@ -2,6 +2,7 @@
   "name": "notform",
   "version": "3.0.1",
   "private": true,
+  "packageManager": "pnpm@12.16.1",
   "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
@@ -16,12 +17,12 @@
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": ">=24.0.0",
+      "version": ">=24.0.0 <25.0.0",
       "onFail": "download"
     },
     "packageManager": {
       "name": "pnpm",
-      "version": ">=12.0.0 <13.0.0",
+      "version": "12.16.1",
       "onFail": "download"
     }
   },

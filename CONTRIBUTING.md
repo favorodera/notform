@@ -10,8 +10,8 @@ By participating in this project, you agree to follow the [Contributor Covenant 
 
 ### Requirements
 
-- [Node.js](https://nodejs.org/) 24 or later
-- [pnpm](https://pnpm.io/) 11 or later
+- [Node.js](https://nodejs.org/) 24.x
+- [pnpm](https://pnpm.io/) 12.16.1
 
 ### Setup
 
