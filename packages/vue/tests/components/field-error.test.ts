@@ -1,4 +1,3 @@
-import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import { object, string } from '../../schemas'
@@ -95,7 +94,6 @@ describe('rendering', () => {
 
     await wrapper.find('#name').setValue('H')
     await wrapper.find('#name').trigger('blur')
-    await flushPromises()
 
     expect(wrapper.find('span').exists()).toBe(true)
     expect(wrapper.find('span').text()).toBe('Must be at least 2 characters')
@@ -106,7 +104,6 @@ describe('rendering', () => {
 
     await wrapper.find('#name').setValue('H')
     await wrapper.find('#name').trigger('blur')
-    await flushPromises()
 
     expect(wrapper.find('span').exists()).toBe(true)
     expect(wrapper.find('span').text()).toBe('Must be at least 2 characters')
@@ -116,12 +113,10 @@ describe('rendering', () => {
     const { wrapper } = useMountedForm()
 
     await wrapper.find('#name').trigger('blur')
-    await flushPromises()
 
     expect(wrapper.find('span').exists()).toBe(true)
 
     await wrapper.find('#name').setValue('Jane')
-    await flushPromises()
 
     expect(wrapper.find('span').exists()).toBe(false)
   })
@@ -134,7 +129,6 @@ describe('rendering', () => {
 
     await wrapper.find('#email').setValue('H')
     await wrapper.find('#email').trigger('blur')
-    await flushPromises()
 
     expect(wrapper.findAll('span')).toHaveLength(2)
     expect(wrapper.findAll('span')[0].text()).toBe('Must be at least 2 characters')
@@ -145,7 +139,6 @@ describe('rendering', () => {
     const { wrapper } = useMountedForm()
 
     await wrapper.find('#name').trigger('blur')
-    await flushPromises()
 
     expect(wrapper.find('span').exists()).toBe(true)
     expect(wrapper.find('p').exists()).toBe(false)
@@ -155,7 +148,6 @@ describe('rendering', () => {
     const { wrapper } = useMountedForm(undefined, pTagTemplate)
 
     await wrapper.find('#name').trigger('blur')
-    await flushPromises()
 
     expect(wrapper.find('p').exists()).toBe(true)
     expect(wrapper.find('span').exists()).toBe(false)
@@ -166,7 +158,6 @@ describe('rendering', () => {
 
     await wrapper.find('#name').setValue('H')
     await wrapper.find('#name').trigger('blur')
-    await flushPromises()
 
     expect(wrapper.find('#custom').text()).toBe('Must be at least 2 characters')
   })

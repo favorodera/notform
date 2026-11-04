@@ -102,7 +102,6 @@ describe('reset', () => {
 
     await nameInput.setValue('ChangedName')
     await emailInput.setValue('ChangedEmail')
-    await flushPromises()
 
     expect(form.values.name).toBe('ChangedName')
     expect(form.values.email).toBe('ChangedEmail')
