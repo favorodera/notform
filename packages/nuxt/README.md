@@ -1,21 +1,22 @@
 <h1 align="center">
   <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notformdocs.vercel.app/favicon.svg">
   </br>
-  NotForm Nuxt
+  NotForm for Nuxt
 </h1>
+
 <p align="center">
-  Headless, schema-agnostic form management for Vue and Nuxt.
+  Official Nuxt integration for NotForm.
 </p>
 
-Official Nuxt integration for NotForm. 
-
-The module registers the core components and composable as Nuxt auto-imports.
+This module registers NotForm's components and composable so you can use them in any page or component without importing them. The APIs are exactly the ones in the core package.
 
 ## Install
 
 ```bash
 pnpm add @notform/nuxt
 ```
+
+The module brings `notform` with it. Add `notform` to your own dependencies only if you want to import its types directly.
 
 Register the module in `nuxt.config.ts`:
 
@@ -29,7 +30,7 @@ export default defineNuxtConfig({
 
 The module registers `Form`, `Field`, `ArrayField`, `FieldError`, and `useForm`. 
 
-These APIs are otherwise identical to the core package.
+These APIs are otherwise identical to the vue package.
 
 Use `notform.aliases` to change selected names:
 
