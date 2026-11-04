@@ -25,7 +25,6 @@ export default defineConfig({
     packages: ['packages/*'],
     registry: 'https://registry.npmjs.org',
   },
-  safetyCheck: Boolean(process.env.CI),
   types: {
     build: { semver: 'patch', title: 'Builds' },
     chore: { semver: 'patch', title: 'Chores' },
