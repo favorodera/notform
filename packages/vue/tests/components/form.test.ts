@@ -30,6 +30,23 @@ const multiTemplate = `
   </Form>
 `
 
+const completeTemplate = `
+  <Form :form>
+    <Field :field="form.field('name')" v-slot="{ field }">
+      <input :id="field.path" v-model="field.model" v-bind="field.events" />
+      <FieldError :errors="field" />
+    </Field>
+ 
+    <Field :field="form.field('email')" v-slot="{ field }">
+      <input :id="field.path" v-model="field.model" v-bind="field.events" />
+      <FieldError :errors="field" />
+    </Field>
+ 
+    <button id="reset" type="reset">Reset</button>
+    <button id="submit" type="submit">Submit</button>
+  </Form>
+`
+
 function useMountedForm(...args: Partial<Parameters<typeof mountForm>>) {
   const [userConfig = {}, template = defaultTemplate] = args
 
@@ -149,5 +166,48 @@ describe('submit', () => {
     await flushPromises()
 
     expect(form.isSubmitting).toBe(false)
+  })
+})
+
+describe('submit and reset through the DOM', () => {
+  it('shows an error under every field after an invalid submit, even untouched ones', async () => {
+    const { form, wrapper } = useMountedForm(undefined, completeTemplate)
+
+    await wrapper.get('form').trigger('submit')
+    await flushPromises()
+
+    expect(form.isSubmitted).toBe(true)
+    expect(wrapper.findAll('span')).toHaveLength(2)
+  })
+
+  it('clears errors, touched and submitted state when the reset button is used', async () => {
+    const { form, wrapper } = useMountedForm(undefined, completeTemplate)
+
+    await wrapper.get('form').trigger('submit')
+    await flushPromises()
+    await wrapper.get('#reset').trigger('click')
+    await flushPromises()
+
+    expect(wrapper.findAll('span')).toHaveLength(0)
+    expect(form.isSubmitted).toBe(false)
+    expect(form.isTouched).toBe(false)
+    expect(form.errors).toHaveLength(0)
+  })
+
+  it('submits a valid form without showing errors', async () => {
+    const submitted: unknown[] = []
+
+    const { wrapper } = useMountedForm({
+      initialValues: { email: 'jane@example.com', name: 'Jane' },
+      onSubmit: (data) => {
+        submitted.push(data)
+      },
+    }, completeTemplate)
+
+    await wrapper.get('form').trigger('submit')
+    await flushPromises()
+
+    expect(submitted).toStrictEqual([{ email: 'jane@example.com', name: 'Jane' }])
+    expect(wrapper.findAll('span')).toHaveLength(0)
   })
 })
