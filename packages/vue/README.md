@@ -3,11 +3,18 @@
   </br>
   NotForm
 </h1>
+
 <p align="center">
-  Headless, schema-agnostic form management for Vue and Nuxt.
+  Vue Forms Without the Friction.
 </p>
 
-NotForm manages reactive form values, validation, field state, submission, and dynamic arrays while leaving markup, styling, and layout to your application.
+NotForm keeps your form's values, errors and field state in one place and leaves the markup to you. Describe the data with the schema library you already use, bind inputs, and read form states wherever you need them.
+
+- **Bring your own schema.** Zod, Valibot, ArkType, or anything else that implements [Standard Schema](https://standardschema.dev). No adapters.
+- **Typed safe.** Field paths, values, and method signatures are checked against your schema.
+- **Dynamic arrays that behave.** Add, remove or reorder rows and each row keeps its touched state and its errors.
+- **Safe async validation.** Auto disposal of inflight validation results making sure stale results cannot overwrite newer form state.
+- **No UI imposed.** The components render a native `<form>` and, for errors, a `<span>` you can change. Everything else is yours.
 
 See the [Documentation](https://notformdocs.vercel.app/) for validation, submission, and array-field guides.
 

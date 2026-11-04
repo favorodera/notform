@@ -13,7 +13,7 @@ const features = [
     title: 'Isolated form instances',
   },
   {
-    description: 'Validate everything or target a specific field, object, or array scope. Choose when validation runs with blur, change, input, mount, or manually.',
+    description: 'Validate everything or target a specific field, object, or array scope. Choose when validation runs with blur, change, input, or manually.',
     title: 'Granular validation',
   },
   {
