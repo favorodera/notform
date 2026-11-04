@@ -85,9 +85,49 @@ export default defineNuxtConfig({
     sections: [
       {
         contentCollection: 'docs',
-        title: 'Documentation',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/getting-started%' }],
+        title: 'Getting Started',
       },
-      // TODO: Complete registration
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/guides%' }],
+        title: 'Guides',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/recipes%' }],
+        title: 'Recipes',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/components%' }],
+        title: 'Components',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/composables%' }],
+        title: 'Composables',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/integrations%' }],
+        title: 'Integrations',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/migrations%' }],
+        title: 'Migrations',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/ai%' }],
+        title: 'AI',
+      },
+      {
+        contentCollection: 'docs',
+        contentFilters: [{ field: 'path', operator: 'LIKE', value: '/docs/reference%' }],
+        title: 'Reference',
+      },
     ],
     title: 'NotForm',
   },
