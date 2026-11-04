@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { UseFormInstance } from '../../src'
 import { array, object, string } from '../../schemas'
 import { createForm } from '../../src/factories/create-form'
 
@@ -14,6 +15,12 @@ const initialPeople = [
   { name: 'Bea', tags: ['green'] },
   { name: 'Cal', tags: ['blue'] },
 ]
+
+function names(form: UseFormInstance<typeof schema>): string[] {
+  return form.values.people.map((person) => {
+    return person.name
+  })
+}
 
 describe('form.arrayField', () => {
   it('inserts cloned items and remaps errors when inserting and removing', () => {
@@ -166,5 +173,95 @@ describe('form.arrayField', () => {
     nameField.model = 'Adele'
 
     expect(form.values.people[2]?.name).toBe('Adele')
+  })
+
+  it('ignores out-of-range indexes and no-op moves', () => {
+    const form = createForm({ initialValues: { people: initialPeople }, schema })
+    const people = form.arrayField('people')
+    const extra = { name: 'Zed', tags: [] }
+
+    people.remove(-1)
+    people.remove(3)
+    people.remove(1.5)
+    people.remove(NaN)
+    people.move(0, 0)
+    people.move(0, 9)
+    people.move(-1, 1)
+    people.swap(1, 1)
+    people.swap(0, 7)
+    people.update(3, extra)
+
+    expect(names(form)).toStrictEqual(['Ada', 'Bea', 'Cal'])
+  })
+
+  it('clamps the insert index into the array', () => {
+    const form = createForm({ initialValues: { people: initialPeople }, schema })
+    const people = form.arrayField('people')
+
+    people.insert(-5, { name: 'First', tags: [] })
+    people.insert(99, { name: 'Last', tags: [] })
+    people.insert(NaN, { name: 'Nan', tags: [] })
+
+    expect(names(form)).toStrictEqual(['Nan', 'First', 'Ada', 'Bea', 'Cal', 'Last'])
+  })
+
+  it('creates the array when the value is missing', () => {
+    const form = createForm({ initialValues: {}, schema })
+    const people = form.arrayField('people')
+
+    expect(people.items).toHaveLength(0)
+
+    people.append({ name: 'Ada', tags: [] })
+
+    expect(names(form)).toStrictEqual(['Ada'])
+    expect(people.items).toHaveLength(1)
+  })
+
+  it('reconciles item ids when the array is changed behind its back', () => {
+    const form = createForm({ initialValues: { people: initialPeople }, schema })
+    const people = form.arrayField('people')
+    const initialIds = people.items.map((item) => {
+      return item.id
+    })
+
+    form.values.people.push({ name: 'Dee', tags: [] })
+
+    expect(people.items).toHaveLength(4)
+    expect(people.items.slice(0, 3).map((item) => {
+      return item.id
+    })).toStrictEqual(initialIds)
+
+    form.values.people.pop()
+    form.values.people.pop()
+
+    expect(people.items.map((item) => {
+      return item.id
+    })).toStrictEqual(initialIds.slice(0, 2))
+  })
+
+  it('creates nested array fields that follow their item', () => {
+    const form = createForm({ initialValues: { people: initialPeople }, schema })
+    const people = form.arrayField('people')
+    const tags = people.items.at(0)?.arrayField('tags')
+
+    expect(tags?.path).toBe('people.0.tags')
+
+    tags?.append('blue')
+
+    expect(form.values.people[0]?.tags).toStrictEqual(['red', 'blue'])
+
+    people.move(0, 2)
+
+    expect(tags?.path).toBe('people.2.tags')
+
+    tags?.append('green')
+
+    expect(form.values.people[2]?.tags).toStrictEqual(['red', 'blue', 'green'])
+  })
+
+  it('returns the same array field for the same path', () => {
+    const form = createForm({ initialValues: { people: initialPeople }, schema })
+
+    expect(form.arrayField('people')).toBe(form.arrayField('people'))
   })
 })
