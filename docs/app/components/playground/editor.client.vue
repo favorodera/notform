@@ -22,14 +22,20 @@ const previousRouteHash = useLocalStorage('notform-playground-previous-hash', ''
 const initialRouteHash = location.hash || savedRouteHash.value
 
 const colorMode = useColorMode()
-const theme = computed(() => (colorMode.value === 'dark' ? 'dark' : 'light'))
+const theme = computed(() => {
+  return colorMode.value === 'dark' ? 'dark' : 'light'
+})
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
-const replLayout = computed(() => (breakpoints.smaller('lg').value ? 'vertical' : 'horizontal'))
+const replLayout = computed(() => {
+  return breakpoints.smaller('lg').value ? 'vertical' : 'horizontal'
+})
 
 const clipboard = useClipboard({
   legacy: true,
-  source: () => location.href,
+  source: () => {
+    return location.href
+  },
 })
 
 const vueImportMap = useVueImportMap({
@@ -38,13 +44,15 @@ const vueImportMap = useVueImportMap({
   serverRenderer: 'https://esm.sh/@vue/server-renderer@3.5/dist/server-renderer.esm-browser.js',
 })
 
-const builtinImportMap = computed(() => ({
-  imports: {
-    ...vueImportMap.importMap.value.imports,
-    notform: `https://esm.sh/notform?external=vue`,
-    zod: 'https://esm.sh/zod?external=vue',
-  },
-}))
+const builtinImportMap = computed(() => {
+  return {
+    imports: {
+      ...vueImportMap.importMap.value.imports,
+      notform: `https://esm.sh/notform?external=vue`,
+      zod: 'https://esm.sh/zod?external=vue',
+    },
+  }
+})
 
 const previewOptions = {
   headHTML: [
@@ -87,6 +95,14 @@ if (!initialRouteHash) {
   replStore.setFiles(defaultFiles, 'src/App.vue')
 }
 
+function resetOrRestore() {
+  if (previousRouteHash.value) {
+    restorePrevious()
+  } else {
+    resetToDefault()
+  }
+}
+
 /** Resets the REPL to its default state, saving the current state to the previousRouteHash.value */
 function resetToDefault() {
   previousRouteHash.value = replStore.serialize()
@@ -99,11 +115,6 @@ function restorePrevious() {
 
   replStore.deserialize(previousRouteHash.value)
   previousRouteHash.value = ''
-}
-
-function resetOrRestore() {
-  if (previousRouteHash.value) restorePrevious()
-  else resetToDefault()
 }
 
 watchEffect(() => {
@@ -168,43 +179,44 @@ watchEffect(() => {
 
 <style lang="css">
 /* eslint-disable css/no-important */
-@reference "../../assets/css/main.css";
+  @reference "../../assets/css/main.css";
 
-.iframe-container iframe {
-  @apply bg-default! p-2;
-}
-
-.monaco-editor {
-  --vscode-editor-background: var(--ui-bg) !important;
-  --vscode-editor-foreground: var(--ui-text) !important;
-  --vscode-editorGutter-background: var(--ui-bg) !important;
-}
-
-.vue-repl,
-.dark .vue-repl {
-  --bg: var(--ui-bg);
-  --bg-soft: var(--ui-bg-muted);
-  --border: var(--ui-border);
-  --text-light: var(--ui-text-muted);
-  --color-branding: var(--ui-primary);
-  --color-branding-dark: var(--ui-primary);
-}
-
-.vue-repl{
-  & .file-selector {
-    @apply px-4;
+  .iframe-container iframe {
+    @apply bg-default! p-2;
   }
 
-  & .output-container {
-    @apply block-full;
+  .monaco-editor {
+    --vscode-editor-background: var(--ui-bg) !important;
+    --vscode-editor-foreground: var(--ui-text) !important;
+    --vscode-editorGutter-background: var(--ui-bg) !important;
   }
 
-  & .tab-buttons {
-    @apply hidden;
-  }
+  .vue-repl {
 
-  & .import-map-wrapper {
-    @apply bg-none;
+    &,
+    .dark & {
+      --bg: var(--ui-bg);
+      --bg-soft: var(--ui-bg-muted);
+      --border: var(--ui-border);
+      --text-light: var(--ui-text-muted);
+      --color-branding: var(--ui-primary);
+      --color-branding-dark: var(--ui-primary);
+    }
+
+     .file-selector {
+      @apply px-4;
+    }
+
+    .output-container {
+      @apply block-full;
+    }
+
+    .tab-buttons {
+      @apply hidden;
+    }
+
+    .import-map-wrapper {
+      @apply bg-none;
+    }
   }
-}
 </style>

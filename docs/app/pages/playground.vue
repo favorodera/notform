@@ -12,9 +12,15 @@ const seo = {
 }
 
 useSeoMeta({
-  description: () => seo.description,
-  ogUrl: () => `${appConfig.siteUrl}${route.fullPath}`,
-  title: () => seo.title,
+  description: () => {
+    return seo.description
+  },
+  ogUrl: () => {
+    return `${appConfig.siteUrl}${route.fullPath}`
+  },
+  title: () => {
+    return seo.title
+  },
 })
 
 defineOgImage('Image.takumi', { ...seo })

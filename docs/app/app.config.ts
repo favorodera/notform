@@ -1,4 +1,3 @@
-/* eslint-disable tailwind/no-unknown-classes */
 export default defineAppConfig({
   author: {
     name: 'Emeka Favour',
