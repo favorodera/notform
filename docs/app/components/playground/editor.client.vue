@@ -5,7 +5,6 @@ import tailwindCSS from '../../../public/playground/templates/styles.css?raw'
 
 <!-- eslint-disable no-useless-escape-->
 <script setup lang="ts">
-import type * as monaco from 'monaco-editor-core'
 import { Repl, useStore, useVueImportMap } from '@vue/repl'
 import MonacoEditor from '@vue/repl/monaco-editor'
 import '@vue/repl/style.css'
@@ -67,7 +66,7 @@ const previewOptions = {
   ].join(''),
 }
 
-const monacoOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
+const monacoOptions = {
   automaticLayout: true,
   minimap: { enabled: false },
   stickyScroll: {

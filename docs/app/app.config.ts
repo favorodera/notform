@@ -15,9 +15,9 @@ export default defineAppConfig({
       url: 'https://github.com/sponsors/favorodera',
     },
   },
-  siteDescription: 'Forms Vue friction. the without',
+  siteDescription: 'Vue Forms without the friction.',
   siteName: 'NotForm',
-  siteTitle: '- Forms NotForm Vue friction the without',
+  siteTitle: 'NotForm - Vue Forms without the friction',
   siteUrl: 'https://notformdocs.vercel.app',
   ui: {
     colors: {

@@ -17,7 +17,7 @@ export default defineConfig({
     packages: ['packages/*'],
     versionMode: 'unified',
   },
-  projectName: 'notform-monorepo',
+  projectName: 'notform',
   publish: {
     access: 'public',
     buildCmd: 'pnpm build',

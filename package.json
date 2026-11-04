@@ -2,7 +2,6 @@
   "name": "notform",
   "version": "3.0.1",
   "private": true,
-  "packageManager": "pnpm@12.14.0",
   "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
@@ -14,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/favorodera/notform/issues"
   },
-  "engines": {
+  "devEngines": {
     "node": ">=24.0.0",
     "pnpm": ">=12.0.0"
   },

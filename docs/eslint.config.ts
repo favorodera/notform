@@ -17,7 +17,7 @@ const config = defineConfig({
   },
   tailwind: {
     settings: {
-      entryPoint: 'app/assets/css/main.css',
+      entryPoint: 'app/assets/css/index.css',
     },
   },
   typescript: {

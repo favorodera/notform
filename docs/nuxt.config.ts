@@ -24,14 +24,6 @@ export default defineNuxtConfig({
         { href: '/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180' },
       ],
     },
-    layoutTransition: {
-      mode: 'out-in',
-      name: 'fade-out-in',
-    },
-    pageTransition: {
-      mode: 'out-in',
-      name: 'fade-out-in',
-    },
   },
   compatibilityDate: '2026-06-21',
   content: {
@@ -43,7 +35,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/index.css'],
   devtools: {
     enabled: false,
   },
@@ -62,7 +54,7 @@ export default defineNuxtConfig({
     families: [{ global: true, name: 'Outfit' }],
   },
   icon: {
-    componentName: 'NIcon',
+    componentName: 'NuxtIcon',
     customCollections: [
       {
         dir: './app/assets/icons',

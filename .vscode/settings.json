@@ -8,7 +8,7 @@
   "tailwindCSS.includeLanguages": {
     "css": "tailwindcss"
   },
-  "tailwindCSS.experimental.configFile": "apps/docs/app/assets/css/main.css",
+  "tailwindCSS.experimental.configFile": "apps/docs/app/assets/css/index.css",
   "files.eol": "\n",
   "eslint.runtime": "node",
   "mdc.enableComponentMetadataCompletions": true,
