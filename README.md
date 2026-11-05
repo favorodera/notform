@@ -16,7 +16,7 @@ Read [Documentation](https://notformdocs.vercel.app/) on how to get started.
 
 | Package                            | Description                                                |
 | ---------------------------------- | ---------------------------------------------------------- |
-| [`notform`](./packages/core)       | Core Vue 3 form state, validation, and headless components |
+| [`notform`](./packages/vue)       | Core Vue 3 form state, validation, and headless components |
 | [`@notform/nuxt`](./packages/nuxt) | Nuxt integration with auto-imports                         |
 
 ## Development

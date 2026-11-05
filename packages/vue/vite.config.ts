@@ -8,6 +8,7 @@ export default defineConfig({
   test: {
     coverage: {
       enabled: true,
+      exclude: ['src/types/'],
       include: ['src/**/*.{ts,vue}'],
     },
     environment: 'happy-dom',
