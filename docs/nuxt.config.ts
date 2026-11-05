@@ -102,7 +102,8 @@ export default defineNuxtConfig({
     zeroRuntime: true,
   },
   routeRules: {
-    '/docs': { redirect: '/docs/getting-started' },
+    '/docs': { redirect: '/docs/getting-started/introduction' },
+    '/docs/getting-started': { redirect: '/docs/getting-started/introduction' },
   },
   runtimeConfig: {
     public: {
@@ -169,10 +170,7 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       exclude: ['@vue/repl'],
-      include: [
-        'zod',
-        '@vueuse/core',
-      ],
+      include: ['@vueuse/core'],
     },
     plugins: [tailwindcss()],
   },

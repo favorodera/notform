@@ -35,7 +35,7 @@
       "
     >
       <Button
-        to="/docs/getting-started"
+        to="/docs"
         size="lg"
         icon="tabler:book-2"
         color="primary"
