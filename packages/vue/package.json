@@ -1,7 +1,7 @@
 {
   "name": "notform",
   "type": "module",
-  "version": "3.0.1",
+  "version": "4.0.0-alpha.0",
   "private": false,
   "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
@@ -29,7 +29,9 @@
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=24.0.0"
   },
