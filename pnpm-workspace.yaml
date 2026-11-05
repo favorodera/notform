@@ -34,7 +34,7 @@ catalog:
   '@nuxt/schema': ^4.5.2
   '@nuxt/ui': ^4.11.1
   '@nuxtjs/mdc': ^0.23.1
-  '@nuxtjs/seo': ^5.3.16
+  '@nuxtjs/seo': ^6.0.0
   '@standard-schema/spec': ^1.1.0
   '@tailwindcss/vite': ^4.3.3
   '@takumi-rs/core': ^2.14.0
