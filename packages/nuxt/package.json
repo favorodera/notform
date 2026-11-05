@@ -34,14 +34,10 @@
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
-      ".": [
-        "./dist/types.d.mts"
-      ]
+      ".": ["./dist/types.d.mts"]
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "engines": {
     "node": ">=24.0.0"
   },
