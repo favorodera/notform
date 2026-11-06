@@ -1,7 +1,7 @@
 {
   "name": "@notform/nuxt",
   "type": "module",
-  "version": "4.0.0-alpha.0",
+  "version": "4.0.0-alpha.1",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -34,10 +34,14 @@
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
-      ".": ["./dist/types.d.mts"]
+      ".": [
+        "./dist/types.d.mts"
+      ]
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=24.0.0"
   },

@@ -1,5 +1,34 @@
 # Changelog
 
+## v4.0.0-alpha.0...v4.0.0-alpha.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.0...v4.0.0-alpha.1)
+
+### Documentation
+
+- **playground:** Style template with class names ([922cae0](https://github.com/favorodera/notform/commit/922cae0))
+
+  - Replace bare tag selectors with explicit classes
+  - Prevent global style leaks in playground preview
+  - Fix ShadcnVue casing in documentation
+
+- **nuxt:** Update npm url to scoped package ([8619a3c](https://github.com/favorodera/notform/commit/8619a3c))
+- **content:** Expand source glob pattern ([400fe20](https://github.com/favorodera/notform/commit/400fe20))
+
+  - Include all file types in docs collection
+
+
+### Chores
+
+- **vue:** Disable jsonc array newline rule ([8dd172c](https://github.com/favorodera/notform/commit/8dd172c))
+
+  - Allow flexible array formatting in package.json
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v3.0.1...v4.0.0-alpha.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v3.0.1...v4.0.0-alpha.0)

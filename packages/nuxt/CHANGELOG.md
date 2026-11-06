@@ -1,5 +1,20 @@
 # Changelog
 
+## v4.0.0-alpha.0...v4.0.0-alpha.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.0...v4.0.0-alpha.1)
+
+### Chores
+
+- **vue:** Disable jsonc array newline rule ([8dd172c](https://github.com/favorodera/notform/commit/8dd172c))
+
+  - Allow flexible array formatting in package.json
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v3.0.1...v4.0.0-alpha.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v3.0.1...v4.0.0-alpha.0)
