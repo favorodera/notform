@@ -143,7 +143,7 @@ export default defineNuxtConfig({
       'operatingSystem': 'Web',
       'sameAs': [
         'https://www.npmjs.com/package/notform',
-        'https://www.npmjs.com/package/notform-nuxt',
+        'https://www.npmjs.com/package/@notform/nuxt',
         'https://github.com/favorodera/notform',
       ],
       'url': 'https://notformdocs.vercel.app',
