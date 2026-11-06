@@ -34,13 +34,19 @@ const form = useForm({
 </script>
 
 <template>
-  <Form :form="form">
+  <Form
+    :form="form"
+    class="nf-card"
+  >
     <Field
       v-slot="{ field }"
       :field="form.field('name')"
     >
-      <div>
-        <label :for="field.path">
+      <div class="nf-field">
+        <label
+          :for="field.path"
+          class="nf-label"
+        >
           Full Name
         </label>
 
@@ -48,11 +54,15 @@ const form = useForm({
           v-bind="field.events"
           :id="field.path"
           v-model="field.model"
+          class="nf-input"
           type="text"
           placeholder="e.g. John Doe"
         >
 
-        <FieldError :errors="field" />
+        <FieldError
+          :errors="field"
+          class="nf-error"
+        />
       </div>
     </Field>
 
@@ -60,24 +70,33 @@ const form = useForm({
       v-slot="{ field }"
       :field="form.field('email')"
     >
-      <div>
-        <label :for="field.path"> Email Address </label>
+      <div class="nf-field">
+        <label
+          :for="field.path"
+          class="nf-label"
+        >
+          Email Address
+        </label>
 
         <input
           v-bind="field.events"
           :id="field.path"
           v-model="field.model"
+          class="nf-input"
           type="email"
           placeholder="e.g. john@example.com"
         >
 
-        <FieldError :errors="field" />
+        <FieldError
+          :errors="field"
+          class="nf-error"
+        />
       </div>
     </Field>
 
-    <div>
-      <div class="text-sm font-medium">
-        interests
+    <div class="nf-field">
+      <div class="nf-label">
+        Interests
       </div>
 
       <ArrayField
@@ -91,18 +110,21 @@ const form = useForm({
           :path="item.path"
           :field="item"
         >
-          <div>
-            <div class="flex-row">
+          <div class="nf-field">
+            <div class="nf-group">
               <input
-                :id=" field.path"
+                v-bind="field.events"
+                :id="field.path"
+                v-model="field.model"
+                class="nf-input"
                 type="text"
-                v-model="field.model" v-bind="field.events"
                 placeholder="Tag name"
               >
 
-              <div class="flex-row gap-2 inline-fit">
+              <div class="nf-group">
                 <button
                   type="button"
+                  class="nf-button nf-button-secondary"
                   title="Move Up"
                   :disabled="item.index === 0"
                   @click="arrayField.move(item.index, item.index - 1)"
@@ -112,6 +134,7 @@ const form = useForm({
 
                 <button
                   type="button"
+                  class="nf-button nf-button-secondary"
                   title="Move Down"
                   :disabled="item.index === arrayField.items.length - 1"
                   @click="arrayField.move(item.index, item.index + 1)"
@@ -121,6 +144,7 @@ const form = useForm({
 
                 <button
                   type="button"
+                  class="nf-button nf-button-secondary"
                   title="Remove Tag"
                   @click="arrayField.remove(item.index)"
                 >
@@ -129,30 +153,32 @@ const form = useForm({
               </div>
             </div>
 
-            <FieldError :errors="field" />
+            <FieldError
+              :errors="field"
+              class="nf-error"
+            />
           </div>
         </Field>
 
         <button
           type="button"
+          class="nf-button nf-button-secondary"
           @click="arrayField.append('')"
         >
           + Add New Tag
         </button>
 
-        <FieldError :errors="arrayField" />
+        <FieldError
+          :errors="arrayField"
+          class="nf-error"
+        />
       </ArrayField>
     </div>
 
-    <div
-      class="
-        flex-row inline-full
-
-        *:flex-1
-      "
-    >
+    <div class="nf-group nf-group-fill">
       <button
         type="reset"
+        class="nf-button nf-button-secondary"
         :disabled="form.isSubmitting"
       >
         Reset
@@ -160,9 +186,10 @@ const form = useForm({
 
       <button
         type="submit"
+        class="nf-button nf-button-primary"
         :disabled="form.isSubmitting"
       >
-        {{ form.isSubmitting ? 'Submitting...': 'Submit' }} 
+        {{ form.isSubmitting ? 'Submitting...' : 'Submit' }}
       </button>
     </div>
   </Form>
