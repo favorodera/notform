@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { PageLink } from '@nuxt/ui'
-import { computed } from '#imports'
 
 definePageMeta({
   layout: 'docs',
@@ -35,21 +34,8 @@ const tocFooterLinks = computed<PageLink[]>(() => {
       label: 'Playground',
       to: `/playground`,
     },
-    {
-      external: true,
-      icon: 'tabler:clock-code',
-      label: 'Changelog',
-      target: '_blank',
-      to: `https://github.com/favorodera/notform/releases`,
-    },
-    {
-      class: 'font-semibold text-pink-400 hover:text-pink-500',
-      external: true,
-      icon: 'tabler:heart',
-      label: 'Become a sponsor',
-      target: '_blank',
-      to: 'https://github.com/sponsors/favorodera',
-    },
+    appConfig.github.changelog,
+    appConfig.github.sponsor,
   ]
 })
 

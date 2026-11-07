@@ -11,21 +11,13 @@ const appConfig = useAppConfig()
 
 const navigationMenuItems = [
   {
-    class: 'w-fit',
-    external: true,
-    icon: 'simple-icons:github',
-    label: 'Github',
-    target: '_blank',
-    to: appConfig.github.repo.url,
+    icon: 'tabler:play',
+    label: 'Playground',
+    to: `/playground`,
   },
-  {
-    class: ' text-pink-400 hover:text-pink-500 **:text-pink-400 **:hover:text-pink-500 w-fit',
-    external: true,
-    icon: 'tabler:heart',
-    label: 'Become a Sponsor',
-    target: '_blank',
-    to: appConfig.github.sponsor.url,
-  },
+  appConfig.github.repo,
+  appConfig.github.changelog,
+  appConfig.github.sponsor,
 ] satisfies NavigationMenuItem[]
 </script>
 
@@ -61,9 +53,7 @@ const navigationMenuItems = [
       />
 
       <Button
-        :to="appConfig.github.repo.url"
-        :icon="appConfig.github.repo.icon"
-        target="_blank"
+        v-bind="appConfig.github.repo"
         variant="subtle"
         size="sm"
         class="max-lg:hidden"
@@ -88,6 +78,9 @@ const navigationMenuItems = [
       <NavigationMenu
         :items="navigationMenuItems"
         orientation="vertical"
+        :ui="{
+          item:'w-fit'
+        }"
       />
 
       <div class="grid grid-cols-1 place-items-center pbs-8 inline-full">
