@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@source "../../../content/**/*";
+
+@theme static {
+  --container-8xl: 90rem;
+
+  --font-sans: 'Outfit', sans-serif;
+}
+
+:root,
+.light {
+  --ui-bg: var(--ui-color-neutral-50);
+  --ui-bg-muted: var(--ui-color-neutral-100);
+  --ui-bg-elevated: var(--ui-color-neutral-100);
+  --ui-bg-accented: var(--ui-color-neutral-200);
+
+  --ui-text: var(--ui-color-neutral-900);
+  --ui-text-highlighted: var(--ui-color-neutral-950);
+  --ui-text-inverted: var(--ui-color-neutral-50);
+
+  --ui-primary: black;
+
+  --ui-container: var(--container-8xl);
+
+  --ui-header-height: 3rem;
+
+  --ui-radius: 0.5rem;
+
+  @apply scroll-smooth;
+}
+
+.dark {
+  --ui-bg: var(--ui-color-neutral-950);
+  --ui-bg-muted: var(--ui-color-neutral-900);
+  --ui-bg-elevated: var(--ui-color-neutral-900);
+  --ui-bg-accented: var(--ui-color-neutral-800);
+  --ui-bg-inverted: var(--ui-color-neutral-50);
+
+  --ui-text: var(--ui-color-neutral-100);
+  --ui-text-highlighted: var(--ui-color-neutral-50);
+  --ui-text-inverted: var(--ui-color-neutral-900);
+
+  --ui-primary: white;
+
+  --ui-border-inverted: var(--ui-color-neutral-50);
+}

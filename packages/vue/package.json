@@ -1,0 +1,72 @@
+{
+  "name": "notform",
+  "type": "module",
+  "version": "4.0.0-alpha.3",
+  "private": false,
+  "description": "Vue Forms Without the Friction",
+  "author": "Favour Emeka <favorodera@gmail.com>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/favorodera",
+  "homepage": "https://notformdocs.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/favorodera/notform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/favorodera/notform/issues"
+  },
+  "keywords": [
+    "notform",
+    "vue",
+    "form",
+    "standard-schema"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "play": "vite",
+    "test:watch": "vitest watch --ui",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepublishOnly": "pnpm run build"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@standard-schema/spec": "catalog:",
+    "dequal": "catalog:",
+    "dot-prop": "catalog:",
+    "klona": "catalog:",
+    "type-fest": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "@vue/test-utils": "catalog:",
+    "happy-dom": "catalog:",
+    "tsdown": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

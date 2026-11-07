@@ -1,11 +1,23 @@
+import { google } from '@ai-sdk/google'
 import { defineConfig } from 'relizy'
 
 export default defineConfig({
+  ai: {
+    fallback: 'fail',
+    provider: 'ai-sdk',
+    providerRelease: { enabled: true },
+    providers: {
+      'ai-sdk': {
+        model: google('gemini-3.5-flash-lite'),
+        reasoning: 'high',
+      },
+    },
+  },
   monorepo: {
     packages: ['packages/*'],
     versionMode: 'unified',
   },
-  projectName: 'notform-monorepo',
+  projectName: 'notform',
   publish: {
     access: 'public',
     buildCmd: 'pnpm build',
@@ -15,14 +27,13 @@ export default defineConfig({
   },
   types: {
     build: { semver: 'patch', title: 'Builds' },
-    chore: false,
-    ci: false,
+    chore: { semver: 'patch', title: 'Chores' },
+    ci: { semver: 'patch', title: 'Continuos Integrations' },
     docs: { semver: 'patch', title: 'Documentation' },
-    feat: { semver: 'minor', title: 'Added' },
+    feat: { semver: 'patch', title: 'Added' },
     fix: { semver: 'patch', title: 'Fixed' },
     perf: { semver: 'patch', title: 'Performance' },
     refactor: { semver: 'patch', title: 'Refactors' },
-    style: false,
-    test: false,
+    test: { semver: 'patch', title: 'Tests' },
   },
 })
