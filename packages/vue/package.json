@@ -1,7 +1,7 @@
 {
   "name": "notform",
   "type": "module",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.3",
   "private": false,
   "description": "Vue Forms Without the Friction",
   "author": "Favour Emeka <favorodera@gmail.com>",

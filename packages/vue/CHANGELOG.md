@@ -1,5 +1,34 @@
 # Changelog
 
+## v4.0.0-alpha.2...v4.0.0-alpha.3
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.2...v4.0.0-alpha.3)
+
+### Documentation
+
+- Reorder documentation sections ([cc9f866](https://github.com/favorodera/notform/commit/cc9f866))
+
+  - update section prefixes to adjust menu ordering
+
+- **app:** Set dynamic title template in seo meta ([d0599d0](https://github.com/favorodera/notform/commit/d0599d0))
+
+  - Format page titles dynamically using appConfig
+
+- **recipes:** Add Pinia guide to multi-step forms ([eb4b24b](https://github.com/favorodera/notform/commit/eb4b24b))
+
+  - Add example for multi-step forms using Pinia
+  - Explain component caching with KeepAlive
+
+- **app:** Centralize github and nav links in config ([8b8f92c](https://github.com/favorodera/notform/commit/8b8f92c))
+
+  - Move header and TOC link config to app config
+  - Reuse link properties across nav components
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v4.0.0-alpha.1...v4.0.0-alpha.2
 
 [compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.1...v4.0.0-alpha.2)
