@@ -13,7 +13,7 @@ export default defineConfig({
     pnpmWorkspace: false,
   },
 })
-.append({
+  .append({
     files: ['package.json'],
     rules: {
       'jsonc/array-bracket-newline': 'off',
