@@ -1,5 +1,22 @@
 # Changelog
 
+## v4.0.0-alpha.1...v4.0.0-alpha.2
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.1...v4.0.0-alpha.2)
+
+### Chores
+
+- **eslint:** Disable jsonc array-bracket-newline ([1df18ba](https://github.com/favorodera/notform/commit/1df18ba))
+
+### 🎨 Styles
+
+- **nuxt:** Fix indentation in eslint config ([ebf65f7](https://github.com/favorodera/notform/commit/ebf65f7))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v4.0.0-alpha.0...v4.0.0-alpha.1
 
 [compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.0...v4.0.0-alpha.1)
