@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const appConfig = useAppConfig()
+
 const navigation = await useAsyncData('navigation', () => {
   return queryCollectionNavigation('docs')
 })
@@ -19,6 +21,9 @@ provide('githubStars', githubStars.data)
 useSeoMeta({
   colorScheme: 'dark light',
   googleSiteVerification: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM',
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} | ${appConfig.siteName}` : appConfig.siteTitle
+  },
   twitterCard: 'summary_large_image',
   twitterCreator: '@favorodera',
   twitterSite: '@favorodera',
