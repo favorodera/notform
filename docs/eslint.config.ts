@@ -5,6 +5,7 @@ const config = defineConfig({
   codeInMarkdown: {
     overrides: {
       'tailwind/no-unknown-classes': 'off',
+      'unicorn/max-nested-calls': 'off',
       'vue/no-mutating-props': 'off',
       'vue/no-root-v-if': 'off',
     },
