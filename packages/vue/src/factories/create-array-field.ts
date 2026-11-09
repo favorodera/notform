@@ -63,7 +63,7 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
   /**
    * Reads the array, creating an empty one if the value is missing.
    * @returns The reactive array.
-   * @throws {TypeError} If an array cannot be created at the path.
+   * @throws If an array cannot be created at the path.
    */
   function ensureArray(): unknown[] {
     const existing = readArray()
