@@ -74,13 +74,6 @@ export default defineNuxtConfig({
       description: 'Vue forms without the friction.',
       title: 'NotForm',
     },
-    sections: [
-      {
-        contentCollection: 'docs',
-        description: 'Technical documentation and guides',
-        title: 'Documentation',
-      },
-    ],
     title: 'NotForm',
   },
   modules: [
@@ -107,10 +100,6 @@ export default defineNuxtConfig({
   },
   ogImage: {
     zeroRuntime: true,
-  },
-  routeRules: {
-    '/docs': { redirect: '/docs/getting-started/introduction' },
-    '/docs/getting-started': { redirect: '/docs/getting-started/introduction' },
   },
   runtimeConfig: {
     public: {
