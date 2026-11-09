@@ -38,7 +38,7 @@ Docs: `https://notformdocs.vercel.app`
 | Editing saved data, unsaved-changes guard | `recipes/editing-existing-data` |
 | Multi-step wizard | `recipes/multi-step-forms` |
 | Custom component or wrapper | `integrations/custom-components` |
-| Nuxt UI, ShadcnVue, Reka UI | `integrations/nuxt-ui`, `integrations/shadcn-vue`, `integrations/reka-ui` |
+| Nuxt UI, ShadcnVue | `integrations/nuxt-ui`, `integrations/shadcn-vue` |
 | Component or composable contracts | `components/form`, `components/field`, `components/array-field`, `components/field-error`, `composables/use-form` |
 | Exact type names | `reference/types` |
 | Something misbehaves | `reference/troubleshooting` |
