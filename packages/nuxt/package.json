@@ -1,12 +1,12 @@
 {
-  "name": "notform-nuxt",
+  "name": "@notform/nuxt",
   "type": "module",
-  "version": "3.0.1",
+  "version": "4.0.0-beta.0",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
-  "description": "Official notform nuxt module - Vue Forms Without the Friction",
+  "description": "Official Nuxt integration for NotForm.",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/favorodera",
@@ -19,12 +19,11 @@
     "url": "https://github.com/favorodera/notform/issues"
   },
   "keywords": [
-    "notform-nuxt",
+    "notform",
+    "vue",
     "nuxt",
     "form",
-    "nuxt form",
-    "validator",
-    "nuxt form validator"
+    "standard-schema"
   ],
   "exports": {
     ".": {
@@ -35,33 +34,33 @@
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
-      ".": ["./dist/types.d.mts"]
+      ".": [
+        "./dist/types.d.mts"
+      ]
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
-    "node": ">=24.0.0",
-    "pnpm": ">=11.0.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
-    "prepack": "pnpm build",
-    "dev": "nuxt prepare && nuxt-module-build build --stub",
-    "build": "nuxt prepare && nuxt-module-build build",
-    "typecheck": "nuxt prepare && nuxt typecheck",
-    "lint": "nuxt prepare && eslint . --fix"
-  },
-  "peerDependencies": {
-    "notform": "workspace:*",
-    "nuxt": "^4.5.0"
+    "build": "nuxt-module-build prepare && nuxt-module-build build",
+    "dev": "nuxt-module-build prepare && nuxt-module-build build --stub",
+    "lint": "nuxt-module-build prepare && eslint .",
+    "lint:fix": "nuxt-module-build prepare && eslint . --fix",
+    "typecheck": "nuxt-module-build prepare && vue-tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@nuxt/kit": "catalog:",
     "notform": "workspace:*"
   },
   "devDependencies": {
-    "@favorodera/eslint-config": "catalog:",
     "@nuxt/module-builder": "catalog:",
     "@nuxt/schema": "catalog:",
+    "@types/node": "catalog:",
     "nuxt": "catalog:",
     "vue-tsc": "catalog:"
   }

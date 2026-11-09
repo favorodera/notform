@@ -1,3 +1,6 @@
+
+minimumReleaseAgeExclude:
+  - '@favorodera/eslint-config@3.2.0'
 shellEmulator: true
 
 trustPolicy: no-downgrade
@@ -7,73 +10,68 @@ trustPolicyExclude:
   - nanoid@3.3.14
 
 packages:
-  - 'apps/*'
   - 'packages/*'
+  - docs
 
 nodeOptions: --max_old_space_size=4096
+
+catalog:
+  '@ai-sdk/google': ^4.0.114
+  '@favorodera/eslint-config': ^3.2.0
+  '@iconify-json/simple-icons': ^1.2.96
+  '@iconify-json/tabler': ^1.2.38
+  '@iconify-json/vscode-icons': ^1.2.78
+  '@nuxt/content': ^3.16.0
+  '@nuxt/eslint': ^1.17.0
+  '@nuxt/fonts': ^1.0.1
+  '@nuxt/kit': ^4.6.4
+  '@nuxt/module-builder': ^1.0.3
+  '@nuxt/schema': ^4.6.4
+  '@nuxt/ui': ^4.12.0
+  '@nuxtjs/mdc': ^0.23.1
+  '@nuxtjs/seo': ^6.0.1
+  '@standard-schema/spec': ^1.1.0
+  '@tailwindcss/vite': ^4.3.5
+  '@takumi-rs/core': ^2.20.0
+  '@types/node': ^26.6.5
+  '@vercel/analytics': ^2.0.1
+  '@vitejs/plugin-vue': ^6.0.10
+  '@vitest/coverage-v8': ^5.1.0
+  '@vitest/ui': ^5.1.0
+  '@vue/repl': ^4.7.2
+  '@vue/test-utils': ^2.5.1
+  '@vueuse/core': ^15.0.0
+  ai: ^7.0.165
+  better-sqlite3: ^13.0.0
+  dequal: ^2.0.3
+  dot-prop: ^10.2.0
+  eslint: ^10.13.0
+  happy-dom: ^21.0.4
+  klona: ^2.0.6
+  nuxt: ^4.6.4
+  nuxt-llms: ^0.3.1
+  nuxt-schema-org: ^7.0.1
+  nuxtseo-layer-devtools: ^6.0.2
+  pkg-pr-new: ^0.0.93
+  relizy: ^1.14.4
+  tailwindcss: ^4.3.5
+  tsdown: ^0.23.7
+  tsx: ^4.23.15
+  turbo: ^2.11.10
+  type-fest: ^5.10.0
+  typescript: ^6.0.3
+  ufo: ^1.6.4
+  vite: ^8.3.6
+  vitest: ^5.1.0
+  vue: ^3.5.45
+  vue-router: ^5.3.1
+  vue-tsc: ^3.3.13
 
 allowBuilds:
   '@parcel/watcher': true
   '@tailwindcss/oxide': true
   better-sqlite3: true
   esbuild: true
-  sharp: true
   unrs-resolver: true
   vue-demi: true
 
-catalog:
-  '@favorodera/eslint-config': ^2.0.1
-  '@iconify-json/simple-icons': ^1.2.96
-  '@iconify-json/tabler': ^1.2.38
-  '@iconify-json/vscode-icons': ^1.2.78
-  '@nuxt/content': ^3.16.0
-  '@nuxt/eslint': ^1.17.0
-  '@nuxt/image': ^2.1.0
-  '@nuxt/kit': ^4.5.2
-  '@nuxt/module-builder': ^1.0.3
-  '@nuxt/schema': ^4.5.2
-  '@nuxt/ui': ^4.11.1
-  '@nuxtjs/mdc': ^0.23.1
-  '@nuxtjs/seo': ^5.3.16
-  '@standard-schema/spec': ^1.1.0
-  '@tailwindcss/vite': ^4.3.3
-  '@takumi-rs/core': ^2.14.0
-  '@types/node': ^26.6.1
-  '@vercel/analytics': ^2.0.1
-  '@vitejs/plugin-vue': ^6.0.9
-  '@vitest/coverage-v8': ^5.0.1
-  '@vitest/ui': ^5.0.1
-  '@vue/repl': ^4.7.2
-  '@vue/test-utils': ^2.5.1
-  '@vueuse/core': ^15.0.0
-  better-sqlite3: ^13.0.0
-  dequal: ^2.0.3
-  dot-prop: ^10.2.0
-  eslint: ^10.10.0
-  happy-dom: ^20.14.5
-  klona: ^2.0.6
-  minimark: ^1.0.0
-  monaco-editor-core: ^0.57.0
-  motion-v: ^2.4.4
-  nuxt: ^4.5.2
-  nuxt-llms: ^0.3.0
-  nuxt-schema-org: ^6.3.2
-  nuxtseo-layer-devtools: ^5.3.16
-  relizy: ^1.4.9
-  tailwindcss: ^4.3.3
-  tsdown: ^0.23.0
-  tsx: ^4.23.15
-  turbo: ^2.10.13
-  type-fest: ^5.10.0
-  typescript: ^6.0.3
-  ufo: ^1.6.4
-  vite: ^8.3.0
-  vitest: ^5.0.1
-  vue: ^3.5.43
-  vue-router: ^5.3.1
-  vue-tsc: ^3.3.11
-  zod: ^4.6.5
-peerDependencyRules:
-  allowedVersions:
-    typescript: '6'
-    vite: '8'

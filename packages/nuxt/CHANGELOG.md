@@ -1,475 +1,122 @@
 # Changelog
 
-## v3.0.0...v3.0.1
+## v4.0.0-alpha.3...v4.0.0-beta.0
 
-[compare changes](https://github.com/favorodera/notform/compare/v3.0.0...v3.0.1)
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.3...v4.0.0-beta.0)
 
 No relevant changes for this release
 
 
-## v2.2.5...v3.0.0
+## v4.0.0-alpha.2...v4.0.0-alpha.3
 
-[compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0)
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.2...v4.0.0-alpha.3)
+
+No relevant changes for this release
+
+
+## v4.0.0-alpha.1...v4.0.0-alpha.2
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.1...v4.0.0-alpha.2)
+
+### Chores
+
+- **eslint:** Disable jsonc array-bracket-newline ([1df18ba](https://github.com/favorodera/notform/commit/1df18ba))
+
+### 🎨 Styles
+
+- **nuxt:** Fix indentation in eslint config ([ebf65f7](https://github.com/favorodera/notform/commit/ebf65f7))
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
+## v4.0.0-alpha.0...v4.0.0-alpha.1
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0-alpha.0...v4.0.0-alpha.1)
+
+### Chores
+
+- **vue:** Disable jsonc array newline rule ([8dd172c](https://github.com/favorodera/notform/commit/8dd172c))
+
+  - Allow flexible array formatting in package.json
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
+## v3.0.1...v4.0.0-alpha.0
+
+[compare changes](https://github.com/favorodera/notform/compare/v3.0.1...v4.0.0-alpha.0)
 
 ### Added
 
-- **core:** Add NotArrayField component and state ([72fbffe](https://github.com/favorodera/notform/commit/72fbffe))
+- **nuxt:** Add Nuxt module for NotForm ([f57f7ec](https://github.com/favorodera/notform/commit/f57f7ec))
 
-  - add NotArrayField and useNotArrayField composable
-  - support stable keys and array state mutations
-  - split engine test suite into focused unit tests
-  - update documentation and workspace dependencies
+  - Enable seamless NotForm integration in Nuxt apps
+  - Auto-import components and composables
+  - Allow aliasing component and composable names
+  - Update workspace setup and ESLint rules
 
-- **docs:** Self-host repl web workers ([39e62b7](https://github.com/favorodera/notform/commit/39e62b7))
+- **vue:** Support dynamic array fields ([9e5881d](https://github.com/favorodera/notform/commit/9e5881d))
 
-  - sync repl workers to public assets on install
-  - route worker requests to local bundled scripts
-  - simplify catalog definitions in pnpm workspace
-  - rename playground default template file
+  - Enable dynamic form lists with array mutations
+  - Keep field identity and state across renders
+  - Preserve validation issues across list updates
+  - Add FieldError to simplify error rendering
 
+- **docs:** Add documentation site and playground ([2bad47b](https://github.com/favorodera/notform/commit/2bad47b))
 
-### Refactors
+  - Add docs site with interactive REPL playground
+  - Export UseFormInstance type for type inference
+  - Include FieldError in Nuxt module auto-imports
+  - Add scripts to sync playground worker files
 
-- **playground:** Replace local apps with online links ([11078b7](https://github.com/favorodera/notform/commit/11078b7))
+- **docs:** Update content and components for v4 ([8b8a8a4](https://github.com/favorodera/notform/commit/8b8a8a4))
 
-  - Remove local vue and nuxt playground packages
-  - Add StackBlitz links to issue templates and docs
-  - Add playground menu button to documentation header
-  - Update contributing guide with playground details
-
-
-### Documentation
-
-- **readme:** Update code examples and badges ([39ee348](https://github.com/favorodera/notform/commit/39ee348))
-
-  - Update submit handler and array field examples
-  - Refresh badge URLs across documentation READMEs
-
-- Improve branding and clean up demos ([27bfdcd](https://github.com/favorodera/notform/commit/27bfdcd))
-
-  - Capitalize package titles in README headers
-  - Remove redundant key display in array demo
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.2.5...v3.0.0-alpha.0
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.2.5...v3.0.0-alpha.0)
-
-### Added
-
-- **core:** Add NotArrayField component and state ([72fbffe](https://github.com/favorodera/notform/commit/72fbffe))
-
-  - add NotArrayField and useNotArrayField composable
-  - support stable keys and array state mutations
-  - split engine test suite into focused unit tests
-  - update documentation and workspace dependencies
-
-- **docs:** Self-host repl web workers ([39e62b7](https://github.com/favorodera/notform/commit/39e62b7))
-
-  - sync repl workers to public assets on install
-  - route worker requests to local bundled scripts
-  - simplify catalog definitions in pnpm workspace
-  - rename playground default template file
+  - Introduce AppCard component for better content display
+  - Overhaul ArrayField item removal logic
+  - Update getting started content for v4
+  - Revamp landing page features
+  - Adjust app config and dependencies
 
 
 ### Refactors
 
-- **playground:** Replace local apps with online links ([11078b7](https://github.com/favorodera/notform/commit/11078b7))
+- **workspace:** Prepare repository for v4 rewrite ([45add4c](https://github.com/favorodera/notform/commit/45add4c))
 
-  - Remove local vue and nuxt playground packages
-  - Add StackBlitz links to issue templates and docs
-  - Add playground menu button to documentation header
-  - Update contributing guide with playground details
+  - Remove legacy docs and Nuxt module packages
+  - Clear core package components and composables
+  - Add local playground for core package
+  - Update workspace config and dependencies
 
+- **repo:** Update project name to notform ([5e550ff](https://github.com/favorodera/notform/commit/5e550ff))
 
-### Documentation
-
-- **readme:** Update code examples and badges ([39ee348](https://github.com/favorodera/notform/commit/39ee348))
-
-  - Update submit handler and array field examples
-  - Refresh badge URLs across documentation READMEs
-
-- Improve branding and clean up demos ([27bfdcd](https://github.com/favorodera/notform/commit/27bfdcd))
-
-  - Capitalize package titles in README headers
-  - Remove redundant key display in array demo
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.2.4...v2.2.5
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.2.4...v2.2.5)
-
-No relevant changes for this release
-
-
-## v2.2.3...v2.2.4
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.2.3...v2.2.4)
-
-### Refactors
-
-- **core:** Handle concurrent validation cycles ([0f85251](https://github.com/favorodera/notform/commit/0f85251))
-
-  - Track validation cycles to ignore stale results
-  - Restructure core unit tests into subdirectories
-  - Bump minimum Node engine requirement to v24
+  - Standardize monorepo references to notform
+  - Remove unused CSS and page transitions in docs
+  - Update docs metadata for clarity
 
 
 ### Documentation
 
-- Update READMEs with usage and setup guides ([551fb0e](https://github.com/favorodera/notform/commit/551fb0e))
+- **nuxt:** Clarify package usage in README ([53b9c7a](https://github.com/favorodera/notform/commit/53b9c7a))
 
-  - Refresh root and package READMEs documentation
-  - Add explicit Quick Start and Nuxt examples
-  - Clarify package roles and requirements
-  - Update badge links and development commands
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.2.2...v2.2.3
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.2.2...v2.2.3)
-
-### Documentation
-
-- **site:** Revamp documentation and ui theme ([fb1eb1d](https://github.com/favorodera/notform/commit/fb1eb1d))
-
-  - Reorganize getting started and advanced guides
-  - Update demos to use native form elements
-  - Refresh docs theme, styling, and icon set
-  - Add ai-models reference guide for llms
-  - Improve readme and contributing instructions
-
-- Revamp documentation structure and styling ([4a68d12](https://github.com/favorodera/notform/commit/4a68d12))
-
-  - Restructure docs navigation and content sections
-  - Add UI library integration guides and examples
-  - Update landing page components and design system
-  - Refresh project READMEs and contribution guide
+  - Clarify auto-import and dependency requirements
+  - Improve wording for API consistency with Vue
 
 
 ### Chores
 
-- Update dependencies and editor configuration ([d8fb67a](https://github.com/favorodera/notform/commit/d8fb67a))
+- **nuxt:** Run prepare before build ([fd3af06](https://github.com/favorodera/notform/commit/fd3af06))
 
-  - Add shared VS Code settings and extensions
-  - Upgrade pnpm, ESLint, Vitest, and workspace tools
-  - Improve submit event typing in core package
-  - Refine reactive refs and cleanup in components
+  - Ensure generated types exist before build
+  - Align build script with dev and lint tasks
 
-### ❤️ Contributors
+- **pkg:** Update engine configuration schema ([279771e](https://github.com/favorodera/notform/commit/279771e))
 
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.2.1...v2.2.2
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.2.1...v2.2.2)
-
-### Chores
-
-- **ci:** Streamline release workflow and dependencies ([a253181](https://github.com/favorodera/notform/commit/a253181))
-
-  - Simplify release workflow inputs and validation
-  - Update catalog dependencies and lockfile
-  - Clean up redundant package gitignore files
-  - Adjust turbo task pipeline dependencies
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.2.0...v2.2.1
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.2.0...v2.2.1)
-
-No relevant changes for this release
-
-
-## v2.1.3...v2.2.0
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.1.3...v2.2.0)
-
-### Refactors
-
-- **nuxt:** Consolidate package dependencies ([fca865d](https://github.com/favorodera/notform/commit/fca865d))
-
-  - Move notform-nuxt to dependencies
-  - Remove direct dependency on core package
-  - Update module to resolve paths dynamically
-  - Clean up documentation and workspace references
-
-
-### Documentation
-
-- **readme:** Update pipeline order and fix zod examples ([ef1170a](https://github.com/favorodera/notform/commit/ef1170a))
-
-### Chores
-
-- **repo:** Update dependencies and project structure ([7d1298a](https://github.com/favorodera/notform/commit/7d1298a))
-
-  - Upgrade dependencies and CI workflows
-  - Improve form component UX and accessibility
-  - Standardize issue templates and documentation
-  - Refactor playground styles and configurations
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.1.2...v2.1.3
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.1.2...v2.1.3)
-
-No relevant changes for this release
-
-
-## v2.1.1...v2.1.2
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.1.1...v2.1.2)
-
-### Refactors
-
-- **core:** Cleanup code and types ([158bb3e](https://github.com/favorodera/notform/commit/158bb3e))
-
-  - remove unused runtime files from nuxt package
-  - clean up code comments and type definitions
-  - standardize formatting and indentation
-  - remove redundant eslint-disable comments
-
-- **nuxt:** Migrate to direct dependency on notform ([6aad8d8](https://github.com/favorodera/notform/commit/6aad8d8))
-
-  - Remove runtime wrapper files for components and composables
-  - Update module to import directly from notform
-  - Update dependencies to include notform as peer
-  - Clean up playground and docs configurations
-
-
-### Chores
-
-- **lint:** Migrate to shared eslint configuration ([1c8c5df](https://github.com/favorodera/notform/commit/1c8c5df))
-
-  - Replace local configs with unified factory setup
-  - Update dependencies for consistent linting
-  - Add missing eslint configuration files
-  - Remove redundant legacy config files
-
-
-### Styling
-
-- **repo:** Fix indentation and formatting across codebase ([4c7f460](https://github.com/favorodera/notform/commit/4c7f460))
-
-  - Fix indentation in tests and playgrounds
-  - Reorder peer dependencies in nuxt package
-  - Reorder dependencies in pnpm workspace catalog
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.1.0...v2.1.1
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.1.0...v2.1.1)
-
-### Refactors
-
-- **nuxt:** Update vite optimization strategy ([a7a37d4](https://github.com/favorodera/notform/commit/a7a37d4))
-
-  - Remove manual exclude of notform package
-  - Add dequal and dot-prop to vite optimizeDeps
-  - Use extendViteConfig for better compatibility
-
-- **nuxt:** Remove vite dependency pre-bundling ([7a06674](https://github.com/favorodera/notform/commit/7a06674))
-
-  - remove optimizeDeps configuration for dependencies
-  - update documentation to reflect changes
-
-
-### Documentation
-
-- **nuxt:** Update README with installation and usage ([9e56bfd](https://github.com/favorodera/notform/commit/9e56bfd))
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.0.0...v2.1.0
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0...v2.1.0)
-
-### Documentation
-
-- Simplify project tagline in READMEs - Remove "Vue Forms Without the Friction." - Update core package description to include components ([88c2afc](https://github.com/favorodera/notform/commit/88c2afc))
-
-### Chores
-
-- Update dependencies and build script ([92e2ad9](https://github.com/favorodera/notform/commit/92e2ad9))
-- Update dependencies and build scripts ([62fffb7](https://github.com/favorodera/notform/commit/62fffb7))
-- Update dependencies and lint root config ([50ab98c](https://github.com/favorodera/notform/commit/50ab98c))
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.0.0...v2.1.0-alpha.0
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0...v2.1.0-alpha.0)
-
-### Documentation
-
-- Simplify project tagline in READMEs - Remove "Vue Forms Without the Friction." - Update core package description to include components ([88c2afc](https://github.com/favorodera/notform/commit/88c2afc))
-
-### Chores
-
-- Update dependencies and build script ([92e2ad9](https://github.com/favorodera/notform/commit/92e2ad9))
-- Update dependencies and build scripts ([62fffb7](https://github.com/favorodera/notform/commit/62fffb7))
-- Update dependencies and lint root config ([50ab98c](https://github.com/favorodera/notform/commit/50ab98c))
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v1.0.7...v2.0.0
-
-[compare changes](https://github.com/favorodera/notform/compare/v1.0.7...v2.0.0)
-
-### Added
-
-- Initialize nuxt module structure ([0c82c65](https://github.com/favorodera/notform/commit/0c82c65))
-- Update package.json with new metadata and configuration ([5ab7c57](https://github.com/favorodera/notform/commit/5ab7c57))
-- Introduce Vue playground app and refactor Nuxt module ([120417e](https://github.com/favorodera/notform/commit/120417e))
-- Add notform package dependency ([8f4aa2e](https://github.com/favorodera/notform/commit/8f4aa2e))
-- Register notform components, composables, and types for Nuxt module ([da073ce](https://github.com/favorodera/notform/commit/da073ce))
-- Expose notform components ([cbc8516](https://github.com/favorodera/notform/commit/cbc8516))
-- Expose useNotForm composable ([8446552](https://github.com/favorodera/notform/commit/8446552))
-- Expose notform types from module ([987d38c](https://github.com/favorodera/notform/commit/987d38c))
-
-### Refactors
-
-- Remove explicit type injection for notform module` ([dff28f2](https://github.com/favorodera/notform/commit/dff28f2))
-- Replace direct type re-export with virtual module and alias ([bb7cee3](https://github.com/favorodera/notform/commit/bb7cee3))
-- Remove unused NotFormModuleOptions interface ([5d897b8](https://github.com/favorodera/notform/commit/5d897b8))
-- Remove virtual module and type alias for #notform ([25f8a81](https://github.com/favorodera/notform/commit/25f8a81))
-
-### Documentation
-
-- Update README with new branding and documentation link ([f15fc99](https://github.com/favorodera/notform/commit/f15fc99))
-- Add introduction page and update docs navigation ([11b5162](https://github.com/favorodera/notform/commit/11b5162))
-- Update documentation links ([2590ebe](https://github.com/favorodera/notform/commit/2590ebe))
-- Update documentation link ([f79cf09](https://github.com/favorodera/notform/commit/f79cf09))
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.0.0-beta.2...v2.0.0-beta.3
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-beta.2...v2.0.0-beta.3)
-
-### Refactors
-
-- Remove virtual module and type alias for #notform ([25f8a81](https://github.com/favorodera/notform/commit/25f8a81))
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.0.0-beta.1...v2.0.0-beta.2
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-beta.1...v2.0.0-beta.2)
-
-No relevant changes for this release
-
-
-## v2.0.0-beta.0...v2.0.0-beta.1
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-beta.0...v2.0.0-beta.1)
-
-### Documentation
-
-- Update documentation link ([f79cf09](https://github.com/favorodera/notform/commit/f79cf09))
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.0.0-alpha.9...v2.0.0-beta.0
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.9...v2.0.0-beta.0)
-
-No relevant changes for this release
-
-
-## v2.0.0-alpha.7...v2.0.0-alpha.9
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.7...v2.0.0-alpha.9)
-
-### Documentation
-
-- Update documentation links ([2590ebe](https://github.com/favorodera/notform/commit/2590ebe))
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.0.0-alpha.6...v2.0.0-alpha.7
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.6...v2.0.0-alpha.7)
-
-### Added
-
-- Add notform package dependency ([8f4aa2e](https://github.com/favorodera/notform/commit/8f4aa2e))
-- Register notform components, composables, and types for Nuxt module ([da073ce](https://github.com/favorodera/notform/commit/da073ce))
-- Expose notform components ([cbc8516](https://github.com/favorodera/notform/commit/cbc8516))
-- Expose useNotForm composable ([8446552](https://github.com/favorodera/notform/commit/8446552))
-- Expose notform types from module ([987d38c](https://github.com/favorodera/notform/commit/987d38c))
-
-### Refactors
-
-- Remove explicit type injection for notform module` ([dff28f2](https://github.com/favorodera/notform/commit/dff28f2))
-- Replace direct type re-export with virtual module and alias ([bb7cee3](https://github.com/favorodera/notform/commit/bb7cee3))
-- Remove unused NotFormModuleOptions interface ([5d897b8](https://github.com/favorodera/notform/commit/5d897b8))
-
-### Documentation
-
-- Update README with new branding and documentation link ([f15fc99](https://github.com/favorodera/notform/commit/f15fc99))
-- Add introduction page and update docs navigation ([11b5162](https://github.com/favorodera/notform/commit/11b5162))
-
-### ❤️ Contributors
-
-- Favour Emeka ([@favorodera](https://github.com/favorodera))
-
-
-## v2.0.0-alpha.5...v2.0.0-alpha.6
-
-[compare changes](https://github.com/favorodera/notform/compare/v2.0.0-alpha.5...v2.0.0-alpha.6)
-
-### Added
-
-- Initialize nuxt module structure ([0c82c65](https://github.com/favorodera/notform/commit/0c82c65))
-- Update package.json with new metadata and configuration ([5ab7c57](https://github.com/favorodera/notform/commit/5ab7c57))
-- Introduce Vue playground app and refactor Nuxt module ([120417e](https://github.com/favorodera/notform/commit/120417e))
+  - Update devEngines structure across workspace
+  - Add automatic download strategy for engines
 
 ### ❤️ Contributors
 

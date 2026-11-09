@@ -9,6 +9,9 @@ dist/
 out/
 build/
 .output/
+.nitro
+.data
+.cache
 tsup.config.bundled*
 
 # Turborepo
@@ -47,8 +50,12 @@ coverage/
 # Misc
 *.tsbuildinfo
 .cache/
+pnpm-*
 temp/
 tmp/
 
-# Workers
-apps/docs/public/repl-workers/
+# VSC
+.history
+
+# Scripts outputs
+docs/public/playground/repl-workers/

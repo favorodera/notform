@@ -1,0 +1,317 @@
+/* Global sizing */
+main,
+input,
+label,
+pre,
+button,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div {
+  box-sizing: border-box;
+}
+
+/* Main viewport layout */
+main {
+  position: fixed;
+  inset: 0;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+
+  gap: 1rem;
+  padding: 1rem;
+
+  inline-size: 100%;
+  block-size: 100dvb;
+
+  overflow: hidden;
+  background: #000;
+
+  /* Form on the left */
+  >:first-child {
+    min-inline-size: 0;
+    min-block-size: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+
+    padding: 1rem;
+
+    overflow: hidden auto;
+
+    background: #0a0a0a;
+    border: 1px solid #2e2e2e;
+    border-radius: 12px;
+  }
+}
+
+/* All divs are field containers by default */
+div {
+  min-inline-size: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  /* Only a div containing BOTH submit and reset becomes a row */
+  :has(> button[type="submit"]):has(> button[type="reset"]) {
+    align-items: center;
+    justify-content: flex-end;
+    flex-flow: row wrap;
+    gap: 0.75rem;
+  }
+}
+
+/* Labels */
+label {
+  display: block;
+
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ededed;
+}
+
+/* Inputs */
+input {
+  display: block;
+
+  inline-size: 100%;
+  min-inline-size: 0;
+
+  padding: 0.7rem 0.85rem;
+
+  font: inherit;
+  font-size: 0.9rem;
+  color: #ededed;
+
+  background: #050505;
+  border: 1px solid #333;
+  border-radius: 7px;
+
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &::placeholder {
+    color: #666;
+  }
+
+  &:focus {
+    border-color: #888;
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 8%);
+  }
+}
+
+/* Error messages */
+span {
+  display: block;
+
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #e5484d;
+}
+
+/* Paragraphs */
+p {
+  margin: 0;
+
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #888;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  line-height: 1.3;
+  color: #ededed;
+}
+
+/* Buttons */
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.7rem 1rem;
+
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  color: #ededed;
+  background: #111;
+
+  border: 1px solid #333;
+  border-radius: 7px;
+
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+
+  :hover {
+    background: #1a1a1a;
+    border-color: #555;
+  }
+
+  :disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+
+  /* Submit button */
+  [type="submit"] {
+    color: #000;
+    background: #ededed;
+    border-color: #ededed;
+
+    :hover {
+      background: #ccc;
+      border-color: #ccc;
+    }
+  }
+}
+
+/* State container on the right */
+.state {
+  min-inline-size: 0;
+  min-block-size: 0;
+
+  inline-size: 100%;
+  block-size: 100%;
+  max-block-size: 100%;
+
+  display: grid;
+  grid-template: "title1" auto "body1" minmax(0, 4fr) "title2" auto "body2" minmax(0, 4fr) "title3" auto "body3" minmax(0, 2fr) / minmax(0, 1fr);
+
+  gap: 0;
+  overflow: hidden;
+
+  /* State card headings */
+  >h2 {
+    min-inline-size: 0;
+    min-block-size: 0;
+
+    padding: 0.65rem 0.85rem;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ededed;
+
+    background: #0a0a0a;
+    border: 1px solid #2e2e2e;
+    border-block-end: 0;
+    border-radius: 8px 8px 0 0;
+
+    overflow: hidden;
+
+    &:nth-of-type(1) {
+      grid-area: title1;
+    }
+
+    &:nth-of-type(2) {
+      grid-area: title2;
+      margin: 12px 0 0 0;
+    }
+
+    &:nth-of-type(3) {
+      grid-area: title3;
+      margin: 12px 0 0 0;
+    }
+  }
+
+  /* Position state content */
+  >pre {
+    &:nth-of-type(1) {
+      grid-area: body1;
+    }
+
+    &:nth-of-type(2) {
+      grid-area: body2;
+    }
+
+    &:nth-of-type(3) {
+      grid-area: body3;
+    }
+  }
+
+  /* State card content */
+  pre {
+    min-inline-size: 0;
+    min-block-size: 0;
+
+    inline-size: 100%;
+    block-size: 100%;
+
+    margin: 0;
+    padding: 0.75rem;
+
+    overflow: hidden auto;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+
+    font-family: monospace;
+    font-size: 0.75rem;
+    line-height: 1.5;
+
+    color: #a1a1a1;
+    background: #050505;
+
+    border: 1px solid #2e2e2e;
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+/* Responsive layout */
+@media (width <=850px) {
+  main {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 0.8fr) minmax(0, 1.2fr);
+
+    > :first-child {
+      min-block-size: 0;
+    }
+  }
+
+  .state {
+    min-block-size: 0;
+    block-size: 100%;
+  }
+}
+
+/* Smaller screens */
+@media (width <=480px) {
+  main {
+    gap: 0.65rem;
+    padding: 0.65rem;
+
+    > :first-child {
+      padding: 0.75rem;
+      gap: 0.75rem;
+    }
+  }
+
+  .state>h2 {
+    padding: 0.5rem 0.65rem;
+    font-size: 0.8rem;
+  }
+
+  pre {
+    padding: 0.6rem;
+    font-size: 0.7rem;
+  }
+}
