@@ -1,6 +1,6 @@
 {
   "name": "notform",
-  "version": "4.0.0-beta.0",
+  "version": "4.0.0",
   "private": true,
   "packageManager": "pnpm@12.18.0",
   "description": "Vue Forms Without the Friction",
