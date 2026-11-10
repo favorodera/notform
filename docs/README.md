@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notformdocs.vercel.app/favicon.svg">
+  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notform.favorodera.dev/favicon.svg">
   </br>
   NotForm Documentation
 </h1>
@@ -8,7 +8,7 @@
   Vue Forms Without the Friction.
 </p>
 
-The [documentation site](https://notformdocs.vercel.app/) for NotForm.
+The [documentation site](https://notform.favorodera.dev/) for NotForm.
 
 ## License
 

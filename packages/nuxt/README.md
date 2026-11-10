@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notformdocs.vercel.app/favicon.svg">
+  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notform.favorodera.dev/favicon.svg">
   </br>
   NotForm for Nuxt
 </h1>
@@ -46,7 +46,7 @@ export default defineNuxtConfig({
 })
 ```
 
-See the [Nuxt guide](https://notformdocs.vercel.app/docs/getting-started/nuxt-module) for setup details.
+See the [Nuxt guide](https://notform.favorodera.dev/docs/getting-started/nuxt-module) for setup details.
 
 ## License
 

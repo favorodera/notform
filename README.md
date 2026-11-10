@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notformdocs.vercel.app/favicon.svg">
+  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notform.favorodera.dev/favicon.svg">
   </br>
   NotForm
 </h1>
@@ -10,7 +10,7 @@
 
 NotForm gives you reactive form state, schema validation, field state, submission lifecycle, and dynamic arrays without imposing UI components or styles.
 
-Read [Documentation](https://notformdocs.vercel.app/) on how to get started.
+Read [Documentation](https://notform.favorodera.dev/) on how to get started.
 
 ## Packages
 

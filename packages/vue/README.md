@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notformdocs.vercel.app/favicon.svg">
+  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notform.favorodera.dev/favicon.svg">
   </br>
   NotForm
 </h1>
@@ -16,7 +16,7 @@ NotForm keeps your form's values, errors and field state in one place and leaves
 - **Safe async validation.** Auto disposal of inflight validation results making sure stale results cannot overwrite newer form state.
 - **No UI imposed.** The components render a native `<form>` and, for errors, a `<span>` you can change. Everything else is yours.
 
-See the [Documentation](https://notformdocs.vercel.app/) for validation, submission, and array-field guides.
+See the [Documentation](https://notform.favorodera.dev/) for validation, submission, and array-field guides.
 
 ## License
 

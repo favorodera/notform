@@ -1,7 +1,7 @@
 export default defineAppConfig({
   author: {
     name: 'Emeka Favour',
-    url: 'https://favorodera.vercel.app',
+    url: 'https://favorodera.dev',
   },
   github: {
     changelog: {
@@ -30,7 +30,7 @@ export default defineAppConfig({
   siteDescription: 'Vue Forms without the friction.',
   siteName: 'NotForm',
   siteTitle: 'NotForm - Vue Forms without the friction',
-  siteUrl: 'https://notformdocs.vercel.app',
+  siteUrl: 'https://notform.favorodera.dev',
   ui: {
     colors: {
       neutral: 'zinc',
