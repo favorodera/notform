@@ -69,7 +69,7 @@ export default defineNuxtConfig({
   },
   llms: {
     description: 'Vue forms without the friction.',
-    domain: 'https://notformdocs.vercel.app',
+    domain: 'https://notform.favorodera.dev',
     full: {
       description: 'Vue forms without the friction.',
       title: 'NotForm',
@@ -120,7 +120,7 @@ export default defineNuxtConfig({
       'author': {
         '@type': 'Person',
         'name': 'Favour Emeka',
-        'url': 'https://favorodera.vercel.app',
+        'url': 'https://favorodera.dev',
       },
       'description': 'Vue forms without the friction.',
       'keywords': [
@@ -142,7 +142,7 @@ export default defineNuxtConfig({
         'https://www.npmjs.com/package/@notform/nuxt',
         'https://github.com/favorodera/notform',
       ],
-      'url': 'https://notformdocs.vercel.app',
+      'url': 'https://notform.favorodera.dev',
     }),
   },
   site: {
@@ -150,7 +150,7 @@ export default defineNuxtConfig({
     description: 'Vue forms without the friction.',
     indexable: true,
     name: 'NotForm',
-    url: 'https://notformdocs.vercel.app',
+    url: 'https://notform.favorodera.dev',
   },
   sitemap: {
     zeroRuntime: true,

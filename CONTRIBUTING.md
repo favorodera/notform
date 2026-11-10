@@ -74,6 +74,6 @@ Open an issue describing the problem, the proposed solution, and any alternative
 
 ## Questions
 
-For questions and discussion, use [GitHub Discussions](https://github.com/favorodera/notform/discussions) or the [documentation](https://notformdocs.vercel.app/).
+For questions and discussion, use [GitHub Discussions](https://github.com/favorodera/notform/discussions) or the [documentation](https://notform.favorodera.dev/).
 
 Thank you for helping improve NotForm.

@@ -8,14 +8,14 @@ user-invocable: true
 
 NotForm's API is small but specific, and its names (`Field`, `useForm`, `form.field()`) are easy to confuse with other form libraries. This skill does not describe the API. It tells you which documentation to read for the task in front of you. Read the pages, then write the code.
 
-Docs: `https://notformdocs.vercel.app`
+Docs: `https://notform.favorodera.dev`
 
 ## Procedure
 
 1. **Identify the stack and version.** Check `package.json` for `notform` (Vue) or `@notform/nuxt` (Nuxt) and note the version. In Nuxt, `useForm` and the components are auto-imported.
 2. **Handle v3 first.** If the project is on `notform` 3.x, or uses `useNotForm`, `NotForm`, `NotField`, `NotArrayField`, or `NotMessage`, read `migrations/notform-v3` before anything else. The docs describe v4.
-3. **Read the index.** Fetch `https://notformdocs.vercel.app/llms.txt` to see which pages exist.
-4. **Load only the pages the task needs** (table below). Fetch a page as Markdown with `https://notformdocs.vercel.app/docs/<section>/<page>.md`. Fetch `https://notformdocs.vercel.app/llms-full.txt` only when a task spans many sections or you cannot fetch several pages.
+3. **Read the index.** Fetch `https://notform.favorodera.dev/llms.txt` to see which pages exist.
+4. **Load only the pages the task needs** (table below). Fetch a page as Markdown with `https://notform.favorodera.dev/docs/<section>/<page>.md`. Fetch `https://notform.favorodera.dev/llms-full.txt` only when a task spans many sections or you cannot fetch several pages.
 5. **Write code from those pages.** If a behavior or option is not documented, say so. Do not invent NotForm options, props, or methods.
 6. **Say which pages you used,** so the user can check your work.
 

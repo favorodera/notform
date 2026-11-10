@@ -20,7 +20,6 @@ provide('githubStars', githubStars.data)
 
 useSeoMeta({
   colorScheme: 'dark light',
-  googleSiteVerification: 'qYU6PqljRftNzCNBLdEFxnKJKwH-Aj7aJ9CLp6itnhM',
   titleTemplate: (titleChunk) => {
     return titleChunk ? `${titleChunk} | ${appConfig.siteName}` : appConfig.siteTitle
   },

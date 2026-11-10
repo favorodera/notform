@@ -2,7 +2,7 @@ blank_issues_enabled: false
 
 contact_links:
   - name: Documentation
-    url: https://notformdocs.vercel.app/
+    url: https://notform.favorodera.dev/
     about: Check our documentation for guides and API reference
 
   - name: Questions & Discussions
@@ -10,5 +10,5 @@ contact_links:
     about: Ask questions and discuss ideas
 
   - name: Playground
-    url: https://notformdocs.vercel.app/playground
+    url: https://notform.favorodera.dev/playground
     about: Build, reproduce, and share Vue 3 NotForm examples in the browser
