@@ -62,7 +62,7 @@ div {
   gap: 0.4rem;
 
   /* Only a div containing BOTH submit and reset becomes a row */
-  :has(> button[type="submit"]):has(> button[type="reset"]) {
+  &:has(> button[type="submit"]):has(> button[type="reset"]) {
     align-items: center;
     justify-content: flex-end;
     flex-flow: row wrap;
@@ -160,24 +160,22 @@ button {
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 
-  :hover {
+  &:hover {
     background: #1a1a1a;
     border-color: #555;
   }
 
-  :disabled {
+  &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-
-  /* Submit button */
-  [type="submit"] {
+  &[type="submit"] {
     color: #000;
     background: #ededed;
     border-color: #ededed;
 
-    :hover {
+    &:hover {
       background: #ccc;
       border-color: #ccc;
     }
@@ -305,13 +303,15 @@ button {
     }
   }
 
-  .state>h2 {
-    padding: 0.5rem 0.65rem;
-    font-size: 0.8rem;
-  }
+  .state {
+    >h2 {
+      padding: 0.5rem 0.65rem;
+      font-size: 0.8rem;
+    }
 
-  pre {
-    padding: 0.6rem;
-    font-size: 0.7rem;
+    pre {
+      padding: 0.6rem;
+      font-size: 0.7rem;
+    }
   }
 }
