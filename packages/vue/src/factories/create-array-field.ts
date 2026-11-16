@@ -137,9 +137,7 @@ export function createArrayField<TItem>(host: FieldHost, options: ArrayFieldOpti
     return list
   }
 
-  /**
-   * Announces a finished mutation: refreshes `items` and validates per the field's config.
-   */
+  /** Announces a finished mutation: refreshes `items` and validates per the field's config. */
   function commit(): void {
     triggerRef(ids)
     base.parts.events.onChange()

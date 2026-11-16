@@ -58,7 +58,14 @@ useSeoMeta({
   },
 })
 
-defineOgImage('Image.takumi', { ...seo.value })
+defineOgImage('Image.takumi', {
+  description: () => {
+    return seo.value.description
+  },
+  title: () => {
+    return seo.value.title
+  },
+})
 </script>
 
 <template>
@@ -82,8 +89,8 @@ defineOgImage('Image.takumi', { ...seo.value })
         <ContentSurround
           :surround="pageSurround.data.value"
           :ui="{
-            link:'p-4',
-            linkDescription:'truncate line-clamp-1'
+            link: 'p-4',
+            linkDescription: 'truncate line-clamp-1',
           }"
         />
       </PageBody>
@@ -95,8 +102,8 @@ defineOgImage('Image.takumi', { ...seo.value })
         <ContentToc
           :links="page.data.value?.body?.toc?.links"
           :ui="{
-            title:'text-xs text-muted font-medium',
-            link:'text-[0.8rem]',
+            title: 'text-xs text-muted font-medium',
+            link: 'text-[0.8rem]',
           }"
         >
           <template #bottom>
@@ -106,7 +113,7 @@ defineOgImage('Image.takumi', { ...seo.value })
               :links="tocFooterLinks"
               :ui="{
                 linkLabelExternalIcon: 'hidden',
-                linkLabel:'flex'
+                linkLabel: 'flex',
               }"
             />
           </template>

@@ -14,7 +14,6 @@ export default defineConfig({
   unicorn: {
     overrides: {
       'unicorn/consistent-boolean-name': 'off',
-      'unicorn/prefer-ternary': 'off',
     },
   },
   yaml: {

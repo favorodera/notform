@@ -65,7 +65,7 @@ div {
   &:has(> button[type="submit"]):has(> button[type="reset"]) {
     align-items: center;
     justify-content: flex-end;
-    flex-flow: row wrap;
+    flex-flow: wrap;
     gap: 0.75rem;
   }
 }
@@ -161,7 +161,7 @@ button {
   transition: background 0.2s, border-color 0.2s;
 
   &:hover {
-    background: #1a1a1a;
+    background-color: #1a1a1a;
     border-color: #555;
   }
 
@@ -172,11 +172,11 @@ button {
 
   &[type="submit"] {
     color: #000;
-    background: #ededed;
+    background-color: #ededed;
     border-color: #ededed;
 
     &:hover {
-      background: #ccc;
+      background-color: #ccc;
       border-color: #ccc;
     }
   }

@@ -3,7 +3,7 @@ import appVue from '../../../public/playground/templates/app.vue?raw'
 import tailwindCSS from '../../../public/playground/templates/styles.css?raw'
 </script>
 
-<!-- eslint-disable no-useless-escape-->
+<!-- eslint-disable no-useless-escape -->
 <script setup lang="ts">
 import { Repl, useStore, useVueImportMap } from '@vue/repl'
 import MonacoEditor from '@vue/repl/monaco-editor'
@@ -165,9 +165,9 @@ watchEffect(() => {
       :layout="replLayout"
       :show-compile-output="false"
       :show-ts-config="false"
-      :show-import-map="true"
+      show-import-map
       :clear-console="false"
-      :auto-resize="true"
+      auto-resize
       :editor-options="{ monacoOptions }"
       :preview-options="previewOptions"
       preview-theme

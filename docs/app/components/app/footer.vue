@@ -5,9 +5,9 @@ const currentYear = new Date().getFullYear()
 <template>
   <Footer
     :ui="{
-      container:'py-4',
-      root:'text-sm border-bs border-default text-muted ',
-      center:'hidden'
+      container: 'py-4',
+      root: 'text-sm border-bs border-default text-muted ',
+      center: 'hidden',
     }"
   >
     <template #left>

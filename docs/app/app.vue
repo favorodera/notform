@@ -37,9 +37,9 @@ defineOgImage('Image.takumi', {
 <template>
   <App
     :toaster="{
-      progress:false,
-      position:'top-center',
-      duration:4000
+      progress: false,
+      position: 'top-center',
+      duration: 4000,
     }"
   >
     <NuxtLayout>
