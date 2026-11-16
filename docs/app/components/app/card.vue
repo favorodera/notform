@@ -19,7 +19,7 @@ const NuxtLink = resolveComponent('NuxtLink')
       p-4 shadow-xs shadow-neutral-800 block-full
     "
     :class="{
-      'cursor-pointer transition-colors duration-200 hover:bg-muted':to
+      'cursor-pointer transition-colors duration-200 hover:bg-muted': to,
     }"
     aria-describedby="title"
   >

@@ -33,7 +33,7 @@ const fieldsState = reactive({
       :form
     >
       <Field
-        v-slot="{field}"
+        v-slot="{ field }"
         :field="form.field('name')"
       >
         <div>
@@ -53,7 +53,7 @@ const fieldsState = reactive({
       </Field>
 
       <Field
-        v-slot="{field}"
+        v-slot="{ field }"
         :field="form.field('age')"
       >
         <div>

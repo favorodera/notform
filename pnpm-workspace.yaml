@@ -1,6 +1,6 @@
 
 minimumReleaseAgeExclude:
-  - '@favorodera/eslint-config@3.2.0'
+  - '@favorodera/eslint-config@3.6.0'
 shellEmulator: true
 
 trustPolicy: no-downgrade
@@ -17,7 +17,7 @@ nodeOptions: --max_old_space_size=4096
 
 catalog:
   '@ai-sdk/google': ^4.0.114
-  '@favorodera/eslint-config': ^3.2.0
+  '@favorodera/eslint-config': ^3.6.0
   '@iconify-json/simple-icons': ^1.2.96
   '@iconify-json/tabler': ^1.2.38
   '@iconify-json/vscode-icons': ^1.2.78
@@ -49,7 +49,6 @@ catalog:
   happy-dom: ^21.0.4
   klona: ^2.0.6
   nuxt: ^4.6.4
-  nuxt-llms: ^0.3.1
   nuxt-schema-org: ^7.0.1
   nuxtseo-layer-devtools: ^6.0.2
   pkg-pr-new: ^0.0.93

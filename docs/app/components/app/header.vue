@@ -26,8 +26,8 @@ const navigationMenuItems = [
     to="/"
     :ui="{
       center: 'flex-1',
-      title:'items-center',
-      root:'border-none'
+      title: 'items-center',
+      root: 'border-none',
     }"
     :toggle="{
       variant: 'subtle',
@@ -79,7 +79,7 @@ const navigationMenuItems = [
         :items="navigationMenuItems"
         orientation="vertical"
         :ui="{
-          item:'w-fit'
+          item: 'w-fit',
         }"
       />
 

@@ -14,37 +14,39 @@ const mdPath = computed(() => {
   return `${site.url}${routePath.value}.md`
 })
 
-const items = [
-  {
-    icon: 'tabler:link',
-    label: 'Copy Markdown link',
-    onSelect() {
-      clipboard.copy(mdPath.value)
-      toast.add({
-        icon: 'tabler:circle-check',
-        title: 'Copied to clipboard',
-      })
+const items = computed(() => {
+  return [
+    {
+      icon: 'tabler:link',
+      label: 'Copy Markdown link',
+      onSelect() {
+        clipboard.copy(mdPath.value)
+        toast.add({
+          icon: 'tabler:circle-check',
+          title: 'Copied to clipboard',
+        })
+      },
     },
-  },
-  {
-    icon: 'simple-icons:markdown',
-    label: 'View as Markdown',
-    target: '_blank',
-    to: `${routePath.value}.md`,
-  },
-  {
-    icon: 'simple-icons:openai',
-    label: 'Open in ChatGPT',
-    target: '_blank',
-    to: `https://chatgpt.com/?hints=search&q=${encodeURIComponent(`Read ${mdPath.value} so I can ask questions about it.`)}`,
-  },
-  {
-    icon: 'simple-icons:claude',
-    label: 'Open in Claude',
-    target: '_blank',
-    to: `https://claude.ai/new?q=${encodeURIComponent(`Read ${mdPath.value} so I can ask questions about it.`)}`,
-  },
-]
+    {
+      icon: 'simple-icons:markdown',
+      label: 'View as Markdown',
+      target: '_blank',
+      to: `${routePath.value}.md`,
+    },
+    {
+      icon: 'simple-icons:openai',
+      label: 'Open in ChatGPT',
+      target: '_blank',
+      to: `https://chatgpt.com/?hints=search&q=${encodeURIComponent(`Read ${mdPath.value} so I can ask questions about it.`)}`,
+    },
+    {
+      icon: 'simple-icons:claude',
+      label: 'Open in Claude',
+      target: '_blank',
+      to: `https://claude.ai/new?q=${encodeURIComponent(`Read ${mdPath.value} so I can ask questions about it.`)}`,
+    },
+  ]
+})
 
 async function copyPage() {
   const pageMarkdown = await $fetch<string>(`${routePath.value}.md`)
@@ -69,10 +71,10 @@ async function copyPage() {
       :content="{
         align: 'end',
         side: 'bottom',
-        sideOffset: 8
+        sideOffset: 8,
       }"
       :ui="{
-        content: 'w-48'
+        content: 'w-48',
       }"
     >
       <Button

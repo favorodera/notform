@@ -40,7 +40,6 @@
     "@vueuse/core": "catalog:",
     "better-sqlite3": "catalog:",
     "nuxt": "catalog:",
-    "nuxt-llms": "catalog:",
     "nuxt-schema-org": "catalog:",
     "ufo": "catalog:",
     "vue": "catalog:",
