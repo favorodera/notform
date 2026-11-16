@@ -48,10 +48,7 @@ export default defineNuxtConfig({
     asyncContext: true,
   },
   fonts: {
-    defaults: {
-      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-    },
-    families: [{ global: true, name: 'Outfit' }],
+    families: [{ global: true, name: 'Outfit', weights: [300, 400, 500, 600, 700] }],
   },
   icon: {
     componentName: 'NuxtIcon',
@@ -66,15 +63,6 @@ export default defineNuxtConfig({
   },
   linkChecker: {
     failOnError: true,
-  },
-  llms: {
-    description: 'Vue forms without the friction.',
-    domain: 'https://notform.favorodera.dev',
-    full: {
-      description: 'Vue forms without the friction.',
-      title: 'NotForm',
-    },
-    title: 'NotForm',
   },
   modules: [
     '@nuxt/content',
