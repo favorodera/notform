@@ -4,7 +4,7 @@ By participating, you agree to follow the [Code of Conduct](./CODE_OF_CONDUCT.md
 
 ## Setup
 
-Requires Node.js 24 and pnpm 12.20.0 (both pinned in `package.json`).
+Requires Node.js 24 or later and pnpm 12 (both pinned in `package.json`).
 
 ```bash
 git clone https://github.com/favorodera/notform.git
