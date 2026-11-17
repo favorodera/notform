@@ -344,7 +344,7 @@ importers:
         specifier: 'catalog:'
         version: 10.15.0(jiti@2.7.0)(supports-color@10.2.2)
       node:
-        specifier: runtime:>=24.0.0 <25.0.0
+        specifier: runtime:>=24.0.0 <27.0.0
         version: runtime:24.22.2
       pkg-pr-new:
         specifier: 'catalog:'
