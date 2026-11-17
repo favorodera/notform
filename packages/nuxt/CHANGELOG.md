@@ -1,5 +1,32 @@
 # Changelog
 
+## v4.0.1-alpha.0 [2026-11-17]
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0...v4.0.1-alpha.0)
+
+### Bug Fixes
+
+- **docs:** Update documentation site domain ([5254277](https://github.com/favorodera/notform/commit/5254277))
+
+  - Point doc URLs to new custom domain
+  - Update author profile URL references
+
+
+### Chores
+
+- Update dependencies and configuration ([ffcf50d](https://github.com/favorodera/notform/commit/ffcf50d))
+
+  - Updated `relizy` to version 2.2.1 and added `nuxtseo-devtools-host` at version 1.0.2 in `pnpm-workspace.yaml`.
+  - Modified `buildCmd` in `relizy.config.ts` to filter builds for packages.
+  - Enhanced changelog templates in `relizy.config.ts` for better clarity.
+  - Set types for `build`, `ci`, and `test` to false in `relizy.config.ts`.
+  - Added dependency on `build` for the `play` task in `turbo.json`.
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v3.0.1...v4.0.0
 
 [compare changes](https://github.com/favorodera/notform/compare/v3.0.1...v4.0.0)
