@@ -42,7 +42,7 @@ Or run all of them at once with `pnpm ready`.
 
 Use [Conventional Commits](https://www.conventionalcommits.org) with the package as the scope, for example `feat(vue): add field reset` or `fix(nuxt): resolve alias conflict`.
 
-Commits of type `feat`, `fix`, `perf`, `refactor`, `docs`, and `chore` appear in the changelog. `ci`, `build`, and `test` do not.
+Commits of type `feat`, `fix`, `perf`, `refactor`, `docs`, and `chore` appear in the changelog. `ci`, `styles`, `build`, and `test` do not.
 
 ## Pull requests
 
