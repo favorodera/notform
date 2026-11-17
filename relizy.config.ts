@@ -22,7 +22,6 @@ export default defineConfig({
     access: 'public',
     buildCmd: `pnpm build --filter='./packages/*'`,
     packageManager: 'pnpm',
-    packages: ['packages/*'],
     registry: 'https://registry.npmjs.org',
   },
   templates: {
@@ -38,6 +37,7 @@ export default defineConfig({
     fix: { semver: 'patch', title: 'Bug Fixes' },
     perf: { semver: 'patch', title: 'Performance' },
     refactor: { semver: 'patch', title: 'Refactors' },
+    styles: false,
     test: false,
   },
 })
