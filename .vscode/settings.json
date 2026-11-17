@@ -17,10 +17,7 @@
     "class",
     "ui"
   ],
-  "tailwindCSS.classFunctions": [
-    "tv",
-    "defineAppConfig"
-  ],
+  "tailwindCSS.classFunctions": ["defineAppConfig"],
   "tailwindCSS.experimental.classRegex": [
     [
       "Classes\\s*=\\s*computed\\(\\(\\)\\s*=>\\s*([\\s\\S]+?)\\)",

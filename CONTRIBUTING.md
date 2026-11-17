@@ -1,19 +1,10 @@
 # Contributing to NotForm
 
-Thank you for contributing to NotForm.
+By participating, you agree to follow the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
-## Code of Conduct
+## Setup
 
-By participating in this project, you agree to follow the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md).
-
-## Getting Started
-
-### Requirements
-
-- [Node.js](https://nodejs.org/) 24.x
-- [pnpm](https://pnpm.io/) 12.16.1
-
-### Setup
+Requires Node.js 24 and pnpm 12.20.0 (both pinned in `package.json`).
 
 ```bash
 git clone https://github.com/favorodera/notform.git
@@ -22,19 +13,17 @@ pnpm install
 pnpm dev
 ```
 
-This starts the monorepo development environment with Turborepo. The documentation site runs at `http://localhost:3000`.
+`pnpm dev` builds the packages in watch mode and serves the docs site at `http://localhost:3000`. Run `pnpm play` to open the Vue playground.
 
-## Development
+| Path | Contents |
+| --- | --- |
+| `packages/vue` | `notform`, the core package |
+| `packages/nuxt` | `@notform/nuxt`, the Nuxt module |
+| `docs` | Documentation site |
 
-Use conventional commit messages. Common prefixes are:
+## Before you open a pull request
 
-- `feat` — new functionality
-- `fix` — bug fixes
-- `docs` — documentation changes
-- `refactor` — code changes without behavior changes
-- `perf` — performance improvements
-
-Before opening a pull request, run:
+Run the checks CI runs:
 
 ```bash
 pnpm lint
@@ -43,37 +32,22 @@ pnpm test
 pnpm build
 ```
 
-Add or update tests when changing behavior.
+Or run all of them at once with `pnpm ready`.
 
-## Documentation
+- Add or update tests in `packages/vue/tests` when you change behavior.
+- Update the docs in `docs/content/docs` when you change the public API.
+- If you add, rename, or remove a docs page, update the page table in `.agents/skills/notform/SKILL.md`.
 
-Documentation lives in `apps/docs`.
+## Commits
 
-When changing the public API, update the relevant documentation alongside the code.
+Use [Conventional Commits](https://www.conventionalcommits.org) with the package as the scope, for example `feat(vue): add field reset` or `fix(nuxt): resolve alias conflict`.
 
-## Pull Requests
+Commits of type `feat`, `fix`, `perf`, `refactor`, and `docs` appear in the changelog. `chore`, `ci`, `build`, and `test` do not.
 
-Keep pull requests focused and easy to review.
+## Pull requests
 
-Before submitting:
+Keep each pull request focused on one change, fill in the template, and link the issue it addresses.
 
-1. Add or update tests where appropriate.
-2. Update documentation for user-facing changes.
-3. Run the project checks locally.
-4. Use a conventional commit message.
+## Issues and questions
 
-## Reporting Bugs
-
-Search existing issues before opening a new one.
-
-Include the expected behavior, actual behavior, reproduction steps, and relevant environment details.
-
-## Feature Requests
-
-Open an issue describing the problem, the proposed solution, and any alternatives you considered.
-
-## Questions
-
-For questions and discussion, use [GitHub Discussions](https://github.com/favorodera/notform/discussions) or the [documentation](https://notform.favorodera.dev/).
-
-Thank you for helping improve NotForm.
+Search existing issues first, then use the bug report or feature request template. A bug report needs a minimal reproduction. For questions and ideas, use [GitHub Discussions](https://github.com/favorodera/notform/discussions).

@@ -1,36 +1,4 @@
 export default defineAppConfig({
-  author: {
-    name: 'Emeka Favour',
-    url: 'https://favorodera.dev',
-  },
-  github: {
-    changelog: {
-      external: true,
-      icon: 'tabler:clock-code',
-      label: 'Changelog',
-      target: '_blank',
-      to: `https://github.com/favorodera/notform/releases`,
-    },
-    repo: {
-      external: true,
-      icon: 'simple-icons:github',
-      label: 'GitHub',
-      target: '_blank',
-      to: 'https://github.com/favorodera/notform',
-    },
-    sponsor: {
-      class: ' text-pink-400 hover:text-pink-500 **:text-pink-400 **:hover:text-pink-500',
-      external: true,
-      icon: 'tabler:heart',
-      label: 'Become a Sponsor',
-      target: '_blank',
-      to: 'https://github.com/sponsors/favorodera',
-    },
-  },
-  siteDescription: 'Vue Forms without the friction.',
-  siteName: 'NotForm',
-  siteTitle: 'NotForm - Vue Forms without the friction',
-  siteUrl: 'https://notform.favorodera.dev',
   ui: {
     colors: {
       neutral: 'zinc',
