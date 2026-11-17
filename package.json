@@ -2,7 +2,7 @@
   "name": "notform",
   "version": "4.0.1-alpha.0",
   "private": true,
-  "packageManager": "pnpm@12.20.0",
+  "packageManager": "pnpm@12.21.0",
   "description": "Vue forms without the friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
@@ -22,7 +22,7 @@
     },
     "packageManager": {
       "name": "pnpm",
-      "version": "12.20.0",
+      "version": "12.21.0",
       "onFail": "download"
     }
   },
