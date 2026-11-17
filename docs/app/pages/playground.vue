@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { site } from '#shared/site'
+
 definePageMeta({
   layout: 'playground',
 })
 
-const appConfig = useAppConfig()
 const route = useRoute()
 
 const seo = {
@@ -16,18 +17,25 @@ useSeoMeta({
     return seo.description
   },
   ogUrl: () => {
-    return `${appConfig.siteUrl}${route.fullPath}`
+    return `${site.url}${route.fullPath}`
   },
   title: () => {
     return seo.title
   },
 })
 
-defineOgImage('Image.takumi', { ...seo })
+defineOgImage(
+  'Image.takumi',
+  { ...seo },
+  [
+    { key: 'og' },
+    { height: 800, key: 'whatsapp', width: 800 },
+  ],
+)
 </script>
 
 <template>
-  <Main>
+  <Main class="grid grid-cols-1">
     <h1 class="sr-only">
       NotForm Playground
     </h1>

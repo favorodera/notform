@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const appConfig = useAppConfig()
+import { site } from '#shared/site'
 
 const navigation = await useAsyncData('navigation', () => {
   return queryCollectionNavigation('docs')
@@ -21,27 +21,28 @@ provide('githubStars', githubStars.data)
 useSeoMeta({
   colorScheme: 'dark light',
   titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} | ${appConfig.siteName}` : appConfig.siteTitle
+    return titleChunk ? `${titleChunk} | ${site.name}` : site.title
   },
   twitterCard: 'summary_large_image',
-  twitterCreator: '@favorodera',
-  twitterSite: '@favorodera',
+  twitterCreator: site.author.twitter,
+  twitterSite: site.author.twitter,
 })
 
-defineOgImage('Image.takumi', {
-  description: 'Vue Forms Without the Friction.',
-  title: 'NotForm',
-})
+defineOgImage(
+  'Image.takumi',
+  {
+    description: site.description,
+    title: site.name,
+  },
+  [
+    { key: 'og' },
+    { height: 800, key: 'whatsapp', width: 800 },
+  ],
+)
 </script>
 
 <template>
-  <App
-    :toaster="{
-      progress: false,
-      position: 'top-center',
-      duration: 4000,
-    }"
-  >
+  <App>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

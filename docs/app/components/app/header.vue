@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
 import type { NavigationMenuItem } from '@nuxt/ui'
-
-const runtimeConfig = useRuntimeConfig()
+import { site } from '#shared/site'
 
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 const githubStars = inject<Ref<number>>('githubStars')
-
-const appConfig = useAppConfig()
 
 const navigationMenuItems = [
   {
@@ -15,9 +12,27 @@ const navigationMenuItems = [
     label: 'Playground',
     to: `/playground`,
   },
-  appConfig.github.repo,
-  appConfig.github.changelog,
-  appConfig.github.sponsor,
+  {
+    external: true,
+    icon: 'simple-icons:github',
+    label: 'GitHub',
+    target: '_blank',
+    to: site.github.url,
+  },
+  {
+    external: true,
+    icon: 'tabler:clock-code',
+    label: 'Changelog',
+    target: '_blank',
+    to: site.github.changelog,
+  },
+  {
+    external: true,
+    icon: 'tabler:heart',
+    label: 'Become a sponsor',
+    target: '_blank',
+    to: site.github.sponsor,
+  },
 ] satisfies NavigationMenuItem[]
 </script>
 
@@ -38,7 +53,7 @@ const navigationMenuItems = [
       <AppLogo />
 
       <Badge
-        :label="`v${runtimeConfig.public.version}`"
+        :label="`v${site.version}`"
         variant="subtle"
         size="sm"
       />
@@ -53,7 +68,7 @@ const navigationMenuItems = [
       />
 
       <Button
-        v-bind="appConfig.github.repo"
+        v-bind="navigationMenuItems[1]"
         variant="subtle"
         size="sm"
         class="max-lg:hidden"

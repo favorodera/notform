@@ -19,9 +19,7 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
           </PageAside>
         </template>
 
-        <Main>
-          <slot />
-        </Main>
+        <slot />
       </Page>
     </Container>
 

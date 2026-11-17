@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
-import { defineSoftwareApp } from 'nuxt-schema-org/schema'
-import packageJson from '../package.json'
+import { defineOrganization } from 'nuxt-schema-org/schema'
+import { site } from './shared/site'
 
 export default defineNuxtConfig({
   aiReady: {
@@ -20,7 +20,6 @@ export default defineNuxtConfig({
         { href: '/icon-192x192.png', rel: 'icon', sizes: '192x192', type: 'image/png' },
         { href: '/icon-512x512.png', rel: 'icon', sizes: '512x512', type: 'image/png' },
         { href: '/icon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png' },
-        { href: '/logo.svg', rel: 'icon', sizes: 'any', type: 'image/svg+xml' },
         { href: '/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180' },
       ],
     },
@@ -37,7 +36,7 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/index.css'],
   devtools: {
-    enabled: false,
+    enabled: true,
   },
   eslint: {
     config: {
@@ -59,18 +58,17 @@ export default defineNuxtConfig({
       },
     ],
     mode: 'svg',
-    provider: 'iconify',
   },
   linkChecker: {
     failOnError: true,
+    showLiveInspections: true,
   },
   modules: [
+    '@nuxtjs/seo',
     '@nuxt/content',
     '@nuxt/fonts',
     '@nuxt/ui',
-    '@nuxtjs/seo',
     'motion-v/nuxt',
-    '@notform/nuxt',
     '@vercel/analytics',
     '@nuxt/eslint',
   ],
@@ -88,56 +86,25 @@ export default defineNuxtConfig({
   ogImage: {
     zeroRuntime: true,
   },
-  runtimeConfig: {
-    public: {
-      version: packageJson.version,
-    },
-  },
   schemaOrg: {
-    identity: defineSoftwareApp({
-      '@type': 'SoftwareApplication',
-      'aggregateRating': {
-        '@type': 'AggregateRating',
-        'bestRating': '5',
-        'ratingValue': '4.9',
-        'reviewCount': '13',
-        'worstRating': '1',
+    identity: defineOrganization({
+      description: site.description,
+      founder: {
+        name: site.author.name,
+        url: site.author.url,
       },
-      'applicationCategory': 'DeveloperApplication',
-      'author': {
-        '@type': 'Person',
-        'name': 'Favour Emeka',
-        'url': 'https://favorodera.dev',
-      },
-      'description': 'Vue forms without the friction.',
-      'keywords': [
-        'Vue forms',
-        'Nuxt form validation',
-        'Vue 3 form library',
-        'TypeScript form validation',
-        'headless form components',
-      ],
-      'name': 'NotForm',
-      'offers': {
-        '@type': 'Offer',
-        'price': '0',
-        'priceCurrency': 'USD',
-      },
-      'operatingSystem': 'Web',
-      'sameAs': [
-        'https://www.npmjs.com/package/notform',
-        'https://www.npmjs.com/package/@notform/nuxt',
-        'https://github.com/favorodera/notform',
-      ],
-      'url': 'https://notform.favorodera.dev',
+      logo: `${site.url}/icon-512x512.png`,
+      name: site.name,
+      sameAs: [site.github.url, site.npm.vue, site.npm.nuxt],
+      url: site.url,
     }),
   },
   site: {
-    defaultLocale: 'en',
-    description: 'Vue forms without the friction.',
+    defaultLocale: site.locale,
+    description: site.description,
     indexable: true,
-    name: 'NotForm',
-    url: 'https://notform.favorodera.dev',
+    name: site.name,
+    url: site.url,
   },
   sitemap: {
     zeroRuntime: true,

@@ -1,12 +1,12 @@
 {
   "name": "@notform/nuxt",
   "type": "module",
-  "version": "4.0.0",
+  "version": "4.0.1-alpha.0",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
-  "description": "Official Nuxt integration for NotForm.",
+  "description": "Official Nuxt integration for NotForm",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/favorodera",

@@ -1,31 +1,49 @@
 <script setup lang="ts">
-const props = defineProps<{
-  description: string
-  title: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    description: string
+    docs?: boolean
+    title: string
+  }>(),
+  {
+    docs: false,
+  },
+)
 </script>
 
 <template>
   <div
+    data-theme="light"
     :style="{
-      fontFamily: `'Outfit', sans-serif`,
+      fontFamily: `'Outfit', ui-sans-serif, system-ui, sans-serif`,
     }"
     class="
-      relative flex flex-col items-center justify-center gap-4 border
-      border-default bg-black p-10 text-center block-full inline-full
+      relative flex flex-col justify-between bg-default p-10 min-block-full
+      min-inline-full
     "
   >
-    <Icon
-      name="custom:logo"
-      class="shrink-0 text-highlighted block-16 inline-16"
-    />
+    <div class="flex items-start justify-between inline-full">
+      <Icon
+        name="custom:logo"
+        class="shrink-0 text-highlighted block-12 inline-12"
+      />
 
-    <div class="text-5xl font-bold tracking-tight text-highlighted">
-      {{ props.title }}
+      <span
+        v-if="props.docs"
+        class="text-3xl text-muted"
+      >
+        DOCUMENTATION
+      </span>
     </div>
 
-    <div class="text-3xl font-medium tracking-wide text-muted">
-      {{ props.description }}
+    <div class="flex flex-col items-start gap-2 inline-full max-inline-[70%]">
+      <div class="text-5xl tracking-tight text-highlighted">
+        {{ props.title }}
+      </div>
+
+      <div class="text-3xl tracking-wide text-muted">
+        {{ props.description }}
+      </div>
     </div>
   </div>
 </template>

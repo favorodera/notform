@@ -1,7 +1,8 @@
 import type { H3Event } from 'h3'
+import { site } from '#shared/site'
 
 const cachedGithubStars = defineCachedFunction(async (_event: H3Event) => {
-  const response = await fetch(`https://api.github.com/repos/favorodera/notform`)
+  const response = await fetch(site.github.api)
   const data = await response.json()
 
   return data.stargazers_count

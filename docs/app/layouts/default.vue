@@ -3,9 +3,7 @@
     <AppHeader />
 
     <Page>
-      <Main class="grid grid-cols-1">
-        <slot />
-      </Main>
+      <slot />
     </Page>
 
     <AppFooter />

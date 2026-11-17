@@ -1,9 +1,9 @@
 {
   "name": "notform",
-  "version": "4.0.0",
+  "version": "4.0.1-alpha.0",
   "private": true,
   "packageManager": "pnpm@12.20.0",
-  "description": "Vue Forms Without the Friction",
+  "description": "Vue forms without the friction",
   "author": "Favour Emeka <favorodera@gmail.com>",
   "license": "MIT",
   "homepage": "https://notform.favorodera.dev/",

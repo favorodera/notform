@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { PageLink } from '@nuxt/ui'
+import { site } from '#shared/site'
 
 definePageMeta({
   layout: 'docs',
 })
 
 const route = useRoute()
-const appConfig = useAppConfig()
 
 const page = await useAsyncData(route.path, () => {
   return queryCollection('docs').path(route.path)
@@ -34,15 +34,27 @@ const tocFooterLinks = computed<PageLink[]>(() => {
       label: 'Playground',
       to: `/playground`,
     },
-    appConfig.github.changelog,
-    appConfig.github.sponsor,
+    {
+      external: true,
+      icon: 'tabler:clock-code',
+      label: 'Changelog',
+      target: '_blank',
+      to: site.github.changelog,
+    },
+    {
+      external: true,
+      icon: 'tabler:heart',
+      label: 'Become a sponsor',
+      target: '_blank',
+      to: site.github.sponsor,
+    },
   ]
 })
 
 const seo = computed(() => {
   return {
-    description: page.data.value?.description ?? appConfig.siteDescription,
-    title: page.data.value?.title ?? appConfig.siteName,
+    description: page.data.value?.description ?? site.description,
+    title: page.data.value?.title ?? site.name,
   }
 })
 
@@ -51,25 +63,33 @@ useSeoMeta({
     return seo.value.description
   },
   ogUrl: () => {
-    return `${appConfig.siteUrl}${route.fullPath}`
+    return `${site.url}${route.fullPath}`
   },
   title: () => {
     return seo.value.title
   },
 })
 
-defineOgImage('Image.takumi', {
-  description: () => {
-    return seo.value.description
+defineOgImage(
+  'Image.takumi',
+  {
+    description: () => {
+      return seo.value.description
+    },
+    docs: true,
+    title: () => {
+      return seo.value.title
+    },
   },
-  title: () => {
-    return seo.value.title
-  },
-})
+  [
+    { key: 'og' },
+    { height: 800, key: 'whatsapp', width: 800 },
+  ],
+)
 </script>
 
 <template>
-  <div>
+  <Main class="grid grid-cols-1">
     <Page v-if="page.data.value">
       <PageHeader
         :title="page.data.value.title"
@@ -120,5 +140,5 @@ defineOgImage('Image.takumi', {
         </ContentToc>
       </template>
     </Page>
-  </div>
+  </Main>
 </template>

@@ -12,7 +12,7 @@
         lg:text-[2.5rem]
       "
     >
-      Vue Forms
+      Vue forms
       <br>
       without the friction.
     </h1>

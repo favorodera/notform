@@ -1,12 +1,8 @@
-<h1 align="center">
-  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notform.favorodera.dev/favicon.svg">
-  </br>
-  NotForm
-</h1>
-
-<p align="center">
-  Vue Forms Without the Friction.
-</p>
+<div align="center">
+  <img alt="NotForm logo" src="https://notform.favorodera.dev/favicon.svg" width="50" height="50">
+  <h1>NotForm</h1>
+  <p>Vue forms without the friction</p>
+</div>
 
 NotForm keeps your form's values, errors and field state in one place and leaves the markup to you. Describe the data with the schema library you already use, bind inputs, and read form states wherever you need them.
 

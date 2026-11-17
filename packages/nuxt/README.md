@@ -1,12 +1,8 @@
-<h1 align="center">
-  <img alt="NotForm Logo" loading="lazy" width="50" height="50" decoding="async" data-nimg="1" style="color:transparent" src="https://notform.favorodera.dev/favicon.svg">
-  </br>
-  NotForm for Nuxt
-</h1>
-
-<p align="center">
-  Official Nuxt integration for NotForm.
-</p>
+<div align="center">
+  <img alt="NotForm logo" src="https://notform.favorodera.dev/favicon.svg" width="50" height="50">
+  <h1>NotForm for Nuxt</h1>
+  <p>Official Nuxt integration for NotForm.</p>
+</div>
 
 This module registers NotForm's components and composable so you can use them in any page or component without importing them. The APIs are exactly the ones in the core package.
 

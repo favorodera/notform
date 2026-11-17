@@ -50,9 +50,10 @@ catalog:
   klona: ^2.0.6
   nuxt: ^4.6.4
   nuxt-schema-org: ^7.0.1
+  nuxtseo-devtools-host: ^1.0.2
   nuxtseo-layer-devtools: ^6.0.2
   pkg-pr-new: ^0.0.93
-  relizy: ^1.14.4
+  relizy: ^2.2.1
   tailwindcss: ^4.3.5
   tsdown: ^0.23.7
   tsx: ^4.23.15

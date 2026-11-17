@@ -53,6 +53,7 @@
       "outputs": []
     },
     "play": {
+      "dependsOn": ["^build"],
       "persistent": true,
       "cache": false
     }
