@@ -37,9 +37,9 @@ const tocFooterLinks = computed<PageLink[]>(() => {
     {
       external: true,
       icon: 'tabler:clock-code',
-      label: 'Changelog',
+      label: 'Releases',
       target: '_blank',
-      to: site.github.changelog,
+      to: site.github.releases,
     },
     {
       external: true,
@@ -76,7 +76,7 @@ defineOgImage(
     description: () => {
       return seo.value.description
     },
-    docs: true,
+    label: 'DOCUMENTATION',
     title: () => {
       return seo.value.title
     },
@@ -108,10 +108,8 @@ defineOgImage(
 
         <ContentSurround
           :surround="pageSurround.data.value"
-          :ui="{
-            link: 'p-4',
-            linkDescription: 'truncate line-clamp-1',
-          }"
+          prev-icon="tabler:chevron-left"
+          next-icon="tabler:chevron-right"
         />
       </PageBody>
 

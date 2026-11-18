@@ -1,7 +1,13 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      neutral: 'zinc',
+      error: 'red',
+      info: 'blue',
+      neutral: 'neutral',
+      primary: 'neutral',
+      secondary: 'neutral',
+      success: 'emerald',
+      warning: 'amber',
     },
     contentNavigation: {
       compoundVariants: [
@@ -39,6 +45,25 @@ export default defineAppConfig({
           true: {
             item: 'ms-0 ps-0',
             itemWithChildren: 'ms-0 ps-0',
+          },
+        },
+      },
+    },
+    contentSurround: {
+      slots: {
+        link: 'grid items-start gap-x-2 gap-y-1 p-3',
+        linkDescription: '[grid-area:desc] truncate line-clamp-1',
+        linkLeading: 'p-0 bg-transparent ring-0 mb-0 [grid-area:icon] group-hover:bg-transparent group-hover:ring-0',
+        linkLeadingIcon: 'group-active:translate-x-0! group-active:-translate-x-0! text-muted',
+        linkTitle: 'mb-0 [grid-area:title]',
+      },
+      variants: {
+        direction: {
+          left: {
+            link: `grid-cols-[auto_1fr] [grid-template-areas:'icon_title'_'icon_desc']`,
+          },
+          right: {
+            link: `grid-cols-[1fr_auto] [grid-template-areas:'title_icon'_'desc_icon']`,
           },
         },
       },

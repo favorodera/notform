@@ -36,7 +36,7 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/index.css'],
   devtools: {
-    enabled: true,
+    enabled: false,
   },
   eslint: {
     config: {
@@ -65,10 +65,8 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxtjs/seo',
-    '@nuxt/content',
-    '@nuxt/fonts',
     '@nuxt/ui',
-    'motion-v/nuxt',
+    '@nuxt/content',
     '@vercel/analytics',
     '@nuxt/eslint',
   ],

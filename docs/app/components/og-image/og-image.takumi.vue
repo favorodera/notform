@@ -1,14 +1,9 @@
 <script setup lang="ts">
-const props = withDefaults(
-  defineProps<{
-    description: string
-    docs?: boolean
-    title: string
-  }>(),
-  {
-    docs: false,
-  },
-)
+const props = defineProps<{
+  description: string
+  label?: string
+  title: string
+}>()
 </script>
 
 <template>
@@ -29,10 +24,10 @@ const props = withDefaults(
       />
 
       <span
-        v-if="props.docs"
+        v-if="props.label"
         class="text-3xl text-muted"
       >
-        DOCUMENTATION
+        {{ props.label }}
       </span>
     </div>
 

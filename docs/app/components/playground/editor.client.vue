@@ -133,16 +133,23 @@ watchEffect(() => {
   >
     <div
       class="
-        flex shrink-0 items-center justify-between gap-1 overflow-x-auto
-        border-be border-default px-2 block-10
+        mx-auto flex shrink-0 items-center justify-between gap-1 overflow-x-auto
+        border-y border-default px-4 block-10 inline-full
+        max-inline-(--ui-container)
 
-        md:px-3
+        sm:px-6
+
+        lg:px-8
       "
     >
+      <p class="text-base font-medium">
+        NotForm Vue Playground
+      </p>
+
       <div class="ms-auto flex items-center gap-1">
         <Button
           :icon="previousRouteHash ? 'tabler:rotate-clockwise-2' : 'tabler:rotate'"
-          variant="ghost"
+          variant="subtle"
           :label="previousRouteHash ? 'Restore' : 'Reset'"
           size="sm"
           @click="resetOrRestore"
@@ -151,7 +158,7 @@ watchEffect(() => {
         <Button
           :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:link'"
           :label="clipboard.copied.value ? 'Copied' : 'Share'"
-          variant="ghost"
+          variant="subtle"
           size="sm"
           @click="clipboard.copy()"
         />

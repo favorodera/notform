@@ -5,7 +5,8 @@
   >
     <h1
       class="
-        relative overflow-hidden text-3xl/tight tracking-tight max-inline-4xl
+        relative overflow-hidden text-3xl/tight font-medium tracking-tight
+        max-inline-4xl
 
         sm:text-3xl
 
@@ -18,7 +19,7 @@
     </h1>
 
     <p
-      class="mbs-5 text-base/relaxed font-light text-muted max-inline-md"
+      class="mbs-5 text-base/relaxed font-normal text-muted max-inline-md"
     >
       Headless form state and validation library for Vue 3.
       Bring your own schema, keep your own components, and stay in control

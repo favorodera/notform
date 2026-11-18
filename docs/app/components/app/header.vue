@@ -13,6 +13,11 @@ const navigationMenuItems = [
     to: `/playground`,
   },
   {
+    badge: {
+      label: githubStars?.value?.toString(),
+      size: 'sm',
+      variant: 'subtle',
+    },
     external: true,
     icon: 'simple-icons:github',
     label: 'GitHub',
@@ -22,9 +27,9 @@ const navigationMenuItems = [
   {
     external: true,
     icon: 'tabler:clock-code',
-    label: 'Changelog',
+    label: 'Releases',
     target: '_blank',
-    to: site.github.changelog,
+    to: site.github.releases,
   },
   {
     external: true,
@@ -56,6 +61,7 @@ const navigationMenuItems = [
         :label="`v${site.version}`"
         variant="subtle"
         size="sm"
+        class="block-4"
       />
     </template>
 
@@ -64,7 +70,14 @@ const navigationMenuItems = [
         size="sm"
         :collapsed="false"
         variant="subtle"
+        class="max-lg:hidden"
         label="Search"
+      />
+
+      <ContentSearchButton
+        size="sm"
+        variant="subtle"
+        class="lg:hidden"
       />
 
       <Button
@@ -77,7 +90,6 @@ const navigationMenuItems = [
 
       <ColorModeButton
         size="sm"
-        class="max-lg:hidden"
         variant="subtle"
       />
     </template>
@@ -97,10 +109,6 @@ const navigationMenuItems = [
           item: 'w-fit',
         }"
       />
-
-      <div class="grid grid-cols-1 place-items-center pbs-8 inline-full">
-        <ColorModeSelect />
-      </div>
     </template>
   </Header>
 </template>

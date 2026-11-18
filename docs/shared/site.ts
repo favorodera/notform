@@ -16,10 +16,10 @@ export const site = {
   description: `${tagline}.`,
   github: {
     api: `https://api.github.com/repos/${owner}/${repo}`,
-    changelog: `${repositoryUrl}/releases`,
     discussions: `${repositoryUrl}/discussions`,
     issues: `${repositoryUrl}/issues`,
     owner,
+    releases: `${repositoryUrl}/releases`,
     repo,
     sponsor: `https://github.com/sponsors/${owner}`,
     url: repositoryUrl,
