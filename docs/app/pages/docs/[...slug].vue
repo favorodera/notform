@@ -108,10 +108,8 @@ defineOgImage(
 
         <ContentSurround
           :surround="pageSurround.data.value"
-          :ui="{
-            link: 'p-4',
-            linkDescription: 'truncate line-clamp-1',
-          }"
+          prev-icon="tabler:chevron-left"
+          next-icon="tabler:chevron-right"
         />
       </PageBody>
 
