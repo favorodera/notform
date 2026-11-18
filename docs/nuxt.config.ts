@@ -65,10 +65,8 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxtjs/seo',
-    '@nuxt/content',
-    '@nuxt/fonts',
     '@nuxt/ui',
-    'motion-v/nuxt',
+    '@nuxt/content',
     '@vercel/analytics',
     '@nuxt/eslint',
   ],
