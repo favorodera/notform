@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { resolveComponent } from 'vue'
+import { resolveComponent, useId } from 'vue'
 
 defineProps<{
   description?: string
@@ -8,6 +8,7 @@ defineProps<{
 }>()
 
 const NuxtLink = resolveComponent('NuxtLink')
+const titleId = useId()
 </script>
 
 <template>
@@ -21,10 +22,10 @@ const NuxtLink = resolveComponent('NuxtLink')
     :class="{
       'cursor-pointer transition-colors duration-200 hover:bg-muted': to,
     }"
-    aria-describedby="title"
+    :aria-describedby="titleId"
   >
     <p
-      id="title"
+      :id="titleId"
       class="mbe-2 text-sm font-medium text-highlighted"
     >
       {{ title }}
