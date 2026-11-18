@@ -1,7 +1,13 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      neutral: 'zinc',
+      error: 'red',
+      info: 'blue',
+      neutral: 'neutral',
+      primary: 'neutral',
+      secondary: 'neutral',
+      success: 'emerald',
+      warning: 'amber',
     },
     contentNavigation: {
       compoundVariants: [
