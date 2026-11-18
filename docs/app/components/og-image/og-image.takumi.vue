@@ -27,7 +27,7 @@ const props = defineProps<{
         v-if="props.label"
         class="text-3xl text-muted"
       >
-        {{props.label}}
+        {{ props.label }}
       </span>
     </div>
 
