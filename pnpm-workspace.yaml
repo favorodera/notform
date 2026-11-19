@@ -1,6 +1,9 @@
-
 minimumReleaseAgeExclude:
-  - '@favorodera/eslint-config@3.6.0'
+  - '@maz-ui/node@5.7.0-beta.1'
+  - '@maz-ui/utils@5.7.0-beta.7'
+  - '@relizy/core@2.4.0'
+  - relizy@2.3.0
+  
 shellEmulator: true
 
 trustPolicy: no-downgrade
@@ -16,12 +19,12 @@ packages:
 nodeOptions: --max_old_space_size=4096
 
 catalog:
-  '@ai-sdk/google': ^4.0.114
+  '@ai-sdk/google': ^4.0.122
   '@favorodera/eslint-config': ^3.6.0
-  '@iconify-json/simple-icons': ^1.2.96
+  '@iconify-json/simple-icons': ^1.2.103
   '@iconify-json/tabler': ^1.2.38
   '@iconify-json/vscode-icons': ^1.2.78
-  '@nuxt/content': ^3.16.0
+  '@nuxt/content': ^3.17.0
   '@nuxt/eslint': ^1.17.0
   '@nuxt/kit': ^4.6.4
   '@nuxt/module-builder': ^1.0.3
@@ -39,7 +42,7 @@ catalog:
   '@vue/repl': ^4.7.2
   '@vue/test-utils': ^2.5.1
   '@vueuse/core': ^15.0.0
-  ai: ^7.0.165
+  ai: ^7.0.176
   better-sqlite3: ^13.0.0
   dequal: ^2.0.3
   dot-prop: ^10.2.0
@@ -48,15 +51,15 @@ catalog:
   klona: ^2.0.6
   nuxt: ^4.6.4
   nuxt-schema-org: ^7.0.1
-  nuxtseo-devtools-host: ^1.0.2
+  nuxtseo-devtools-host: ^1.0.3
   nuxtseo-layer-devtools: ^6.0.2
-  pkg-pr-new: ^0.0.93
-  relizy: ^2.2.1
+  pkg-pr-new: ^0.0.94
+  relizy: ^2.3.0
   tailwindcss: ^4.3.5
   tsdown: ^0.23.7
   tsx: ^4.23.15
-  turbo: ^2.11.10
-  type-fest: ^5.10.0
+  turbo: ^2.11.12
+  type-fest: ^6.0.1
   typescript: ^6.0.3
   ufo: ^1.6.4
   vite: ^8.3.6

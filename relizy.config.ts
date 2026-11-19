@@ -13,6 +13,7 @@ export default defineConfig({
       },
     },
   },
+  includeDepsCommits: true,
   monorepo: {
     packages: ['packages/*'],
     versionMode: 'unified',
