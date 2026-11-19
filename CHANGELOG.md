@@ -1,5 +1,66 @@
 # Changelog
 
+## v4.0.1 [2026-11-19]
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.0...v4.0.1)
+
+### Bug Fixes
+
+- **docs:** Update documentation site domain ([5254277](https://github.com/favorodera/notform/commit/5254277))
+
+  - Point doc URLs to new custom domain
+  - Update author profile URL references
+
+
+### Documentation
+
+- **contributing:** Update changelog inclusion list for chore commits ([2223d42](https://github.com/favorodera/notform/commit/2223d42))
+- **contributing:** Update hidden commit types in changelog docs ([0e17fd7](https://github.com/favorodera/notform/commit/0e17fd7))
+
+### Chores
+
+- **deps:** Update non-major dependencies ([3f6650d](https://github.com/favorodera/notform/commit/3f6650d))
+- **deps:** Update non-major dependencies ([f6bcdd2](https://github.com/favorodera/notform/commit/f6bcdd2))
+- **deps:** Update eslint config and remove nuxt-llms ([fa11380](https://github.com/favorodera/notform/commit/fa11380))
+
+  - Update @favorodera/eslint-config to 3.6.0
+  - Remove unused nuxt-llms dependency as its now auto bundled with the seo package
+  - Drop obsolete eslint rule overrides
+  - Apply updated lint and formatting rules
+
+- Update dependencies and configuration ([ffcf50d](https://github.com/favorodera/notform/commit/ffcf50d))
+
+  - Updated `relizy` to version 2.2.1 and added `nuxtseo-devtools-host` at version 1.0.2 in `pnpm-workspace.yaml`.
+  - Modified `buildCmd` in `relizy.config.ts` to filter builds for packages.
+  - Enhanced changelog templates in `relizy.config.ts` for better clarity.
+  - Set types for `build`, `ci`, and `test` to false in `relizy.config.ts`.
+  - Added dependency on `build` for the `play` task in `turbo.json`.
+
+- **config:** Remove redundant packages property from relizy config ([376852b](https://github.com/favorodera/notform/commit/376852b))
+- **deps:** Update non-major dependencies ([2d2ebd8](https://github.com/favorodera/notform/commit/2d2ebd8))
+- **deps:** Update node.js to v26 ([511b7b3](https://github.com/favorodera/notform/commit/511b7b3))
+- **deps:** Update Node.js engine constraints for Node 26 support ([45a70e7](https://github.com/favorodera/notform/commit/45a70e7))
+- **deps:** Bump catalog deps and release config ([1786bb7](https://github.com/favorodera/notform/commit/1786bb7))
+
+  Track dependency updates in future releases by
+  enabling dependency commits in `relizy.config.ts`.
+
+  - Update catalog dependency versions
+  - Adjust minimum release age exclusions
+
+
+### 🎨 Styles
+
+- **playground:** Fix nested CSS self-selectors ([1bf24f2](https://github.com/favorodera/notform/commit/1bf24f2))
+
+  - Target parent elements instead of descendants
+  - Nest .state child rules consistently
+
+### ❤️ Contributors
+
+- Favour Emeka ([@favorodera](https://github.com/favorodera))
+
+
 ## v4.0.1-alpha.0 [2026-11-17]
 
 [compare changes](https://github.com/favorodera/notform/compare/v4.0.0...v4.0.1-alpha.0)
