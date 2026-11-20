@@ -3,42 +3,59 @@ import type { ContentNavigationItem } from '@nuxt/content'
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { site } from '#shared/site'
 
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
-const githubStars = inject<Ref<number>>('githubStars')
+const numberFormatter = new Intl.NumberFormat('en', {
+  maximumFractionDigits: 1,
+  notation: 'compact',
+})
 
-const navigationMenuItems = [
-  {
-    icon: 'tabler:play',
-    label: 'Playground',
-    to: `/playground`,
+const githubStars = useFetch('/api/github/stars', {
+  default: () => {
+    return '20' // shown while pending or on error
   },
-  {
-    badge: {
-      label: githubStars?.value?.toString(),
-      size: 'sm',
-      variant: 'subtle',
+  key: 'github-stars',
+  lazy: true, // don't block navigation
+  transform: (stars: number) => {
+    return numberFormatter.format(stars)
+  },
+})
+
+const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
+
+const navigationMenuItems = computed(() => {
+  return [
+    {
+      icon: 'tabler:play',
+      label: 'Playground',
+      to: `/playground`,
     },
-    external: true,
-    icon: 'simple-icons:github',
-    label: 'GitHub',
-    target: '_blank',
-    to: site.github.url,
-  },
-  {
-    external: true,
-    icon: 'tabler:clock-code',
-    label: 'Releases',
-    target: '_blank',
-    to: site.github.releases,
-  },
-  {
-    external: true,
-    icon: 'tabler:heart',
-    label: 'Become a sponsor',
-    target: '_blank',
-    to: site.github.sponsor,
-  },
-] satisfies NavigationMenuItem[]
+    {
+      badge: {
+        label: githubStars.data.value,
+        size: 'sm',
+        variant: 'subtle',
+      },
+      external: true,
+      icon: 'simple-icons:github',
+      label: 'GitHub',
+      target: '_blank',
+      to: site.github.url,
+    },
+    {
+      external: true,
+      icon: 'tabler:clock-code',
+      label: 'Releases',
+      target: '_blank',
+      to: site.github.releases,
+    },
+    {
+      external: true,
+      icon: 'tabler:heart',
+      label: 'Become a sponsor',
+      target: '_blank',
+      to: site.github.sponsor,
+    },
+  ] satisfies NavigationMenuItem[]
+})
 </script>
 
 <template>
@@ -85,7 +102,7 @@ const navigationMenuItems = [
         variant="subtle"
         size="sm"
         class="max-lg:hidden"
-        :label="githubStars?.toString()"
+        :label="githubStars.data.value"
       />
 
       <ColorModeButton

@@ -24,14 +24,11 @@ const sectionsSearch = useAsyncData('search', () => {
   return queryCollectionSearchSections('docs')
 })
 
-const githubStars = useFetch('/api/github/stars')
-
 const resolvedNavigation = computed(() => {
   return navigation.data.value?.[0]?.children ?? []
 })
 
 provide('navigation', resolvedNavigation)
-provide('githubStars', githubStars.data)
 </script>
 
 <template>

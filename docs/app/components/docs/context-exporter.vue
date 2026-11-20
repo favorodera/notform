@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
-import { withoutTrailingSlash } from 'ufo'
 
 const route = useRoute()
 const toast = useToast()
@@ -8,10 +7,11 @@ const clipboard = useClipboard({ legacy: true })
 const site = useSiteConfig()
 
 const routePath = computed(() => {
-  return withoutTrailingSlash(route.path)
+  return route.path.replace(/\/$/, '') || '/'
 })
+
 const mdPath = computed(() => {
-  return `${site.url}${routePath.value}.md`
+  return `${site.url}${routePath.value === '/' ? '/index' : routePath.value}.md`
 })
 
 const items = computed(() => {

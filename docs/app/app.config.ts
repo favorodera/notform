@@ -113,6 +113,9 @@ export default defineAppConfig({
       upload: 'tabler:upload',
       warning: 'tabler:alert-triangle',
     },
+    pageBody: {
+      base: 'pb-8',
+    },
     prose: {
       a: {
         base: `

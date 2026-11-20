@@ -106,6 +106,8 @@ defineOgImage(
           :value="page.data.value"
         />
 
+        <Separator />
+
         <ContentSurround
           :surround="pageSurround.data.value"
           prev-icon="tabler:chevron-left"

@@ -15,7 +15,7 @@ export const site = {
   },
   description: `${tagline}.`,
   github: {
-    api: `https://api.github.com/repos/${owner}/${repo}`,
+    api: `https://ungh.cc/repos/${owner}/${repo}`,
     discussions: `${repositoryUrl}/discussions`,
     issues: `${repositoryUrl}/issues`,
     owner,

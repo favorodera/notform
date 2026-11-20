@@ -299,9 +299,6 @@ catalogs:
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
-    ufo:
-      specifier: ^1.6.4
-      version: 1.6.4
     vite:
       specifier: ^8.3.6
       version: 8.3.8
@@ -394,9 +391,6 @@ importers:
       nuxt-schema-org:
         specifier: 'catalog:'
         version: 7.0.1(141c2c52a47ccbc0ef1fac79cb878994)
-      ufo:
-        specifier: 'catalog:'
-        version: 1.6.4
       vue:
         specifier: 'catalog:'
         version: 3.5.45(typescript@6.0.3)
