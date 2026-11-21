@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { PageLink } from '@nuxt/ui'
-import { site } from '#shared/site'
+import { siteConfig } from '#shared/site'
 
 definePageMeta({
   layout: 'docs',
@@ -27,34 +26,10 @@ const pageSurround = await useAsyncData(`${route.path}-surround`, () => {
   })
 })
 
-const tocFooterLinks = computed<PageLink[]>(() => {
-  return [
-    {
-      icon: 'tabler:play',
-      label: 'Playground',
-      to: `/playground`,
-    },
-    {
-      external: true,
-      icon: 'tabler:clock-code',
-      label: 'Releases',
-      target: '_blank',
-      to: site.github.releases,
-    },
-    {
-      external: true,
-      icon: 'tabler:heart',
-      label: 'Become a sponsor',
-      target: '_blank',
-      to: site.github.sponsor,
-    },
-  ]
-})
-
 const seo = computed(() => {
   return {
-    description: page.data.value?.description ?? site.description,
-    title: page.data.value?.title ?? site.name,
+    description: page.data.value?.description ?? siteConfig.description,
+    title: page.data.value?.title ?? siteConfig.name,
   }
 })
 
@@ -63,7 +38,7 @@ useSeoMeta({
     return seo.value.description
   },
   ogUrl: () => {
-    return `${site.url}${route.fullPath}`
+    return `${siteConfig.url}${route.fullPath}`
   },
   title: () => {
     return seo.value.title
@@ -81,10 +56,7 @@ defineOgImage(
       return seo.value.title
     },
   },
-  [
-    { key: 'og' },
-    { height: 800, key: 'whatsapp', width: 800 },
-  ],
+  siteConfig.ogImageVariants,
 )
 </script>
 
@@ -126,16 +98,12 @@ defineOgImage(
             link: 'text-[0.8rem]',
           }"
         >
+          <!--
+            Large screens only: ContentToc hides this slot below `lg`. On
+            smaller screens the same card is the last item of the mobile menu.
+          -->
           <template #bottom>
-            <Separator />
-
-            <PageLinks
-              :links="tocFooterLinks"
-              :ui="{
-                linkLabelExternalIcon: 'hidden',
-                linkLabel: 'flex',
-              }"
-            />
+            <AppSponsorCard />
           </template>
         </ContentToc>
       </template>

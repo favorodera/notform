@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { type ContentCollectionName, isContentCollectionName } from '#shared/content-collections'
-import { site } from '#shared/site'
+import { siteConfig, type SiteLink } from '#shared/site'
 
 const search = useSearch()
 
@@ -42,13 +42,57 @@ const githubStars = useFetch('/api/github/stars', {
   },
 })
 
-const navigationMenuItems = computed(() => {
+/**
+ * Checks whether the current route belongs to a navigation link.
+ * @param link Link from `siteConfig`.
+ * @returns `true` when the route is the link's `activePrefix` or sits below it.
+ * @remarks
+ * Matching whole path segments keeps `/docs` active on `/docs/guides/validation`
+ * without also matching `/docs-archive`. Links without an `activePrefix`, such
+ * as external ones, are never active.
+ *
+ * The active state is passed to `NavigationMenu` explicitly because a link such
+ * as Documentation points at one page but should stay highlighted across the
+ * whole section.
+ */
+function isLinkActive(link: SiteLink) {
+  const { activePrefix } = link
+
+  if (!activePrefix) {
+    return false
+  }
+
+  return route.path === activePrefix || route.path.startsWith(`${activePrefix}/`)
+}
+
+/**
+ * Primary navigation items shared by the desktop header and the mobile menu.
+ * @remarks
+ * Built from `siteConfig.navigation`, so changing the links there updates both
+ * places. Recomputed on every route change to keep the active state current.
+ */
+const navigationItems = computed<NavigationMenuItem[]>(() => {
+  return siteConfig.navigation.map((link) => {
+    return {
+      active: isLinkActive(link),
+      external: link.external,
+      label: link.label,
+      target: link.external ? '_blank' : undefined,
+      to: link.to,
+    }
+  })
+})
+
+/**
+ * Mobile menu items: the primary navigation plus a GitHub link.
+ * @remarks
+ * On desktop the GitHub link lives in the header as a button with the star
+ * count. That button is hidden on small screens, so the menu carries the link
+ * instead, with the same star count as a badge.
+ */
+const mobileNavigationItems = computed<NavigationMenuItem[]>(() => {
   return [
-    {
-      icon: 'tabler:play',
-      label: 'Playground',
-      to: `/playground`,
-    },
+    ...navigationItems.value,
     {
       badge: {
         label: githubStars.data.value,
@@ -56,26 +100,11 @@ const navigationMenuItems = computed(() => {
         variant: 'subtle',
       },
       external: true,
-      icon: 'simple-icons:github',
-      label: 'GitHub',
+      label: siteConfig.links.github.label,
       target: '_blank',
-      to: site.github.url,
+      to: siteConfig.links.github.to,
     },
-    {
-      external: true,
-      icon: 'tabler:clock-code',
-      label: 'Releases',
-      target: '_blank',
-      to: site.github.releases,
-    },
-    {
-      external: true,
-      icon: 'tabler:heart',
-      label: 'Become a sponsor',
-      target: '_blank',
-      to: site.github.sponsor,
-    },
-  ] satisfies NavigationMenuItem[]
+  ]
 })
 </script>
 
@@ -83,9 +112,8 @@ const navigationMenuItems = computed(() => {
   <Header
     to="/"
     :ui="{
-      center: 'flex-1',
-      title: 'items-center',
       root: 'border-none',
+      title: 'items-center',
     }"
     :toggle="{
       variant: 'subtle',
@@ -96,12 +124,18 @@ const navigationMenuItems = computed(() => {
       <AppLogo />
 
       <Badge
-        :label="`v${site.version}`"
+        :label="`v${siteConfig.version}`"
         variant="subtle"
         size="sm"
         class="block-4"
       />
     </template>
+
+    <!-- Center of the header. Hidden below the `lg` breakpoint by Header itself. -->
+    <NavigationMenu
+      :items="navigationItems"
+      aria-label="Primary"
+    />
 
     <template #right>
       <ContentSearchButton
@@ -120,6 +154,7 @@ const navigationMenuItems = computed(() => {
 
       <ClientOnly>
         <LazyContentSearch
+          :links="search.links.value"
           :navigation="search.navigation.value"
           :search="search.search"
           :search-status="search.status.value"
@@ -129,11 +164,15 @@ const navigationMenuItems = computed(() => {
       </ClientOnly>
 
       <Button
-        v-bind="navigationMenuItems[1]"
-        variant="subtle"
-        size="sm"
-        class="max-lg:hidden"
+        :aria-label="`${siteConfig.links.github.label} repository`"
         :label="githubStars.data.value"
+        :to="siteConfig.links.github.to"
+        external
+        icon="simple-icons:github"
+        size="sm"
+        target="_blank"
+        variant="subtle"
+        class="max-lg:hidden"
       />
 
       <ColorModeButton
@@ -142,24 +181,27 @@ const navigationMenuItems = computed(() => {
       />
     </template>
 
+    <!--
+      Mobile menu. Links first, then the documentation tree (docs routes only),
+      then the sponsor card.
+    -->
     <template #body>
-      <ContentNavigation
-        :navigation="navigation.data.value"
-        :collapsible="false"
-      />
-
-      <Separator
-        v-if="navigation.data.value.length > 0"
-        class="my-4"
-      />
-
       <NavigationMenu
-        :items="navigationMenuItems"
+        :items="mobileNavigationItems"
+        aria-label="Primary"
         orientation="vertical"
-        :ui="{
-          item: 'w-fit',
-        }"
       />
+
+      <template v-if="navigation.data.value.length > 0">
+        <Separator class="my-4" />
+
+        <ContentNavigation
+          :navigation="navigation.data.value"
+          :collapsible="false"
+        />
+      </template>
+
+      <AppSponsorCard class="mbs-8" />
     </template>
   </Header>
 </template>

@@ -1,4 +1,4 @@
-import { site } from '#shared/site'
+import { siteConfig } from '#shared/site'
 
 /**
  * Sends an authenticated application request to a GitHub API endpoint.
@@ -13,7 +13,7 @@ import { site } from '#shared/site'
  * ```
  */
 export async function githubFetch<TData>(path: string, query?: Record<string, number | string>): Promise<TData> {
-  return $fetch<TData>(`${site.github.api}${path}`, {
+  return $fetch<TData>(`${siteConfig.github.api}${path}`, {
     headers: {
       'Accept': 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2026-03-10',

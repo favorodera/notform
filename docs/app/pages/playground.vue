@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { site } from '#shared/site'
+import { siteConfig } from '#shared/site'
 
 definePageMeta({
   layout: 'playground',
@@ -17,7 +17,7 @@ useSeoMeta({
     return seo.description
   },
   ogUrl: () => {
-    return `${site.url}${route.fullPath}`
+    return `${siteConfig.url}${route.fullPath}`
   },
   title: () => {
     return seo.title
@@ -26,11 +26,8 @@ useSeoMeta({
 
 defineOgImage(
   'Image.takumi',
-  { ...seo },
-  [
-    { key: 'og' },
-    { height: 800, key: 'whatsapp', width: 800 },
-  ],
+  seo,
+  siteConfig.ogImageVariants,
 )
 </script>
 

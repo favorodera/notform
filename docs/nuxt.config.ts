@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import { defineOrganization } from 'nuxt-schema-org/schema'
-import { site } from './shared/site'
+import { siteConfig } from './shared/site'
 
 export default defineNuxtConfig({
   aiReady: {
@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        lang: 'en',
+        lang: siteConfig.locale,
       },
       link: [
         { href: '/favicon.ico', rel: 'icon', type: 'image/x-icon' },
@@ -85,23 +85,24 @@ export default defineNuxtConfig({
   },
   schemaOrg: {
     identity: defineOrganization({
-      description: site.description,
+      description: siteConfig.description,
       founder: {
-        name: site.author.name,
-        url: site.author.url,
+        name: siteConfig.author.name,
+        url: siteConfig.author.url,
       },
-      logo: `${site.url}/icon-512x512.png`,
-      name: site.name,
-      sameAs: [site.github.url, site.npm.vue, site.npm.nuxt],
-      url: site.url,
+      logo: `${siteConfig.url}/icon-512x512.png`,
+      name: siteConfig.name,
+      sameAs: [siteConfig.github.url, siteConfig.npm.vue, siteConfig.npm.nuxt],
+      url: siteConfig.url,
     }),
   },
+  // Nuxt Site Config module options. Unrelated to the `siteConfig` object above, which only supplies its values.
   site: {
-    defaultLocale: site.locale,
-    description: site.description,
+    defaultLocale: siteConfig.locale,
+    description: siteConfig.description,
     indexable: true,
-    name: site.name,
-    url: site.url,
+    name: siteConfig.name,
+    url: siteConfig.url,
   },
   sitemap: {
     zeroRuntime: true,

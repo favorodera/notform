@@ -30,7 +30,6 @@
     "@iconify-json/vscode-icons": "catalog:",
     "@nuxt/content": "catalog:",
     "@nuxt/ui": "catalog:",
-    "@nuxtjs/mdc": "catalog:",
     "@nuxtjs/seo": "catalog:",
     "@takumi-rs/core": "catalog:",
     "@vercel/analytics": "catalog:",

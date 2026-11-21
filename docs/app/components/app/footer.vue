@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { site } from '#shared/site'
+import { siteConfig } from '#shared/site'
 </script>
 
 <template>
@@ -15,7 +15,7 @@ import { site } from '#shared/site'
       <NuxtLink
         variant="link"
         size="sm"
-        :to="site.github.license"
+        :to="siteConfig.github.license"
         external
         target="_blank"
         class="underline underline-offset-4"

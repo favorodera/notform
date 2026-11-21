@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { siteConfig } from '#shared/site'
+</script>
+
 <template>
   <Container
     class="relative grid grid-cols-1 justify-items-center py-8 text-center"
@@ -36,7 +40,7 @@
       "
     >
       <Button
-        to="/docs/getting-started/introduction"
+        :to="siteConfig.links.docs.to"
         size="lg"
         icon="tabler:book-2"
         color="primary"
@@ -45,7 +49,7 @@
       </Button>
 
       <Button
-        to="/playground"
+        :to="siteConfig.links.playground.to"
         size="lg"
         icon="tabler:player-play"
         color="primary"

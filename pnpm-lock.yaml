@@ -206,9 +206,6 @@ catalogs:
     '@nuxt/ui':
       specifier: ^4.12.0
       version: 4.12.2
-    '@nuxtjs/mdc':
-      specifier: ^0.23.4
-      version: 0.23.4
     '@nuxtjs/seo':
       specifier: ^6.0.1
       version: 6.0.1
@@ -370,9 +367,6 @@ importers:
       '@nuxt/ui':
         specifier: 'catalog:'
         version: 4.12.2(27b9d88a8dbde7364371bd28c18b97e6)
-      '@nuxtjs/mdc':
-        specifier: 'catalog:'
-        version: 0.23.4(@nuxt/schema@4.6.4)(confbox@0.3.2)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(oxc-parser@0.153.0)(rolldown@1.2.19)(supports-color@10.2.2)(unplugin@3.7.0(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.68.4)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
       '@nuxtjs/seo':
         specifier: 'catalog:'
         version: 6.0.1(cf499e8ec11eef5c7274d5c30c09e99d)

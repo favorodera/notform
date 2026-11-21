@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
+import { siteConfig } from '#shared/site'
 
 defineProps<{
   error: NuxtError
@@ -7,7 +8,7 @@ defineProps<{
 
 useHead({
   htmlAttrs: {
-    lang: 'en',
+    lang: siteConfig.locale,
   },
 })
 
