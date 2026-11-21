@@ -100,9 +100,9 @@ const navigationMenuItems = computed(() => {
 
       <ClientOnly>
         <LazyContentSearch
-          :navigation="search.navigation"
+          :navigation="search.navigation.value"
           :search="search.search"
-          :search-status="search.status"
+          :search-status="search.status.value"
           :color-mode="false"
           placeholder="Search documentation..."
         />
