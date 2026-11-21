@@ -1,14 +1,6 @@
-import { site } from '#shared/site'
-
 const getGithubStars = defineCachedFunction(
   async () => {
-    const data = await $fetch<{ count: number }>(`${site.github.api}/stargazers/count`, {
-      headers: {
-        'Accept': 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2026-03-10',
-      },
-      timeout: 5000,
-    })
+    const data = await githubFetch<{ count: number }>(`/stargazers/count`)
 
     const stars = data?.count
 

@@ -1,23 +1,27 @@
 <script setup lang="ts">
-const currentYear = new Date().getFullYear()
+import { site } from '#shared/site'
 </script>
 
 <template>
   <Footer
     :ui="{
       container: 'py-4',
-      root: 'text-sm border-bs border-default text-muted ',
-      center: 'hidden',
+      root: 'text-sm border-bs border-default text-muted',
     }"
   >
-    <template #left>
-      <span>Published under MIT License</span>
-    </template>
+    <div class="flex items-center gap-1">
+      <span>Released and published under the</span>
 
-    <template #right>
-      <span class="text-end">
-        Copyright © {{ currentYear }} NotForm
-      </span>
-    </template>
+      <NuxtLink
+        variant="link"
+        size="sm"
+        :to="site.github.license"
+        external
+        target="_blank"
+        class="underline underline-offset-4"
+      >
+        MIT License
+      </NuxtLink>
+    </div>
   </Footer>
 </template>

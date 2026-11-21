@@ -15,20 +15,6 @@ useSeoMeta({
   description: 'We are sorry but this page could not be found.',
   title: 'Page not found',
 })
-
-const navigation = await useAsyncData('navigation', () => {
-  return queryCollectionNavigation('docs')
-})
-
-const sectionsSearch = useAsyncData('search', () => {
-  return queryCollectionSearchSections('docs')
-})
-
-const resolvedNavigation = computed(() => {
-  return navigation.data.value?.[0]?.children ?? []
-})
-
-provide('navigation', resolvedNavigation)
 </script>
 
 <template>
@@ -38,14 +24,5 @@ provide('navigation', resolvedNavigation)
     <Error :error="error" />
 
     <AppFooter />
-
-    <ClientOnly>
-      <LazyContentSearch
-        :files="sectionsSearch.data.value"
-        :navigation="resolvedNavigation"
-        :color-mode="false"
-        placeholder="Search documentation..."
-      />
-    </ClientOnly>
   </App>
 </template>

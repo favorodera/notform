@@ -18,6 +18,7 @@ export const site = {
     api: `https://api.github.com/repos/${owner}/${repo}`,
     discussions: `${repositoryUrl}/discussions`,
     issues: `${repositoryUrl}/issues`,
+    license: `${repositoryUrl}/blob/main/LICENSE`,
     owner,
     releases: `${repositoryUrl}/releases`,
     repo,

@@ -1,20 +1,6 @@
 <script setup lang="ts">
 import { site } from '#shared/site'
 
-const navigation = await useAsyncData('navigation', () => {
-  return queryCollectionNavigation('docs')
-})
-
-const sectionsSearch = useAsyncData('search', () => {
-  return queryCollectionSearchSections('docs')
-})
-
-const resolvedNavigation = computed(() => {
-  return navigation.data.value?.[0]?.children ?? []
-})
-
-provide('navigation', resolvedNavigation)
-
 useSeoMeta({
   colorScheme: 'dark light',
   titleTemplate: (titleChunk) => {
@@ -41,16 +27,9 @@ defineOgImage(
 <template>
   <App>
     <NuxtLayout>
+      <NuxtRouteAnnouncer />
+
       <NuxtPage />
     </NuxtLayout>
-
-    <ClientOnly>
-      <LazyContentSearch
-        :files="sectionsSearch.data.value"
-        :navigation="resolvedNavigation"
-        :color-mode="false"
-        placeholder="Search documentation..."
-      />
-    </ClientOnly>
   </App>
 </template>

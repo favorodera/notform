@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import type { ContentNavigationItem } from '@nuxt/content'
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { site } from '#shared/site'
+
+const search = useSearch()
+
+const navigation = useCollectionNavigation('docs')
 
 const numberFormatter = new Intl.NumberFormat('en', {
   maximumFractionDigits: 1,
@@ -18,8 +21,6 @@ const githubStars = useFetch('/api/github/stars', {
     return numberFormatter.format(stars)
   },
 })
-
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 const navigationMenuItems = computed(() => {
   return [
@@ -97,6 +98,16 @@ const navigationMenuItems = computed(() => {
         class="lg:hidden"
       />
 
+      <ClientOnly>
+        <LazyContentSearch
+          :navigation="search.navigation"
+          :search="search.search"
+          :search-status="search.status"
+          :color-mode="false"
+          placeholder="Search documentation..."
+        />
+      </ClientOnly>
+
       <Button
         v-bind="navigationMenuItems[1]"
         variant="subtle"
@@ -113,7 +124,7 @@ const navigationMenuItems = computed(() => {
 
     <template #body>
       <ContentNavigation
-        :navigation="navigation"
+        :navigation="navigation.data.value"
         :collapsible="false"
       />
 
