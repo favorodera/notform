@@ -61,7 +61,6 @@ catalog:
   turbo: ^2.11.12
   type-fest: ^6.0.1
   typescript: ^6.0.3
-  ufo: ^1.6.4
   vite: ^8.3.6
   vitest: ^5.1.0
   vue: ^3.5.45

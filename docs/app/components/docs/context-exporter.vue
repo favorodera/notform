@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
-import { withoutTrailingSlash } from 'ufo'
+import { siteConfig } from '#shared/site'
 
 const route = useRoute()
 const toast = useToast()
 const clipboard = useClipboard({ legacy: true })
-const site = useSiteConfig()
+const appConfig = useAppConfig()
 
 const routePath = computed(() => {
-  return withoutTrailingSlash(route.path)
+  return route.path.replace(/\/$/, '') || '/'
 })
+
 const mdPath = computed(() => {
-  return `${site.url}${routePath.value}.md`
+  return `${siteConfig.url}${routePath.value === '/' ? '/index' : routePath.value}.md`
 })
 
 const items = computed(() => {
@@ -22,7 +23,7 @@ const items = computed(() => {
       onSelect() {
         clipboard.copy(mdPath.value)
         toast.add({
-          icon: 'tabler:circle-check',
+          icon: appConfig.ui.icons.check,
           title: 'Copied to clipboard',
         })
       },
@@ -59,7 +60,7 @@ async function copyPage() {
   <FieldGroup>
     <Button
       label="Copy Markdown"
-      :icon="clipboard.copied.value ? 'tabler:check' : 'tabler:copy'"
+      :icon="clipboard.copied.value ? appConfig.ui.icons.check : appConfig.ui.icons.copy"
       color="neutral"
       variant="outline"
       size="sm"
@@ -78,7 +79,7 @@ async function copyPage() {
       }"
     >
       <Button
-        icon="tabler:chevron-down"
+        :icon="appConfig.ui.icons.chevronDown"
         size="sm"
         color="neutral"
         variant="outline"

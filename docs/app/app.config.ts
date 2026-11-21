@@ -88,7 +88,7 @@ export default defineAppConfig({
       drag: 'tabler:grip-vertical',
       ellipsis: 'tabler:dots',
       error: 'tabler:square-rounded-x',
-      external: 'tabler:external-link',
+      external: 'tabler:arrow-up-right',
       eye: 'tabler:eye',
       eyeOff: 'tabler:eye-off',
       file: 'tabler:file',
@@ -112,6 +112,59 @@ export default defineAppConfig({
       tip: 'tabler:bulb',
       upload: 'tabler:upload',
       warning: 'tabler:alert-triangle',
+    },
+    navigationMenu: {
+      compoundVariants: [
+        {
+          active: true,
+          class: {
+            link: `
+              text-highlighted
+
+              before:bg-accented
+            `,
+          },
+          variant: 'pill',
+        },
+      ],
+      slots: {
+        link: `
+          inline-fit
+
+          after:hidden
+        `,
+      },
+      variants: {
+        active: {
+          false: { link: 'text-muted' },
+        },
+      },
+    },
+    page: {
+      compoundVariants: [
+        {
+          class: {
+            center: 'lg:col-span-8',
+            left: 'lg:col-span-2',
+          },
+          left: true,
+          right: false,
+        },
+        {
+          class: {
+            center: 'lg:col-span-7',
+            right: 'lg:col-span-3',
+          },
+          left: false,
+          right: true,
+        },
+      ],
+      slots: {
+        root: 'lg:gap-6',
+      },
+    },
+    pageBody: {
+      base: 'pb-8',
     },
     prose: {
       a: {

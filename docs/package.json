@@ -38,7 +38,6 @@
     "better-sqlite3": "catalog:",
     "nuxt": "catalog:",
     "nuxt-schema-org": "catalog:",
-    "ufo": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:"
   },

@@ -1,21 +1,27 @@
-import type { H3Event } from 'h3'
-import { site } from '#shared/site'
+const getGithubStars = defineCachedFunction(
+  async () => {
+    const data = await githubFetch<{ count: number }>(`/stargazers/count`)
 
-const cachedGithubStars = defineCachedFunction(async (_event: H3Event) => {
-  const response = await fetch(site.github.api)
-  const data = await response.json()
+    const stars = data?.count
 
-  return data.stargazers_count
-}, {
-  getKey: (_event: H3Event) => {
-    return 'githubStarsGet'
+    if (typeof stars !== 'number' || Number.isNaN(stars)) {
+      throw createError({
+        statusCode: 502,
+        statusMessage: 'Unexpected API response shape',
+      })
+    }
+
+    return stars
   },
-  maxAge: 60 * 60,
-  name: 'ghStars',
-})
+  {
+    getKey: () => {
+      return 'githubStarsGet'
+    },
+    maxAge: 60 * 60 * 24, // 24 hours
+    name: 'ghStars',
+  },
+)
 
-export default defineEventHandler(async (event) => {
-  const stars = await cachedGithubStars(event)
-
-  return stars ?? 0
+export default defineEventHandler(() => {
+  return getGithubStars()
 })

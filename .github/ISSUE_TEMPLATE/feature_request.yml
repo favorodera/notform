@@ -1,18 +1,18 @@
 name: Feature Request
-description: Suggest an idea or enhancement
+description: Suggest an idea or an improvement
 title: '[Feature]: '
 labels: [enhancement]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for suggesting an idea! Please fill out the sections below.
+        Thanks for the idea! Lead with the problem you are trying to solve. It helps find the best solution, which is not always the first one imagined.
 
   - type: textarea
-    id: problem-statement
+    id: problem
     attributes:
-      label: Problem Statement
-      description: What problem are you trying to solve?
+      label: Problem
+      description: What are you trying to do, and what gets in the way?
       placeholder: "I'm always frustrated when..."
     validations:
       required: true
@@ -20,49 +20,23 @@ body:
   - type: textarea
     id: proposed-solution
     attributes:
-      label: Proposed Solution
-      description: What would you like to happen?
+      label: Proposed solution
+      description: What would you like to happen? A short code sketch of the API you imagine is welcome.
     validations:
       required: true
 
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternatives Considered
-      description: Any alternative solutions or features you've considered.
-    validations:
-      required: false
-
-  - type: textarea
-    id: use-case
-    attributes:
-      label: Use Case
-      description: How would this feature benefit you and others?
-    validations:
-      required: true
-
-  - type: textarea
-    id: example-usage
-    attributes:
-      label: Example Usage
-      description: Optional example code showing how the feature might be used.
-    validations:
-      required: false
-
-  - type: textarea
-    id: additional-context
-    attributes:
-      label: Additional Context
-      description: Mockups, screenshots, or other context.
+      label: Alternatives considered
+      description: Workarounds or other approaches you have tried.
     validations:
       required: false
 
   - type: checkboxes
-    id: checklist
+    id: contribution
     attributes:
-      label: Checklist
+      label: Contribution
       options:
-        - label: I have searched for existing feature requests
-          required: true
-        - label: I am willing to help implement this feature
+        - label: I would be willing to help implement this
           required: false

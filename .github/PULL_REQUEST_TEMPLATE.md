@@ -1,22 +1,11 @@
-## Description
+<!--
+  Title: please use a Conventional Commit with the package as the scope, for example `fix(vue): ...` or `feat(nuxt): ...`.
+  It is used to build the changelog.
+-->
 
-<!-- Describe your changes in detail -->
+## Summary
 
-## Related Issue
+<!-- What does this change, and why? A few sentences are plenty. -->
 
-<!-- Link to the issue this PR addresses, if applicable. e.g. Fixes #123, Closes #123, Relates to #123 -->
-
-## Type of Change
-
-<!-- Mark with an 'x' all that apply -->
-
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Refactor (no functional changes, code improvements)
-- [ ] Code style/UI update (formatting, renaming, etc; no functional changes)
-- [ ] Tests (adding missing tests or correcting existing tests)
-- [ ] Build/CI related changes
-- [ ] Documentation update
-- [ ] Dependencies update
-- [ ] Other (please describe):
+<!-- Link the issue this resolves, or delete this line. -->
+Closes #

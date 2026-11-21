@@ -28,6 +28,6 @@
   --ui-bg: black;
   --ui-bg-muted: var(--ui-color-neutral-950);
   --ui-bg-elevated: var(--ui-color-neutral-900);
-  
+
   --ui-border: var(--ui-color-neutral-800);
 }

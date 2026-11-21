@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { ContentNavigationItem } from '@nuxt/content'
-
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
+const navigation = useCollectionNavigation('docs')
 </script>
 
 <template>
@@ -13,7 +11,7 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
         <template #left>
           <PageAside>
             <ContentNavigation
-              :navigation="navigation"
+              :navigation="navigation.data.value"
               :collapsible="false"
             />
           </PageAside>
