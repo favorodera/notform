@@ -10,8 +10,8 @@ const route = useRoute()
 /**
  * Collection selected from the first route path segment.
  * @remarks
- * Routes outside the content collections fall back to `''`. 
- * 
+ * Routes outside the content collections fall back to `''`.
+ *
  * This removes the header navigation from DOM.
  */
 const collection = computed<ContentCollectionName>(() => {
