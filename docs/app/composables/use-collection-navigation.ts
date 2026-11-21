@@ -1,11 +1,28 @@
-import type { Collections, ContentNavigationItem } from '@nuxt/content'
+import type { ContentNavigationItem } from '@nuxt/content'
+import type { MaybeRefOrGetter } from 'vue'
+import type { ContentCollectionName } from '#shared/content-collections'
 
-export function useCollectionNavigation(collection: keyof Collections, requiresImmediate = true) {
+/**
+ * Loads the navigation tree for a Nuxt Content collection.
+ * @param collection Collection key, or a reactive getter for it.
+ * @param requiresImmediate Whether to execute the query during setup.
+ * Pass `false` to load navigation only when the caller executes it.
+ * @returns Nuxt async data containing the collection's top-level navigation.
+ * @throws Rejects if Nuxt Content cannot query the collection.
+ * @example
+ * ```ts
+ * const navigation = useCollectionNavigation('docs')
+ * await navigation.execute()
+ * ```
+ */
+export function useCollectionNavigation(collection: MaybeRefOrGetter<ContentCollectionName>, requiresImmediate = true) {
   return useAsyncData<ContentNavigationItem[]>(
-    `${collection}-navigation`, // unique key per collection
+    () => {
+      return `${toValue(collection)}-navigation`
+    },
     async () => {
-      const navigation = await queryCollectionNavigation(collection)
-      
+      const navigation = await queryCollectionNavigation(toValue(collection))
+
       // the first level is the collection folder itself
       return navigation[0]?.children ?? []
     },

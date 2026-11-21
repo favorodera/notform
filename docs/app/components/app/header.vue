@@ -1,10 +1,30 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+import { type ContentCollectionName, isContentCollectionName } from '#shared/content-collections'
 import { site } from '#shared/site'
 
 const search = useSearch()
 
-const navigation = useCollectionNavigation('docs')
+const route = useRoute()
+
+/**
+ * Collection selected from the first route path segment.
+ * @remarks
+ * Routes outside the content collections fall back to `''`. 
+ * 
+ * This removes the header navigation from DOM.
+ */
+const collection = computed<ContentCollectionName>(() => {
+  const routeCollection = route.path.split('/').find(Boolean)
+
+  if (routeCollection && isContentCollectionName(routeCollection)) {
+    return routeCollection
+  }
+
+  return '' as ContentCollectionName
+})
+
+const navigation = useCollectionNavigation(collection)
 
 const numberFormatter = new Intl.NumberFormat('en', {
   maximumFractionDigits: 1,
@@ -128,7 +148,10 @@ const navigationMenuItems = computed(() => {
         :collapsible="false"
       />
 
-      <Separator class="my-4" />
+      <Separator
+        v-if="navigation.data.value.length > 0"
+        class="my-4"
+      />
 
       <NavigationMenu
         :items="navigationMenuItems"

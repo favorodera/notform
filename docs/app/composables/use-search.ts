@@ -1,15 +1,26 @@
-import type { Collections } from '@nuxt/content'
+import { contentCollectionNames } from '#shared/content-collections'
 
-const collections: (keyof Collections)[] = ['docs']
-
+/**
+ * Creates the shared documentation search and collection navigation state.
+ * @returns Search state and actions for the documentation header.
+ * @remarks
+ * Navigation and search indexing start lazily when the content search opens.
+ * This keeps route navigation responsive until the user needs search.
+ * @example
+ * ```ts
+ * const search = useSearch()
+ * await search.search('validation')
+ * ```
+ */
 export function useSearch() {
   const contentSearch = useContentSearch()
 
-  const collectionsNavigations = collections.map((collection) => {
+  // Keep navigation state for each collection so search can combine its results.
+  const collectionsNavigations = contentCollectionNames.map((collection) => {
     return useCollectionNavigation(collection, false)
   })
 
-  const searchCollections = useSearchCollection(collections, {
+  const searchCollections = useSearchCollection(contentCollectionNames, {
     ignoredTags: ['style'],
     immediate: false,
   })
