@@ -60,7 +60,7 @@ async function copyPage() {
   <FieldGroup>
     <Button
       label="Copy Markdown"
-      :icon="clipboard.copied.value ?  appConfig.ui.icons.check : appConfig.ui.icons.copy"
+      :icon="clipboard.copied.value ? appConfig.ui.icons.check : appConfig.ui.icons.copy"
       color="neutral"
       variant="outline"
       size="sm"
