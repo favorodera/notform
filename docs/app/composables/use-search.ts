@@ -70,12 +70,12 @@ export function useSearch() {
     }
 
     if (searchCollections.status.value === 'idle') {
-      void searchCollections.init()
+      searchCollections.init()
     }
 
     for (const navigation of collectionsNavigations) {
       if (navigation.status.value === 'idle') {
-        void navigation.execute()
+        navigation.execute()
       }
     }
   }, { immediate: true })
