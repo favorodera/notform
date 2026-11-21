@@ -1,5 +1,5 @@
 <!--
-  Title: please use a Conventional Commit, for example `fix: ...`, `feat: ...` or `docs: ...`.
+  Title: please use a Conventional Commit with the package as the scope, for example `fix(vue): ...` or `feat(nuxt): ...`.
   It is used to build the changelog.
 -->
 
