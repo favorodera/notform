@@ -15,13 +15,19 @@ import type { ContentCollectionName } from '#shared/content-collections'
  * await navigation.execute()
  * ```
  */
-export function useCollectionNavigation(collection: MaybeRefOrGetter<ContentCollectionName>, requiresImmediate = true) {
+export function useCollectionNavigation(collection: MaybeRefOrGetter<ContentCollectionName | undefined>, requiresImmediate = true) {
   return useAsyncData<ContentNavigationItem[]>(
     () => {
-      return `${toValue(collection)}-navigation`
+      return `${toValue(collection) ?? 'none'}-navigation`
     },
     async () => {
-      const navigation = await queryCollectionNavigation(toValue(collection))
+      const resolvedCollection = toValue(collection)
+
+      if (!resolvedCollection) {
+        return []
+      }
+
+      const navigation = await queryCollectionNavigation(resolvedCollection)
 
       // the first level is the collection folder itself
       return navigation[0]?.children ?? []
@@ -31,6 +37,11 @@ export function useCollectionNavigation(collection: MaybeRefOrGetter<ContentColl
         return []
       },
       immediate: requiresImmediate,
+      watch: [
+        () => {
+          return toValue(collection)
+        },
+      ],
     },
   )
 }

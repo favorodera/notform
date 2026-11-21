@@ -7,21 +7,13 @@ const search = useSearch()
 
 const route = useRoute()
 
-/**
- * Collection selected from the first route path segment.
- * @remarks
- * Routes outside the content collections fall back to `''`.
- *
- * This removes the header navigation from DOM.
- */
-const collection = computed<ContentCollectionName>(() => {
+/** Collection selected from the first route path segment. */
+const collection = computed<ContentCollectionName | undefined>(() => {
   const routeCollection = route.path.split('/').find(Boolean)
 
-  if (routeCollection && isContentCollectionName(routeCollection)) {
-    return routeCollection
-  }
-
-  return '' as ContentCollectionName
+  return routeCollection && isContentCollectionName(routeCollection)
+    ? routeCollection
+    : undefined
 })
 
 const navigation = useCollectionNavigation(collection)
