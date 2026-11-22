@@ -20,8 +20,7 @@ body:
     id: reproduction
     attributes:
       label: Reproduction
-      description: |
-        The fastest way is the [Playground](https://notform.favorodera.dev/playground). Reproduce the bug there, click **Share**, and paste the link. A minimal code snippet or repository works too. Add the steps if they are not obvious.
+      description: Provide a minimal code snippet, repository, or clear steps to reproduce the issue.
     validations:
       required: true
 
