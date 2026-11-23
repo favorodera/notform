@@ -47,7 +47,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
-    "vue": "^3.5.0"
+    "vue": "^3.5.45"
   },
   "dependencies": {
     "@standard-schema/spec": "catalog:",
