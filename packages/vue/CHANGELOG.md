@@ -1,5 +1,14 @@
 # Changelog
 
+## v4.0.2 [2026-11-23]
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.1...v4.0.2)
+
+### Chores
+
+- **deps:** Update non-major dependencies ([4483567](https://github.com/favorodera/notform/commit/4483567))
+
+
 ## v4.0.1 [2026-11-19]
 
 [compare changes](https://github.com/favorodera/notform/compare/v4.0.0...v4.0.1)

@@ -1,5 +1,29 @@
 # Changelog
 
+## v4.0.2 [2026-11-23]
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.1...v4.0.2)
+
+### Documentation
+
+- Require package scope in PR title template ([893109d](https://github.com/favorodera/notform/commit/893109d))
+
+### Chores
+
+- Update workspace config and issue templates ([75cd45f](https://github.com/favorodera/notform/commit/75cd45f))
+
+  Clean up project configuration and streamline contribution templates.
+
+  - Remove release age exclusions in workspace config
+  - Simplify reproduction steps in bug report template
+
+- **deps:** Update non-major dependencies ([4483567](https://github.com/favorodera/notform/commit/4483567))
+
+### ❤️ Contributors
+
+- Favour Emeka <favorodera@gmail.com>
+
+
 ## v4.0.1 [2026-11-19]
 
 [compare changes](https://github.com/favorodera/notform/compare/v4.0.0...v4.0.1)
