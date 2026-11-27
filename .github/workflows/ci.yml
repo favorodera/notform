@@ -39,11 +39,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Notify Vercel
-        uses: vercel/repository-dispatch/actions/status@v1
-        with:
-          name: CI Checks
-
   continuous-release:
     name: Continuous releases
     needs: checks
