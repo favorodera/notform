@@ -27,6 +27,7 @@
   "sideEffects": false,
   "exports": {
     ".": "./dist/index.js",
+    "./types": "./dist/types.js",
     "./package.json": "./package.json"
   },
   "files": [
