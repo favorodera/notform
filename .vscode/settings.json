@@ -1,42 +1,41 @@
 {
+  // Editor
   "editor.tabSize": 2,
-  "eslint.format.enable": true,
-  "editor.detectIndentation": false,
   "editor.indentSize": "tabSize",
+  "editor.detectIndentation": false,
+  "editor.quickSuggestions": {
+    "other": "on",
+    "strings": "on"
+  },
+
+  // Files and system handling
+  "files.eol": "\n",
+
+  // Diff Editor
+  "diffEditor.ignoreTrimWhitespace": false,
+
+  // Core CSS
+  "css.lint.unknownAtRules": "ignore",
+  "css.lint.zeroUnits": "warning",
+  "css.lint.duplicateProperties": "error",
+
+  // Tailwind CSS
   "tailwindCSS.validate": true,
   "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
-  "tailwindCSS.includeLanguages": {
-    "css": "tailwindcss"
-  },
+  "tailwindCSS.lint.cssConflict": "ignore",
   "tailwindCSS.experimental.configFile": "apps/docs/app/assets/css/index.css",
-  "files.eol": "\n",
-  "eslint.runtime": "node",
-  "mdc.enableComponentMetadataCompletions": true,
-  "mdc.enableFormatting": true,
   "tailwindCSS.classAttributes": [
     "class",
     "ui"
   ],
   "tailwindCSS.classFunctions": ["defineAppConfig"],
-  "tailwindCSS.experimental.classRegex": [
-    [
-      "Classes\\s*=\\s*computed\\(\\(\\)\\s*=>\\s*([\\s\\S]+?)\\)",
-      "'([^']+)'"
-    ]
-  ],
-  "npm.packageManager": "pnpm",
-  "cSpell.ignorePaths": [
-    "package-lock.json",
-    ".gitignore",
-    "node_modules",
-    "vscode-extension",
-    ".git/{info,lfs,logs,refs,objects}/**",
-    ".git/{index,*refs,*HEAD}",
-    ".vscode",
-    ".vscode-insiders",
-    "pnpm-lock.yaml",
-    "CHANGELOG.md"
-  ],
+
+  // Vue language support
+  "vue.format.script.initialIndent": true,
+  "vue.format.style.initialIndent": true,
+
+  // ESLint linter
+  "eslint.format.enable": true,
   "eslint.validate": [
     "javascript",
     "vue",
@@ -51,11 +50,86 @@
     "mdc",
     "css"
   ],
+  "eslint.useFlatConfig": true,
+  "eslint.rules.customizations": [
+    {
+      "rule": "style/*",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "format/*",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-indent",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-spacing",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-spaces",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-order",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-dangle",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-newline",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*quotes",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*semi",
+      "severity": "off",
+      "fixable": true
+    }
+  ],
+
+  // Markdown and MDC syntax configuration
+  "markdown.updateLinksOnFileMove.enabled": "prompt",
+  "mdc.enableComponentMetadataCompletions": true,
+  "mdc.enableFormatting": true,
   "[mdc]": {
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "editor.detectIndentation": false
   },
+
+  // Code Spell Checker
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "node_modules",
+    "vscode-extension",
+    ".git/{info,lfs,logs,refs,objects}/**",
+    ".git/{index,*refs,*HEAD}",
+    ".vscode",
+    ".gitignore",
+    ".gitattributes",
+    ".vscode-insiders",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "yarn.lock"
+  ],
+  "cSpell.language": "en-GB",
   "cSpell.words": [
     "beforeunload",
     "dequal",
@@ -109,5 +183,14 @@
     "vitest",
     "Vuetify",
     "vueuse"
-  ]
+  ],
+
+  // NPM
+  "npm.packageManager": "pnpm",
+
+  // JSON
+  "json.format.keepLines": true,
+
+  // YAML
+  "yaml.format.singleQuote": true
 }
