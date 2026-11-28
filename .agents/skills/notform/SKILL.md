@@ -12,7 +12,7 @@ Docs: `https://notform.favorodera.dev`
 
 ## Procedure
 
-1. **Identify the stack and version.** Check `package.json` for `notform` (Vue) or `@notform/nuxt` (Nuxt) and note the version. In Nuxt, `useForm` and the components are auto-imported.
+1. **Identify the stack and version.** Check `package.json` for `notform` (Vue) or `@notform/nuxt` (Nuxt), and note the version. In Nuxt, `useForm` and the components are auto-imported. Import types from `@notform/nuxt`; you do not need to add `notform` directly.
 2. **Handle v3 first.** If the project is on `notform` 3.x, or uses `useNotForm`, `NotForm`, `NotField`, `NotArrayField`, or `NotMessage`, read `migrations/notform-v3` before anything else. The docs describe v4.
 3. **Read the index.** Fetch `https://notform.favorodera.dev/llms.txt` to see which pages exist.
 4. **Load only the pages the task needs** (table below). Fetch a page as Markdown with `https://notform.favorodera.dev/docs/<section>/<page>.md`. Fetch `https://notform.favorodera.dev/llms-full.txt` only when a task spans many sections or you cannot fetch several pages.
@@ -24,7 +24,7 @@ Docs: `https://notform.favorodera.dev`
 | Task | Read (`<section>/<page>`) |
 | --- | --- |
 | New form, setup | `getting-started/installation`, `getting-started/quickstart` |
-| Nuxt setup, aliases, auto-import problems | `getting-started/nuxt-module` |
+| Nuxt setup, type imports, aliases, auto-import problems | `getting-started/nuxt-module` |
 | How the pieces fit together | `getting-started/core-concepts` |
 | Binding native inputs (checkbox, radio, select, number, file) | `guides/binding-inputs` |
 | Schema typing, input vs output, initial values | `guides/schema-input-output`, `guides/typescript`, `composables/use-form` |
@@ -59,7 +59,8 @@ The pages explain each of these. Check them before you finish.
 - Field config is read once, on the first `form.field(path, config)` call for that path.
 - Show field errors with `<FieldError :errors="field" />`, and form-level errors from `form.errors`.
 - NotForm must be the only owner of a form's state. Do not combine it with another form library or with a component library's own form validation on the same form.
-- Import only what `notform` exports. Do not use internal modules.
+- Import only from the public package exports for the current stack. Do not use internal modules.
+- In Nuxt, import types from `@notform/nuxt`; the module re-exports the public `notform` types.
 
 ## When sources disagree
 

@@ -9,6 +9,8 @@ export interface ModuleOptions {
   aliases?: Partial<Record<typeof componentNames[number] | typeof composableName, string>>
 }
 
+export type * from 'notform/types'
+
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     compatibility: { nuxt: '>=4.0.0' },
