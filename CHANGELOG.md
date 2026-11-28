@@ -1,5 +1,35 @@
 # Changelog
 
+## v4.1.0-alpha.0 [2026-11-28]
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.2...v4.1.0-alpha.0)
+
+### Features
+
+- **nuxt:** Re-export notform types ([d1b6598](https://github.com/favorodera/notform/commit/d1b6598))
+
+  Nuxt applications can now import types directly from @notform/nuxt
+  without needing notform as a direct dependency.
+
+  - Re-export notform types from @notform/nuxt
+  - Export ./types subpath from notform
+  - Update documentation and snippets for Nuxt
+
+
+### Chores
+
+- Update vscode, ci, and pnpm config ([149ffc1](https://github.com/favorodera/notform/commit/149ffc1))
+
+  - Remove Vercel status dispatch from CI
+  - Enable ESLint flat config and en-GB cSpell
+  - Enable `catalogMode` and `catalogPrune` in pnpm
+  - Apply LF line endings to `pnpm-lock.yaml`
+
+### ❤️ Contributors
+
+- Favour Emeka <favorodera@gmail.com>
+
+
 ## v4.0.2 [2026-11-23]
 
 [compare changes](https://github.com/favorodera/notform/compare/v4.0.1...v4.0.2)
