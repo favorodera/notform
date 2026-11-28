@@ -1,5 +1,25 @@
 # Changelog
 
+## v4.1.0 [2026-11-28]
+
+[compare changes](https://github.com/favorodera/notform/compare/v4.0.2...v4.1.0)
+
+### Features
+
+- **nuxt:** Re-export notform types ([d1b6598](https://github.com/favorodera/notform/commit/d1b6598))
+
+  Nuxt applications can now import types directly from @notform/nuxt
+  without needing notform as a direct dependency.
+
+  - Re-export notform types from @notform/nuxt
+  - Export ./types subpath from notform
+  - Update documentation and snippets for Nuxt
+
+### ❤️ Contributors
+
+- Favour Emeka <favorodera@gmail.com>
+
+
 ## v4.1.0-alpha.0 [2026-11-28]
 
 [compare changes](https://github.com/favorodera/notform/compare/v4.0.2...v4.1.0-alpha.0)
